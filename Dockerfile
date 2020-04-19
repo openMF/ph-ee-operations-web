@@ -9,6 +9,7 @@ CMD ["ng","serve","--host", "0.0.0.0"]
 ADD . /app
 WORKDIR /app
 RUN npm rebuild node-sass --force
+RUN npm install
 RUN ng build
 
 
