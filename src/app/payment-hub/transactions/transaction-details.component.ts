@@ -78,6 +78,9 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   convertTimestampToDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
     return formatDate(new Date(timestamp));
   }
 
