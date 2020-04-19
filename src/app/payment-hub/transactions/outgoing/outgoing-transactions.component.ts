@@ -103,11 +103,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'timeFrom',
+      type: 'startFrom',
       value: ''
     },
     {
-      type: 'timeTo',
+      type: 'startTo',
       value: ''
     }
   ];
@@ -238,7 +238,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(formatDate(filterValue), 'timeFrom');
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -248,7 +248,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(formatDate(filterValue), 'timeTo');
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -344,6 +344,13 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     }
     date = this.formatDate(date);
     return date.split(' ')[1];
+  }
+
+  convertTimestampToDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return formatDate(new Date(timestamp));
   }
 
   /**

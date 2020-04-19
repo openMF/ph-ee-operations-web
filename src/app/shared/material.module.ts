@@ -41,6 +41,8 @@ import {
 } from '@angular/material';
 
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule, NGX_MAT_MOMENT_FORMATS } from '@angular-material-components/moment-adapter';
+
 
 /**
  * Material Module
@@ -86,7 +88,7 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateMod
     MatTreeModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    NgxMatNativeDateModule
+    NgxMatMomentModule
   ],
   providers: [
     {

@@ -103,11 +103,11 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'timeFrom',
+      type: 'startFrom',
       value: ''
     },
     {
-      type: 'timeTo',
+      type: 'startTo',
       value: ''
     }
   ];
@@ -238,7 +238,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(formatDate(filterValue), 'timeFrom');
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -248,7 +248,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(formatDate(filterValue), 'timeTo');
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -270,6 +270,13 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       delete this.sort.active;
     }
     this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+  }
+
+  convertTimestampToDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return formatDate(new Date(timestamp));
   }
 
   /**
