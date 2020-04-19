@@ -1,0 +1,94 @@
+<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="2%" fxLayout.lt-md="column" class="container m-b-20">
+  <button mat-raised-button color="primary" *ngIf="glAccount.usage.value === 'HEADER'" [routerLink]="['/accounting/chart-of-accounts/gl-accounts/create']" [queryParams]="{ parent: glAccount.id, accountType: glAccount.type.id }">
+    <fa-icon icon="plus"></fa-icon>&nbsp;&nbsp;
+    Subledger Account
+  </button>
+  <button mat-raised-button color="primary" [routerLink]="['edit']">
+    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+    Edit
+  </button>
+  <button mat-raised-button color="warn" *ngIf="!glAccount.disabled" (click)="changeGlAccountState()">
+    <fa-icon icon="lock"></fa-icon>&nbsp;&nbsp;
+    Disable
+  </button>
+  <button mat-raised-button color="accent" *ngIf="glAccount.disabled" (click)="changeGlAccountState()">
+    <fa-icon icon="lock-open"></fa-icon>&nbsp;&nbsp;
+    Enable
+  </button>
+  <button mat-raised-button color="warn" (click)="deleteGlAccount()">
+    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp;
+    Delete
+  </button>
+</div>
+
+<div class="container">
+
+  <mat-card>
+
+    <mat-card-content>
+
+      <div fxLayout="row wrap" class="content">
+
+        <div fxFlex="50%" class="header">
+          Account Type
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccount.type?.value }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          GL Code
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccount.glCode }}
+        </div>
+
+        <div fxFlex="50%" class="header" *ngIf="glAccount.parent">
+          Parent Account Name
+        </div>
+
+        <div fxFlex="50%" *ngIf="glAccount.parent">
+          {{ glAccount.parent.name }}
+        </div>
+
+        <div fxFlex="50%" class="header" *ngIf="glAccount.tagId.id">
+          Tag
+        </div>
+
+        <div fxFlex="50%" *ngIf="glAccount.tagId.id">
+          {{ glAccount.tagId.name }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Account Usage
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccount.usage?.value }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Manual Entries Allowed
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccount.manualEntriesAllowed }}
+        </div>
+
+        <div fxFlex="50%" class="header" *ngIf="glAccount.description">
+          Description
+        </div>
+
+        <div fxFlex="50%" *ngIf="glAccount.description">
+          {{ glAccount.description }}
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

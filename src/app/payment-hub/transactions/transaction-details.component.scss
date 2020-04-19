@@ -1,0 +1,63 @@
+.content {
+  div {
+    line-height: 3rem;
+
+    &.header {
+      font-weight: 500;
+    }
+  }
+}
+
+table {
+  width: 100%;
+
+  .select-row:hover {
+    cursor: pointer;
+  }
+}
+
+mat-card {
+  margin: 0 10px;
+}
+
+.mat-column-payment-process-id-value, .mat-column-payment-process-id {
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.mat-column-payment-business-attributes, .mat-column-payment-task-list {
+  font-size: large;
+  font-weight: bold;
+}
+
+.marginTop100 {
+  margin-top: 100px;
+}
+
+.mat-column-name {
+  width: 250px;
+}
+
+.mat-column-timestamp {
+  width: 170px;
+}
+
+.mat-cell {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-cell.cdk-column-completedAt, .mat-column-timestamp {
+ flex: 0 0 110px !important;
+ width: 110px !important;
+}

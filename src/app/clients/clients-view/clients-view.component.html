@@ -1,0 +1,77 @@
+<mat-card class="client-card">
+  <mat-card-header fxLayout="column" class="header">
+    <mat-card-title-group class="header-title-group">
+      <!-- change this -->
+      <div class="profile-image-container">
+        <div>
+          <img mat-card-md-image class="profile-image"
+            [src]="(clientImage)?clientImage:'assets/images/user_placeholder.png'">
+        </div>
+      </div>
+      <div class="mat-typography client-card-title">
+        <mat-card-title>
+          <h3>
+            Client Name : {{clientViewData.displayName}}
+          </h3>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <p>
+            Client #:{{clientViewData.accountNo}} | External
+            Id: {{clientViewData.externalId}} | Staff:{{clientViewData.staffName}}<br />
+            Activation Date :
+            {{(clientViewData.activationDate)?(clientViewData.activationDate|date) :'Not Activated'}}<br />
+            Member Of : <span *ngFor="let group of clientViewData.groups">
+              <a>{{group.name}}</a>
+              &nbsp;
+            </span>
+            <span *ngIf="!clientViewData.groups">Unassigned</span>
+            <br />
+          </p>
+        </mat-card-subtitle>
+      </div>
+    </mat-card-title-group>
+    <mat-card-actions class="client-actions">
+      <button mat-raised-button>Edit</button>
+      <button mat-raised-button>+ New Loan</button>
+      <button mat-raised-button>+ New Savings</button>
+      <button mat-raised-button>+ Deposit</button>
+      <button mat-raised-button [matMenuTriggerFor]="More">More</button>
+      <mat-menu #More="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+    </mat-card-actions>
+  </mat-card-header>
+  <mat-card-content>
+    <nav mat-tab-nav-bar class="navigation-tabs">
+      <a mat-tab-link [routerLink]="['./general']" routerLinkActive #general="routerLinkActive"
+        [active]="general.isActive">
+        General
+      </a>
+      <a mat-tab-link [routerLink]="['./address']" routerLinkActive #address="routerLinkActive"
+        [active]="address.isActive" *ngIf="clientTemplateData.isAddressEnabled">
+        Address
+      </a>
+      <a mat-tab-link [routerLink]="['./family-members']" routerLinkActive #familyMembers="routerLinkActive"
+        [active]="familyMembers.isActive">
+        Family Members
+      </a>
+      <a mat-tab-link [routerLink]="['./identities']" routerLinkActive #identities="routerLinkActive"
+        [active]="identities.isActive">
+        Identities
+      </a>
+      <a mat-tab-link [routerLink]="['./documents']" routerLinkActive #documents="routerLinkActive"
+        [active]="documents.isActive">
+        Documents
+      </a>
+      <a mat-tab-link [routerLink]="['./notes']" routerLinkActive #notes="routerLinkActive" [active]="notes.isActive">
+        Notes
+      </a>
+      <a mat-tab-link *ngFor="let clientDatatable of clientDatatables" [routerLink]="['./datatables',clientDatatable.registeredTableName]"
+        routerLinkActive #datatable="routerLinkActive" [active]="datatable.isActive">
+        {{clientDatatable.registeredTableName}}
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

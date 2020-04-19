@@ -1,0 +1,105 @@
+Request of Search
+GET /v1/transactions?payeeMSISDN=27710305999&payerMSISDN=27710101999&transactionId=b8eaa167-32c9-40d2-84d5-4e33cdbca714&status=1&amount=511&currency=TZS&timeFrom=2020-04-10T18:04:36Z&timeTo=2020-04-10T18:05:36Z&dateFormat=YYYY-MM-DDThh:mm:ssTZD&locale=en
+
+Approximately < 2000 characters in the URL then we are okay...
+
+Response of Search
+{
+    "timestamp": 1234567890,
+    "transactionId": "b8eaa167-32c9-40d2-84d5-4e33cdbca714",
+    "payerId": 27710101999,
+    "payeeId": 27710305999,
+    "payeeDFSPId": "in01tn01",
+    "payeeDFSPName": "Buffalo Bank", 
+    "status": 1,
+    "amount": 511,
+    "currency": "TZS", 
+    "feeMethod": "???",
+    "feeAmount": 12
+}
+
+Request of detailed view of Transaction
+GET /v1/transaction?transactionId=b8eaa167-32c9-40d2-84d5-4e33cdbca714
+
+
+Response of detailed view of Transaction
+
+{
+    "payer": {
+        "id": 27710101999,
+        "idType": "MSISDN",
+        "DFSPId": "in01tn01",
+        "DFSPName": "",
+        "dateOfBirth": "1991-02-02",
+        "lastName": "Kennedy",
+        "firstName": "John"
+    },
+    "payee": {
+        "id": 27710105999,
+        "idType": "MSISDN",
+        "DFSPId": "in01tn01",
+        "DFSPName": "Buffalo Bank"
+    },
+    "transaction": {
+        "id": "b8eaa167-32c9-40d2-84d5-4e33cdbca714",
+        "amount": 511,
+        "currency": "TZS",
+        "amountType": "SEND",
+        "transferCompleted": 1586357200082
+    },
+    "fees": {
+        "payer": {
+            "quoteCode": "029ce860-9642-490c-8b96-9541f2105a29",
+            "fee": {
+                "amount": 0,
+                "currency": "TZS"
+            }
+        },
+        "payee": {
+            "quoteCode": "64c48978-f495-41ca-8758-e96224417c46",
+            "fee": {
+                "amount": 5,
+                "currency": "TZS"
+            }
+        }
+    },
+    "paymentProcessId": 2251799813849780,
+    "taskList": [
+        {
+            "id": 337,
+            "workflowKey": 2251799813685393,
+            "workflowInstanceKey": 4503599627448205,
+            "timestamp": 1586357199945,
+            "intent": "ACTIVATED",
+            "recordType": "EVENT",
+            "type": "send-success-to-channel"
+        },
+        {
+            "id": 338,
+            "workflowKey": 2251799813685393,
+            "workflowInstanceKey": 4503599627448205,
+            "timestamp": 1586357200082,
+            "intent": "COMPLETED",
+            "recordType": "EVENT",
+            "type": "send-success-to-channel"
+        }
+    ],
+    "details": [
+        {
+            "id": 298,
+            "workflowKey": 2251799813685393,
+            "workflowInstanceKey": 4503599627448205,
+            "timestamp": 1586357183383,
+            "name": "transactionRequest",
+            "value": "\"{\\n  \\\"clientRefId\\\": \\\"ref\\\",\\n  \\\"payer\\\": {\\n    \\\"partyIdInfo\\\": {\\n      \\\"partyIdType\\\": \\\"MSISDN\\\",\\n      \\\"partyIdentifier\\\": \\\"27710101999\\\",\\n      \\\"fspId\\\": \\\"in01tn01\\\",\\n      \\\"tenantId\\\": \\\"tn01\\\"\\n    }\\n  },\\n  \\\"payee\\\": {\\n    \\\"partyIdInfo\\\": {\\n      \\\"partyIdType\\\": \\\"MSISDN\\\",\\n      \\\"partyIdentifier\\\": \\\"27710305999\\\"\\n    },\\n    \\\"merchantClassificationCode\\\": \\\"\\\"\\n  },\\n  \\\"amountType\\\": \\\"SEND\\\",\\n  \\\"amount\\\": {\\n    \\\"amount\\\": 511,\\n    \\\"currency\\\": \\\"TZS\\\"\\n  },\\n  \\\"transactionType\\\": {\\n    \\\"scenario\\\": \\\"TRANSFER\\\",\\n    \\\"initiator\\\": \\\"PAYER\\\",\\n    \\\"initiatorType\\\": \\\"CONSUMER\\\"\\n  },\\n  \\\"note\\\": \\\"Demo interoperation merchant payment\\\",\\n  \\\"expiration\\\": \\\"2019-12-31T00:00:00.000-01:00\\\"\\n}\\n\""
+        },
+        {
+            "id": 299,
+            "workflowKey": 2251799813685393,
+            "workflowInstanceKey": 4503599627448205,
+            "timestamp": 1586357183383,
+            "name": "transactionId",
+            "value": "\"a67ec71c-1af1-47a6-b53d-de7f8b4c2f63\""
+        }
+    ]
+}

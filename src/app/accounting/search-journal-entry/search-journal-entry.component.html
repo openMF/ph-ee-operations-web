@@ -1,0 +1,119 @@
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+  <mat-form-field fxFlex="31%">
+    <mat-label>Office Name</mat-label>
+    <input matInput [formControl]="officeName" [matAutocomplete]="officeNameAutocomplete">
+  </mat-form-field>
+
+  <mat-form-field fxFlex="31%">
+    <mat-label>GL Account Name or Code</mat-label>
+    <input matInput [formControl]="glAccount" [matAutocomplete]="glAccountAutocomplete">
+  </mat-form-field>
+
+  <mat-form-field fxFlex="31%">
+    <mat-label>Filter</mat-label>
+    <mat-select [formControl]="entryTypeFilter" (selectionChange)="applyFilter($event.value, 'manualEntriesOnly')">
+      <mat-option *ngFor="let filter of entryTypeFilterData" [value]="filter.value">
+        {{ filter.option }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="31%">
+    <mat-label>Transaction Date From</mat-label>
+    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker" [formControl]="transactionDateFrom">
+    <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+    <mat-datepicker #transactionDateFromPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="31%">
+    <mat-label>Transaction Date To</mat-label>
+    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker" [formControl]="transactionDateTo">
+    <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
+    <mat-datepicker #transactionDateToPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="31%">
+    <mat-label>Transaction ID</mat-label>
+    <input matInput [formControl]="transactionId">
+  </mat-form-field>
+
+</div>
+
+
+<!-- Autocomplete data -->
+<mat-autocomplete autoActiveFirstOption #officeNameAutocomplete="matAutocomplete" [displayWith]="displayOfficeName">
+  <mat-option *ngFor="let office of filteredOfficeData | async" [value]="{ id: office.id, name: office.name }">
+    {{ office.name }}
+  </mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete autoActiveFirstOption #glAccountAutocomplete="matAutocomplete" [displayWith]="displayGLAccount">
+  <mat-option *ngFor="let glAccount of filteredGLAccountData | async" [value]="{ id: glAccount.id, name: glAccount.name, glCode: glAccount.glCode }">
+    {{ glAccount.name + ' (' + glAccount.glCode + ')' }}
+  </mat-option>
+</mat-autocomplete>
+
+
+<div class="mat-elevation-z8 container">
+
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Entry ID </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="officeName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Office </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.officeName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="transactionId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction ID </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.transactionId }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="transactionDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Date </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.transactionDate }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="glAccountType">
+      <th mat-header-cell *matHeaderCellDef> Type </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.glAccountType.value }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdByUserName">
+      <th mat-header-cell *matHeaderCellDef> Created by </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.createdByUserName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="glAccountCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Code </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.glAccountCode }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="glAccountName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name </th>
+      <td mat-cell *matCellDef="let journalEntry"> {{ journalEntry.glAccountName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="debit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Debit </th>
+      <td mat-cell *matCellDef="let journalEntry"><span *ngIf="journalEntry.entryType.value === 'DEBIT'"> {{ (journalEntry.currency.displaySymbol || journalEntry.currency.code) + ' ' + journalEntry.amount }} </span></td>
+    </ng-container>
+
+    <ng-container matColumnDef="credit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Credit </th>
+      <td mat-cell *matCellDef="let journalEntry"><span *ngIf="journalEntry.entryType.value === 'CREDIT'"> {{ (journalEntry.currency.displaySymbol || journalEntry.currency.code) + ' ' + journalEntry.amount }} </span></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['transactions/view', row.transactionId]" class="select-row"></tr>
+
+  </table>
+
+  <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+
+</div>

@@ -1,0 +1,26 @@
+[
+    {
+        "id": "in01tn01",
+        "name": "Buffalo Bank"
+    },
+    {
+        "id": "in01tn02",
+        "name": "Lion Bank"
+    },
+    {
+        "id": "in02tn02",
+        "name": "Rhino Bank"
+    },
+    {
+        "id": "in02tn03",
+        "name": "Elephant Bank"
+    },
+    {
+        "id": "in03tn05",
+        "name": "Leopard Bank"
+    },
+    {
+        "id": "in03tn06",
+        "name": "Gorilla Bank"
+    }
+]

@@ -1,0 +1,120 @@
+<div class="container m-b-20" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="end" fxLayoutGap="2%">
+  <!-- TODO: Update to show only Activate/Inactivate button at a time according to status of user. -->
+  <button mat-raised-button color="primary" [routerLink]="['edit']">
+    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+    Edit
+  </button>
+  <button mat-raised-button color="primary" (click)="openDialog()">
+    <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp;
+    Change Password
+  </button>
+  <button mat-raised-button color="accent">
+    <fa-icon icon="lock-open"></fa-icon>&nbsp;&nbsp;
+    Activate
+  </button>
+  <button mat-raised-button color="warn">
+    <fa-icon icon="lock"></fa-icon>&nbsp;&nbsp;
+    Deactivate
+  </button>
+</div>
+
+<div class="container">
+
+  <mat-card>
+
+    <mat-card-content>
+
+      <div fxLayout="row wrap" class="content">
+
+        <div fxFlex="100%" class="header">
+          <fa-icon icon="circle" size="lg" matTooltip="{{ user.status }}" matTooltipPosition="above"></fa-icon>&nbsp;&nbsp;
+          ID: {{ user.id }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Username
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.username }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          First Name
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.firstName }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Last Name
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.lastName }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Gender
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.gender }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Date of Birth
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.dateOfBirth }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Email
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.email }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Mobile
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.mobile }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Office
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.office }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Staff
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.staff }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Activation Date
+        </div>
+
+        <div fxFlex="50%">
+          {{ user.activationDate }}
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

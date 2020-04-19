@@ -1,0 +1,85 @@
+<div class="container">
+
+  <mat-card>
+
+    <form>
+
+      <mat-card-content>
+
+        <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Office</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let office of officeData" [value]="office">
+                {{ office }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Staff</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let staff of staffData" [value]="staff">
+                {{ staff }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Username</mat-label>
+            <input type="text" matInput>
+          </mat-form-field>
+
+          <span fxFlex="48%" fxHide.lt-md></span>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>First Name</mat-label>
+            <input type="text" matInput>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Last Name</mat-label>
+            <input type="text" matInput>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Gender</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let gender of genderData" [value]="gender">
+                {{ gender }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="dateOfBirthDatePicker">
+            <mat-datepicker-toggle matSuffix [for]="dateOfBirthDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #dateOfBirthDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="48%">
+            <mat-label>Mobile No</mat-label>
+            <input type="tel" matInput>
+          </mat-form-field>
+
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="5px">
+        <button type="button" mat-raised-button [routerLink]="['../']">Cancel</button>
+        <button mat-raised-button color="primary">Submit</button>
+      </mat-card-actions>
+
+    </form>
+
+  </mat-card>
+
+</div>

@@ -1,0 +1,82 @@
+<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="2%" fxLayout.lt-md="column" class="container m-b-20">
+  <button mat-raised-button color="primary" [routerLink]="['edit']">
+    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+    Edit
+  </button>
+  <button mat-raised-button color="warn" (click)="deleteAccountingClosure()">
+    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp;
+    Delete
+  </button>
+</div>
+
+<div class="container" *ngIf="glAccountClosure">
+
+  <mat-card>
+
+    <mat-card-content>
+
+      <div fxLayout="row wrap" class="content">
+
+        <div fxFlex="50%" class="header">
+          Office
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.officeName }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Closure Date
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.closingDate }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Closed By
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.createdByUsername }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Updated By
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.lastUpdatedByUsername }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Updated On
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.lastUpdatedDate }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Closure Creation Date
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.createdDate }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Comments
+        </div>
+
+        <div fxFlex="50%">
+          {{ glAccountClosure.comments }}
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

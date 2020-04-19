@@ -1,0 +1,42 @@
+<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="2%" class="container m-b-20">
+  <button mat-raised-button color="primary" [routerLink]="['edit']">
+    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+    Edit
+  </button>
+  <button mat-raised-button color="warn" (click)="deleteFinancialActivityAccount()">
+    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp;
+    Delete
+  </button>
+</div>
+
+<div class="container">
+
+  <mat-card>
+
+    <mat-card-content>
+
+      <div fxLayout="row wrap" class="content">
+
+        <div fxFlex="50%" class="header">
+          Financial Activity
+        </div>
+
+        <div fxFlex="50%">
+          {{ financialActivityAccount?.financialActivityData.name }}
+        </div>
+
+        <div fxFlex="50%" class="header">
+          Account Name
+        </div>
+
+        <div fxFlex="50%">
+          {{ financialActivityAccount?.glAccountData.name }}
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

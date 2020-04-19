@@ -1,0 +1,161 @@
+<div class="container">
+
+  <mat-accordion>
+
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Main Configuration
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="column">
+
+        <mat-form-field>
+          <mat-label>Name of the Organization</mat-label>
+          <input matInput>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea matInput></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Summary</mat-label>
+          <textarea matInput></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Default Language</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let language of languages" [value]="language">
+              {{ language }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Default Date Format</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">
+              {{ dateFormat }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Images
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="column">
+
+        <span class="header">Favicon</span>
+        <mifosx-file-upload></mifosx-file-upload>
+
+        <span class="header">Cover Image</span>
+        <mifosx-file-upload></mifosx-file-upload>
+
+        <span class="header">Logo</span>
+        <mifosx-file-upload></mifosx-file-upload>
+
+        <span class="header">Logo with Organization Name</span>
+        <mifosx-file-upload></mifosx-file-upload>
+
+      </div>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Theme and Font
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="column">
+
+        <span class="header">Mobile Banking App</span>
+        <mat-form-field>
+          <mat-label>Default Theme</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let theme of mobileAppThemes" [value]="theme">
+              {{ theme }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Default Font</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let font of mobileAppFonts" [value]="font">
+              {{ font }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <span class="header">Online Banking App</span>
+        <mat-form-field>
+          <mat-label>Default Theme</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let theme of onlineBankingAppThemes" [value]="theme">
+              {{ theme }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Default Font</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let font of onlineBankingAppFonts" [value]="font">
+              {{ font }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Contact Information
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="column">
+
+        <mat-form-field>
+          <mat-label>Website</mat-label>
+          <input type="url" matInput>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input type="email" matInput>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Contact No</mat-label>
+          <input type="tel" matInput>
+        </mat-form-field>
+
+      </div>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+</div>
