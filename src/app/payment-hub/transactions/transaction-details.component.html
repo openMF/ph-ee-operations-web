@@ -184,7 +184,7 @@
           </div>
 
           <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.completedAt!==undefined">
-            {{ convertTimestampToDate(datasource.transaction.completedAt) }}
+            {{ formatDate(datasource.transaction.completedAt) }}
           </div>
         </div>
 

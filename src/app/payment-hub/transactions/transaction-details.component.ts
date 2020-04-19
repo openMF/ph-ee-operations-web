@@ -84,6 +84,17 @@ export class TransactionDetailsComponent implements OnInit {
     return formatDate(new Date(timestamp));
   }
 
+  formatDate(date: string) {
+    if (!date) {
+      return undefined;
+    }
+
+    date = date.replace('+0000', '');
+    date = date.replace('T', ' ');
+    date = date.replace('.000', '');
+    return date;
+  }
+
   getPaymentProcessId() {
     return this.datasource.transaction.workflowInstanceKey;
   }
