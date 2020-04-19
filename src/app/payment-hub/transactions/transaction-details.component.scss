@@ -56,8 +56,3 @@ mat-card {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-
-.mat-cell.cdk-column-completedAt, .mat-column-timestamp {
- flex: 0 0 110px !important;
- width: 110px !important;
-}
