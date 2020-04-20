@@ -5,7 +5,7 @@ import { MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/m
 
 /** Custom Services */
 import { TransactionsService } from './service/transactions.service';
-import { formatDate } from './helper/date-format.helper';
+import { formatDate, formatUTCDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 
 /**
@@ -81,7 +81,7 @@ export class TransactionDetailsComponent implements OnInit {
     if (!timestamp) {
       return undefined;
     }
-    return formatDate(new Date(timestamp));
+    return formatUTCDate(new Date(timestamp));
   }
 
   formatDate(date: string) {
