@@ -12,7 +12,7 @@ export const transactionStatusData = [
     {
         option: 'In progress',
         value: 'IN_PROGRESS',
-        css: 'yellow'
+        css: 'orange'
     },
     {
         option: '',
