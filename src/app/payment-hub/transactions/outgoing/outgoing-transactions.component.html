@@ -28,9 +28,11 @@
   <mat-form-field fxFlex="20%">
     <mat-label>Status</mat-label>
     <mat-select [formControl]="status">
-      <mat-option *ngFor="let filter of transactionStatusData" [value]="filter.value">
-        {{ filter.option }}
-      </mat-option>
+      <ng-container *ngFor="let filter of transactionStatusData">
+        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+          {{ filter.option }}
+        </mat-option>
+      </ng-container>
     </mat-select>
   </mat-form-field>
 

@@ -16,6 +16,7 @@ import { formatDate } from '../helper/date-format.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
+import { transactionStatusData as statuses } from '../helper/transaction.helper';
 
 /**
  * Transactions component.
@@ -42,22 +43,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   filteredDfspEntries: any;
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
-  transactionStatusData = [
-    {
-      option: 'Completed',
-      value: 'COMPLETED',
-      css: 'green'
-    },
-    {
-      option: 'Failed',
-      value: 'FAILED',
-      css: 'red'
-    },
-    {
-      option: 'In progress',
-      value: 'INPROGRESS'
-    }
-  ];
+  transactionStatusData = statuses;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */

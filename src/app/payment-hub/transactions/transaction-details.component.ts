@@ -7,6 +7,7 @@ import { MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/m
 import { TransactionsService } from './service/transactions.service';
 import { formatDate, formatUTCDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
+import { transactionStatusData as statuses } from './helper/transaction.helper';
 
 /**
  * View transaction component.
@@ -25,13 +26,13 @@ export class TransactionDetailsComponent implements OnInit {
   /** Transaction ID. */
   transactionId: string;
   /** Columns to be displayed in transaction table. */
-  displayedColumns: string[] = ['timestamp', 'type', 'intent'];
+  displayedColumns: string[] = ['timestamp', 'elementId', 'type', 'intent'];
   displayedBusinessAttributeColumns: string[] = ['name', 'timestamp', 'value'];
   /** Data source for transaction table. */
   taskList: MatTableDataSource<any>;
   businessAttributes: MatTableDataSource<any>;
   dfspEntriesData: DfspEntry[];
-
+  transactionStatusData = statuses;
   /**
    * @param {TransactionsService} transactionsService Transactions Service.
    * @param {ActivatedRoute} route Activated Route.
@@ -112,5 +113,14 @@ export class TransactionDetailsComponent implements OnInit {
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
+  displayStatus(status?: any): string | undefined {
+    const elements = this.transactionStatusData.filter((option) => option.value === status);
+    return elements.length > 0 ? elements[0].option : undefined;
+  }
 
+  displayCSS(status?: any): string | undefined {
+
+    const elements = this.transactionStatusData.filter((option) => option.value === status);
+    return elements.length > 0 ? elements[0].css : undefined;
+  }
 }

@@ -186,6 +186,13 @@
           <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.completedAt!==undefined">
             {{ formatDate(datasource.transaction.completedAt) }}
           </div>
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.completedAt!==undefined">
+            Transfer Status
+          </div>
+
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.status!==undefined" class="{{displayCSS(datasource.transaction.status)}}">
+            {{ displayStatus(datasource.transaction.status) }}
+          </div>
         </div>
 
       </mat-card-content>
@@ -242,15 +249,15 @@
 
   <table mat-table [dataSource]="taskList" matSort>
     <ng-container matColumnDef="payment-task-list">
-      <th mat-header-cell *matHeaderCellDef colspan="3"> Transaction Task List </th>
+      <th mat-header-cell *matHeaderCellDef colspan="4"> Transaction Task List </th>
     </ng-container>
 
     <ng-container matColumnDef="payment-process-id">
-      <th mat-header-cell *matHeaderCellDef colspan="2"> Payment Process Id </th>
+      <th mat-header-cell *matHeaderCellDef > Payment Process Id </th>
     </ng-container>
 
     <ng-container matColumnDef="payment-process-id-value">
-      <th mat-header-cell *matHeaderCellDef> {{ getPaymentProcessId() }} </th>
+      <th mat-header-cell *matHeaderCellDef colspan="3"> {{ getPaymentProcessId() }} </th>
     </ng-container>
 
     <ng-container matColumnDef="timestamp">
@@ -258,8 +265,13 @@
       <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
     </ng-container>
 
+    <ng-container matColumnDef="elementId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Id </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.elementId }} </td>
+    </ng-container>
+
     <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Task </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Type</th>
       <td mat-cell *matCellDef="let transaction"> {{ transaction.type }} </td>
     </ng-container>
 
