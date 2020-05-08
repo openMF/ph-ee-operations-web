@@ -90,18 +90,16 @@ export class AuthenticationService {
 
     let httpParams = new HttpParams();
     httpParams = httpParams.set('username', loginContext.username);
-    httpParams = httpParams.set('password', btoa(loginContext.password));
+    httpParams = httpParams.set('password', loginContext.password);
     if (environment.oauth.enabled) {
-      // httpParams = httpParams.set('client_id', 'community-app');
+      httpParams = httpParams.set('client_id', 'community-app');
       httpParams = httpParams.set('grant_type', 'password');
-      // httpParams = httpParams.set('client_secret', '123');
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/token`, {}, { params: httpParams })
+      httpParams = httpParams.set('client_secret', '123');
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
         .pipe(
           map((tokenResponse: OAuth2Token) => {
-            //this.getUserDetails(tokenResponse);
-            //return of(true);
-            this.onLoginSuccess({ ...tokenResponse, username: loginContext.username } as any);
-            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+            this.getUserDetails(tokenResponse);
+            return of(true);
           })
         );
     } else {
@@ -122,8 +120,8 @@ export class AuthenticationService {
    * @param {OAuth2Token} tokenResponse OAuth2 Token details.
    */
   private getUserDetails(tokenResponse: OAuth2Token) {
-    const httpParams = new HttpParams().set('access_token', tokenResponse.accessToken);
-    this.refreshTokenOnExpiry(tokenResponse.accessTokenExpiration);
+    const httpParams = new HttpParams().set('access_token', tokenResponse.access_token);
+    this.refreshTokenOnExpiry(tokenResponse.expires_in);
     this.http.get('/userdetails', { params: httpParams })
       .subscribe((credentials: Credentials) => {
         this.onLoginSuccess(credentials);
@@ -137,26 +135,28 @@ export class AuthenticationService {
    * Sets the oauth2 token to refresh on expiry.
    * @param {number} expiresInTime OAuth2 token expiry time in seconds.
    */
-  private refreshTokenOnExpiry(expiresInTime: string) {
-    setTimeout(() => this.refreshOAuthAccessToken(), new Date(expiresInTime).getTime());
+  private refreshTokenOnExpiry(expiresInTime: number) {
+    setTimeout(() => this.refreshOAuthAccessToken(), expiresInTime * 1000);
   }
 
   /**
    * Refreshes the oauth2 authorization token.
    */
   private refreshOAuthAccessToken() {
+    const oAuthRefreshToken = JSON.parse(this.storage.getItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
     this.authenticationInterceptor.removeAuthorization();
     let httpParams = new HttpParams();
-    // httpParams = httpParams.set('client_id', 'community-app');
+    httpParams = httpParams.set('client_id', 'community-app');
     httpParams = httpParams.set('grant_type', 'refresh_token');
-    // httpParams = httpParams.set('client_secret', '123');
-    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/token`, {}, { params: httpParams })
+    httpParams = httpParams.set('client_secret', '123');
+    httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
+    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .subscribe((tokenResponse: OAuth2Token) => {
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
-        this.authenticationInterceptor.setAuthorizationToken(tokenResponse.accessToken);
-        this.refreshTokenOnExpiry(tokenResponse.accessTokenExpiration);
+        this.authenticationInterceptor.setAuthorizationToken(tokenResponse.access_token);
+        this.refreshTokenOnExpiry(tokenResponse.expires_in);
         const credentials = JSON.parse(this.storage.getItem(this.credentialsStorageKey));
-        credentials.accessToken = tokenResponse.accessToken;
+        credentials.accessToken = tokenResponse.access_token;
         this.storage.setItem(this.credentialsStorageKey, JSON.stringify(credentials));
       });
   }

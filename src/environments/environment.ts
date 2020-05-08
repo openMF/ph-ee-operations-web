@@ -9,14 +9,14 @@ import env from "./.env";
 export const environment = {
   production: false,
   version: env.npm_package_version + "-dev",
-  fineractPlatformTenantId: "playground", // For connecting to server running elsewhere update the tenant identifier
+  fineractPlatformTenantId: "default", // For connecting to server running elsewhere update the tenant identifier
   baseApiUrl: "https://demo.mifos.io", // For connecting to server running elsewhere update the base API URL
   apiProvider: "/fineract-provider/api",
   apiVersion: "/v1",
   serverUrl: "",
   oauth: {
     enabled: false, // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    serverUrl: "/identity/v1",
+    serverUrl: "",
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],
@@ -24,4 +24,4 @@ export const environment = {
 
 // Server URL
 environment.serverUrl = `${environment.baseApiUrl}${environment.apiProvider}${environment.apiVersion}`;
-//environment.oauth.serverUrl = `${environment.baseApiUrl}${environment.apiProvider}`;
+environment.oauth.serverUrl = `${environment.baseApiUrl}${environment.apiProvider}`;

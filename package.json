@@ -22,8 +22,7 @@
     "e2e": "npm run env -s && ng e2e",
     "translations:extract": "ngx-translate-extract --input ./src --output ./src/translations/template.json --format=json --clean -sort --marker extract",
     "docs": "hads ./docs -o",
-    "env": "ngx-scripts env npm_package_version",
-    "dev": "ng serve --watch --verbose --proxy-config proxy.conf.json"
+    "env": "ngx-scripts env npm_package_version"
   },
   "dependencies": {
     "@angular/animations": "7.2.15",
@@ -79,7 +78,6 @@
     "karma-coverage-istanbul-reporter": "2.0.5",
     "karma-jasmine": "2.0.1",
     "karma-junit-reporter": "1.2.0",
-    "node-sass": "^4.14.0",
     "protractor": "5.4.2",
     "stylelint": "10.0.1",
     "stylelint-config-recommended-scss": "3.3.0",

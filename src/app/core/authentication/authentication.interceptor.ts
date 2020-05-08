@@ -11,8 +11,7 @@ import { environment } from '../../../environments/environment';
 /** Http request options headers. */
 const httpOptions = {
   headers: {
-    'Fineract-Platform-TenantId': environment.fineractPlatformTenantId,
-    'X-Tenant-Identifier': environment.fineractPlatformTenantId
+    'Fineract-Platform-TenantId': environment.fineractPlatformTenantId
   }
 };
 
