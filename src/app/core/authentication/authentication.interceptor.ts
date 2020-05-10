@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 /** Http request options headers. */
 const httpOptions = {
   headers: {
-    'Fineract-Platform-TenantId': environment.fineractPlatformTenantId
+    'Platform-TenantId': environment.fineractPlatformTenantId
   }
 };
 
@@ -44,7 +44,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     if (environment.oauth.enabled) {
       httpOptions.headers[authorizationHeader] = `Bearer ${authenticationKey}`;
     } else {
-      //httpOptions.headers[authorizationHeader] = `Basic ${authenticationKey}`;
+      httpOptions.headers[authorizationHeader] = `Basic ${authenticationKey}`;
     }
   }
 

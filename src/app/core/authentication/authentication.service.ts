@@ -92,24 +92,25 @@ export class AuthenticationService {
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
     if (environment.oauth.enabled) {
-      httpParams = httpParams.set('client_id', 'community-app');
+
       httpParams = httpParams.set('grant_type', 'password');
-      httpParams = httpParams.set('client_secret', '123');
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+      let headers;
+      if (environment.oauth.basicAuth) {
+        headers = { ['Authorization']: environment.oauth.basicAuthToken };
+      }
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams, headers })
         .pipe(
           map((tokenResponse: OAuth2Token) => {
-            this.getUserDetails(tokenResponse);
+            // TODO: fix UserDetails API
+            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+            this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true } as any);
             return of(true);
           })
         );
     } else {
-      // return this.http.post('/authentication', {}, { params: httpParams })
-      //   .pipe(
-      //     map((credentials: Credentials) => {
-      this.onLoginSuccess({} as any);
-      //  return of(true);
-      //   })
-      // );
+      // TODO: fix UserDetails API
+      this.onLoginSuccess({ username: loginContext.username, authenticated: true } as any);
+      return of(true).pipe(map((x: Boolean) => of(true)));
     }
   }
 
@@ -146,11 +147,13 @@ export class AuthenticationService {
     const oAuthRefreshToken = JSON.parse(this.storage.getItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
     this.authenticationInterceptor.removeAuthorization();
     let httpParams = new HttpParams();
-    httpParams = httpParams.set('client_id', 'community-app');
     httpParams = httpParams.set('grant_type', 'refresh_token');
-    httpParams = httpParams.set('client_secret', '123');
     httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+    let headers;
+    if (environment.oauth.basicAuth) {
+      headers = { ['Authorization']: environment.oauth.basicAuthToken };
+    }
+    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams, headers })
       .subscribe((tokenResponse: OAuth2Token) => {
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
         this.authenticationInterceptor.setAuthorizationToken(tokenResponse.access_token);
