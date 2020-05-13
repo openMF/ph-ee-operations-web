@@ -27,6 +27,15 @@
     </mat-error>
   </mat-form-field>
 
+  <mat-form-field fxFlexAlign="center" class="login-input">
+      <mat-label>Tenant</mat-label>
+      <mat-select formControlName="tenant">
+        <mat-option *ngFor="let tenant of tenants" [value]="tenant">
+          {{tenant}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
   <mat-checkbox fxFlexAlign="center" formControlName="remember" class="m-t-10">Remember me</mat-checkbox>
 
   <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" [disabled]="!loginForm.valid">

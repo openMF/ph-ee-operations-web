@@ -1,26 +1,32 @@
 [
     {
         "id": "in01tn01",
-        "name": "Buffalo Bank"
+        "name": "Buffalo Bank",
+        "tenantId": "tn01"
     },
     {
         "id": "in01tn02",
-        "name": "Lion Bank"
+        "name": "Lion Bank",
+        "tenantId": "tn02"
     },
     {
         "id": "in02tn03",
-        "name": "Rhino Bank"
+        "name": "Rhino Bank",
+        "tenantId": "tn03"
     },
     {
         "id": "in02tn04",
-        "name": "Elephant Bank"
+        "name": "Elephant Bank",
+        "tenantId": "tn04"
     },
     {
         "id": "in03tn05",
-        "name": "Leopard Bank"
+        "name": "Leopard Bank",
+        "tenantId": "tn05"
     },
     {
         "id": "in03tn06",
-        "name": "Gorilla Bank"
+        "name": "Gorilla Bank",
+        "tenantId": "tn06"
     }
 ]

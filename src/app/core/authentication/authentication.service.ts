@@ -87,23 +87,22 @@ export class AuthenticationService {
     this.alertService.alert({ type: 'Authentication Start', message: 'Please wait...' });
     this.rememberMe = loginContext.remember;
     this.storage = this.rememberMe ? localStorage : sessionStorage;
-
+    this.authenticationInterceptor.setTenantId(loginContext.tenant);
     let httpParams = new HttpParams();
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
     if (environment.oauth.enabled) {
 
       httpParams = httpParams.set('grant_type', 'password');
-      let headers;
       if (environment.oauth.basicAuth) {
-        headers = { ['Authorization']: environment.oauth.basicAuthToken };
+        this.authenticationInterceptor.setAuthorization(environment.oauth.basicAuthToken);
       }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams, headers })
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
         .pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
-            this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true } as any);
+            this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
             return of(true);
           })
         );
@@ -146,14 +145,14 @@ export class AuthenticationService {
   private refreshOAuthAccessToken() {
     const oAuthRefreshToken = JSON.parse(this.storage.getItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
     this.authenticationInterceptor.removeAuthorization();
+    this.authenticationInterceptor.setTenantId(JSON.parse(this.storage.getItem(this.credentialsStorageKey)).tenantId);
     let httpParams = new HttpParams();
     httpParams = httpParams.set('grant_type', 'refresh_token');
     httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    let headers;
     if (environment.oauth.basicAuth) {
-      headers = { ['Authorization']: environment.oauth.basicAuthToken };
+      this.authenticationInterceptor.setAuthorization(environment.oauth.basicAuthToken);
     }
-    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams, headers })
+    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .subscribe((tokenResponse: OAuth2Token) => {
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
         this.authenticationInterceptor.setAuthorizationToken(tokenResponse.access_token);
@@ -330,7 +329,8 @@ export class AuthenticationService {
           const loginContext: LoginContext = {
             username: this.credentials.username,
             password: passwordDetails.password,
-            remember: this.rememberMe
+            remember: this.rememberMe,
+            tenant: this.credentials.tenantId
           };
           this.login(loginContext).subscribe();
         })

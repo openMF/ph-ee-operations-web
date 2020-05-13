@@ -25,12 +25,14 @@ export class LoginFormComponent implements OnInit {
   /** True if loading. */
   loading = false;
 
+  tenants = ['tn01', 'wrongtenant'];
+
   /**
    * @param {FormBuilder} formBuilder Form Builder.
    * @param {AuthenticationService} authenticationService Authentication Service.
    */
   constructor(private formBuilder: FormBuilder,
-              private authenticationService: AuthenticationService) {  }
+    private authenticationService: AuthenticationService) { }
 
   /**
    * Creates login form.
@@ -72,6 +74,7 @@ export class LoginFormComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       'username': ['', Validators.required],
       'password': ['', Validators.required],
+      'tenant': ['', Validators.required],
       'remember': false
     });
   }

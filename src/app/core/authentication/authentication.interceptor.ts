@@ -10,9 +10,7 @@ import { environment } from '../../../environments/environment';
 
 /** Http request options headers. */
 const httpOptions = {
-  headers: {
-    'Platform-TenantId': environment.fineractPlatformTenantId
-  }
+  headers: {}
 };
 
 /** Authorization header. */
@@ -36,6 +34,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 
+  setTenantId(value: string) {
+    httpOptions.headers['Platform-TenantId'] = value;
+  }
+
   /**
    * Sets the basic/oauth authorization header depending on the configuration.
    * @param {string} authenticationKey Authentication key.
@@ -46,6 +48,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     } else {
       httpOptions.headers[authorizationHeader] = `Basic ${authenticationKey}`;
     }
+  }
+
+  setAuthorization(authenticationKey: string) {
+    httpOptions.headers[authorizationHeader] = authenticationKey;
   }
 
   /**

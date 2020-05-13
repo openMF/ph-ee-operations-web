@@ -45,7 +45,7 @@ export class TransactionsService {
     //   .pipe(map((transactions: any) => transactions as Transactions));
     return this.http
       .disableApiPrefix()
-      .get('http://large-dfsp-operator.mifos.io/transactions?' + params)
+      .get('/transactions?' + params)
       .pipe(map((transactions: any) => transactions as Transactions));
   }
 
@@ -68,7 +68,7 @@ export class TransactionsService {
     //   .pipe(map((transaction: TransactionDetails) => transaction as TransactionDetails));
     return this.http
       .disableApiPrefix()
-      .get('http://large-dfsp-operator.mifos.io/transaction/' + id)
+      .get('/transaction/' + id)
       .pipe(map((transaction: any) => transaction as TransactionDetails));
   }
 
