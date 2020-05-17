@@ -25,8 +25,6 @@ export class LoginFormComponent implements OnInit {
   /** True if loading. */
   loading = false;
 
-  tenants = ['tn01', 'wrongtenant'];
-
   /**
    * @param {FormBuilder} formBuilder Form Builder.
    * @param {AuthenticationService} authenticationService Authentication Service.
