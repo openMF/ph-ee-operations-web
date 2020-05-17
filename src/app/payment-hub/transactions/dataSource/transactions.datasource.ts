@@ -7,7 +7,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 /** Custom Services */
 import { TransactionsService } from '../service/transactions.service';
 import { Transaction, Transactions } from '../model/transaction.model';
-import { TransactionsResolver } from '../resolver/transactions.resolver';
+import { FilteredTransactions } from '../helper/filtered-transactions';
 import { FilteredRecord } from '../model/filtered-record.model';
 
 /**
@@ -43,7 +43,7 @@ export class TransactionsDataSource implements DataSource<Transaction> {
 
         this.transactionsService.getTransactions(filterBy, page, count)
             .subscribe((transactions: Transactions) => {
-                const filteredTransactions: FilteredRecord<Transaction> = new TransactionsResolver(transactions).resolve();
+                const filteredTransactions: FilteredRecord<Transaction> = new FilteredTransactions(transactions);
                 this.recordsSubject.next(filteredTransactions.totalFilteredRecords);
                 this.transactionsSubject.next(filteredTransactions.pageItems);
             });
