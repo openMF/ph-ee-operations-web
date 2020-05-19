@@ -107,9 +107,13 @@ export class AuthenticationService {
           })
         );
     } else {
-      // TODO: fix UserDetails API
-      this.onLoginSuccess({ username: loginContext.username, authenticated: true } as any);
-      return of(true).pipe(map((x: Boolean) => of(true)));
+      return this.http.post('/authentication', {}, { params: httpParams })
+        .pipe(
+          map((credentials: Credentials) => {
+            this.onLoginSuccess(credentials);
+            return of(true);
+          })
+        );
     }
   }
 

@@ -1,5 +1,5 @@
 /** Angular Imports */
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,6 +19,9 @@ import { WebAppComponent } from './web-app.component';
 
 /** Not Found Component */
 import { NotFoundComponent } from './not-found/not-found.component';
+
+/** Load config dynamically */
+import { AppConfig } from './app.config';
 
 /** Custom Modules */
 import { CoreModule } from './core/core.module';
@@ -42,6 +45,10 @@ import { PaymentHubModule } from './payment-hub/paymenthub.module';
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
 
+
+export function initConfig(config: AppConfig) {
+  return () => config.load();
+}
 
 /**
  * App Module
@@ -75,7 +82,13 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
   ],
   declarations: [WebAppComponent, NotFoundComponent],
-  providers: [],
+  providers: [AppConfig,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initConfig,
+      deps: [AppConfig],
+      multi: true
+    }],
   bootstrap: [WebAppComponent]
 })
 export class AppModule { }

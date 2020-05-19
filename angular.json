@@ -82,6 +82,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "kubernetes": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.kubernetes.ts"
+                }
+              ]
             }
           }
         },
@@ -93,6 +101,9 @@
           "configurations": {
             "production": {
               "browserTarget": "mifosx-web-app:build:production"
+            },
+            "kubernetes": {
+              "browserTarget": "mifosx-web-app:build:kubernetes"
             }
           }
         },
