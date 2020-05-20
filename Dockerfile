@@ -10,6 +10,6 @@ ADD . /app
 WORKDIR /app
 RUN npm rebuild node-sass --force
 RUN npm install
-RUN ng build
+RUN ng build --configuration kubernetes
 
 
