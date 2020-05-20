@@ -25,7 +25,7 @@ export class AppConfig {
                     .subscribe((responseData: string) => {
                         const variables = responseData.split(/\r\n|\r|\n/);
                         for (let variable of variables) {
-                            const keyValue = variable.split('=');
+                            const keyValue = variable.split(' ');
                             const keys = keyValue[0].split('.');
                             if (keys.length > 1) {
                                 environment[keys[0]][keys[1]] = keyValue[1];
