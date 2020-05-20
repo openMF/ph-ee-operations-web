@@ -91,11 +91,12 @@ export class AuthenticationService {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
+    //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
     if (environment.oauth.enabled) {
 
       httpParams = httpParams.set('grant_type', 'password');
       if (environment.oauth.basicAuth) {
-        this.authenticationInterceptor.setAuthorization(environment.oauth.basicAuthToken);
+        this.authenticationInterceptor.setAuthorization(`Basic ${environment.oauth.basicAuthToken}`);
       }
       return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
         .pipe(
