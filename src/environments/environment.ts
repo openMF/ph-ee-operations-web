@@ -12,9 +12,9 @@ export let environment = {
   version: env.npm_package_version + "-dev",
   serverUrl: "",
   oauth: {
-    enabled: false, // For connecting to Mifos X using OAuth2 Authentication change the value to true
+    enabled: "false", // For connecting to Mifos X using OAuth2 Authentication change the value to true
     serverUrl: "",
-    basicAuth: false,
+    basicAuth: "false",
     basicAuthToken: ''
   },
   defaultLanguage: "en-US",

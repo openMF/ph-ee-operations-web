@@ -67,7 +67,7 @@ export class AuthenticationService {
         this.storage = localStorage;
       }
       const twoFactorAccessToken = JSON.parse(this.storage.getItem(this.twoFactorAuthenticationTokenStorageKey));
-      if (environment.oauth.enabled) {
+      if (environment.oauth.enabled === 'true') {
         this.refreshOAuthAccessToken();
       } else {
         authenticationInterceptor.setAuthorizationToken(savedCredentials.base64EncodedAuthenticationKey);
@@ -92,7 +92,7 @@ export class AuthenticationService {
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
     //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
-    if (environment.oauth.enabled) {
+    if (environment.oauth.enabled === 'true') {
 
       httpParams = httpParams.set('grant_type', 'password');
       if (environment.oauth.basicAuth) {
@@ -154,7 +154,7 @@ export class AuthenticationService {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('grant_type', 'refresh_token');
     httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    if (environment.oauth.basicAuth) {
+    if (environment.oauth.basicAuth === 'true') {
       this.authenticationInterceptor.setAuthorization(environment.oauth.basicAuthToken);
     }
     this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
@@ -179,7 +179,7 @@ export class AuthenticationService {
    * @param {Credentials} credentials Authenticated user credentials.
    */
   private onLoginSuccess(credentials: Credentials) {
-    if (environment.oauth.enabled) {
+    if (environment.oauth.enabled === 'true') {
       this.authenticationInterceptor.setAuthorizationToken(credentials.accessToken);
     } else {
       this.authenticationInterceptor.setAuthorizationToken(credentials.base64EncodedAuthenticationKey);
