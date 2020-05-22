@@ -7,9 +7,9 @@ export let environment = {
   version: env.npm_package_version,
   serverUrl: "",
   oauth: {
-    enabled: false,
+    enabled: "false",
     serverUrl: "",
-    basicAuth: false,
+    basicAuth: "false",
     basicAuthToken: ''
   },
   defaultLanguage: "en-US",
