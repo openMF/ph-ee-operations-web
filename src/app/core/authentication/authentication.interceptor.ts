@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { switchMap, take, filter } from 'rxjs/operators';
 
-/** Environment Configuration */
-import { environment } from '../../../environments/environment';
+import { AuthenticationService } from './authentication.service';
 
 /** Http request options headers. */
 const httpOptions = {
@@ -23,43 +23,75 @@ const twoFactorAccessTokenHeader = 'Fineract-Platform-TFA-Token';
  */
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
+  private refreshTokenInProgress = false;
+  private accessExpired = false;
+  private refreshTokenSubject: Subject<any> = new BehaviorSubject<any>(null);
 
-  constructor() { }
+  constructor(private authService: AuthenticationService) { }
 
   /**
    * Intercepts a Http request and sets the request headers.
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    request = request.clone({ setHeaders: httpOptions.headers });
-    return next.handle(request);
-  }
 
-  setTenantId(value: string) {
-    httpOptions.headers['Platform-TenantId'] = value;
-  }
-
-  /**
-   * Sets the basic/oauth authorization header depending on the configuration.
-   * @param {string} authenticationKey Authentication key.
-   */
-  setAuthorizationToken(authenticationKey: string) {
-    if (environment.oauth.enabled) {
-      httpOptions.headers[authorizationHeader] = `Bearer ${authenticationKey}`;
+    this.retrieveAuthData();
+    if (request.url.indexOf('/oauth/token') !== -1) {
+      return next.handle(this.injectToken(request));
+    }
+    if (!this.authService.isLoggedIn) {
+      this.removeAuthorization();
+    }
+    if (this.accessExpired) {
+      if (!this.refreshTokenInProgress) {
+        this.refreshTokenInProgress = true;
+        this.refreshTokenSubject.next(null);
+        return this.authService.refreshOAuthAccessToken().pipe(
+          switchMap((authResponse) => {
+            this.retrieveAuthData();
+            this.refreshTokenInProgress = false;
+            this.refreshTokenSubject.next(true);
+            return next.handle(this.injectToken(request));
+          }),
+        );
+      } else {
+        return this.refreshTokenSubject.pipe(
+          filter(result => result !== null),
+          take(1),
+          switchMap((res) => {
+            this.retrieveAuthData();
+            return next.handle(this.injectToken(request));
+          })
+        );
+      }
     } else {
-      httpOptions.headers[authorizationHeader] = `Basic ${authenticationKey}`;
+      return next.handle(this.injectToken(request));
     }
   }
 
-  setAuthorization(authenticationKey: string) {
-    httpOptions.headers[authorizationHeader] = authenticationKey;
+  retrieveAuthData() {
+    this.setTenantId(this.authService.getTenantId());
+    this.setAuthorization(this.authService.getAuthorizationToken());
+    this.setAccessExpired(this.authService.isRefreshAccessToken());
   }
 
-  /**
-   * Sets the two factor access token header.
-   * @param {string} twoFactorAccessToken Two factor access token.
-   */
-  setTwoFactorAccessToken(twoFactorAccessToken: string) {
-    httpOptions.headers[twoFactorAccessTokenHeader] = twoFactorAccessToken;
+  injectToken(request: HttpRequest<any>) {
+    return request.clone({ setHeaders: httpOptions.headers });
+  }
+
+  setTenantId(tenantId: String) {
+    if (tenantId) {
+      httpOptions.headers['Platform-TenantId'] = tenantId;
+    } else {
+      delete httpOptions.headers['Platform-TenantId'];
+    }
+  }
+
+  setAuthorization(authenticationKey: String) {
+    if (authenticationKey) {
+      httpOptions.headers[authorizationHeader] = authenticationKey;
+    } else {
+      delete httpOptions.headers[authorizationHeader];
+    }
   }
 
   /**
@@ -69,11 +101,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     delete httpOptions.headers[authorizationHeader];
   }
 
-  /**
-   * Removes the two factor access token header.
-   */
-  removeTwoFactorAuthorization() {
-    delete httpOptions.headers[twoFactorAccessTokenHeader];
+  setAccessExpired(accessExpired: boolean) {
+    this.accessExpired = accessExpired;
   }
-
 }

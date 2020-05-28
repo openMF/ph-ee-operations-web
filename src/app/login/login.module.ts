@@ -9,7 +9,6 @@ import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { TwoFactorAuthenticationComponent } from './two-factor-authentication/two-factor-authentication.component';
 
 /**
  * Login Module
@@ -24,8 +23,7 @@ import { TwoFactorAuthenticationComponent } from './two-factor-authentication/tw
   declarations: [
     LoginComponent,
     LoginFormComponent,
-    ResetPasswordComponent,
-    TwoFactorAuthenticationComponent
+    ResetPasswordComponent
   ]
 })
 export class LoginModule { }
