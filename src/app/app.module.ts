@@ -28,17 +28,8 @@ import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { SettingsModule } from './settings/settings.module';
-import { NavigationModule } from './navigation/navigation.module';
-import { ClientsModule } from './clients/clients.module';
-import { GroupsModule } from './groups/groups.module';
-import { CentersModule } from './centers/centers.module';
-import { AccountingModule } from './accounting/accounting.module';
-import { SelfServiceModule } from './self-service/self-service.module';
-import { SystemModule } from './system/system.module';
-import { ProductsModule } from './products/products.module';
-import { OrganizationModule } from './organization/organization.module';
-import { TemplatesModule } from './templates/templates.module';
-import { UsersModule } from './users/users.module';
+// import { SystemModule } from './system/system.module';
+// import { UsersModule } from './users/users.module';
 import { PaymentHubModule } from './payment-hub/paymenthub.module';
 
 
@@ -67,17 +58,8 @@ export function initConfig(config: AppConfig) {
     HomeModule,
     LoginModule,
     SettingsModule,
-    NavigationModule,
-    ClientsModule,
-    GroupsModule,
-    CentersModule,
-    AccountingModule,
-    SelfServiceModule,
-    SystemModule,
-    ProductsModule,
-    OrganizationModule,
-    TemplatesModule,
-    UsersModule,
+    // SystemModule,
+    // UsersModule,
     PaymentHubModule,
     AppRoutingModule,
   ],
