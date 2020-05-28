@@ -51,13 +51,11 @@
       Type of Form:
         Login
         Reset Password
-        Two Factor Authentication
         Forgot Password (TODO: Decision to be taken on providing this feature.)
     -->
     <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
       <mifosx-login-form *ngIf="!resetPassword && !twoFactorAuthenticationRequired"></mifosx-login-form>
       <mifosx-reset-password *ngIf="resetPassword"></mifosx-reset-password>
-      <mifosx-two-factor-authentication *ngIf="twoFactorAuthenticationRequired"></mifosx-two-factor-authentication>
     </div>
 
     <!-- Contact Information/Resources (hidden on smaller screens) -->
