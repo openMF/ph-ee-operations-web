@@ -11,7 +11,6 @@ import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-
 import { PaymentHubComponent } from './paymenthub.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
 
-
 /**
  * Payment HUB Module
  *

@@ -82,7 +82,9 @@ import {
   faCloudUploadAlt,
   faTimes,
   faStickyNote,
-  faStop
+  faStop,
+  faAngleDown,
+  faAngleUp
 } from '@fortawesome/free-solid-svg-icons';
 
 /** Add icons to the library for convenient access in other components. */
@@ -164,7 +166,9 @@ library.add(
   faCloudUploadAlt,
   faTimes,
   faStickyNote,
-  faStop
+  faStop,
+  faAngleDown,
+  faAngleUp
 );
 
 /**

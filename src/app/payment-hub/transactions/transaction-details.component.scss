@@ -10,10 +10,6 @@
 
 table {
   width: 100%;
-
-  .select-row:hover {
-    cursor: pointer;
-  }
 }
 
 mat-card {
@@ -71,4 +67,26 @@ mat-card {
 
 .blue { 
   color: blue;
+}
+
+tr.transaction-detail-row {
+  height: 0;
+}
+
+tr.transaction-row:not(.transaction-expanded-row):hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+tr.transaction-row:not(.transaction-expanded-row):active {
+  background: #efefef;
+}
+
+.transaction-row td {
+  border-bottom-width: 0;
+}
+
+.transaction-detail {
+  overflow: hidden;
+  display: flex;
 }
