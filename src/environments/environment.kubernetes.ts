@@ -8,7 +8,7 @@ import env from "./.env";
 
 export let environment = Object.assign({}, {
   name: "kubernetes",
-  production: true,
+  production: false,
   version: env.npm_package_version,
   serverUrl: "",
   oauth: {
