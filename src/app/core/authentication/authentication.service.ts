@@ -165,6 +165,7 @@ export class AuthenticationService {
     }
     return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .pipe(map((tokenResponse: OAuth2Token) => {
+        this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
         this.authorizationToken = `Bearer ${tokenResponse.access_token}`;
         this.refreshTokenOnExpiry(tokenResponse.expires_in);
