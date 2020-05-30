@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 /** Custom Modules */
 import { SharedModule } from '../shared/shared.module';
 import { PaymentHubRoutingModule } from './paymenthub-routing.module';
+import { PipesModule } from '../pipes/pipes.module';
 
 /** Custom Components */
 import { IncomingTransactionsComponent } from './transactions/incoming/incoming-transactions.component';
@@ -20,7 +21,8 @@ import { TransactionDetailsComponent } from './transactions/transaction-details.
 @NgModule({
   imports: [
     SharedModule,
-    PaymentHubRoutingModule
+    PaymentHubRoutingModule,
+    PipesModule
   ],
   declarations: [
     IncomingTransactionsComponent,
