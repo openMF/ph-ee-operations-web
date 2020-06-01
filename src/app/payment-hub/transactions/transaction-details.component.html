@@ -247,7 +247,7 @@
 
 <div class="mat-elevation-z8 container">
 
-  <table mat-table [dataSource]="taskList" matSort>
+  <table mat-table [dataSource]="taskList" multiTemplateDataRows matSort>
     <ng-container matColumnDef="payment-task-list">
       <th mat-header-cell *matHeaderCellDef colspan="4"> Transaction Task List </th>
     </ng-container>
@@ -280,10 +280,64 @@
       <td mat-cell *matCellDef="let transaction" [ngClass]="{'orange': transaction.intent==='CREATED','blue': transaction.intent==='ACTIVATED','green': transaction.intent==='COMPLETED'}"> {{ transaction.intent }} </td>
     </ng-container>
 
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let transaction">
+      <button mat-button color="grey">
+            <span *ngIf="!checkExpanded(transaction)">
+              <fa-icon icon="angle-down"></fa-icon>&nbsp;&nbsp;
+            </span>
+            <span *ngIf="checkExpanded(transaction)">
+              <fa-icon icon="angle-up"></fa-icon>&nbsp;&nbsp;
+            </span>
+         </button>
+      </td>
+    </ng-container>
+
+     <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let transaction" [attr.colspan]="displayedColumns.length">
+        <div class="transaction-detail"
+            [@detailExpand]="checkExpanded(transaction) ? 'expanded' : 'collapsed'">
+        <table mat-table [dataSource]="transaction.datasource" matSort> 
+        
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
+            <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="elementId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Id </th>
+            <td mat-cell *matCellDef="let transaction"> {{ transaction.elementId }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Type</th>
+            <td mat-cell *matCellDef="let transaction"> {{ transaction.type }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="intent">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let transaction" [ngClass]="{'orange': transaction.intent==='CREATED','blue': transaction.intent==='ACTIVATED','green': transaction.intent==='COMPLETED'}"> {{ transaction.intent }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsDetailsTable"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsDetailsTable;"></tr>
+
+        </table>
+
+        </div>
+    </td>
+  </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="['payment-task-list']"></tr>
     <tr mat-header-row *matHeaderRowDef="['payment-process-id', 'payment-process-id-value']"></tr>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let transaction; columns: displayedColumns;"
+      class="transaction-row"
+      [class.transaction-expanded-row]="checkExpanded(transaction)"
+      (click)="pushPopElement(transaction)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="transaction-detail-row"></tr>
 
   </table>
 

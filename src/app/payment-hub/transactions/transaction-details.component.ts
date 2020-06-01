@@ -2,6 +2,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+
+/** rxjs Imports */
+import { from } from 'rxjs';
+import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { TransactionsService } from './service/transactions.service';
@@ -15,7 +20,14 @@ import { transactionStatusData as statuses } from './helper/transaction.helper';
 @Component({
   selector: 'mifosx-transaction-details',
   templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.scss']
+  styleUrls: ['./transaction-details.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class TransactionDetailsComponent implements OnInit {
 
@@ -26,13 +38,17 @@ export class TransactionDetailsComponent implements OnInit {
   /** Transaction ID. */
   transactionId: string;
   /** Columns to be displayed in transaction table. */
-  displayedColumns: string[] = ['timestamp', 'elementId', 'type', 'intent'];
+  displayedColumns: string[] = ['timestamp', 'elementId', 'type', 'intent', 'actions'];
+  displayedColumnsDetailsTable: string[] = ['timestamp', 'elementId', 'type', 'intent'];
   displayedBusinessAttributeColumns: string[] = ['name', 'timestamp', 'value'];
   /** Data source for transaction table. */
   taskList: MatTableDataSource<any>;
   businessAttributes: MatTableDataSource<any>;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
+  tasks: Array<any> = [];
+  counter: number = 0;
+  expandedElement: Array<any> = [];
   /**
    * @param {TransactionsService} transactionsService Transactions Service.
    * @param {ActivatedRoute} route Activated Route.
@@ -50,22 +66,55 @@ export class TransactionDetailsComponent implements OnInit {
     });
   }
 
+  checkExpanded(transaction: any): boolean {
+    let flag = false;
+    this.expandedElement.forEach(e => {
+      if(e === transaction) {
+        flag = true;
+        
+      }
+    });
+    return flag;
+  }
+
+  pushPopElement(transaction: any) {
+    const index = this.expandedElement.indexOf(transaction);
+    if(index === -1) {
+        this.expandedElement.push(transaction);
+    } else {
+      this.expandedElement.splice(index,1);
+    }
+  }
+
   /**
    * Retrieves the transaction data from `resolve` and sets the transaction table.
    */
   ngOnInit() {
     this.route.data.subscribe((data: { transaction: any }) => {
       this.datasource = data.transaction;
-      this.setTransactionTaskList();
       this.setTransactionBusinessAttributes();
     });
+	const source = from(this.datasource.tasks);
+	const example = source.pipe(
+ 	 groupBy(transaction => transaction['type']),
+  	 mergeMap(group => group.pipe(toArray()))
+	);
+	const subscribe = example.subscribe(val => {
+		this.tasks.push(val[val.length-1]);
+		this.tasks[this.counter].datasource = new MatTableDataSource(val.slice(0,val.length-1));
+		this.tasks[this.counter].datasource.sortingDataAccessor = (transaction: any, property: any) => {
+      	  return transaction[property];
+    };
+		this.counter++;
+	});
+	this.setTransactionTaskList();
   }
 
   /**
    * Initializes the data source for transaction table with journal entries, paginator and sorter.
    */
   setTransactionTaskList() {
-    this.taskList = new MatTableDataSource(this.datasource.tasks);
+    this.taskList = new MatTableDataSource(this.tasks);
     this.taskList.sortingDataAccessor = (transaction: any, property: any) => {
       return transaction[property];
     };
