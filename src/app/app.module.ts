@@ -28,8 +28,8 @@ import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { SettingsModule } from './settings/settings.module';
-// import { SystemModule } from './system/system.module';
-// import { UsersModule } from './users/users.module';
+import { SystemModule } from './system/system.module';
+import { UsersModule } from './users/users.module';
 import { PaymentHubModule } from './payment-hub/paymenthub.module';
 
 
@@ -58,8 +58,8 @@ export function initConfig(config: AppConfig) {
     HomeModule,
     LoginModule,
     SettingsModule,
-    // SystemModule,
-    // UsersModule,
+    SystemModule,
+    UsersModule,
     PaymentHubModule,
     AppRoutingModule,
   ],

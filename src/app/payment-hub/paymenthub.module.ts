@@ -1,5 +1,6 @@
 /** Angular Imports */
 import { NgModule } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 /** Custom Modules */
 import { SharedModule } from '../shared/shared.module';
@@ -10,6 +11,7 @@ import { IncomingTransactionsComponent } from './transactions/incoming/incoming-
 import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-transactions.component';
 import { PaymentHubComponent } from './paymenthub.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
+import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
 
 
 /**
@@ -19,6 +21,7 @@ import { TransactionDetailsComponent } from './transactions/transaction-details.
  */
 @NgModule({
   imports: [
+    MatDialogModule,
     SharedModule,
     PaymentHubRoutingModule
   ],
@@ -26,10 +29,12 @@ import { TransactionDetailsComponent } from './transactions/transaction-details.
     IncomingTransactionsComponent,
     OutgoingTransactionsComponent,
     TransactionDetailsComponent,
-    PaymentHubComponent
+    PaymentHubComponent,
+    BpmnDialogComponent
   ],
   entryComponents: [
     PaymentHubComponent,
+    BpmnDialogComponent
   ]
 })
 export class PaymentHubModule { }
