@@ -11,21 +11,16 @@
 
   <nav mat-tab-nav-bar backgroundColor="primary" class="ml-1">
 
-    <!-- <a mat-tab-link class="tab-link" [matMenuTriggerFor]="institutionMenu" #institutionMenuTrigger="matMenuTrigger">
-      <fa-icon class="mr-05" icon="university" size="lg"></fa-icon>
-      Institution
-    </a> -->
-
     <span fxHide.lt-lg="true">
 
       <a mat-tab-link class="tab-link" [routerLink]="['/paymenthubee']">
         <fa-icon class="mr-05" icon="money-bill-alt" size="lg"></fa-icon>
         Payment Hub EE
       </a>
-      <!-- <a mat-tab-link class="tab-link" [matMenuTriggerFor]="adminMenu" #adminMenuTrigger="matMenuTrigger">
+      <a mat-tab-link class="tab-link" [matMenuTriggerFor]="adminMenu" #adminMenuTrigger="matMenuTrigger">
         <fa-icon class="mr-05" icon="shield-alt" size="lg"></fa-icon>
         Admin
-      </a> -->
+      </a>
     </span>
 
   </nav>

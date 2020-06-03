@@ -14,6 +14,9 @@ import { formatDate, formatUTCDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
 
+/** Dialog Components */
+import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
+
 /**
  * View transaction component.
  */
@@ -171,5 +174,13 @@ export class TransactionDetailsComponent implements OnInit {
 
     const elements = this.transactionStatusData.filter((option) => option.value === status);
     return elements.length > 0 ? elements[0].css : undefined;
+  }
+
+  openDialog() {
+    const bpmnDialogRef = this.dialog.open( BpmnDialogComponent, {
+      data: {
+        datasource: this.datasource
+      },
+    });
   }
 }
