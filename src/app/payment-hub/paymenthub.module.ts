@@ -1,16 +1,18 @@
 /** Angular Imports */
 import { NgModule } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 /** Custom Modules */
 import { SharedModule } from '../shared/shared.module';
 import { PaymentHubRoutingModule } from './paymenthub-routing.module';
+import { PipesModule } from '../pipes/pipes.module';
 
 /** Custom Components */
 import { IncomingTransactionsComponent } from './transactions/incoming/incoming-transactions.component';
 import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-transactions.component';
 import { PaymentHubComponent } from './paymenthub.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
-
+import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
 
 /**
  * Payment HUB Module
@@ -19,17 +21,21 @@ import { TransactionDetailsComponent } from './transactions/transaction-details.
  */
 @NgModule({
   imports: [
+    MatDialogModule,
     SharedModule,
-    PaymentHubRoutingModule
+    PaymentHubRoutingModule,
+    PipesModule
   ],
   declarations: [
     IncomingTransactionsComponent,
     OutgoingTransactionsComponent,
     TransactionDetailsComponent,
-    PaymentHubComponent
+    PaymentHubComponent,
+    BpmnDialogComponent
   ],
   entryComponents: [
     PaymentHubComponent,
+    BpmnDialogComponent
   ]
 })
 export class PaymentHubModule { }
