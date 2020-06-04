@@ -12,6 +12,7 @@ import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-
 import { PaymentHubComponent } from './paymenthub.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
 import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
+import { RetryResolveDialogComponent } from './transactions/retry-resolve-dialog/retry-resolve-dialog.component';
 
 
 /**
@@ -30,11 +31,13 @@ import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.comp
     OutgoingTransactionsComponent,
     TransactionDetailsComponent,
     PaymentHubComponent,
-    BpmnDialogComponent
+    BpmnDialogComponent,
+    RetryResolveDialogComponent
   ],
   entryComponents: [
     PaymentHubComponent,
-    BpmnDialogComponent
+    BpmnDialogComponent,
+    RetryResolveDialogComponent
   ]
 })
 export class PaymentHubModule { }

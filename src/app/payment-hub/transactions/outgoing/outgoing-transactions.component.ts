@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -17,6 +17,7 @@ import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
+import { RetryResolveDialogComponent } from '../retry-resolve-dialog/retry-resolve-dialog.component';
 
 /**
  * Transactions component.
@@ -51,7 +52,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status','actions'];
   /** Data source for transactions table. */
   dataSource: TransactionsDataSource;
   /** Journal entries filter. */
@@ -107,9 +108,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
    * Retrieves the offices and gl accounts data from `resolve`.
    * @param {AccountingService} accountingService Accounting Service.
    * @param {ActivatedRoute} route Activated Route.
+   * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private transactionsService: TransactionsService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    public dialog: MatDialog) {
     this.route.data.subscribe((data: {
       currencies: any
       dfspEntries: DfspEntry[]
@@ -382,6 +385,15 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   getTransactions() {
     this.dataSource = new TransactionsDataSource(this.transactionsService);
     this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+  }
+
+  openRetryResolveDialog(workflowInstanceKey:  any,action: string) {
+    const retryResolveDialogRef = this.dialog.open( RetryResolveDialogComponent, {
+      data: {
+        action: action,
+        workflowInstanceKey: workflowInstanceKey
+      },
+    });
   }
 
 }

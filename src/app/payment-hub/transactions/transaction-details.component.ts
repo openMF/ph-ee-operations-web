@@ -12,6 +12,8 @@ import { transactionStatusData as statuses } from './helper/transaction.helper';
 /** Dialog Components */
 import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
 
+import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
+
 /**
  * View transaction component.
  */
@@ -131,6 +133,15 @@ export class TransactionDetailsComponent implements OnInit {
     const bpmnDialogRef = this.dialog.open( BpmnDialogComponent, {
       data: {
         datasource: this.datasource
+      },
+    });
+  }
+
+  openRetryResolveDialog(workflowInstanceKey:  any,action: string) {
+    const retryResolveDialogRef = this.dialog.open( RetryResolveDialogComponent, {
+      data: {
+        action: action,
+        workflowInstanceKey: workflowInstanceKey
       },
     });
   }

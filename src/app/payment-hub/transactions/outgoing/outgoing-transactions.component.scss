@@ -9,13 +9,6 @@ table {
 .mat-paginator-range-label {
   display: hidden;
 }
-.green {
-  color: green;
-}
-
-.red { color:red;}
-  
-.orange { color:orange;}
 
 table{
   width: 100%;
@@ -39,4 +32,22 @@ table{
  .mat-cell.cdk-column-completedAt {
   flex: 0 0 110px !important;
   width: 110px !important;
- }
+ }.green {
+  color: green;
+}
+
+.green {
+  color: green;
+}
+
+.red { 
+  color:red;
+}
+
+.orange { 
+  color:orange;
+}
+
+.blue { 
+  color: blue;
+}
