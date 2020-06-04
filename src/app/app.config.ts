@@ -39,6 +39,8 @@ export class AppConfig {
                             }
                             resolve(true);
                         });
+                } else {
+                    resolve(true);
                 }
 
             });
