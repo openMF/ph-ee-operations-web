@@ -1,0 +1,20 @@
+version: '2'
+services:
+  operations-mysql:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - /home/docker/data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    ports:
+      - "3306:3306"
+
+  operations-app:
+    image: paymenthubee.azurecr.io/phee/operations-app
+    ports:
+      - 5000:5000
+    environment:
+      FINERACT_DATASOURCE_CORE_HOST: operations-mysql
+    depends_on:
+      - operations-mysql
