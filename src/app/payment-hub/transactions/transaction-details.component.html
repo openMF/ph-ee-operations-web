@@ -144,7 +144,7 @@
     </mat-card>
   </mat-grid-tile>
 </mat-grid-list>
-<mat-grid-list cols="2" rowHeight="350">
+<mat-grid-list cols="2" rowHeight="450">
   <mat-grid-tile [colspan]="1"
     [rowspan]="1">
     <mat-card class="mat-elevation-z8" *ngIf="datasource.transaction">
@@ -196,11 +196,10 @@
             Transfer Status
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.status!==undefined" class="{{displayCSS(datasource.transaction.status)}}">
-            {{ displayStatus(datasource.transaction.status) }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.status!==undefined" [ngClass]="{'red': datasource.transaction.status==='FAILED','green': datasource.transaction.status==='COMPLETED','orange': datasource.transaction.status==='ACTION_NEEDED'}">{{datasource.transaction.status}}
+      <div *ngIf="datasource.transaction.status==='ACTION_NEEDED'"><button mat-raised-button color="primary" (click)="openRetryResolveDialog(datasource.transaction.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="sm"></fa-icon>&nbsp;RETRY</button>&nbsp;&nbsp;<button mat-raised-button color="primary" (click)="openRetryResolveDialog(datasource.transaction.workflowInstanceKey,'resolve')"><fa-icon icon="check" size="sm"></fa-icon>&nbsp;RESOLVE</button></div>
           </div>
         </div>
-
       </mat-card-content>
     </mat-card>
   </mat-grid-tile>

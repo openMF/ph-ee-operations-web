@@ -68,6 +68,7 @@ import {
   faTachometerAlt,
   faTag,
   faTags,
+  faRedo,
   faTimesCircle,
   faTrash,
   faUndo,
@@ -85,6 +86,7 @@ import {
   faStop,
   faAngleDown,
   faAngleUp
+
 } from '@fortawesome/free-solid-svg-icons';
 
 /** Add icons to the library for convenient access in other components. */
@@ -152,6 +154,7 @@ library.add(
   faTachometerAlt,
   faTag,
   faTags,
+  faRedo,
   faTimesCircle,
   faTrash,
   faUndo,

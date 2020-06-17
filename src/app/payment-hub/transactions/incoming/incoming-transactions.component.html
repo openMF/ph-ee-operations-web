@@ -136,7 +136,14 @@
 
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-    <td mat-cell *matCellDef="let transaction" class="mat-cell cdk-column-status mat-column-status {{displayCSS(transaction.status)}}"> {{ displayStatus(transaction.status) }} </td>
+    <td mat-cell *matCellDef="let transaction" [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">{{ transaction.status }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let transaction" (click)="$event.stopPropagation()">
+        <div *ngIf="transaction.status==='ACTION_NEEDED'"><button mat-button color="primary" (click)="openRetryResolveDialog(transaction.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="lg"></fa-icon></button><button mat-button class="green" (click)="openRetryResolveDialog(transaction.workflowInstanceKey,'resolve')" ><fa-icon icon="check" size="lg"></fa-icon></button></div>
+      </td>
     </ng-container>
 
     <!-- <ng-container matColumnDef="feeMethod">
