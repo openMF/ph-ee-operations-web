@@ -38,7 +38,7 @@ export class TransactionsService {
       }
     });
     params += 'page=' + page + '&size=' + count;
-    return this.http.get('/transactions?' + params).pipe(map((transactions: any) => transactions as Transactions));
+    return this.http.get('/transfers?' + params).pipe(map((transactions: any) => transactions as Transactions));
   }
 
   getDfspEntries(): Observable<DfspEntry[]> {
@@ -53,7 +53,7 @@ export class TransactionsService {
    *
    */
   getTransactionDetail(id: string): Observable<TransactionDetails> {
-    return this.http.get('/transaction/' + id).pipe(map((transaction: any) => transaction as TransactionDetails));
+    return this.http.get('/transfer/' + id).pipe(map((transaction: any) => transaction as TransactionDetails));
   }
 
 
