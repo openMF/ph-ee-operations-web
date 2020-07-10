@@ -1,0 +1,37 @@
+fineract:
+  datasource:
+    core:
+      host: operations-mysql
+      port: 3306
+      schema: tenants
+      username: root
+      password: mysql
+    common:
+      protocol: jdbc
+      subprotocol: mysql
+      driverclass_name: com.mysql.cj.jdbc.Driver
+
+token:
+  user:
+    access-validity-seconds: 600
+    refresh-validity-seconds: 43200
+  client:
+    access-validity-seconds: 3600
+
+caching:
+  enabled: false
+
+security:
+  filter-order: 5
+
+spring:
+  resources:
+    add-mappings: false
+  mvc:
+    favicon:
+      enabled: false
+  jmx:
+    enabled: false
+
+server:
+  port: 5000

@@ -66,11 +66,17 @@ public class TenantDatabaseUpgradeService {
     @Value("${fineract.datasource.common.driverclass_name}")
     private String driverClass;
 
-    @Value("${token.access.validity-seconds}")
-    private String tokenAccessValiditySeconds;
+    @Value("${token.user.access-validity-seconds}")
+    private String userTokenAccessValiditySeconds;
 
-    @Value("${token.refresh.validity-seconds}")
-    private String tokenRefreshValiditySeconds;
+    @Value("${token.user.refresh-validity-seconds}")
+    private String userTokenRefreshValiditySeconds;
+
+    @Value("${token.client.access-validity-seconds}")
+    private String clientAccessTokenValidity;
+
+    @Value("${token.client.channel.secret}")
+    private String channelClientSecret;
 
     @Value("#{'${tenants}'.split(',')}")
     private List<String> tenants;
@@ -93,8 +99,10 @@ public class TenantDatabaseUpgradeService {
                     fw.setOutOfOrder(true);
                     Map<String, String> placeholders = new HashMap<>();
                     placeholders.put("tenantDatabase", tenant.getSchemaName()); // add tenant as aud claim
-                    placeholders.put("accessTokenValidity", tokenAccessValiditySeconds);
-                    placeholders.put("refreshTokenValidity", tokenRefreshValiditySeconds);
+                    placeholders.put("userAccessTokenValidity", userTokenAccessValiditySeconds);
+                    placeholders.put("userRefreshTokenValidity", userTokenRefreshValiditySeconds);
+                    placeholders.put("clientAccessTokenValidity", clientAccessTokenValidity);
+                    placeholders.put("channelClientSecret", channelClientSecret);
                     placeholders.put("identityProviderResourceId", IDENTITY_PROVIDER_RESOURCE_ID); // add identity provider as aud claim
                     fw.setPlaceholders(placeholders);
                     fw.migrate();

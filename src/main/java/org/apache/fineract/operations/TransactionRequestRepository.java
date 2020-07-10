@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface TransactionRequestRepository extends JpaRepository<TransactionRequest, Long>, JpaSpecificationExecutor {
 
-    TransactionRequest findByWorkflowInstanceKey(Long workflowInstanceKey);
+    TransactionRequest findFirstByWorkflowInstanceKey(Long workflowInstanceKey);
 
 }

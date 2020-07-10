@@ -37,4 +37,4 @@ ENGINE=InnoDB
 AUTO_INCREMENT=1;
 
 INSERT INTO `oauth_client_details` (`client_id`, `resource_ids`, `scope`, `authorized_grant_types`, `access_token_validity`, `refresh_token_validity`)
-VALUES ('client', '${identityProviderResourceId},${tenantDatabase}', 'identity', 'password,refresh_token,client_credentials', ${accessTokenValidity}, ${refreshTokenValidity});
+VALUES ('client', '${identityProviderResourceId},${tenantDatabase}', 'identity', 'password,refresh_token', ${userAccessTokenValidity}, ${userRefreshTokenValidity});

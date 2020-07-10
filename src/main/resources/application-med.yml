@@ -1,0 +1,10 @@
+tenants: "tn05,tn06"
+
+token:
+  client:
+    channel:
+      secret: "p2345"
+
+channel-connector:
+  url: http://med-connector-channel.mifos.io
+  transfer-path: /channel/transfer

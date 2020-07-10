@@ -1,0 +1,10 @@
+tenants: "tn03,tn04"
+
+token:
+  client:
+    channel:
+      secret: "p1234"
+
+channel-connector:
+  url: http://bb-connector-channel.mifos.io
+  transfer-path: /channel/transfer

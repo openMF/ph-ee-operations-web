@@ -48,17 +48,18 @@ public class OperationsDetailedApi {
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "size") Integer size,
             @RequestParam(value = "payerPartyId", required = false) String payerPartyId,
+            @RequestParam(value = "payerDfspId", required = false) String payerDfspId,
             @RequestParam(value = "payeePartyId", required = false) String payeePartyId,
             @RequestParam(value = "payeeDfspId", required = false) String payeeDfspId,
-            @RequestParam(value = "payerDfspId", required = false) String payerDfspId,
             @RequestParam(value = "transactionId", required = false) String transactionId,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "amount", required = false) BigDecimal amount,
             @RequestParam(value = "currency", required = false) String currency,
             @RequestParam(value = "startFrom", required = false) String startFrom,
             @RequestParam(value = "startTo", required = false) String startTo,
-            @RequestParam(value = "sortedBy", required = false) String sortedBy
-    ) {
+            @RequestParam(value = "direction", required = false) String direction,
+            @RequestParam(value = "sortedBy", required = false) String sortedBy,
+            @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
         List<Specifications<Transfer>> specs = new ArrayList<>();
         if (payerPartyId != null) {
             specs.add(TransferSpecs.match(Transfer_.payerPartyId, payerPartyId));
@@ -84,6 +85,9 @@ public class OperationsDetailedApi {
         if (currency != null) {
             specs.add(TransferSpecs.match(Transfer_.currency, currency));
         }
+        if (direction != null) {
+            specs.add(TransferSpecs.match(Transfer_.direction, direction));
+        }
         try {
             if (startFrom != null && startTo != null) {
                 specs.add(TransferSpecs.between(Transfer_.startedAt, dateFormat().parse(startFrom), dateFormat().parse(startTo)));
@@ -98,9 +102,9 @@ public class OperationsDetailedApi {
 
         PageRequest pager;
         if (sortedBy == null || "startedAt".equals(sortedBy)) {
-            pager = new PageRequest(page, size, new Sort(Sort.Direction.DESC, "startedAt"));
+            pager = new PageRequest(page, size, new Sort(sortedOrder, "startedAt"));
         } else {
-            pager = new PageRequest(page, size, new Sort(Sort.Direction.ASC, sortedBy));
+            pager = new PageRequest(page, size, new Sort(sortedOrder, sortedBy));
         }
 
         if (specs.size() > 0) {
@@ -129,6 +133,7 @@ public class OperationsDetailedApi {
             @RequestParam(value = "currency", required = false) String currency,
             @RequestParam(value = "startFrom", required = false) Long startFrom,
             @RequestParam(value = "startTo", required = false) Long startTo,
+            @RequestParam(value = "direction", required = false) String direction,
             @RequestParam(value = "sortedBy", required = false) String sortedBy,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
         List<Specifications<TransactionRequest>> specs = new ArrayList<>();
@@ -156,7 +161,9 @@ public class OperationsDetailedApi {
         if (currency != null) {
             specs.add(TransactionRequestSpecs.match(TransactionRequest_.currency, currency));
         }
-
+        if (direction != null) {
+            specs.add(TransactionRequestSpecs.match(TransactionRequest_.direction, direction));
+        }
         try {
             if (startFrom != null && startTo != null) {
                 specs.add(TransactionRequestSpecs.between(TransactionRequest_.startedAt, new Date(startFrom), new Date(startTo)));
