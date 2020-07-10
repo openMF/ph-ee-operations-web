@@ -16,8 +16,12 @@ import { transactionStatusData as statuses } from './helper/transaction.helper';
 
 /** Dialog Components */
 import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
-
+import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
 import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
+
+/** Custom Models */
+import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
+import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 
 /**
  * View transaction component.
@@ -178,7 +182,7 @@ export class TransactionDetailsComponent implements OnInit {
     return elements.length > 0 ? elements[0].css : undefined;
   }
 
-  openDialog() {
+  openBPMNDialog() {
     const bpmnDialogRef = this.dialog.open( BpmnDialogComponent, {
       data: {
         datasource: this.datasource
@@ -192,6 +196,30 @@ export class TransactionDetailsComponent implements OnInit {
         action: action,
         workflowInstanceKey: workflowInstanceKey
       },
+    });
+  }
+
+  openReturnDialog() {
+        const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'comment',
+        label: 'Comment',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Comment',
+      layout: { addButtonText: 'Confirm' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        //update when api is available and send request using workflowInstanceKey
+        //console.log(response.data.value.comment)
+        //console.log(this.datasource.transaction.workflowInstanceKey)
+      }
     });
   }
 }
