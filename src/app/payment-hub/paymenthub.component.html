@@ -16,6 +16,14 @@
             <p matLine>Advanced search option for incoming transactions</p>
           </mat-list-item>
 
+          <mat-list-item [routerLink]="['outgoingtransactions']">
+            <mat-icon matListIcon>
+              <fa-icon icon="search" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Search Outgoing Transactions</h4>
+            <p matLine>Advanced search option for outgoing transactions</p>
+          </mat-list-item>
+
         </mat-nav-list>
 
       </div>
@@ -24,11 +32,19 @@
 
         <mat-nav-list>
 
-          <mat-list-item [routerLink]="['outgoingtransactions']">
+          <mat-list-item [routerLink]="['incomingrequesttopay']">
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Search Outgoing Transactions</h4>
+            <h4 matLine>Search Incoming Request to Pay</h4>
+            <p matLine>Advanced search option for outgoing transactions</p>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="['outgoingrequesttopay']">
+            <mat-icon matListIcon>
+              <fa-icon icon="search" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Search Outgoing Request to Pay</h4>
             <p matLine>Advanced search option for outgoing transactions</p>
           </mat-list-item>
 
