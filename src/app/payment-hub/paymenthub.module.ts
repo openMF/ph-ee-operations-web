@@ -14,6 +14,9 @@ import { PaymentHubComponent } from './paymenthub.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
 import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
 import { RetryResolveDialogComponent } from './transactions/retry-resolve-dialog/retry-resolve-dialog.component';
+import { IncomingRequestToPayComponent } from './request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component';
+import { OutgoingRequestToPayComponent } from './request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component';
+import { ViewRequestToPayComponent } from './request-to-pay/view-request-to-pay/view-request-to-pay.component';
 
 /**
  * Payment HUB Module
@@ -33,7 +36,10 @@ import { RetryResolveDialogComponent } from './transactions/retry-resolve-dialog
     TransactionDetailsComponent,
     PaymentHubComponent,
     BpmnDialogComponent,
-    RetryResolveDialogComponent
+    RetryResolveDialogComponent,
+    IncomingRequestToPayComponent,
+    OutgoingRequestToPayComponent,
+    ViewRequestToPayComponent
   ],
   entryComponents: [
     PaymentHubComponent,
