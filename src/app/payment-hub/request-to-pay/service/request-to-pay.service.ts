@@ -20,14 +20,14 @@ export class RequestToPayService {
   	return this.http.get('/api/v1/transactionRequests');
   }
 
-  // getRequestToPay(requestId: string): Observable<any> {
-  //   return this.http.get(`/api/v1/transactionRequests/${requestId}`);
-  // }
-
-  getRequestToPay(id: string): Observable<any> {
-    return this.http
-        .disableApiPrefix()
-        .get('/assets/mock/payment-hub/transaction-details.mock.json');
+  getRequestToPay(requestId: string): Observable<any> {
+    return this.http.get(`/api/v1/transactionRequest/${requestId}`);
   }
+
+  // getRequestToPay(id: string): Observable<any> {
+  //   return this.http
+  //       .disableApiPrefix()
+  //       .get('/assets/mock/payment-hub/transaction-details.mock.json');
+  // }
 
 }
