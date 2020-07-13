@@ -102,9 +102,9 @@ public class OperationsDetailedApi {
 
         PageRequest pager;
         if (sortedBy == null || "startedAt".equals(sortedBy)) {
-            pager = new PageRequest(page, size, new Sort(sortedOrder, "startedAt"));
+            pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), "startedAt"));
         } else {
-            pager = new PageRequest(page, size, new Sort(sortedOrder, sortedBy));
+            pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), sortedBy));
         }
 
         if (specs.size() > 0) {
