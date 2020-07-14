@@ -16,8 +16,12 @@ import { transactionStatusData as statuses } from './helper/transaction.helper';
 
 /** Dialog Components */
 import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
-
+import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
 import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
+
+/** Custom Models */
+import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
+import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 
 /**
  * View transaction component.
@@ -28,8 +32,8 @@ import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolv
   styleUrls: ['./transaction-details.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
@@ -74,9 +78,9 @@ export class TransactionDetailsComponent implements OnInit {
   checkExpanded(transaction: any): boolean {
     let flag = false;
     this.expandedElement.forEach(e => {
-      if(e === transaction) {
+      if (e === transaction) {
         flag = true;
-        
+
       }
     });
     return flag;
@@ -84,10 +88,10 @@ export class TransactionDetailsComponent implements OnInit {
 
   pushPopElement(transaction: any) {
     const index = this.expandedElement.indexOf(transaction);
-    if(index === -1) {
-        this.expandedElement.push(transaction);
+    if (index === -1) {
+      this.expandedElement.push(transaction);
     } else {
-      this.expandedElement.splice(index,1);
+      this.expandedElement.splice(index, 1);
     }
   }
 
@@ -99,20 +103,20 @@ export class TransactionDetailsComponent implements OnInit {
       this.datasource = data.transaction;
       this.setTransactionBusinessAttributes();
     });
-	const source = from(this.datasource.tasks);
-	const example = source.pipe(
- 	 groupBy(transaction => transaction['type']),
-  	 mergeMap(group => group.pipe(toArray()))
-	);
-	const subscribe = example.subscribe(val => {
-		this.tasks.push(val[val.length-1]);
-		this.tasks[this.counter].datasource = new MatTableDataSource(val.slice(0,val.length-1));
-		this.tasks[this.counter].datasource.sortingDataAccessor = (transaction: any, property: any) => {
-      	  return transaction[property];
-    };
-		this.counter++;
-	});
-	this.setTransactionTaskList();
+    const source = from(this.datasource.tasks);
+    const example = source.pipe(
+      groupBy(transaction => transaction['type']),
+      mergeMap(group => group.pipe(toArray()))
+    );
+    const subscribe = example.subscribe(val => {
+      this.tasks.push(val[val.length - 1]);
+      this.tasks[this.counter].datasource = new MatTableDataSource(val.slice(0, val.length - 1));
+      this.tasks[this.counter].datasource.sortingDataAccessor = (transaction: any, property: any) => {
+        return transaction[property];
+      };
+      this.counter++;
+    });
+    this.setTransactionTaskList();
   }
 
   /**
@@ -178,20 +182,42 @@ export class TransactionDetailsComponent implements OnInit {
     return elements.length > 0 ? elements[0].css : undefined;
   }
 
-  openDialog() {
-    const bpmnDialogRef = this.dialog.open( BpmnDialogComponent, {
+  openBPMNDialog() {
+    const bpmnDialogRef = this.dialog.open(BpmnDialogComponent, {
       data: {
         datasource: this.datasource
       },
     });
   }
 
-  openRetryResolveDialog(workflowInstanceKey:  any,action: string) {
-    const retryResolveDialogRef = this.dialog.open( RetryResolveDialogComponent, {
+  openRetryResolveDialog(workflowInstanceKey: any, action: string) {
+    const retryResolveDialogRef = this.dialog.open(RetryResolveDialogComponent, {
       data: {
         action: action,
         workflowInstanceKey: workflowInstanceKey
       },
+    });
+  }
+
+  openReturnDialog() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'comment',
+        label: 'Comment',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Comment',
+      layout: { addButtonText: 'Confirm' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        this.transactionsService.refund(this.getPaymentProcessId(), response.data);
+      }
     });
   }
 }

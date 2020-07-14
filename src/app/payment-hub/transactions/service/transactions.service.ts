@@ -48,12 +48,16 @@ export class TransactionsService {
       .pipe(map((entries: any) => entries as DfspEntry[]));
   }
 
+  refund(id: string, comment: string): Observable<any> {
+    return this.http.post('/api/v1/transfer/' + id + '/refund', { comment });
+  }
+
   /**
    * Get details of a Transaction.
    *
    */
   getTransactionDetail(id: string): Observable<TransactionDetails> {
-    return this.http.get('/transfer/' + id).pipe(map((transaction: any) => transaction as TransactionDetails));
+    return this.http.get('/api/v1/transfer/' + id).pipe(map((transaction: any) => transaction as TransactionDetails));
   }
 
 
