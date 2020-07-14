@@ -29,6 +29,8 @@ export class OutgoingRequestToPayComponent implements OnInit {
   
   /* Requests to pay data. */
   requestToPayData: any;
+  /* Requests to outgoing data. */
+  requestToPayOutgoingData: Array<any> = [];
 
   /** Columns to be displayed in request to pay table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'state'];
@@ -51,7 +53,11 @@ export class OutgoingRequestToPayComponent implements OnInit {
       this.currenciesData = data.currencies;
       this.dfspEntriesData = data.dfspEntries;
     });
-    console.log(this.requestToPayData);
+    for(let request of this.requestToPayData) {
+    	if(request.direction==="OUTGOING")
+    		this.requestToPayOutgoingData.push(request);
+    };
+    console.log(this.requestToPayOutgoingData);
   }
 
   ngOnInit() {
@@ -63,7 +69,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
    * Initializes the data source, paginator and sorter for request to pay table.
    */
   setRequestToPay() {
-    this.dataSource = new MatTableDataSource(this.requestToPayData);
+    this.dataSource = new MatTableDataSource(this.requestToPayOutgoingData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
