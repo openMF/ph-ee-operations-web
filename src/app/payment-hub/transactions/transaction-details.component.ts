@@ -159,6 +159,10 @@ export class TransactionDetailsComponent implements OnInit {
     return this.datasource.transfer.workflowInstanceKey;
   }
 
+  getTransferId() {
+    return this.datasource.transfer.transactionId;
+  }
+
   cleanse(unformatted: any) {
     return unformatted ? unformatted.replace(/\\n|\\r|\\t/gm, '').replace(/\\"/gi, '"') : undefined;
   }
@@ -217,7 +221,7 @@ export class TransactionDetailsComponent implements OnInit {
     const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
     editFundDialogRef.afterClosed().subscribe((response: any) => {
       if (response.data) {
-        return this.transactionsService.refund(this.getPaymentProcessId(), response.data.value).subscribe();
+        return this.transactionsService.refund(this.getTransferId(), response.data.value).subscribe();
       }
     });
   }
