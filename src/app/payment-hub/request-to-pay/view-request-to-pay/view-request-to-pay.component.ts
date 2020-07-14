@@ -46,15 +46,16 @@ export class ViewRequestToPayComponent implements OnInit {
   tasks: Array<any> = [];
   counter: number = 0;
   expandedElement: Array<any> = [];
+  requestToPayData: any;
 
   constructor(private requestToPayService: RequestToPayService,
   	private route: ActivatedRoute,
   	private router: Router,
     public dialog: MatDialog) { 
-    // this.route.data.subscribe((data: { requestToPay: any }) => {
-    //   this.requestToPayData = data.requestToPay;
-    // });
-    // console.log(this.requestToPayData) 
+    this.route.data.subscribe((data: { requestToPay: any }) => {
+      this.requestToPayData = data.requestToPay;
+    });
+    console.log(this.requestToPayData) 
     this.route.data.subscribe((data: {
       dfspEntries: DfspEntry[]
     }) => {
@@ -134,7 +135,7 @@ export class ViewRequestToPayComponent implements OnInit {
     if (!date) {
       return undefined;
     }
-
+    date=date.toString();
     date = date.replace('+0000', '');
     date = date.replace('T', ' ');
     date = date.replace('.000', '');
@@ -142,7 +143,7 @@ export class ViewRequestToPayComponent implements OnInit {
   }
 
   getPaymentProcessId() {
-    return this.datasource.transaction.workflowInstanceKey;
+    return this.datasource.transactionRequest.workflowInstanceKey;
   }
 
   cleanse(unformatted: any) {
