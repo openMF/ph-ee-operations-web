@@ -12,66 +12,66 @@
   <mat-grid-list cols="2" rowHeight="350">
     <mat-grid-tile [colspan]="1"
     [rowspan]="1">
-    <mat-card class="mat-elevation-z8" *ngIf="datasource.transaction">
+    <mat-card class="mat-elevation-z8" *ngIf="datasource.transfer">
       <mat-card-title>Payer</mat-card-title>
       <mat-card-content>
 
         <div fxLayout="row wrap" class="content">
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerPartyIdType!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerPartyIdType!==undefined">
             Id Type
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerPartyIdType!==undefined">
-            {{ datasource.transaction.payerPartyIdType }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerPartyIdType!==undefined">
+            {{ datasource.transfer.payerPartyIdType }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerPartyId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerPartyId!==undefined">
             Id
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerPartyId!==undefined">
-            {{ datasource.transaction.payerPartyId }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerPartyId!==undefined">
+            {{ datasource.transfer.payerPartyId }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerDfspId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerDfspId!==undefined">
             DFSP Id
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerDfspId!==undefined">
-            {{ datasource.transaction.payerDfspId }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerDfspId!==undefined">
+            {{ datasource.transfer.payerDfspId }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerDfspId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerDfspId!==undefined">
             DFSP Name
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerDfspId!==undefined">
-            {{ displayDfspName(getDfpsEntry(datasource.transaction.payerDfspId))}}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerDfspId!==undefined">
+            {{ displayDfspName(getDfpsEntry(datasource.transfer.payerDfspId))}}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerDateOfBirth!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerDateOfBirth!==undefined">
             Date of Birth
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerDateOfBirth!==undefined">
-            {{ datasource.transaction.payerDateOfBirth }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerDateOfBirth!==undefined">
+            {{ datasource.transfer.payerDateOfBirth }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerLastName!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerLastName!==undefined">
             Last Name
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerLastName!==undefined">
-            {{ datasource.transaction.payerLastName }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerLastName!==undefined">
+            {{ datasource.transfer.payerLastName }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerFirstName!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerFirstName!==undefined">
             First Name
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerFirstName!==undefined">
-            {{ datasource.transaction.payerFirstName }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerFirstName!==undefined">
+            {{ datasource.transfer.payerFirstName }}
           </div>
 
         </div>
@@ -81,66 +81,66 @@
   </mat-grid-tile>
   <mat-grid-tile [colspan]="1"
     [rowspan]="1">
-    <mat-card class="mat-elevation-z8" *ngIf="datasource.transaction">
+    <mat-card class="mat-elevation-z8" *ngIf="datasource.transfer">
       <mat-card-title>Payee</mat-card-title>
       <mat-card-content>
 
-        <div fxLayout="row wrap" class="content">
+        <div fxLayout="row wrap" class="content"> 
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeePartyIdType!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeePartyIdType!==undefined">
             Id Type
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeePartyIdType!==undefined">
-            {{ datasource.transaction.payeePartyIdType }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeePartyIdType!==undefined">
+            {{ datasource.transfer.payeePartyIdType }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeePartyId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeePartyId!==undefined">
             Id
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeePartyId!==undefined">
-            {{ datasource.transaction.payeePartyId }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeePartyId!==undefined">
+            {{ datasource.transfer.payeePartyId }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeDfspId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeDfspId!==undefined">
             DFSP Id
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeDfspId!==undefined">
-            {{ datasource.transaction.payeeDfspId }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeDfspId!==undefined">
+            {{ datasource.transfer.payeeDfspId }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeDfspId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeDfspId!==undefined">
             DFSP Name
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeDfspId!==undefined">
-            {{ displayDfspName(getDfpsEntry(datasource.transaction.payeeDfspId)) }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeDfspId!==undefined">
+            {{ displayDfspName(getDfpsEntry(datasource.transfer.payeeDfspId)) }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeDateOfBirth!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeDateOfBirth!==undefined">
             Date of Birth
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeDateOfBirth!==undefined">
-            {{ datasource.transaction.payeeDateOfBirth }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeDateOfBirth!==undefined">
+            {{ datasource.transfer.payeeDateOfBirth }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeLastName!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeLastName!==undefined">
             Last Name
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeLastName!==undefined">
-            {{ datasource.transaction.payeeLastName }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeLastName!==undefined">
+            {{ datasource.transfer.payeeLastName }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeFirstName!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeFirstName!==undefined">
             First Name
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeFirstName!==undefined">
-            {{ datasource.transaction.payeeFirstName }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeFirstName!==undefined">
+            {{ datasource.transfer.payeeFirstName }}
           </div>
 
         </div>
@@ -151,57 +151,57 @@
 <mat-grid-list cols="2" rowHeight="450">
   <mat-grid-tile [colspan]="1"
     [rowspan]="1">
-    <mat-card class="mat-elevation-z8" *ngIf="datasource.transaction">
+    <mat-card class="mat-elevation-z8" *ngIf="datasource.transfer">
       <mat-card-title>Transfer</mat-card-title>
       <mat-card-content>
 
         <div fxLayout="row wrap" class="content">
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.transactionId!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.transactionId!==undefined">
             Transfer Code
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.transactionId!==undefined">
-            {{ datasource.transaction.transactionId }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.transactionId!==undefined">
+            {{ datasource.transfer.transactionId }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.amount!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.amount!==undefined">
             Transfer Amount
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.amount!==undefined">
-            {{ datasource.transaction.amount }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.amount!==undefined">
+            {{ datasource.transfer.amount }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.currency!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.currency!==undefined">
             Transfer Currency
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.currency!==undefined">
-            {{ datasource.transaction.currency }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.currency!==undefined">
+            {{ datasource.transfer.currency }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.feeType!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.feeType!==undefined">
             Fee Type
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.feeType!==undefined">
-            {{ datasource.transaction.feeType }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.feeType!==undefined">
+            {{ datasource.transfer.feeType }}
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.completedAt!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.completedAt!==undefined">
             Transfer Completed
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.completedAt!==undefined">
-            {{ formatDate(datasource.transaction.completedAt) }}
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.completedAt!==undefined">
+            {{ formatDate(datasource.transfer.completedAt) }}
           </div>
-          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.completedAt!==undefined">
+          <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.completedAt!==undefined">
             Transfer Status
           </div>
 
-          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.status!==undefined" [ngClass]="{'red': datasource.transaction.status==='FAILED','green': datasource.transaction.status==='COMPLETED','orange': datasource.transaction.status==='ACTION_NEEDED'}">{{datasource.transaction.status}}
-      <div *ngIf="datasource.transaction.status==='ACTION_NEEDED'"><button mat-raised-button color="primary" (click)="openRetryResolveDialog(datasource.transaction.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="sm"></fa-icon>&nbsp;RETRY</button>&nbsp;&nbsp;<button mat-raised-button color="primary" (click)="openRetryResolveDialog(datasource.transaction.workflowInstanceKey,'resolve')"><fa-icon icon="check" size="sm"></fa-icon>&nbsp;RESOLVE</button></div>
+          <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.status!==undefined" [ngClass]="{'red': datasource.transfer.status==='FAILED','green': datasource.transfer.status==='COMPLETED','orange': datasource.transfer.status==='ACTION_NEEDED'}">{{datasource.transfer.status}}
+      <div *ngIf="datasource.transfer.status==='ACTION_NEEDED'"><button mat-raised-button color="primary" (click)="openRetryResolveDialog(datasource.transfer.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="sm"></fa-icon>&nbsp;RETRY</button>&nbsp;&nbsp;<button mat-raised-button color="primary" (click)="openRetryResolveDialog(datasource.transfer.workflowInstanceKey,'resolve')"><fa-icon icon="check" size="sm"></fa-icon>&nbsp;RESOLVE</button></div>
           </div>
         </div>
       </mat-card-content>
@@ -209,42 +209,42 @@
   </mat-grid-tile>
   <mat-grid-tile [colspan]="1"
   [rowspan]="1">
-  <mat-card class="mat-elevation-z8" *ngIf="datasource.transaction">
+  <mat-card class="mat-elevation-z8" *ngIf="datasource.transfer">
     <mat-card-title>Fees</mat-card-title>
     <mat-card-content>
 
       <div fxLayout="row wrap" class="content">
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerQuoteCode!==undefined">
+        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerQuoteCode!==undefined">
           Payer quote code
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerQuoteCode!==undefined">
-          {{ datasource.transaction.payerQuoteCode }}
+        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerQuoteCode!==undefined">
+          {{ datasource.transfer.payerQuoteCode }}
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payerFee!==undefined">
+        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payerFee!==undefined">
           Payer fee
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payerFee!==undefined">
-          {{ datasource.transaction.payerFee }} {{ datasource.transaction.payerFeeCurrency }}
+        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payerFee!==undefined">
+          {{ datasource.transfer.payerFee }} {{ datasource.transfer.payerFeeCurrency }}
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeQuoteCode!==undefined">
+        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeQuoteCode!==undefined">
           Payee quote code
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeQuoteCode!==undefined">
-          {{ datasource.transaction.payeeQuoteCode }}
+        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeQuoteCode!==undefined">
+          {{ datasource.transfer.payeeQuoteCode }}
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transaction.payeeFee!==undefined">
+        <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.payeeFee!==undefined">
           Payee fee
         </div>
 
-        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transaction.payeeFee!==undefined">
-          {{ datasource.transaction.payeeFee }} {{ datasource.transaction.payeeFeeCurrency }}
+        <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.payeeFee!==undefined">
+          {{ datasource.transfer.payeeFee }} {{ datasource.transfer.payeeFeeCurrency }}
         </div>
       </div>
 

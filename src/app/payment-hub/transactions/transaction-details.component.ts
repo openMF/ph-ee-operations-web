@@ -148,6 +148,7 @@ export class TransactionDetailsComponent implements OnInit {
       return undefined;
     }
 
+    date = date.toString();
     date = date.replace('+0000', '');
     date = date.replace('T', ' ');
     date = date.replace('.000', '');
@@ -155,7 +156,7 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   getPaymentProcessId() {
-    return this.datasource.transaction.workflowInstanceKey;
+    return this.datasource.transfer.workflowInstanceKey;
   }
 
   cleanse(unformatted: any) {

@@ -52,7 +52,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status','actions'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for transactions table. */
   dataSource: TransactionsDataSource;
   /** Journal entries filter. */
@@ -327,7 +327,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     if (!date) {
       return undefined;
     }
-    date=date.toString();
+    date = date.toString();
     date = date.replace('+0000', '');
     date = date.replace('T', ' ');
     date = date.replace('.000', '');
@@ -387,8 +387,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
-  openRetryResolveDialog(workflowInstanceKey:  any,action: string) {
-    const retryResolveDialogRef = this.dialog.open( RetryResolveDialogComponent, {
+  openRetryResolveDialog(workflowInstanceKey: any, action: string) {
+    const retryResolveDialogRef = this.dialog.open(RetryResolveDialogComponent, {
       data: {
         action: action,
         workflowInstanceKey: workflowInstanceKey
