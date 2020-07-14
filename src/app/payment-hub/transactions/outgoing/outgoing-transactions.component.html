@@ -93,8 +93,8 @@
     </ng-container>
 
     <ng-container matColumnDef="completedAt">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time </th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatEndDate(transaction.completedAt) }} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time (UTC) </th>
+        <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.completedAt) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="transactionId">
