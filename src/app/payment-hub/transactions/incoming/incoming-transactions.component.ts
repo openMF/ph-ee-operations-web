@@ -327,7 +327,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     if (!date) {
       return undefined;
     }
-
+    date=date.toString();
     date = date.replace('+0000', '');
     date = date.replace('T', ' ');
     date = date.replace('.000', '');
