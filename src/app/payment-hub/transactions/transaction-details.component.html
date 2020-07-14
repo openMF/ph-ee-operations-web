@@ -194,7 +194,7 @@
           </div>
 
           <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.completedAt!==undefined">
-            {{ formatDate(datasource.transfer.completedAt) }}
+            {{ formatDate(convertTimestampToUTCDate(datasource.transfer.completedAt)) }}
           </div>
           <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.completedAt!==undefined">
             Transfer Status
@@ -271,7 +271,7 @@
 
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.timestamp)) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="elementId">
@@ -311,7 +311,7 @@
         
           <ng-container matColumnDef="timestamp">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
-            <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
+            <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.timestamp)) }} </td>
           </ng-container>
 
           <ng-container matColumnDef="elementId">
@@ -366,7 +366,7 @@
 
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.timestamp)) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="value">

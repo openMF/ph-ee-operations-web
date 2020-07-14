@@ -136,7 +136,7 @@ export class TransactionDetailsComponent implements OnInit {
     };
   }
 
-  convertTimestampToDate(timestamp: any) {
+  convertTimestampToUTCDate(timestamp: any) {
     if (!timestamp) {
       return undefined;
     }

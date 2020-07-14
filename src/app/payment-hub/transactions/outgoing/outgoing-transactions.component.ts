@@ -12,7 +12,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDate } from '../helper/date-format.helper';
+import { formatDate, formatUTCDate } from '../helper/date-format.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
@@ -52,7 +52,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status','actions'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for transactions table. */
   dataSource: TransactionsDataSource;
   /** Journal entries filter. */
@@ -320,7 +320,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     if (!date) {
       return undefined;
     }
-    date=date.toString();
+    date = date.toString();
     date = date.replace('+0000', '');
     date = date.replace('T', ' ');
     date = date.replace('.000', '');
@@ -340,6 +340,13 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       return undefined;
     }
     return formatDate(new Date(timestamp));
+  }
+
+  convertTimestampToUTCDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return formatUTCDate(new Date(timestamp));
   }
 
   /**
@@ -387,8 +394,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
-  openRetryResolveDialog(workflowInstanceKey:  any,action: string) {
-    const retryResolveDialogRef = this.dialog.open( RetryResolveDialogComponent, {
+  openRetryResolveDialog(workflowInstanceKey: any, action: string) {
+    const retryResolveDialogRef = this.dialog.open(RetryResolveDialogComponent, {
       data: {
         action: action,
         workflowInstanceKey: workflowInstanceKey

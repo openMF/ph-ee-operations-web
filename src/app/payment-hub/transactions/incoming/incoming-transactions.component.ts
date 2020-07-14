@@ -12,7 +12,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDate } from '../helper/date-format.helper';
+import { formatDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
@@ -259,6 +259,13 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       delete this.sort.active;
     }
     this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+  }
+
+  convertTimestampToUTCDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return formatUTCDate(new Date(timestamp));
   }
 
   convertTimestampToDate(timestamp: any) {
