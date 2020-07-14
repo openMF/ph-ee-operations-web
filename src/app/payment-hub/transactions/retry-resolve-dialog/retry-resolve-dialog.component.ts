@@ -14,21 +14,20 @@ export class RetryResolveDialogComponent implements OnInit {
   action: string;
 
   constructor(public dialogRef: MatDialogRef<RetryResolveDialogComponent>,
-  @Inject(MAT_DIALOG_DATA) public data: any) { 
-  	this.workflowInstanceKey = data.workflowInstanceKey;
-  	this.action = data.action;
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.workflowInstanceKey = data.workflowInstanceKey;
+    this.action = data.action;
   }
 
   ngOnInit() {
   }
 
-  takeAction(){
-  	// TODO: Send request to api with workflowInstanceKey by defining a function in transaction service when api is available
-  	if(this.action==='retry'){
+  takeAction() {
+    // TODO: Send request to api with workflowInstanceKey by defining a function in transaction service when api is available
+    if (this.action === 'retry') {
       this.dialogRef.close();
-  	}
-  	else if(this.action==='resolve'){
+    } else if (this.action === 'resolve') {
       this.dialogRef.close();
-  	}
+    }
   }
 }
