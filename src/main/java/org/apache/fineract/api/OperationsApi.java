@@ -14,6 +14,7 @@ import org.apache.fineract.operations.TransferRepository;
 import org.apache.fineract.operations.TransferStatus;
 import org.apache.fineract.operations.Variable;
 import org.apache.fineract.operations.VariableRepository;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,6 +70,7 @@ public class OperationsApi {
     @PostMapping("/transfer/{transactionId}/refund")
     public String refundTransfer(@RequestHeader("Platform-TenantId") String tenantId,
                                  @PathVariable("transactionId") String transactionId,
+                                 @RequestBody String requestBody,
                                  HttpServletResponse response) {
         Transfer existingIncomingTransfer = transferRepository.findFirstByTransactionIdAndDirection(transactionId, "INCOMING");
         if (existingIncomingTransfer == null || !TransferStatus.COMPLETED.equals(existingIncomingTransfer.getStatus())) {
@@ -82,30 +85,48 @@ public class OperationsApi {
         httpHeaders.add("Content-Type", "application/json");
         // httpHeaders.add("Authorization", "Bearer token"); TODO auth needed?
 
-        JSONObject request = new JSONObject();
+        JSONObject channelRequest = new JSONObject();
         JSONObject payer = new JSONObject();
         JSONObject payerPartyIdInfo = new JSONObject();
         payerPartyIdInfo.put("partyIdType", existingIncomingTransfer.getPayeePartyIdType());
         payerPartyIdInfo.put("partyIdentifier", existingIncomingTransfer.getPayeePartyId());
         payer.put("partyIdInfo", payerPartyIdInfo);
-        request.put("payer", payer);
+        channelRequest.put("payer", payer);
         JSONObject payee = new JSONObject();
         JSONObject payeePartyIdInfo = new JSONObject();
         payeePartyIdInfo.put("partyIdType", existingIncomingTransfer.getPayerPartyIdType());
         payeePartyIdInfo.put("partyIdentifier", existingIncomingTransfer.getPayerPartyId());
         payee.put("partyIdInfo", payeePartyIdInfo);
-        request.put("payee", payee);
+        channelRequest.put("payee", payee);
         JSONObject amount = new JSONObject();
         amount.put("amount", existingIncomingTransfer.getAmount());
         amount.put("currency", existingIncomingTransfer.getCurrency());
-        request.put("amount", amount);
+        channelRequest.put("amount", amount);
+        try {
+            JSONObject body = new JSONObject(requestBody);
+            String comment = body.optString("comment", null);
+            if (comment != null) {
+                JSONArray extensionList = new JSONArray();
+                addExtension(extensionList, "comment", comment);
+                channelRequest.put("extensionList", extensionList);
+            }
+        } catch (Exception e) {
+            logger.error("Could not parse refund request body {}, can not set comment on refund!", requestBody);
+        }
 
         ResponseEntity<String> channelResponse = restTemplate.exchange(channelConnectorUrl + channelConnectorTransferPath,
                 HttpMethod.POST,
-                new HttpEntity<String>(request.toString(), httpHeaders),
+                new HttpEntity<String>(channelRequest.toString(), httpHeaders),
                 String.class);
         response.setStatus(channelResponse.getStatusCodeValue());
         return channelResponse.getBody();
+    }
+
+    private void addExtension(JSONArray extensionList, String key, String value) {
+        JSONObject extension = new JSONObject();
+        extension.put("key", key);
+        extension.put("value", value);
+        extensionList.put(extension);
     }
 
     @GetMapping("/transfer/{workflowInstanceKey}")
