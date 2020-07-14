@@ -217,7 +217,7 @@ export class TransactionDetailsComponent implements OnInit {
     const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
     editFundDialogRef.afterClosed().subscribe((response: any) => {
       if (response.data) {
-        this.transactionsService.refund(this.getPaymentProcessId(), response.data);
+        return this.transactionsService.refund(this.getPaymentProcessId(), response.data.value).subscribe();
       }
     });
   }
