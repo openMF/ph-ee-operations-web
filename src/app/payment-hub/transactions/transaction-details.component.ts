@@ -23,6 +23,7 @@ import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolv
 import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { AlertService } from 'app/core/alert/alert.service';
+import { AuthenticationService } from 'app/core/authentication/authentication.service';
 
 /**
  * View transaction component.
@@ -67,6 +68,7 @@ export class TransactionDetailsComponent implements OnInit {
    */
   constructor(private transactionsService: TransactionsService,
     private alertService: AlertService,
+    private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog) {
@@ -206,7 +208,14 @@ export class TransactionDetailsComponent implements OnInit {
     });
   }
 
+  hasRefundAccess() {
+    return this.authService.hasAccess('REFUND');
+  }
+
   openReturnDialog() {
+    if (!this.hasRefundAccess()) {
+      return;
+    }
     const formfields: FormfieldBase[] = [
       new InputBase({
         controlName: 'comment',

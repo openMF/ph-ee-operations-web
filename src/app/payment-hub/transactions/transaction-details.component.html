@@ -1,5 +1,5 @@
 <div class="container m-b-20" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
-  <button mat-raised-button color="primary" (click)="openReturnDialog()">
+  <button [disabled]="!hasRefundAccess()" mat-raised-button color="primary" (click)="openReturnDialog()">
     Refund
   </button>
 
