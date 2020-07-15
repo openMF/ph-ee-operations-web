@@ -18,6 +18,8 @@ import { Credentials } from './credentials.model';
 import { OAuth2Token } from './o-auth2-token.model';
 import { AppConfig } from 'app/app.config';
 
+import * as jwt_decode from 'jwt-decode';
+
 /**
  * Authentication workflow.
  */
@@ -82,6 +84,13 @@ export class AuthenticationService {
         this.authorizationToken = `Basic ${savedCredentials.base64EncodedAuthenticationKey}`;
       }
     }
+  }
+
+  hasAccess(permission: String): Boolean {
+    const credentials = JSON.parse(this.storage.getItem(this.credentialsStorageKey));
+    const decoded = jwt_decode(credentials.access_token);
+    const authorities = decoded['authorities'];
+    return authorities.includes('ALL_FUNCTION') || authorities.includes(permission);
   }
 
   /**
