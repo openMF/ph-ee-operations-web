@@ -209,7 +209,7 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   hasRefundAccess() {
-    return this.authService.hasAccess('REFUND');
+    return this.datasource.transfer.direction === 'INCOMING' && this.authService.hasAccess('REFUND');
   }
 
   openReturnDialog() {
