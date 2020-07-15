@@ -70,8 +70,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'payerDfspId',
-      value: PaymentHubComponent.getDFSPId()
+      type: 'direction',
+      value: 'OUTGOING'
     },
     {
       type: 'transactionId',
