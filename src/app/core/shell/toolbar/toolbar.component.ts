@@ -55,8 +55,8 @@ export class ToolbarComponent implements OnInit {
    * @param {AuthenticationService} authenticationService Authentication service.
    */
   constructor(private breakpointObserver: BreakpointObserver,
-              private router: Router,
-              private authenticationService: AuthenticationService) { }
+    private router: Router,
+    private authenticationService: AuthenticationService) { }
 
   /**
    * Subscribes to breakpoint for handset.
@@ -67,6 +67,11 @@ export class ToolbarComponent implements OnInit {
         this.toggleSidenavCollapse(false);
       }
     });
+  }
+
+  displayUser() {
+    const credentials = this.authenticationService.getCredentials();
+    return credentials ? credentials.username + ' - ' + credentials.tenantId : '';
   }
 
   /**

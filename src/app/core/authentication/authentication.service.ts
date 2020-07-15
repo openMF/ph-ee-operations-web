@@ -48,6 +48,7 @@ export class AuthenticationService {
   private loggedIn = false;
   private authorizationToken: String;
   private tenantId: String;
+  private username: String;
 
   /**
    * Initializes the type of storage and authorization headers depending on whether
@@ -104,6 +105,7 @@ export class AuthenticationService {
     this.storage = this.rememberMe ? localStorage : sessionStorage;
     this.tenantId = loginContext.tenant;
     let httpParams = new HttpParams();
+    this.username = loginContext.username;
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
     //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
@@ -295,6 +297,10 @@ export class AuthenticationService {
 
   getTenantId() {
     return this.tenantId;
+  }
+
+  getUsername() {
+    return this.username;
   }
 
 }
