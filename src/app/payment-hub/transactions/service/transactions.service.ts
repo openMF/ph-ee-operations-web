@@ -49,7 +49,7 @@ export class TransactionsService {
   }
 
   refund(id: string, comment: string): Observable<any> {
-    return this.http.post('/api/v1/transfer/' + id + '/refund', comment);
+    return this.http.post('/api/v1/transfer/' + id + '2/refund', comment);
   }
 
   /**

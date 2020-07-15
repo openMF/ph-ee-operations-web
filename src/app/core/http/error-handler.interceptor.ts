@@ -25,7 +25,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   /**
    * @param {AlertService} alertService Alert Service.
    */
-  constructor(private alertService: AlertService) {  }
+  constructor(private alertService: AlertService) { }
 
   /**
    * Intercepts a Http request and adds a default error handler.
@@ -39,8 +39,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
    */
   private handleError(response: HttpErrorResponse): Observable<HttpEvent<any>> {
     const status = response.status;
-    let errorMessage = (response.error.developerMessage || response.message);
-    if (response.error.errors) {
+    let errorMessage = ((response.error && response.error.developerMessage) || response.message);
+    if (response.error && response.error.errors) {
       if (response.error.errors[0]) {
         errorMessage = response.error.errors[0].defaultUserMessage || response.error.errors[0].developerMessage;
       }
@@ -60,7 +60,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
       this.alertService.alert({ type: 'Unauthorized Request', message: errorMessage || 'You are not authorized for this request!' });
     } else if (status === 404) {
       this.alertService.alert({ type: 'Resource does not exist', message: errorMessage || 'Resource does not exist!' });
-    }  else if (status === 500) {
+    } else if (status === 500) {
       this.alertService.alert({ type: 'Internal Server Error', message: 'Internal Server Error. Please try again later.' });
     } else {
       this.alertService.alert({ type: 'Unknown Error', message: 'Unknown Error. Please try again later.' });

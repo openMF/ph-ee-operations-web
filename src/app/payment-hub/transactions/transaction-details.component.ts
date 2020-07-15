@@ -22,6 +22,7 @@ import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolv
 /** Custom Models */
 import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
+import { AlertService } from 'app/core/alert/alert.service';
 
 /**
  * View transaction component.
@@ -65,6 +66,7 @@ export class TransactionDetailsComponent implements OnInit {
    * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private transactionsService: TransactionsService,
+    private alertService: AlertService,
     private route: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog) {
@@ -221,7 +223,10 @@ export class TransactionDetailsComponent implements OnInit {
     const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
     editFundDialogRef.afterClosed().subscribe((response: any) => {
       if (response.data) {
-        return this.transactionsService.refund(this.getTransferId(), response.data.value).subscribe();
+        return this.transactionsService.refund(this.getTransferId(), response.data.value).subscribe(
+          res => this.alertService.alert({ type: 'Refund Success', message: `Refund request was successfully initiated!` }),
+          err => this.alertService.alert({ type: 'Refund Error', message: `Refund request was failed` })
+        );
       }
     });
   }

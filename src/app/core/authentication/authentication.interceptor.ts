@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { switchMap, take, filter } from 'rxjs/operators';
+import { Observable, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { switchMap, take, filter, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from './authentication.service';
+import { Router } from '@angular/router';
 
 /** Http request options headers. */
 const httpOptions = {
@@ -27,7 +28,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private accessExpired = false;
   private refreshTokenSubject: Subject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private authService: AuthenticationService) { }
+  constructor(private router: Router, private authService: AuthenticationService) { }
 
   /**
    * Intercepts a Http request and sets the request headers.
@@ -46,6 +47,12 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         this.refreshTokenInProgress = true;
         this.refreshTokenSubject.next(null);
         return this.authService.refreshOAuthAccessToken().pipe(
+          catchError(err => {
+            console.log('Handling error locally and rethrowing it...', err);
+            this.authService.logout();
+            this.router.navigate(['/login'], { replaceUrl: true });
+            return throwError(err);
+        }),
           switchMap((authResponse) => {
             this.refreshTokenInProgress = false;
             this.retrieveAuthData();
