@@ -18,12 +18,15 @@
  */
 package org.apache.fineract.core.service;
 
+import org.apache.fineract.organisation.user.AppUser;
 import org.apache.fineract.organisation.user.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
 
 import static org.apache.fineract.config.CacheConfig.CACHE_USER_BY_NAME;
 
@@ -36,6 +39,9 @@ public class TenantAwareUserDetailsService implements UserDetailsService {
     @Override
     @Cacheable(cacheNames = CACHE_USER_BY_NAME)
     public UserDetails loadUserByUsername(final String username) {
-        return appUserRepository.findAppUserByName(username);
+        AppUser appUserByName = appUserRepository.findAppUserByName(username);
+        AppUser unknowUser = new AppUser();
+        unknowUser.setRoles(Collections.emptyList());
+        return appUserByName == null ? unknowUser : appUserByName;
     }
 }

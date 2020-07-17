@@ -70,7 +70,7 @@ public class TenantAwareHeaderFilter extends GenericFilterBean {
         } catch (Exception e) {
             logger.error("Error when executing request!", e);
             SecurityContextHolder.getContext().setAuthentication(null);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } finally {
             task.stop();
             ThreadLocalContextUtil.clear();

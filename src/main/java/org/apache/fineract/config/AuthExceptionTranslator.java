@@ -24,7 +24,9 @@ public class AuthExceptionTranslator implements WebResponseExceptionTranslator {
             body.put("path", "/oauth/token");
             return new ResponseEntity(body.toString(), HttpStatus.UNAUTHORIZED);
         } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            JSONObject body = new JSONObject();
+            body.put("error", e.getMessage());
+            return new ResponseEntity(body.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 }
