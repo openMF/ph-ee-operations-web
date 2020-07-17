@@ -106,8 +106,10 @@ public class OperationsApi {
             JSONObject body = new JSONObject(requestBody);
             String comment = body.optString("comment", null);
             if (comment != null) {
-                JSONArray extensionList = new JSONArray();
-                addExtension(extensionList, "comment", comment);
+                JSONObject extensionList = new JSONObject();
+                JSONArray extensions = new JSONArray();
+                addExtension(extensions, "comment", comment);
+                extensionList.put("extension", extensions);
                 channelRequest.put("extensionList", extensionList);
             }
         } catch (Exception e) {
