@@ -17,13 +17,6 @@
 -- under the License.
 --
 
-INSERT INTO `m_permission` (`grouping`, `code`, `entity_name`, `action_name`, `can_maker_checker`) VALUES ('portfolio', 'ACTIVATE_CENTER', 'CENTER', 'ACTIVATE', 1);
-INSERT INTO `m_permission` (`grouping`, `code`, `entity_name`, `action_name`, `can_maker_checker`) VALUES ('portfolio', 'ACTIVATE_CENTER_CHECKER', 'CENTER', 'ACTIVATE', 0);
-
-INSERT INTO `m_permission` (`grouping`, `code`, `entity_name`, `action_name`, `can_maker_checker`) VALUES ('portfolio', 'ACTIVATE_GROUP', 'GROUP', 'ACTIVATE', 1);
-INSERT INTO `m_permission` (`grouping`, `code`, `entity_name`, `action_name`, `can_maker_checker`) VALUES ('portfolio', 'ACTIVATE_GROUP_CHECKER', 'GROUP', 'ACTIVATE', 0);
-
-
 ALTER TABLE `m_group` DROP FOREIGN KEY `FK_m_group_level`;
 ALTER TABLE `m_group`
 CHANGE COLUMN `external_id` `external_id` VARCHAR(100) NULL DEFAULT NULL AFTER `id`,

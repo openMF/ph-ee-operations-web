@@ -41,6 +41,6 @@ rest:
     enabled: true
     settings:
       - endpoint: "/api/v1/transfer/*/refund"
-        authority: "hasAuthority('refund')"
+        authority: "hasAuthority('REFUND')"
       - endpoint: "/api/v1/**"
         authority: "hasAuthority('ALL_FUNCTIONS')"

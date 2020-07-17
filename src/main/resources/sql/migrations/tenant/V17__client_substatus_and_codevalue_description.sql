@@ -20,6 +20,10 @@
 ALTER TABLE `m_code_value`
 ADD COLUMN `code_score` INT(11) NULL AFTER `order_position`;
 
-/**PPI permission**/
-INSERT INTO `m_permission` (`id`, `grouping`, `code`, `entity_name`, `action_name`, `can_maker_checker`) VALUES (NULL, 'datatable', 'UPDATE_LIKELIHOOD', 'likelihood', 'UPDATE', '0');
-INSERT INTO `m_permission` (`id`, `grouping`, `code`, `entity_name`, `action_name`, `can_maker_checker`) VALUES (NULL, 'survey', 'REGISTER_SURVEY', 'survey', 'CREATE', '0');
+alter table m_staff
+add column joining_date date;
+
+INSERT INTO `m_code` (`code_name`, `is_system_defined`) VALUES ('ClientSubStatus', 1);
+
+ALTER TABLE `m_code_value`
+ADD COLUMN `code_description` VARCHAR(500) NULL DEFAULT NULL AFTER `code_value`;

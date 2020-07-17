@@ -33,10 +33,8 @@ select 1, id
 from m_permission
 where code = 'ALL_FUNCTIONS';
 
-INSERT INTO `m_appuser` (`id`, `office_id`, `username`, `firstname`, `lastname`, `password`, `email`,
-`firsttime_login_remaining`, `nonexpired`, `nonlocked`, `nonexpired_credentials`, `enabled`)
-VALUES
-(1,1,'mifos','App','Administrator','$2a$10$/rF0VNbTctI1034UwHPHr.XiQxBU3gCbKY/haNtWQTLpqfx8FH0gi','demomfi@mifos.org','\0','','','','');
+INSERT INTO `m_appuser` (`id`, `office_id`, `username`, `firstname`, `lastname`, `password`, `email`, `firsttime_login_remaining`, `nonexpired`, `nonlocked`, `nonexpired_credentials`, `enabled`)
+VALUES (1, 1, 'mifos', 'App', 'Administrator', '$2a$10$/rF0VNbTctI1034UwHPHr.XiQxBU3gCbKY/haNtWQTLpqfx8FH0gi', 'demomfi@mifos.org', '\0','','','','');
 
 INSERT INTO `m_appuser_role` (`appuser_id`, `role_id`) VALUES (1,1);
 
