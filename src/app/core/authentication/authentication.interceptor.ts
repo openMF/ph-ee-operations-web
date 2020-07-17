@@ -42,7 +42,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     if (!this.authService.isLoggedIn) {
       this.removeAuthorization();
     }
-    if (this.accessExpired) {
+    if (!request.url.startsWith('./') && this.accessExpired) {
       if (!this.refreshTokenInProgress) {
         this.refreshTokenInProgress = true;
         this.refreshTokenSubject.next(null);
@@ -52,7 +52,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
             this.authService.logout();
             this.router.navigate(['/login'], { replaceUrl: true });
             return throwError(err);
-        }),
+          }),
           switchMap((authResponse) => {
             this.refreshTokenInProgress = false;
             this.retrieveAuthData();

@@ -3,7 +3,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
@@ -19,6 +19,7 @@ import { OAuth2Token } from './o-auth2-token.model';
 import { AppConfig } from 'app/app.config';
 
 import * as jwt_decode from 'jwt-decode';
+import { Router } from '@angular/router';
 
 /**
  * Authentication workflow.
@@ -49,6 +50,7 @@ export class AuthenticationService {
   private authorizationToken: String;
   private tenantId: String;
   private username: String;
+  private accessTokenExpirationTime = 1;
 
   /**
    * Initializes the type of storage and authorization headers depending on whether
@@ -57,7 +59,7 @@ export class AuthenticationService {
    * @param {AlertService} alertService Alert Service.
    */
   constructor(private http: HttpClient,
-    private alertService: AlertService, private config: AppConfig) {
+    private alertService: AlertService, private config: AppConfig, private router: Router) {
     this.storage = sessionStorage;
 
     config.load().then(value => {
@@ -69,7 +71,7 @@ export class AuthenticationService {
   init() {
     this.rememberMe = false;
     const savedCredentials = JSON.parse(
-      sessionStorage.getItem(this.credentialsStorageKey) || localStorage.getItem(this.credentialsStorageKey)
+      this.getStoreageItem(this.credentialsStorageKey)
     );
     if (savedCredentials) {
       if (savedCredentials.rememberMe) {
@@ -77,7 +79,7 @@ export class AuthenticationService {
         this.storage = localStorage;
       }
 
-      const oAuthRefreshToken = JSON.parse(this.storage.getItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
+      const oAuthRefreshToken = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
       if (oAuthRefreshToken) {
         this.refreshAccessToken = true;
         this.authorizationToken = `Bearer ${oAuthRefreshToken}`;
@@ -88,7 +90,7 @@ export class AuthenticationService {
   }
 
   hasAccess(permission: String): Boolean {
-    const credentials = JSON.parse(this.storage.getItem(this.credentialsStorageKey));
+    const credentials = JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
     const decoded = jwt_decode(credentials.accessToken);
     const authorities = decoded['authorities'];
     return authorities.includes('ALL_FUNCTIONS') || authorities.includes(permission);
@@ -158,16 +160,21 @@ export class AuthenticationService {
    * @param {number} expiresInTime OAuth2 token expiry time in seconds.
    */
   private refreshTokenOnExpiry(expiresInTime: number) {
+    this.accessTokenExpirationTime = Date.now() + expiresInTime * 1000;
     setTimeout(() => this.refreshAccessToken = true, expiresInTime * 1000);
+  }
+
+  private getStoreageItem(item: string): any {
+    return sessionStorage.getItem(item) || localStorage.getItem(item);
   }
 
   /**
    * Refreshes the oauth2 authorization token.
    */
   public refreshOAuthAccessToken() {
-    const oAuthRefreshToken = JSON.parse(this.storage.getItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
-
-    this.tenantId = JSON.parse(this.storage.getItem(this.credentialsStorageKey)).tenantId;
+    const oAuthData = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey));
+    const oAuthRefreshToken = oAuthData.refresh_token;
+    this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
     let httpParams = new HttpParams();
     httpParams = httpParams.set('grant_type', 'refresh_token');
     httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
@@ -180,7 +187,7 @@ export class AuthenticationService {
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
         this.authorizationToken = `Bearer ${tokenResponse.access_token}`;
         this.refreshTokenOnExpiry(tokenResponse.expires_in);
-        const credentials = JSON.parse(this.storage.getItem(this.credentialsStorageKey));
+        const credentials = JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
         credentials.accessToken = tokenResponse.access_token;
         this.storage.setItem(this.credentialsStorageKey, JSON.stringify(credentials));
         return of(true);
@@ -230,7 +237,7 @@ export class AuthenticationService {
    */
   isAuthenticated(): boolean {
     return !!(JSON.parse(
-      sessionStorage.getItem(this.credentialsStorageKey) || localStorage.getItem(this.credentialsStorageKey)
+      sessionStorage.getItem(this.credentialsStorageKey) || this.getStoreageItem(this.credentialsStorageKey)
     ));
   }
 
@@ -239,7 +246,7 @@ export class AuthenticationService {
    * @returns {Credentials} The user credentials if the user is authenticated otherwise null.
    */
   getCredentials(): Credentials | null {
-    return JSON.parse(this.storage.getItem(this.credentialsStorageKey));
+    return JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
   }
 
   /**
@@ -284,7 +291,7 @@ export class AuthenticationService {
   }
 
   isRefreshAccessToken() {
-    return this.refreshAccessToken;
+    return this.refreshAccessToken || this.accessTokenExpirationTime < Date.now();
   }
 
   isLoggedIn() {
