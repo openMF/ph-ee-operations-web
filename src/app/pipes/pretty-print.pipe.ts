@@ -59,7 +59,7 @@ export class PrettyPrintPipe implements PipeTransform {
       
     } 
     var preS=s.substring(0,3);
-    if(preS==="Mon" || preS==="Tue" || preS==="Wed" || preS==="Thu" || preS==="Fri" || preS==="Sat") {
+    if(preS==="Mon" || preS==="Tue" || preS==="Wed" || preS==="Thu" || preS==="Fri" || preS==="Sat" || preS==="Sun") {
       s=s.replace("<br/>","");
     }
     return s;   
