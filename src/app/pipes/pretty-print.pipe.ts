@@ -9,7 +9,7 @@ export class PrettyPrintPipe implements PipeTransform {
     var s="";
     var tb=0;
     val=String(val);
-    console.log(val.length);
+    //console.log(val.length);
     var i=0;
     for(i=0;i<val.length;i++) {
       //console.log(i);
@@ -58,6 +58,10 @@ export class PrettyPrintPipe implements PipeTransform {
         i=j-1;
       
     } 
+    var preS=s.substring(0,3);
+    if(preS==="Mon" || preS==="Tue" || preS==="Wed" || preS==="Thu" || preS==="Fri" || preS==="Sat") {
+      s=s.replace("<br/>","");
+    }
     return s;   
   }
 
