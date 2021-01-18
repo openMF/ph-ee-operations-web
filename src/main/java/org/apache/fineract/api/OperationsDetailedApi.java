@@ -65,10 +65,27 @@ public class OperationsDetailedApi {
             @RequestParam(value = "partyIdType", required = false) String partyIdType,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
         List<Specifications<Transfer>> specs = new ArrayList<>();
+
         if (payerPartyId != null) {
+            if (payerPartyId.contains("%2B")) {
+                try {
+                    payerPartyId = URLDecoder.decode(payerPartyId, "UTF-8");
+                    logger.info("Decoded payerPartyId: " + payerPartyId);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             specs.add(TransferSpecs.match(Transfer_.payerPartyId, payerPartyId));
         }
         if (payeePartyId != null) {
+            if (payeePartyId.contains("%2B")) {
+                try {
+                    payeePartyId = URLDecoder.decode(payeePartyId, "UTF-8");
+                    logger.info("Decoded payeePartyId: " + payeePartyId);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             specs.add(TransferSpecs.match(Transfer_.payeePartyId, payeePartyId));
         }
         if (payeeDfspId != null) {
@@ -93,18 +110,18 @@ public class OperationsDetailedApi {
             specs.add(TransferSpecs.match(Transfer_.direction, direction));
         }
         if (partyIdType != null) {
-            specs.add(TransferSpecs.match(Transfer_.payeePartyIdType, partyIdType));
-            specs.add(TransferSpecs.match(Transfer_.payerPartyIdType, partyIdType));
+            specs.add(TransferSpecs.multiMatch(Transfer_.payeePartyIdType, Transfer_.payerPartyIdType, partyIdType));
         }
         if (partyId != null) {
-            try {
-                String decodedPartyId = URLDecoder.decode(partyId, "UTF-8");
-                specs.add(TransferSpecs.match(Transfer_.payeePartyId, decodedPartyId));
-                specs.add(TransferSpecs.match(Transfer_.payerPartyId, decodedPartyId));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            if (partyId.contains("%2B")) {
+                try {
+                    partyId = URLDecoder.decode(partyId, "UTF-8");
+                    logger.info("Decoded PartyId: " + partyId);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            specs.add(TransferSpecs.multiMatch(Transfer_.payerPartyId, Transfer_.payeePartyId, partyId));
         }
         try {
             if (startFrom != null && startTo != null) {
