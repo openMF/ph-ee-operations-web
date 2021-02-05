@@ -1,19 +1,15 @@
 package org.apache.fineract.operations;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.eclipse.persistence.annotations.Index;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -23,6 +19,7 @@ public class Transfer extends AbstractPersistableCustom<Long> {
 
     @Column(name = "WORKFLOW_INSTANCE_KEY")
     @Index(name = "idx_paymentProcessId")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long workflowInstanceKey;
 
     @Column(name = "TRANSACTION_ID")
@@ -66,6 +63,7 @@ public class Transfer extends AbstractPersistableCustom<Long> {
     private String payerQuoteCode;
 
     @Column(name = "amount")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal amount;
 
     @Column(name = "currency")
