@@ -1,6 +1,7 @@
 package org.apache.fineract.api;
 
 
+import org.apache.fineract.operations.Batch;
 import org.apache.fineract.operations.BusinessKey;
 import org.apache.fineract.operations.BusinessKeyRepository;
 import org.apache.fineract.operations.Task;
@@ -172,5 +173,18 @@ public class OperationsApi {
         List<BusinessKey> businessKeys = businessKeyRepository.findByBusinessKeyAndBusinessKeyType(businessKey, businessKeyType);
         logger.debug("loaded {} transfer(s) for business key {} of type {}", businessKeys.size(), businessKey, businessKeyType);
         return businessKeys;
+    }
+
+    @GetMapping("/batch")
+    public Batch batchDetails(@RequestParam String batchId, @RequestParam String requestId) {
+
+        List<Transfer> transfers = transferRepository.findAllByBatchId(batchId);
+
+        for(int i=0; i<transfers.size(); i++) {
+            if (transfers.get(i).getStatus().equals(TransferStatus.COMPLETED)) {
+
+            }
+        }
+
     }
 }
