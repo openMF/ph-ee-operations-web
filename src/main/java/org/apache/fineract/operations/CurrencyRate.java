@@ -19,7 +19,7 @@ public class CurrencyRate extends AbstractPersistableCustom<Long> {
     private BigDecimal rate;
 
     @Column(name = "last_updated")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
 
     public CurrencyRate(String fromCurrency, String toCurrency, BigDecimal rate, Date lastUpdated) {
@@ -42,5 +42,9 @@ public class CurrencyRate extends AbstractPersistableCustom<Long> {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public CurrencyRateLock getLock(String uniqueKey, Date expireBy) {
+        return new CurrencyRateLock(uniqueKey, fromCurrency, toCurrency, rate, expireBy);
     }
 }

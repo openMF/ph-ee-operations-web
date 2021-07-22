@@ -5,16 +5,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IMUConversionData {
+    private String lockKey;
     private String from;
     private String to;
+    private Boolean failWhenExpired;
     private BigDecimal amount;
     private BigDecimal rate;
     private BigDecimal convertedAmount;
     private String errorCode;
     private String errorMessage;
+    private Date expireBy;
 
     public IMUConversionData() {
     }
@@ -79,5 +83,29 @@ public class IMUConversionData {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String getLockKey() {
+        return lockKey;
+    }
+
+    public void setLockKey(String lockKey) {
+        this.lockKey = lockKey;
+    }
+
+    public Boolean getFailWhenExpired() {
+        return failWhenExpired;
+    }
+
+    public void setFailWhenExpired(Boolean failWhenExpired) {
+        this.failWhenExpired = failWhenExpired;
+    }
+
+    public Date getExpireBy() {
+        return expireBy;
+    }
+
+    public void setExpireBy(Date expireBy) {
+        this.expireBy = expireBy;
     }
 }

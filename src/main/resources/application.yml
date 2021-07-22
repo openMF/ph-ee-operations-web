@@ -18,6 +18,10 @@ token:
   client:
     access-validity-seconds: 3600
 
+config:
+  imu:
+    rate-validity-seconds: 300
+
 caching:
   enabled: false
 
