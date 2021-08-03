@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,12 +61,31 @@ public class OperationsDetailedApi {
             @RequestParam(value = "startTo", required = false) String startTo,
             @RequestParam(value = "direction", required = false) String direction,
             @RequestParam(value = "sortedBy", required = false) String sortedBy,
+            @RequestParam(value = "partyId", required = false) String partyId,
+            @RequestParam(value = "partyIdType", required = false) String partyIdType,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
         List<Specifications<Transfer>> specs = new ArrayList<>();
+
         if (payerPartyId != null) {
+            if (payerPartyId.contains("%2B")) {
+                try {
+                    payerPartyId = URLDecoder.decode(payerPartyId, "UTF-8");
+                    logger.info("Decoded payerPartyId: " + payerPartyId);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             specs.add(TransferSpecs.match(Transfer_.payerPartyId, payerPartyId));
         }
         if (payeePartyId != null) {
+            if (payeePartyId.contains("%2B")) {
+                try {
+                    payeePartyId = URLDecoder.decode(payeePartyId, "UTF-8");
+                    logger.info("Decoded payeePartyId: " + payeePartyId);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             specs.add(TransferSpecs.match(Transfer_.payeePartyId, payeePartyId));
         }
         if (payeeDfspId != null) {
@@ -87,6 +108,20 @@ public class OperationsDetailedApi {
         }
         if (direction != null) {
             specs.add(TransferSpecs.match(Transfer_.direction, direction));
+        }
+        if (partyIdType != null) {
+            specs.add(TransferSpecs.multiMatch(Transfer_.payeePartyIdType, Transfer_.payerPartyIdType, partyIdType));
+        }
+        if (partyId != null) {
+            if (partyId.contains("%2B")) {
+                try {
+                    partyId = URLDecoder.decode(partyId, "UTF-8");
+                    logger.info("Decoded PartyId: " + partyId);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            specs.add(TransferSpecs.multiMatch(Transfer_.payerPartyId, Transfer_.payeePartyId, partyId));
         }
         try {
             if (startFrom != null && startTo != null) {

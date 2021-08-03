@@ -87,3 +87,5 @@ CREATE TABLE `variables` (
   PRIMARY KEY (`ID`),
   KEY `idx_variables_key` (`WORKFLOW_INSTANCE_KEY`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+

@@ -1,6 +1,8 @@
 package org.apache.fineract.api;
 
 
+import org.apache.fineract.operations.Batch;
+import org.apache.fineract.operations.BatchRepository;
 import org.apache.fineract.operations.BusinessKey;
 import org.apache.fineract.operations.BusinessKeyRepository;
 import org.apache.fineract.operations.Task;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +60,9 @@ public class OperationsApi {
 
     @Autowired
     private TransactionRequestRepository transactionRequestRepository;
+
+    @Autowired
+    private BatchRepository batchRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -172,5 +178,50 @@ public class OperationsApi {
         List<BusinessKey> businessKeys = businessKeyRepository.findByBusinessKeyAndBusinessKeyType(businessKey, businessKeyType);
         logger.debug("loaded {} transfer(s) for business key {} of type {}", businessKeys.size(), businessKey, businessKeyType);
         return businessKeys;
+    }
+
+    @GetMapping("/batch")
+    public Batch batchDetails(@RequestParam String batchId, @RequestParam String requestId) {
+
+        Batch batch = batchRepository.findByBatchId(batchId);
+
+        if (batch != null) {
+            if (batch.getResultGeneratedAt() != null) {
+//                Checks if last status was checked before 10 mins
+                if (new Date().getTime() - batch.getResultGeneratedAt().getTime() < 600000) {
+                    return batch;
+                } else {
+                    return generateDetails(batch);
+                }
+            } else {
+                return generateDetails(batch);
+            }
+        } else {
+            return null;
+        }
+
+    }
+
+    private Batch generateDetails (Batch batch) {
+
+//        TODO: Save this to CSV and upload to S3
+        List<Transfer> transfers = transferRepository.findAllByBatchId(batch.getBatchId());
+
+        Long completed = 0L;
+        Long failed = 0L;
+        for(int i=0; i<transfers.size(); i++) {
+            if (transfers.get(i).getStatus().equals(TransferStatus.COMPLETED)) {
+                completed++;
+            } else if (transfers.get(i).getStatus().equals(TransferStatus.FAILED)) {
+                failed++;
+            }
+        }
+
+        batch.setCompleted(completed);
+        batch.setFailed(failed);
+        batch.setResultGeneratedAt(new Date());
+        batchRepository.save(batch);
+
+        return batch;
     }
 }
