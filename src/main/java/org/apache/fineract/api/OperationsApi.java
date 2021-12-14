@@ -180,48 +180,4 @@ public class OperationsApi {
         return businessKeys;
     }
 
-    @GetMapping("/batch")
-    public Batch batchDetails(@RequestParam String batchId, @RequestParam String requestId) {
-
-        Batch batch = batchRepository.findByBatchId(batchId);
-
-        if (batch != null) {
-            if (batch.getResultGeneratedAt() != null) {
-//                Checks if last status was checked before 10 mins
-                if (new Date().getTime() - batch.getResultGeneratedAt().getTime() < 600000) {
-                    return batch;
-                } else {
-                    return generateDetails(batch);
-                }
-            } else {
-                return generateDetails(batch);
-            }
-        } else {
-            return null;
-        }
-
-    }
-
-    private Batch generateDetails (Batch batch) {
-
-//        TODO: Save this to CSV and upload to S3
-        List<Transfer> transfers = transferRepository.findAllByBatchId(batch.getBatchId());
-
-        Long completed = 0L;
-        Long failed = 0L;
-        for(int i=0; i<transfers.size(); i++) {
-            if (transfers.get(i).getStatus().equals(TransferStatus.COMPLETED)) {
-                completed++;
-            } else if (transfers.get(i).getStatus().equals(TransferStatus.FAILED)) {
-                failed++;
-            }
-        }
-
-        batch.setCompleted(completed);
-        batch.setFailed(failed);
-        batch.setResultGeneratedAt(new Date());
-        batchRepository.save(batch);
-
-        return batch;
-    }
 }
