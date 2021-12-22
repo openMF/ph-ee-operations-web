@@ -5,3 +5,6 @@
 .idea
 target/
 *.iml
+.gradle
+build
+bin
