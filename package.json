@@ -25,8 +25,6 @@
     "env": "ngx-scripts env npm_package_version"
   },
   "dependencies": {
-    "@angular-material-components/datetime-picker": "7.0.1",
-    "@angular-material-components/moment-adapter": "7.0.0",
     "@angular/animations": "7.2.15",
     "@angular/cdk": "7.3.7",
     "@angular/common": "7.2.15",
@@ -36,7 +34,6 @@
     "@angular/forms": "7.2.15",
     "@angular/http": "7.2.15",
     "@angular/material": "7.3.7",
-    "@angular/material-moment-adapter": "13.1.1",
     "@angular/platform-browser": "7.2.15",
     "@angular/platform-browser-dynamic": "7.2.15",
     "@angular/router": "7.2.15",

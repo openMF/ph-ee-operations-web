@@ -1,6 +1,7 @@
 import { NativeDateAdapter } from '@angular/material';
 import { MatDateFormats } from '@angular/material/core';
-import { NgxMatDateFormats } from '@angular-material-components/datetime-picker';
+/** import { NgxMatDateFormats } from '@angular-material-components/datetime-picker';
+*/
 
 export function formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -32,12 +33,14 @@ export function formatUTCDate(date: Date): string {
     return year + '-' + month.substr(-2) + '-' + day.substr(-2) + 'T' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 }
 
-export const CUSTOM_MOMENT_FORMATS: NgxMatDateFormats = {
-    parse: {
-      dateInput: "l, LTS"
-    },
-    display: {
-      dateInput: "YYYY-MM-DD HH:mm:ss",
-      monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y'
-    }
-  };
+/**
+* export const CUSTOM_MOMENT_FORMATS: NgxMatDateFormats = {
+*    parse: {
+*      dateInput: "l, LTS"
+*    },
+*    display: {
+*     dateInput: "YYYY-MM-DD HH:mm:ss",
+*     monthYearLabel: 'Y', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM Y'
+*   }
+* };
+*/

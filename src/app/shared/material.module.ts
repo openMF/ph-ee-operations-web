@@ -40,9 +40,11 @@ import {
   MatTreeModule
 } from '@angular/material';
 
-import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
-import { NgxMatMomentModule, NGX_MAT_MOMENT_FORMATS } from '@angular-material-components/moment-adapter';
-import { CUSTOM_MOMENT_FORMATS } from 'app/payment-hub/transactions/helper/date-format.helper';
+/**
+* import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
+* import { NgxMatMomentModule, NGX_MAT_MOMENT_FORMATS } from '@angular-material-components/moment-adapter';
+*/
+
 
 
 /**
@@ -86,10 +88,12 @@ import { CUSTOM_MOMENT_FORMATS } from 'app/payment-hub/transactions/helper/date-
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatTreeModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    NgxMatMomentModule
+    MatTreeModule
+/**    NgxMatDatetimePickerModule,
+*    NgxMatTimepickerModule,
+*
+*    NgxMatMomentModule
+*/
   ],
   providers: [
     {
@@ -102,10 +106,6 @@ import { CUSTOM_MOMENT_FORMATS } from 'app/payment-hub/transactions/helper/date-
         showError: true,
         displayDefaultIndicatorType: false
       }
-    },
-    {
-      provide: NGX_MAT_DATE_FORMATS,
-      useValue: CUSTOM_MOMENT_FORMATS
     }
   ]
 })
