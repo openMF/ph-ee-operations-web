@@ -172,16 +172,20 @@ export class AuthenticationService {
    * Refreshes the oauth2 authorization token.
    */
   public refreshOAuthAccessToken() {
-    const oAuthData = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey));
-    const oAuthRefreshToken = oAuthData.refresh_token;
-    this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
-    let httpParams = new HttpParams();
-    httpParams = httpParams.set('grant_type', 'refresh_token');
-    httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    if (environment.oauth.basicAuth === 'true') {
-      this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-    }
-    return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+    const oAuth = this.getStoreageItem(this.oAuthTokenDetailsStorageKey);
+    
+      const oAuthData = JSON.parse(oAuth);
+      const oAuthRefreshToken = oAuthData.refresh_token;
+      this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
+      let httpParams = new HttpParams();
+      httpParams = httpParams.set('grant_type', 'refresh_token');
+      httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
+    
+      if (environment.oauth.basicAuth === 'true') {
+        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
+      }
+
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
@@ -192,6 +196,7 @@ export class AuthenticationService {
         this.storage.setItem(this.credentialsStorageKey, JSON.stringify(credentials));
         return of(true);
       }));
+    
   }
 
   /**

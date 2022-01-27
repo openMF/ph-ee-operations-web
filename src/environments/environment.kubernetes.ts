@@ -10,12 +10,12 @@ export let environment = {
   name: "kubernetes",
   production: false,
   version: env.npm_package_version,
-  serverUrl: "",
+  serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
   oauth: {
-    enabled: "false",
-    serverUrl: "",
-    basicAuth: "false",
-    basicAuthToken: ''
+    enabled: "true",
+    serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+    basicAuth: "true",
+    basicAuthToken: 'Y2xpZW50Og=='
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],
