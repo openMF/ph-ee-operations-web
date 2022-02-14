@@ -9,3 +9,4 @@ target/
 build
 bin
 src/generated
+.DS_Store
