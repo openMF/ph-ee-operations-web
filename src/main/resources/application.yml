@@ -4,8 +4,8 @@ fineract:
       host: operations-mysql
       port: 3306
       schema: tenants
-      username: root
-      password: mysql
+      username: mifos
+      password: password
     common:
       protocol: jdbc
       subprotocol: mysql
