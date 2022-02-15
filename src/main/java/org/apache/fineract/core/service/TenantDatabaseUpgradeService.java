@@ -96,6 +96,7 @@ public class TenantDatabaseUpgradeService {
                     final Flyway fw = new Flyway();
                     fw.setDataSource(dataSourcePerTenantService.retrieveDataSource());
                     fw.setLocations("sql/migrations/tenant");
+                    fw.setInitOnMigrate(true);
                     fw.setOutOfOrder(true);
                     Map<String, String> placeholders = new HashMap<>();
                     placeholders.put("tenantDatabase", tenant.getSchemaName()); // add tenant as aud claim
@@ -135,6 +136,7 @@ public class TenantDatabaseUpgradeService {
         final Flyway fw = new Flyway();
         fw.setDataSource(dataSourcePerTenantService.retrieveDataSource());
         fw.setLocations("sql/migrations/core");
+        fw.setInitOnMigrate(true);
         fw.setOutOfOrder(true);
         fw.migrate();
     }

@@ -1,4 +1,4 @@
-tenants: "ibank-usa,ibank-india"
+tenants: "tn01,tn02"
 
 token:
   client:
@@ -6,5 +6,5 @@ token:
       secret: "p1234"
 
 channel-connector:
-  url: http://channel.ibank.financial
+  url: http://bb-connector-channel.mifos.io
   transfer-path: /channel/transfer
