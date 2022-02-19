@@ -24,9 +24,9 @@ export class RolesAndPermissionsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   /** Paginator for roles and permissions table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{ static: false }) paginator: MatPaginator;
   /** Sorter for roles and permissions table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort,{ static: false }) sort: MatSort;
 
   /**
    * Retrieves the roles data from `resolve`.

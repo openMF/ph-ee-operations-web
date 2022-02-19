@@ -24,9 +24,9 @@ export class UsersComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   /** Paginator for users table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{ static: false }) paginator: MatPaginator;
   /** Sorter for users table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort,{ static: false }) sort: MatSort;
 
   /**
    * Retrieves the users data from `resolve`.

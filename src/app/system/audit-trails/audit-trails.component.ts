@@ -118,9 +118,9 @@ export class AuditTrailsComponent implements OnInit, AfterViewInit {
   checker = new FormControl();
 
   /** Paginator for audit trails table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{ static: false }) paginator: MatPaginator;
   /** Sorter for audit trails table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort,{ static: false }) sort: MatSort;
 
   /**
    * Retrieves the audit trail search template data from `resolve`.

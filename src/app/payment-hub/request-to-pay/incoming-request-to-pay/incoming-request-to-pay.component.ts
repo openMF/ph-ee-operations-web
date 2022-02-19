@@ -41,9 +41,9 @@ export class IncomingRequestToPayComponent implements OnInit {
   dfspEntriesData:  DfspEntry[];
   currenciesData: any;
   /** Paginator for requesttopay table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{ static: false }) paginator: MatPaginator;
   /** Sorter for requesttopay table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort,{ static: false }) sort: MatSort;
 
   constructor(private requestToPayService: RequestToPayService,
   	private route: ActivatedRoute,

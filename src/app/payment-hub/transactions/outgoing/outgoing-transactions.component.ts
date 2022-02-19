@@ -100,9 +100,9 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   ];
 
   /** Paginator for transactions table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{ static: false }) paginator: MatPaginator;
   /** Sorter for transactions table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort,{ static: false }) sort: MatSort;
 
   /**
    * Retrieves the offices and gl accounts data from `resolve`.
