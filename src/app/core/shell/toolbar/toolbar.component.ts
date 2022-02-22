@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';

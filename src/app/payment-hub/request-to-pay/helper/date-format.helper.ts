@@ -1,4 +1,4 @@
-import { NativeDateAdapter } from '@angular/material';
+import { NativeDateAdapter } from '@angular/material/core';
 import { MatDateFormats } from '@angular/material/core';
 /** import { NgxMatDateFormats } from '@angular-material-components/datetime-picker';
 */
