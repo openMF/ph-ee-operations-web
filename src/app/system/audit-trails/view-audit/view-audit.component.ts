@@ -23,9 +23,9 @@ export class ViewAuditComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   /** Paginator for audit trails table. */
-  @ViewChild(MatPaginator,{ static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   /** Sorter for audit trails table. */
-  @ViewChild(MatSort,{ static: false }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
    * Retrieves the audit trail data from `resolve`.
