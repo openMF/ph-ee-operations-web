@@ -33,27 +33,27 @@
               "src/main.scss",
               {"inject":false,
                 "input": "src/theme/deeppurple-amber.scss",
-                "bundleName": "theme/deeppurple-amber"
+                "bundleName": "deeppurple-amber"
 },
               {"inject":false,
                 "input": "src/theme/indigo-pink.scss",
-                "bundleName": "theme/indigo-pink"
+                "bundleName": "indigo-pink"
 },
               {"inject":false,
                 "input": "src/theme/pink-bluegrey.scss",
-                "bundleName": "theme/pink-bluegrey"
+                "bundleName": "pink-bluegrey"
 },
               {"inject":false,
                 "input": "src/theme/purple-green.scss",
-                "bundleName": "theme/purple-green"
+                "bundleName": "purple-green"
 },
               {"inject":false,
                 "input": "src/theme/custom/denim-yellowgreen.scss",
-                "bundleName": "theme/denim-yellowgreen"
+                "bundleName": "denim-yellowgreen"
 },
               {"inject":false,
                 "input": "src/theme/custom/pictonblue-yellowgreen.scss",
-                "bundleName": "theme/pictonblue-yellowgreen"
+                "bundleName": "pictonblue-yellowgreen"
 }
             ],
             "scripts": [],
@@ -137,27 +137,27 @@
               "src/main.scss",
               {"inject":false,
                 "input": "src/theme/deeppurple-amber.scss",
-                "bundleName": "theme/deeppurple-amber"
+                "bundleName": "deeppurple-amber"
 },
               {"inject":false,
                 "input": "src/theme/indigo-pink.scss",
-                "bundleName": "theme/indigo-pink"
+                "bundleName": "indigo-pink"
 },
               {"inject":false,
                 "input": "src/theme/pink-bluegrey.scss",
-                "bundleName": "theme/pink-bluegrey"
+                "bundleName": "pink-bluegrey"
 },
               {"inject":false,
                 "input": "src/theme/purple-green.scss",
-                "bundleName": "theme/purple-green"
+                "bundleName": "purple-green"
 },
               {"inject":false,
                 "input": "src/theme/custom/denim-yellowgreen.scss",
-                "bundleName": "theme/denim-yellowgreen"
+                "bundleName": "denim-yellowgreen"
 },
               {"inject":false,
                 "input": "src/theme/custom/pictonblue-yellowgreen.scss",
-                "bundleName": "theme/pictonblue-yellowgreen"
+                "bundleName": "pictonblue-yellowgreen"
 }
             ],
             "assets": [
