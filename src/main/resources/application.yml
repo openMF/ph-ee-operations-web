@@ -48,3 +48,6 @@ rest:
         authority: "hasAuthority('REFUND')"
       - endpoint: "/api/v1/**"
         authority: "hasAuthority('ALL_FUNCTIONS')"
+logging:
+  level:
+    ROOT: ERROR
