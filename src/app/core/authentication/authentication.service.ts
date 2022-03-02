@@ -18,7 +18,7 @@ import { Credentials } from './credentials.model';
 import { OAuth2Token } from './o-auth2-token.model';
 import { AppConfig } from 'app/app.config';
 
-import * as jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 
 /**
@@ -117,7 +117,7 @@ export class AuthenticationService {
       if (environment.oauth.basicAuth === "true") {
         this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+      return this.http.post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
         .pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
@@ -185,7 +185,7 @@ export class AuthenticationService {
         this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       }
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+      return this.http.post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
