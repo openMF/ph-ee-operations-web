@@ -18,7 +18,7 @@ import { Credentials } from './credentials.model';
 import { OAuth2Token } from './o-auth2-token.model';
 import { AppConfig } from 'app/app.config';
 
-import * as jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 
 /**
