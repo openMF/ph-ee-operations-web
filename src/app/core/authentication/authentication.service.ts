@@ -173,7 +173,6 @@ export class AuthenticationService {
    */
   public refreshOAuthAccessToken() {
     const oAuth = this.getStoreageItem(this.oAuthTokenDetailsStorageKey);
-    console.log(oAuth);
       const oAuthData = JSON.parse(oAuth);
 
       const oAuthRefreshToken = oAuthData.refresh_token;

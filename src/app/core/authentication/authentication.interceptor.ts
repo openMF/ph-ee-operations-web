@@ -1,5 +1,6 @@
 /** Angular Imports */
 import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 /** rxjs Imports */
@@ -35,6 +36,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+    if (request.url.indexOf('assets') !== -1) {
+      return EMPTY;
+    }
+
     this.retrieveAuthData();
     if (request.url.indexOf('/oauth/token') !== -1) {
       return next.handle(this.injectToken(request));
@@ -43,7 +48,6 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       this.removeAuthorization();
     }
 
-    console.log(request.url + " - " + this.accessExpired + " - " + this.refreshTokenInProgress);
     if (!request.url.startsWith('./') && this.accessExpired) {
       if (!this.refreshTokenInProgress) {
         this.refreshTokenInProgress = true;
