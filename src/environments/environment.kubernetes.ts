@@ -8,7 +8,7 @@ import env from "./.env";
 
 export let environment = {
   name: "kubernetes",
-  production: true,
+  production: false,
   version: env.npm_package_version,
   serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp/",
   oauth: {
