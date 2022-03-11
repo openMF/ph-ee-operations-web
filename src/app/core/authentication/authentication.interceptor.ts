@@ -42,6 +42,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     if (!this.authService.isLoggedIn) {
       this.removeAuthorization();
     }
+
+    console.log(request.url + " - " + this.accessExpired + " - " + this.refreshTokenInProgress);
     if (!request.url.startsWith('./') && this.accessExpired) {
       if (!this.refreshTokenInProgress) {
         this.refreshTokenInProgress = true;
