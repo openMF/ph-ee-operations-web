@@ -36,9 +36,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (request.url.indexOf('assets') !== -1) {
-      return EMPTY;
-    }
+  /**  if (request.url.indexOf('assets') !== -1) {
+    *  return EMPTY;
+    *  }
+    */
 
     this.retrieveAuthData();
     if (request.url.indexOf('/oauth/token') !== -1) {
