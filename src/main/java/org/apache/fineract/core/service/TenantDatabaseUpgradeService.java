@@ -117,9 +117,9 @@ public class TenantDatabaseUpgradeService {
     }
 
     private void insertTenants() {
-        for(String tenant : tenants) {
+        for (String tenant : tenants) {
             TenantServerConnection existingTenant = repository.findOneBySchemaName(tenant);
-            if(existingTenant == null) {
+            if (existingTenant == null) {
                 TenantServerConnection tenantServerConnection = new TenantServerConnection();
                 tenantServerConnection.setSchemaName(tenant);
                 tenantServerConnection.setSchemaServer(hostname);
