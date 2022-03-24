@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
+import { keyValuesToMap } from '@angular/flex-layout/extended/typings/style/style-transforms';
 
 @Injectable()
 export class AppConfig {
@@ -25,12 +26,15 @@ export class AppConfig {
                     })
                 };
                 if (environment.externalConfigurationFile !== '') {
-                    this.http.get(`./assets/${environment.externalConfigurationFile}`, { headers: httpOptions.headers, responseType: "text" })
+                    this.http.get(`/assets/${environment.externalConfigurationFile}`, { headers: httpOptions.headers, responseType: "text" })
                         .subscribe((responseData: string) => {
                             const variables = responseData.split(/\r\n|\r|\n/);
+                            console.log(variables);
                             for (let variable of variables) {
                                 const keyValue = variable.split(' ');
+                                console.log(keyValue);
                                 const keys = keyValue[0].split('.');
+                                console.log(keys);
                                 if (keys.length > 1) {
                                     environment[keys[0]][keys[1]] = keyValue[1];
                                 } else {
