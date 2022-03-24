@@ -29,12 +29,9 @@ export class AppConfig {
                     this.http.get(`/assets/${environment.externalConfigurationFile}`, { headers: httpOptions.headers, responseType: "text" })
                         .subscribe((responseData: string) => {
                             const variables = responseData.split(/\r\n|\r|\n/);
-                            console.log(variables);
                             for (let variable of variables) {
                                 const keyValue = variable.split(' ');
-                                console.log(keyValue);
                                 const keys = keyValue[0].split('.');
-                                console.log(keys);
                                 if (keys.length > 1) {
                                     environment[keys[0]][keys[1]] = keyValue[1];
                                 } else {
