@@ -49,7 +49,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       this.removeAuthorization();
     }
 
-    if (!request.url.startsWith('./') && this.accessExpired) {
+    if (!request.url.startsWith('/') && this.accessExpired) {
       if (!this.refreshTokenInProgress) {
         this.refreshTokenInProgress = true;
         this.refreshTokenSubject.next(null);

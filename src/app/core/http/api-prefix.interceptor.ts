@@ -18,7 +18,9 @@ export class ApiPrefixInterceptor implements HttpInterceptor {
    * Intercepts a Http request and prefixes it with `environment.serverUrl`.
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    request = request.clone({ url: environment.serverUrl + request.url });
+    if(request.url.indexOf('configuration.properties')==-1){
+      request = request.clone({ url: environment.serverUrl + request.url });
+    }
     return next.handle(request);
   }
 
