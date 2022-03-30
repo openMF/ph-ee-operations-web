@@ -19,5 +19,5 @@ export let environment = {
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],
-  externalConfigurationFile: "" // When provided, the external configuration file content will override this environment settings based on naming conventions
+  externalConfigurationFile: "configuration.properties" // When provided, the external configuration file content will override this environment settings based on naming conventions
 };
