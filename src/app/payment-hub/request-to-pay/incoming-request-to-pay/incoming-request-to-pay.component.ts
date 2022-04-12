@@ -6,9 +6,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import {requestInterface} from './incoming-request-to-pay-interface'
 /** rxjs Imports */
-import { merge, of } from 'rxjs';
+import { merge } from 'rxjs';
+import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
@@ -29,20 +30,36 @@ export class IncomingRequestToPayComponent implements OnInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  
+  payeePartyId = new FormControl();
+  payerPartyId = new FormControl();
+  payerDfspId = new FormControl();
+  payerDfspName = new FormControl();
+  status = new FormControl();
+  amount = new FormControl();
+  currencyCode = new FormControl();
+  filteredCurrencies: any;
+  filteredDfspEntries: any;
+  currenciesData: any;
+  dfspEntriesData: DfspEntry[];
+  /** Transaction date from form control. */
+  transactionDateFrom = new FormControl();
+  /** Transaction date to form control. */
+  transactionDateTo = new FormControl();
+  /** Transaction ID form control. */
+  transactionId = new FormControl();
   /* Requests to pay data. */
   requestToPayData: any;
   /* Requests to incoming data. */
-  requestToPayIncomingData: Array<any> = [];
+  requestToPayIncomingData: requestInterface[]=[];
 
   /** Columns to be displayed in request to pay table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'state'];
-
+  
   /** Data source for request to pay table. */
-  dataSource: MatTableDataSource<any>;
+  dataSource=new MatTableDataSource<requestInterface>(this.requestToPayIncomingData);
 
-  dfspEntriesData:  DfspEntry[];
-  currenciesData: any;
+
+  filteredValues = { payerPartyId:'' , amount: '',payerDfspId:'', transactionId: ''};
   /** Paginator for requesttopay table. */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** Sorter for requesttopay table. */
@@ -62,12 +79,30 @@ export class IncomingRequestToPayComponent implements OnInit {
     };
     console.log(this.requestToPayIncomingData);
   }
-
+  
   ngOnInit() {
+    
     this.setRequestToPay();
+    this.payerPartyId.valueChanges.subscribe((payerPartyIdFilterValue)        => {
+      this.filteredValues['payerPartyId'] = payerPartyIdFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+      });
+      this.amount.valueChanges.subscribe((amountFilterValue)        => {
+        this.filteredValues['amount'] = amountFilterValue;
+        this.dataSource.filter = JSON.stringify(this.filteredValues);
+        });
+        this.payerDfspId.valueChanges.subscribe((payerDfspIdFilterValue)        => {
+          this.filteredValues['payerDfspId'] = payerDfspIdFilterValue;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+          });
+          this.transactionId.valueChanges.subscribe((transactionIdFilterValue)        => {
+            this.filteredValues['transactionId'] = transactionIdFilterValue;
+            this.dataSource.filter = JSON.stringify(this.filteredValues);
+            });
+      this.dataSource.filterPredicate = this.customFilterPredicate();
     //console.log(this.dataSource);
   }
-
+  
   /**
    * Initializes the data source, paginator and sorter for request to pay table.
    */
@@ -76,7 +111,7 @@ export class IncomingRequestToPayComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
+  
   convertTimestampToDate(timestamp: any) {
     if (!timestamp) {
       return undefined;
@@ -107,7 +142,7 @@ export class IncomingRequestToPayComponent implements OnInit {
     const elements = this.dfspEntriesData.filter((option) => option.id === dfpsId);
     return elements.length > 0 ? elements[0] : undefined;
   }
-
+  
   /**
    * Displays office name in form control input.
    * @param {any} office Office data.
@@ -116,5 +151,18 @@ export class IncomingRequestToPayComponent implements OnInit {
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
-
+  customFilterPredicate() {
+    const myFilterPredicate = function(data:requestInterface, filter:string) :boolean {
+      let searchString = JSON.parse(filter);
+      let payerPartyIdFound = data.payerPartyId.toString().trim().indexOf(searchString.payerPartyId) !== -1
+      let amountFound = data.amount.toString().trim().indexOf(searchString.amount) !== -1
+      let transactionIdFound = data.transactionId.toString().trim().indexOf(searchString.transactionId) !== -1
+      if (searchString.topFilter) {
+          return  payerPartyIdFound  || amountFound || transactionIdFound
+      } else {
+          return payerPartyIdFound && amountFound && transactionIdFound
+      }
+    }
+    return myFilterPredicate;
+  }
 }
