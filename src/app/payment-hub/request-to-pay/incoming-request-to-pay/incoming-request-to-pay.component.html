@@ -2,57 +2,57 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payer Id</mat-label>
-    <input matInput>
+    <input matInput [formControl]="payerPartyId" >
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP Id</mat-label>
-    <input matInput >
+    <input matInput [formControl]="payerDfspId" >
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <!-- <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP name</mat-label>
-    <input matInput>
-  </mat-form-field>
+    <input matInput [formControl]="payerDfspName" [matAutocomplete]="dfspEntriesAutocomplete">
+  </mat-form-field> -->
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
-    <input matInput>
+    <input matInput [formControl]="payeePartyId" >
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction ID</mat-label>
-    <input matInput>
+    <input matInput [formControl]="transactionId">
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <!-- <mat-form-field fxFlex="20%">
     <mat-label>Status</mat-label>
-    <mat-select>
-      <ng-container>
-        <mat-option>
-         
+    <mat-select [formControl]="status">
+      <ng-container *ngFor="let filter of transactionStatusData">
+        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+          {{ filter.option }}
         </mat-option>
       </ng-container>
     </mat-select>
-  </mat-form-field>
+  </mat-form-field> -->
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount</mat-label>
-    <input matInput>
+    <input matInput [formControl]="amount">
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <!-- <mat-form-field fxFlex="20%">
     <mat-label>Currency</mat-label>
-    <input matInput>
-  </mat-form-field>
+    <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
+  </mat-form-field> -->
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
     <input matInput>
-    <!-- <input matInput [ngxMatDatetimePicker]="requesttopayDateFromPicker" placeholder="Choose a date"
+    <!-- <input matInput [ngxMatDatetimePicker]="transactionDateFromPicker" placeholder="Choose a date" [formControl]="transactionDateFrom"
        [min]="minDate" [max]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="requesttopayDateFromPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #requesttopayDateFromPicker [showSpinners]="true" [showSeconds]="true"
+    <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #transactionDateFromPicker [showSpinners]="true" [showSeconds]="true"
        [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
     </ngx-mat-datetime-picker> -->
  </mat-form-field>
@@ -60,10 +60,10 @@
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
     <input matInput>
-    <!-- <input matInput [ngxMatDatetimePicker]="requesttopayDateToPicker" placeholder="Choose a date"
+    <!-- <input matInput [ngxMatDatetimePicker]="transactionDateToPicker" placeholder="Choose a date" [formControl]="transactionDateTo"
        [min]="minDate" [max]="maxDate" >
-    <mat-datepicker-toggle matSuffix [for]="requesttopayDateToPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #requesttopayDateToPicker [showSpinners]="true" [showSeconds]="true"
+    <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #transactionDateToPicker [showSpinners]="true" [showSeconds]="true"
        [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
     </ngx-mat-datetime-picker> -->
  </mat-form-field>
