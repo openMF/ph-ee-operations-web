@@ -59,7 +59,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   dataSource=new MatTableDataSource<requestInterface>(this.requestToPayIncomingData);
 
 
-  filteredValues = { payerPartyId:'' , amount: ''};
+  filteredValues = { payerPartyId:'' , amount: '',payerDfspId:'', transactionId: ''};
   /** Paginator for requesttopay table. */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** Sorter for requesttopay table. */
@@ -91,6 +91,14 @@ export class IncomingRequestToPayComponent implements OnInit {
         this.filteredValues['amount'] = amountFilterValue;
         this.dataSource.filter = JSON.stringify(this.filteredValues);
         });
+        this.payerDfspId.valueChanges.subscribe((payerDfspIdFilterValue)        => {
+          this.filteredValues['payerDfspId'] = payerDfspIdFilterValue;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+          });
+          this.transactionId.valueChanges.subscribe((transactionIdFilterValue)        => {
+            this.filteredValues['transactionId'] = transactionIdFilterValue;
+            this.dataSource.filter = JSON.stringify(this.filteredValues);
+            });
       this.dataSource.filterPredicate = this.customFilterPredicate();
     //console.log(this.dataSource);
   }
@@ -148,10 +156,11 @@ export class IncomingRequestToPayComponent implements OnInit {
       let searchString = JSON.parse(filter);
       let payerPartyIdFound = data.payerPartyId.toString().trim().indexOf(searchString.payerPartyId) !== -1
       let amountFound = data.amount.toString().trim().indexOf(searchString.amount) !== -1
+      let transactionIdFound = data.transactionId.toString().trim().indexOf(searchString.transactionId) !== -1
       if (searchString.topFilter) {
-          return  payerPartyIdFound  || amountFound
+          return  payerPartyIdFound  || amountFound || transactionIdFound
       } else {
-          return payerPartyIdFound && amountFound 
+          return payerPartyIdFound && amountFound && transactionIdFound
       }
     }
     return myFilterPredicate;
