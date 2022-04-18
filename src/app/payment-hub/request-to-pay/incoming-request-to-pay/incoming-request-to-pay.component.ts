@@ -13,6 +13,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
+import { RequestToPayDataSource} from '../dataSource /requestToPay.datasource'
 
 /** Custom Data Source */
 import { formatDate } from '../helper/date-format.helper';
@@ -56,10 +57,50 @@ export class IncomingRequestToPayComponent implements OnInit {
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'state'];
   
   /** Data source for request to pay table. */
-  dataSource=new MatTableDataSource<requestInterface>(this.requestToPayIncomingData);
+  dataSource: RequestToPayDataSource;
+  filterTransactionsBy = [
+    {
+      type: 'payeePartyId',
+      value: ''
+    },
+    {
+      type: 'payerPartyId',
+      value: ''
+    },
+    {
+      type: 'payerDfspId',
+      value: ''
+    },
+    {
+      type: 'direction',
+      value: 'INCOMING'
+    },
+    {
+      type: 'transactionId',
+      value: ''
+    },
+    {
+      type: 'status',
+      value: ''
+    },
+    {
+      type: 'amount',
+      value: ''
+    },
+    {
+      type: 'currency',
+      value: ''
+    },
+    {
+      type: 'startFrom',
+      value: ''
+    },
+    {
+      type: 'startTo',
+      value: ''
+    }
+  ];
 
-
-  filteredValues = { payerPartyId:'' , amount: ''};
   /** Paginator for requesttopay table. */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** Sorter for requesttopay table. */
@@ -78,31 +119,146 @@ export class IncomingRequestToPayComponent implements OnInit {
         this.requestToPayIncomingData.push(request);
     };
     console.log(this.requestToPayIncomingData);
+    console.log(this.dataSource)
   }
   
   ngOnInit() {
     
-    this.setRequestToPay();
-    this.payerPartyId.valueChanges.subscribe((payerPartyIdFilterValue)        => {
-      this.filteredValues['payerPartyId'] = payerPartyIdFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-      });
-      this.amount.valueChanges.subscribe((amountFilterValue)        => {
-        this.filteredValues['amount'] = amountFilterValue;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-        });
-      this.dataSource.filterPredicate = this.customFilterPredicate();
+    // this.setRequestToPay();
     //console.log(this.dataSource);
+    // this.dataSource.getRequestsPay(this.filterTransactionsBy , this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    this.getRequestsPay();
   }
-  
+  ngAfterViewInit() {
+    this.payeePartyId.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'payeePartyId');
+
+        })
+      )
+      .subscribe();
+
+    this.payerPartyId.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'payerPartyId');
+        })
+      )
+      .subscribe();
+
+    this.payerDfspId.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'payerDfspId');
+        })
+      )
+      .subscribe();
+
+    this.payerDfspName.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          const elements = this.dfspEntriesData.filter((option) => option.name === filterValue.name);
+          if (elements.length === 1) {
+            this.payerDfspId.setValue(elements[0].id);
+            filterValue = elements[0].name;
+          }
+        })
+      )
+      .subscribe();
+
+    this.transactionId.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'transactionId');
+        })
+      )
+      .subscribe();
+
+    this.status.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'status');
+        })
+      )
+      .subscribe();
+
+    this.amount.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'amount');
+        })
+      )
+      .subscribe();
+
+    this.currencyCode.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          filterValue = filterValue.AlphabeticCode;
+          this.applyFilter(filterValue, 'currency');
+        })
+      )
+      .subscribe();
+
+    this.transactionDateFrom.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'startFrom');
+        })
+      )
+      .subscribe();
+
+    this.transactionDateTo.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+        })
+      )
+      .subscribe();
+
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        tap(() => this.loadTransactionsPage())
+      )
+      .subscribe();
+  }
+  loadTransactionsPage() {
+    if (!this.sort.direction) {
+      delete this.sort.active;
+    }
+    this.dataSource.getRequestsPay(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    
+  }
   /**
    * Initializes the data source, paginator and sorter for request to pay table.
    */
-  setRequestToPay() {
-    this.dataSource = new MatTableDataSource(this.requestToPayIncomingData);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+  // setRequestToPay() {
+  //   this.dataSource = new MatTableDataSource(this.requestToPayIncomingData);
+  //   this.dataSource.paginator = this.paginator;
+  //   this.dataSource.sort = this.sort;
+  // }
   
   convertTimestampToDate(timestamp: any) {
     if (!timestamp) {
@@ -134,7 +290,17 @@ export class IncomingRequestToPayComponent implements OnInit {
     const elements = this.dfspEntriesData.filter((option) => option.id === dfpsId);
     return elements.length > 0 ? elements[0] : undefined;
   }
-  
+  /**
+   * Filters data in transactions table based on passed value and poperty.
+   * @param {string} filterValue Value to filter data.
+   * @param {string} property Property to filter data by.
+   */
+   applyFilter(filterValue: string, property: string) {
+    this.paginator.pageIndex = 0;
+    const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
+    this.filterTransactionsBy[findIndex].value = filterValue;
+    this.loadTransactionsPage();
+  }
   /**
    * Displays office name in form control input.
    * @param {any} office Office data.
@@ -143,17 +309,9 @@ export class IncomingRequestToPayComponent implements OnInit {
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
-  customFilterPredicate() {
-    const myFilterPredicate = function(data:requestInterface, filter:string) :boolean {
-      let searchString = JSON.parse(filter);
-      let payerPartyIdFound = data.payerPartyId.toString().trim().indexOf(searchString.payerPartyId) !== -1
-      let amountFound = data.amount.toString().trim().indexOf(searchString.amount) !== -1
-      if (searchString.topFilter) {
-          return  payerPartyIdFound  || amountFound
-      } else {
-          return payerPartyIdFound && amountFound 
-      }
-    }
-    return myFilterPredicate;
+  getRequestsPay(){
+    this.dataSource = new RequestToPayDataSource(this.requestToPayService);
+    console.log(this.dataSource);
+    this.dataSource.getRequestsPay(this.filterTransactionsBy);
   }
 }
