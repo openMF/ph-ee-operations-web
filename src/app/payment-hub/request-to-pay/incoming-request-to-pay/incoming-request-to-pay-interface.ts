@@ -4,4 +4,6 @@ export interface requestInterface{
   payerPartyId: string,
   payerPartyIdType: string,
   amount: number,
+  payerDfspId: string,
+  transactionId: string
 }

@@ -309,9 +309,11 @@ export class IncomingRequestToPayComponent implements OnInit {
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
+  
   getRequestsPay(){
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
     console.log(this.dataSource);
     this.dataSource.getRequestsPay(this.filterTransactionsBy);
+
   }
 }
