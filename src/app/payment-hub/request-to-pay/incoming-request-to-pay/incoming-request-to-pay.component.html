@@ -48,15 +48,14 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
-    <input matInput  placeholder="Choose a date" [formControl]="transactionDateFrom"
+    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [formControl]="transactionDateFrom"
        [min]="minDate" [max]="maxDate">
     
  </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
-    <input matInput>
-    <input matInput  placeholder="Choose a date" [formControl]="transactionDateTo"
+    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [formControl]="transactionDateTo"
        [min]="minDate" [max]="maxDate" >
  </mat-form-field>
 

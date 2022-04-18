@@ -15,6 +15,7 @@ export function formatDate(date: Date): string {
     const seconds = '0' + date.getSeconds();
 
     // Will display time in 2020-04-10 18:04:36Z format
+    console.log(year + '-' + month.substr(-2) + '-' + day.substr(-2) + 'T' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2));
     return year + '-' + month.substr(-2) + '-' + day.substr(-2) + 'T' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 }
 
