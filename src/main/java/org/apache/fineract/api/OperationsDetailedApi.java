@@ -166,8 +166,8 @@ public class OperationsDetailedApi {
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "amount", required = false) BigDecimal amount,
             @RequestParam(value = "currency", required = false) String currency,
-            @RequestParam(value = "startFrom", required = false) Long startFrom,
-            @RequestParam(value = "startTo", required = false) Long startTo,
+            @RequestParam(value = "startFrom", required = false) String startFrom,
+            @RequestParam(value = "startTo", required = false) String startTo,
             @RequestParam(value = "direction", required = false) String direction,
             @RequestParam(value = "sortedBy", required = false) String sortedBy,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
@@ -201,11 +201,11 @@ public class OperationsDetailedApi {
         }
         try {
             if (startFrom != null && startTo != null) {
-                specs.add(TransactionRequestSpecs.between(TransactionRequest_.startedAt, new Date(startFrom), new Date(startTo)));
+                specs.add(TransactionRequestSpecs.between(TransactionRequest_.startedAt, dateFormat().parse(startFrom), dateFormat().parse(startTo)));
             } else if (startFrom != null) {
-                specs.add(TransactionRequestSpecs.later(TransactionRequest_.startedAt, new Date(startFrom)));
+                specs.add(TransactionRequestSpecs.later(TransactionRequest_.startedAt, dateFormat().parse(startFrom)));
             } else if (startTo != null) {
-                specs.add(TransactionRequestSpecs.earlier(TransactionRequest_.startedAt, new Date(startTo)));
+                specs.add(TransactionRequestSpecs.earlier(TransactionRequest_.startedAt, dateFormat().parse(startTo)));
             }
         } catch (Exception e) {
             logger.warn("failed to parse dates {} / {}", startFrom, startTo);

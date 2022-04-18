@@ -9,6 +9,6 @@ public class OperatorUtils {
     }
 
     public static SimpleDateFormat dateFormat() {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 }
