@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.googlecode.flyway:flyway-core:2.1.1'
     implementation 'net.sf.ehcache:ehcache:2.10.6'
     testImplementation 'junit:junit:4.11'
+    implementation 'net.sf.supercsv:super-csv:2.4.0'
 }
 
 group = 'org.apache.fineract'

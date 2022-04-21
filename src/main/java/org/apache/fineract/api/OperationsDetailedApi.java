@@ -1,16 +1,7 @@
 package org.apache.fineract.api;
 
-
-import org.apache.fineract.operations.TransactionRequest;
-import org.apache.fineract.operations.TransactionRequestRepository;
-import org.apache.fineract.operations.TransactionRequestSpecs;
-import org.apache.fineract.operations.TransactionRequestState;
-import org.apache.fineract.operations.TransactionRequest_;
-import org.apache.fineract.operations.Transfer;
-import org.apache.fineract.operations.TransferRepository;
-import org.apache.fineract.operations.TransferSpecs;
-import org.apache.fineract.operations.TransferStatus;
-import org.apache.fineract.operations.Transfer_;
+import org.apache.fineract.operations.*;
+import org.apache.fineract.utils.CsvUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
@@ -228,6 +216,64 @@ public class OperationsDetailedApi {
         } else {
             return transactionRequestRepository.findAll(pager);
         }
+    }
+
+    /**
+     * Filter the [TransactionRequests] based on multiple type of ids
+     * @param response instance of HttpServletResponse
+     * @param page the count/number of page which we want to fetch
+     * @param size the size of the single page defaults to [10000]
+     * @param sortedOrder the order of sorting [ASC] or [DESC], defaults to [DESC]
+     * @param filterBy type of filter we want to apply, @see [Filter]
+     * @param ids the list of ids to match the query with
+     * @throws IOException in case of csv writing can cause this exception
+     */
+    @PostMapping("/transactionRequests/export")
+    public void filterTransactionRequests(
+            HttpServletResponse response,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
+            @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
+            @RequestParam(value = "filterBy", required = true, defaultValue = "TRANSACTIONID") String filterBy,
+            @RequestBody(required = true) List<String> ids) throws IOException {
+
+        Specifications<TransactionRequest> spec = null;
+        Filter filter;
+        try {
+            filter = parseFilter(filterBy);
+            logger.info("Filter parsed successfully " + filter.name());
+        } catch (Exception e) {
+            filter = Filter.TRANSACTIONID;
+            logger.info("Filter parsing failed. Setting default filter " + filter.name());
+        }
+        switch (filter) {
+            case TRANSACTIONID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, ids);
+                break;
+            case PAYERID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.payerPartyId, ids);
+                break;
+            case PAYEEID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, ids);
+                break;
+            case WORKFLOWINSTANCEKEY:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
+                break;
+        }
+        PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
+
+
+        Page<TransactionRequest> result;
+        if(spec == null) {
+            result = transactionRequestRepository.findAll(pager);
+        } else {
+            result = transactionRequestRepository.findAll(spec, pager);
+        }
+        CsvUtility.writeToCsv(response, result.getContent());
+    }
+
+    private Filter parseFilter(String filterBy) {
+        return filterBy == null ? null : Filter.valueOf(filterBy.toUpperCase());
     }
 
     private TransferStatus parseStatus(@RequestParam(value = "transactionStatus", required = false) String
