@@ -48,15 +48,22 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
-    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [formControl]="transactionDateFrom"
-       [min]="minDate" [max]="maxDate">
-    
+    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [ngxMatDatetimePicker]="picker" [formControl]="transactionDateFrom"
+       [min]="minDate" [max]="maxDate" >
+       <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker >
+    </ngx-mat-datetime-picker>
  </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
     <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [formControl]="transactionDateTo"
        [min]="minDate" [max]="maxDate" >
+       <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker >
+    </ngx-mat-datetime-picker>
  </mat-form-field>
 
 </div>

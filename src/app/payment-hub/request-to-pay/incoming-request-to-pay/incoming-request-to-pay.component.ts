@@ -223,6 +223,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         tap((filterValue) => {
           if(filterValue) {
             this.applyFilter(filterValue, 'startFrom');
+            console.log(filterValue);
           }
         })
       )
@@ -233,7 +234,9 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+          if(filterValue) {
+            this.applyFilter(filterValue, 'startTo');
+          }
         })
       )
       .subscribe();
@@ -285,7 +288,7 @@ export class IncomingRequestToPayComponent implements OnInit {
     const seconds = '0' + date2.getSeconds();
 
     // Will display time in 2020-04-10 18:04:36 format
-    return year + '-' + month.substr(-2) + '-' + day.substr(-2) + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    return year + '-' + month.substr(-2) + '-' + day.substr(-2) + '  ' +hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
   }
 
 
