@@ -1,7 +1,10 @@
 package org.apache.fineract.api;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.apache.fineract.exception.WriteToCsvException;
 import org.apache.fineract.operations.*;
 import org.apache.fineract.utils.CsvUtility;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,7 +238,7 @@ public class OperationsDetailedApi {
             @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
             @RequestParam(value = "filterBy", required = true, defaultValue = "TRANSACTIONID") String filterBy,
-            @RequestBody(required = true) List<String> ids) throws IOException {
+            @RequestBody(required = true) List<String> ids) {
 
         Specifications<TransactionRequest> spec = null;
         Filter filter;
@@ -269,7 +272,18 @@ public class OperationsDetailedApi {
         } else {
             result = transactionRequestRepository.findAll(spec, pager);
         }
-        CsvUtility.writeToCsv(response, result.getContent());
+        try {
+            CsvUtility.writeToCsv(response, result.getContent());
+        } catch (WriteToCsvException e) {
+            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+            response.setContentType("application/json");
+            try {
+                response.getWriter().write(e.toString());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                logger.info("Failed to get writer from HttpServletResponse");
+            }
+        }
     }
 
     private Filter parseFilter(String filterBy) {
