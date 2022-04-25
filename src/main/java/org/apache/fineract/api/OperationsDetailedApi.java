@@ -1,10 +1,9 @@
 package org.apache.fineract.api;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.apache.fineract.data.ErrorCode;
 import org.apache.fineract.exception.WriteToCsvException;
 import org.apache.fineract.operations.*;
 import org.apache.fineract.utils.CsvUtility;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 
@@ -28,7 +25,7 @@ import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 @RequestMapping("/api/v1")
 public class OperationsDetailedApi {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private TransferRepository transferRepository;
@@ -229,16 +226,23 @@ public class OperationsDetailedApi {
      * @param sortedOrder the order of sorting [ASC] or [DESC], defaults to [DESC]
      * @param filterBy type of filter we want to apply, @see [Filter]
      * @param ids the list of ids to match the query with
-     * @throws IOException in case of csv writing can cause this exception
      */
     @PostMapping("/transactionRequests/export")
-    public void filterTransactionRequests(
+    public Map<String, String> filterTransactionRequests(
             HttpServletResponse response,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
-            @RequestParam(value = "filterBy", required = true, defaultValue = "TRANSACTIONID") String filterBy,
+            @RequestParam(value = "filterBy", defaultValue = "TRANSACTIONID") String filterBy,
             @RequestBody(required = true) List<String> ids) {
+
+        if(ids.isEmpty()) {
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", ErrorCode.FILTER_ID.name());
+            res.put("errorDescription", "List of ids can't be empty");
+            res.put("developerMessage", "Provide list of ids as body which belongs to any one of these domains " + EnumSet.allOf(Filter.class));
+            return  res;
+        }
 
         Specifications<TransactionRequest> spec = null;
         Filter filter;
@@ -246,8 +250,11 @@ public class OperationsDetailedApi {
             filter = parseFilter(filterBy);
             logger.info("Filter parsed successfully " + filter.name());
         } catch (Exception e) {
-            filter = Filter.TRANSACTIONID;
-            logger.info("Filter parsing failed. Setting default filter " + filter.name());
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", ErrorCode.INVALID_FILTER.name());
+            res.put("errorDescription", "Invalid filter value " + filterBy);
+            res.put("developerMessage", "Possible filter values are " + EnumSet.allOf(Filter.class));
+            return res;
         }
         switch (filter) {
             case TRANSACTIONID:
@@ -264,8 +271,6 @@ public class OperationsDetailedApi {
                 break;
         }
         PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
-
-
         Page<TransactionRequest> result;
         if(spec == null) {
             result = transactionRequestRepository.findAll(pager);
@@ -275,15 +280,13 @@ public class OperationsDetailedApi {
         try {
             CsvUtility.writeToCsv(response, result.getContent());
         } catch (WriteToCsvException e) {
-            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-            response.setContentType("application/json");
-            try {
-                response.getWriter().write(e.toString());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                logger.info("Failed to get writer from HttpServletResponse");
-            }
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", e.getErrorCode());
+            res.put("errorDescription", e.getErrorDescription());
+            res.put("developerMessage", e.getDeveloperMessage());
+            return  res;
         }
+        return null;
     }
 
     private Filter parseFilter(String filterBy) {

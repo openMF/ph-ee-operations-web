@@ -1,5 +1,6 @@
 package org.apache.fineract.utils;
 
+import org.apache.fineract.data.ErrorCode;
 import org.apache.fineract.exception.CsvWriterException;
 import org.apache.fineract.exception.WriteToCsvException;
 import org.supercsv.io.CsvBeanWriter;
@@ -48,7 +49,7 @@ public class CsvWriter<T> {
      */
     private void writeCsvHeaders(String[] csvHeader) throws WriteToCsvException {
         performErrorProneTask(
-                new WriteToCsvException(WriteToCsvException.ErrorCode.CSV_WRITE_HEADER, "Unable to write csv headers"),
+                new WriteToCsvException(ErrorCode.CSV_WRITE_HEADER, "Unable to write csv headers"),
                 () -> {
                     iCsvBeanWriter.writeHeader(csvHeader);
                     return null;
@@ -64,7 +65,7 @@ public class CsvWriter<T> {
     private void writeData(String[] nameMapping, List<T> objects) throws WriteToCsvException {
         for(T data: objects) {
             performErrorProneTask(
-                    new WriteToCsvException(WriteToCsvException.ErrorCode.CSV_WRITE_DATA, "Unable to write csv headers"),
+                    new WriteToCsvException(ErrorCode.CSV_WRITE_DATA, "Unable to write csv headers"),
                     () -> {
                         iCsvBeanWriter.write(data, nameMapping);
                         return null;
@@ -78,7 +79,7 @@ public class CsvWriter<T> {
      */
     private void closeStream() throws WriteToCsvException {
         performErrorProneTask(
-                new WriteToCsvException(WriteToCsvException.ErrorCode.CSV_STREAM, "Unable to close/flush stream"),
+                new WriteToCsvException(ErrorCode.CSV_STREAM, "Unable to close/flush stream"),
                 () -> {
                     iCsvBeanWriter.close();
                     return null;
@@ -113,7 +114,7 @@ public class CsvWriter<T> {
         public Builder<T> setPrintWriter(HttpServletResponse response) throws WriteToCsvException {
             this.printWriter = performErrorProneTask(
                     new WriteToCsvException(
-                            WriteToCsvException.ErrorCode.CSV_GET_WRITER,
+                            ErrorCode.CSV_GET_WRITER,
                             "Unable to create csv bean writer instance"),
                     response::getWriter) ;
             return this;
@@ -142,16 +143,16 @@ public class CsvWriter<T> {
 
         public CsvWriter<T> build() throws CsvWriterException {
             if(printWriter == null) {
-                throw new CsvWriterException(WriteToCsvException.ErrorCode.CSV_BUILDER,"Print writer can't be null");
+                throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Print writer can't be null");
             }
             if(csvHeader == null) {
-                throw new CsvWriterException(WriteToCsvException.ErrorCode.CSV_BUILDER,"Csv header can't be null");
+                throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Csv header can't be null");
             }
             if(data == null) {
-                throw new CsvWriterException(WriteToCsvException.ErrorCode.CSV_BUILDER,"Data can't be null");
+                throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Data can't be null");
             }
             if(nameMapping == null) {
-                throw new CsvWriterException(WriteToCsvException.ErrorCode.CSV_BUILDER, "Name mapping can't be null");
+                throw new CsvWriterException(ErrorCode.CSV_BUILDER, "Name mapping can't be null");
             }
             return new CsvWriter<>(printWriter, csvHeader, data, nameMapping);
         }

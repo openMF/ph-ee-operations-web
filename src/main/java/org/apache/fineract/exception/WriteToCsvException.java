@@ -1,6 +1,6 @@
 package org.apache.fineract.exception;
 
-import java.io.IOException;
+import org.apache.fineract.data.ErrorCode;
 
 public class WriteToCsvException extends Exception {
 
@@ -43,14 +43,6 @@ public class WriteToCsvException extends Exception {
                 ", errorDescription='" + errorDescription + '\'' +
                 ", errorCode=" + errorCode +
                 '}';
-    }
-
-    public enum ErrorCode {
-        CSV_GET_WRITER,
-        CSV_WRITE_HEADER,
-        CSV_WRITE_DATA,
-        CSV_STREAM,
-        CSV_BUILDER
     }
 
 }
