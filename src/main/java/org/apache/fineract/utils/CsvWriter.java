@@ -8,6 +8,7 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -105,6 +106,34 @@ public class CsvWriter<T> {
         }
     }
 
+    /**
+     * Automatically generates the name mapping string using the java reflect api
+     * @param pojoClass the Class instance of the generic type [T]
+     * @param <T> the generic type for [pojoClass]
+     * @return string array of name mapping
+     */
+    public static <T> String[] generateNameMapping(Class<T> pojoClass) {
+        Field[] fields = pojoClass.getDeclaredFields();
+        String[] nm = new String[fields.length];
+        int i = 0;
+        for (Field field :fields) {
+            nm[i++] = field.getName();
+        }
+        return nm;
+    }
+
+    /**
+     * creates the csv header based on the fields provided
+     * @return csv header of type String array
+     */
+    private static String[] getCsvHeader(String[] fields) {
+        String[] csvHeader = new String[fields.length];
+        for (int i = 0; i < fields.length; i++) {
+            csvHeader[i] = fields[i].toUpperCase();
+        }
+        return csvHeader;
+    }
+
     public static class Builder<T> {
         private PrintWriter printWriter;
         private String[] csvHeader;
@@ -130,10 +159,8 @@ public class CsvWriter<T> {
             return this;
         }
 
-        public Builder<T> setData(List<T> data, String[] nameMapping) {
-            this.data = data;
-            setNameMapping(nameMapping);
-            return this;
+        public void setNameMapping(Class<T> pojoClass) {
+            this.nameMapping = CsvWriter.generateNameMapping(pojoClass);
         }
 
         public Builder<T> setNameMapping(String[] nameMapping) {
@@ -145,14 +172,15 @@ public class CsvWriter<T> {
             if(printWriter == null) {
                 throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Print writer can't be null");
             }
-            if(csvHeader == null) {
-                throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Csv header can't be null");
-            }
             if(data == null) {
                 throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Data can't be null");
             }
             if(nameMapping == null) {
+                setNameMapping((Class<T>) this.data.get(0).getClass());
                 throw new CsvWriterException(ErrorCode.CSV_BUILDER, "Name mapping can't be null");
+            }
+            if(csvHeader == null) {
+                this.csvHeader = getCsvHeader(nameMapping);
             }
             return new CsvWriter<>(printWriter, csvHeader, data, nameMapping);
         }
