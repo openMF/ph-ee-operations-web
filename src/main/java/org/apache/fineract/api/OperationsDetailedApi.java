@@ -1,16 +1,9 @@
 package org.apache.fineract.api;
 
-
-import org.apache.fineract.operations.TransactionRequest;
-import org.apache.fineract.operations.TransactionRequestRepository;
-import org.apache.fineract.operations.TransactionRequestSpecs;
-import org.apache.fineract.operations.TransactionRequestState;
-import org.apache.fineract.operations.TransactionRequest_;
-import org.apache.fineract.operations.Transfer;
-import org.apache.fineract.operations.TransferRepository;
-import org.apache.fineract.operations.TransferSpecs;
-import org.apache.fineract.operations.TransferStatus;
-import org.apache.fineract.operations.Transfer_;
+import org.apache.fineract.data.ErrorCode;
+import org.apache.fineract.exception.WriteToCsvException;
+import org.apache.fineract.operations.*;
+import org.apache.fineract.utils.CsvUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +11,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
-
 import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 
 
@@ -37,7 +28,7 @@ import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 @RequestMapping("/api/v1")
 public class OperationsDetailedApi {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private TransferRepository transferRepository;
@@ -228,6 +219,81 @@ public class OperationsDetailedApi {
         } else {
             return transactionRequestRepository.findAll(pager);
         }
+    }
+
+    /**
+     * Filter the [TransactionRequests] based on multiple type of ids
+     * @param response instance of HttpServletResponse
+     * @param page the count/number of page which we want to fetch
+     * @param size the size of the single page defaults to [10000]
+     * @param sortedOrder the order of sorting [ASC] or [DESC], defaults to [DESC]
+     * @param filterBy type of filter we want to apply, @see [Filter]
+     * @param ids the list of ids to match the query with
+     */
+    @PostMapping("/transactionRequests/export")
+    public Map<String, String> filterTransactionRequests(
+            HttpServletResponse response,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
+            @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
+            @RequestParam(value = "filterBy", defaultValue = "TRANSACTIONID") String filterBy,
+            @RequestBody(required = true) List<String> ids) {
+
+        if(ids.isEmpty()) {
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", ErrorCode.FILTER_ID.name());
+            res.put("errorDescription", "List of ids can't be empty");
+            res.put("developerMessage", "Provide list of ids as body which belongs to any one of these domains " + EnumSet.allOf(Filter.class));
+            return  res;
+        }
+
+        Specifications<TransactionRequest> spec = null;
+        Filter filter;
+        try {
+            filter = parseFilter(filterBy);
+            logger.info("Filter parsed successfully " + filter.name());
+        } catch (Exception e) {
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", ErrorCode.INVALID_FILTER.name());
+            res.put("errorDescription", "Invalid filter value " + filterBy);
+            res.put("developerMessage", "Possible filter values are " + EnumSet.allOf(Filter.class));
+            return res;
+        }
+        switch (filter) {
+            case TRANSACTIONID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, ids);
+                break;
+            case PAYERID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.payerPartyId, ids);
+                break;
+            case PAYEEID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, ids);
+                break;
+            case WORKFLOWINSTANCEKEY:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
+                break;
+        }
+        PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
+        Page<TransactionRequest> result;
+        if(spec == null) {
+            result = transactionRequestRepository.findAll(pager);
+        } else {
+            result = transactionRequestRepository.findAll(spec, pager);
+        }
+        try {
+            CsvUtility.writeToCsv(response, result.getContent());
+        } catch (WriteToCsvException e) {
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", e.getErrorCode());
+            res.put("errorDescription", e.getErrorDescription());
+            res.put("developerMessage", e.getDeveloperMessage());
+            return  res;
+        }
+        return null;
+    }
+
+    private Filter parseFilter(String filterBy) {
+        return filterBy == null ? null : Filter.valueOf(filterBy.toUpperCase());
     }
 
     private TransferStatus parseStatus(@RequestParam(value = "transactionStatus", required = false) String
