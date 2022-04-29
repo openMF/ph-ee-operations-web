@@ -51,3 +51,21 @@ rest:
 logging:
   level:
     ROOT: ERROR
+
+cloud:
+  aws:
+    enabled: true
+    credentials:
+      access-key: ${AWS_ACCESS_KEY:AKIAX32JM37TZOJ5AKFB}
+      secret-key: ${AWS_SECRET_KEY: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}
+    region:
+      static: us-east-2
+    stack:
+      auto: false
+  azure:
+    enabled: false
+    blob:
+      connection-string:
+
+application:
+  bucket-name: paymenthub-ee-dev
