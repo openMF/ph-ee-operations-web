@@ -1,4 +1,5 @@
 FROM node:16.13.0 as builder
+
 RUN apt-get update && apt-get install -y vim
 
 RUN npm install -g @angular/cli@12.2.16
