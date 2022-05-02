@@ -12,10 +12,10 @@ export let environment = {
   version: env.npm_package_version,
   serverUrl: "",
   oauth: {
-    enabled: "false",
-    serverUrl: "",
-    basicAuth: "false",
-    basicAuthToken: ''
+    enabled: "true", // For connecting to Mifos X using OAuth2 Authentication change the value to true
+    serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+    basicAuth: "true",
+    basicAuthToken: 'Y2xpZW50Og=='
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],
