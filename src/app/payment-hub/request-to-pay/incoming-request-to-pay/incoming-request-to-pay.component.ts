@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import {requestInterface} from './incoming-request-to-pay-interface'
+import { HttpClient, HttpParams , HttpHeaders, JsonpClientBackend} from '@angular/common/http';
 /** rxjs Imports */
 import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
@@ -14,12 +15,12 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
 import { RequestToPayDataSource} from '../dataSource /requestToPay.datasource'
+import { ExportCsv } from '../export-csv/export-csv.service';
 
 /** Custom Data Source */
 import { formatDate } from '../helper/date-format.helper';
 
 import { DfspEntry } from '../model/dfsp.model';
-
 @Component({
   selector: 'mifosx-incoming-request-to-pay',
   templateUrl: './incoming-request-to-pay.component.html',
@@ -48,6 +49,8 @@ export class IncomingRequestToPayComponent implements OnInit {
   transactionDateTo = new FormControl();
   /** Transaction ID form control. */
   transactionId = new FormControl();
+  csvExport : [];
+  csvName: string;
   /* Requests to pay data. */
   requestToPayData: any;
   /* Requests to incoming data. */
@@ -58,6 +61,10 @@ export class IncomingRequestToPayComponent implements OnInit {
   
   /** Data source for request to pay table. */
   dataSource: RequestToPayDataSource;
+
+  /**
+   * @param {HttpClient} http Http Client to send requests.
+   */
   filterTransactionsBy = [
     {
       type: 'payeePartyId',
@@ -108,7 +115,7 @@ export class IncomingRequestToPayComponent implements OnInit {
 
   constructor(private requestToPayService: RequestToPayService,
   	private route: ActivatedRoute,
-    public dialog: MatDialog) { 
+    public dialog: MatDialog,private http: HttpClient) { 
     this.route.data.subscribe((data: { requestsToPay: any,dfspEntries: DfspEntry[],currencies: any }) => {
       this.requestToPayData = data.requestsToPay.content;
       this.currenciesData = data.currencies;
@@ -135,8 +142,10 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'payeePartyId');
+          if(filterValue.length<5){
 
+          }
+          this.applyFilter(filterValue, 'payeePartyId');
         })
       )
       .subscribe();
@@ -180,7 +189,9 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'transactionId');
+          if(filterValue.length>5){
+            this.applyFilter(filterValue, 'transactionId');
+          }
         })
       )
       .subscribe();
@@ -223,7 +234,6 @@ export class IncomingRequestToPayComponent implements OnInit {
         tap((filterValue) => {
           if(filterValue) {
             this.applyFilter(filterValue, 'startFrom');
-            console.log(filterValue);
           }
         })
       )
@@ -241,13 +251,19 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap(() => this.loadTransactionsPage())
       )
       .subscribe();
+
+      
+      
+  }
+  onSubmit(){
+    this.exportCSV(this.csvExport,this.csvName);
   }
   loadTransactionsPage() {
     if (!this.sort.direction) {
@@ -291,7 +307,7 @@ export class IncomingRequestToPayComponent implements OnInit {
     return year + '-' + month.substr(-2) + '-' + day.substr(-2) + '  ' +hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
   }
 
-
+  
 
   shortenValue(value: any) {
     return value && value.length > 15 ? value.slice(0, 13) + '...' : value;
@@ -324,11 +340,39 @@ export class IncomingRequestToPayComponent implements OnInit {
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
-  
+  exportCSV(filterBy:any,filterName:string) {
+    console.log(filterBy);
+    var postData = filterBy.transactionid.split(',');
+    console.log(postData)
+    
+    this.http.post("/api/v1/transactionRequests/export?filterBy="+filterBy.cars,
+    
+    postData,{responseType: 'blob'as 'json',headers: new HttpHeaders().append("Content-Type", "application/json")}
+    )
+    .subscribe(
+        (val) => {
+            console.log("POST call successful value returned in body", 
+                        val);
+                        this.downLoadFile(val,"application/csv")
+        })
+}
+/**
+     * Method is use to download file.
+     * @param data - Array Buffer data
+     * @param type - type of the document.
+     */
+downLoadFile(data: any, type: string) {
+  let blob = new Blob([data], { type: type});
+  let url = window.URL.createObjectURL(blob);
+  let pwa = window.open(url);
+  if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+      alert( 'Please disable your Pop-up blocker and try again.');
+  }
+}
   getRequestsPay(){
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
     console.log(this.dataSource);
     this.dataSource.getRequestsPay(this.filterTransactionsBy);
-
+    
   }
 }
