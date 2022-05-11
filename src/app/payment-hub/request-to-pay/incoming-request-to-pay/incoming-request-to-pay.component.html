@@ -48,15 +48,22 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
-    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [formControl]="transactionDateFrom"
-       [min]="minDate" [max]="maxDate">
-    
+    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [ngxMatDatetimePicker]="picker" [formControl]="transactionDateFrom"
+       [min]="minDate" [max]="maxDate" >
+       <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker >
+    </ngx-mat-datetime-picker>
  </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
-    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [formControl]="transactionDateTo"
+    <input matInput  placeholder="yyyy-MM-dd hh:mm:ss" [ngxMatDatetimePicker]="pickerTo" [formControl]="transactionDateTo"
        [min]="minDate" [max]="maxDate" >
+       <mat-datepicker-toggle matSuffix [for]="pickerTo">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerTo >
+    </ngx-mat-datetime-picker>
  </mat-form-field>
 
 </div>
@@ -122,8 +129,33 @@
 
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
-
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons [length]=""></mat-paginator>
+    
   </div>
-
+  <form #postForm="ngForm" (ngSubmit)="exportCSV(postForm.value,postForm.id)" class="csv-form" >
+    <div class="container-fluid" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+      <mat-form-field fxFlex="20%">
+        <mat-label for="querytype" class="form-control">Filter By</mat-label>
+        <select id="querytype" name="cars" class="form-control" required ngModel matNativeControl>
+          <option value="transactionid">TRANSACTION ID</option>
+          <option value="payerid">PAYER ID</option>
+          <option value="payeeid">PAYEE ID</option>
+          <option value="externalid">EXTERNALID</option>
+          <option value="workflowinstancekey">WORKFLOWINSTANCEKEY</option>
+        </select>
+      </mat-form-field>
+      <mat-form-field class="example-full-width form-group" fxFlex="20%">
+  
+        <mat-label for="querytype" class="form-control">Value</mat-label>
+        <input matInput type="text" class="form-control col-sm-4" id="filterBy" required ngModel name="transactionid"
+        placeholder="comma-separated-list">
+      </mat-form-field>
+    </div>
+    
+    
+    <button mat-stroked-button type="submit" [disabled]="!postForm.valid">
+      Export CSV
+    </button>
+  </form>
+  
 </div>
