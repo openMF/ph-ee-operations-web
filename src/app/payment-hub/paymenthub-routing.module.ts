@@ -24,6 +24,7 @@ import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-
 import { DfspResolver } from './transactions/resolver/dfsp.resolver';
 import { RequestToPayResolver } from './request-to-pay/common-resolvers/request-to-pay.resolver';
 import { ViewRequestToPayResolver } from './request-to-pay/common-resolvers/view-request-to-pay.resolver';
+import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component'
 
 /** Payment HUB Routes */
 const routes: Routes = [
@@ -130,6 +131,16 @@ const routes: Routes = [
             },
           ]
         },
+        {
+          path: 'incomingrequesttopayexport',
+          data: { title: extract(''), breadcrumb: 'Export Incoming Request to Pay' },
+          children: [
+            {
+              path: '',
+              component: IncomingRequestExportComponent,
+            }
+          ]
+        }
       ]
     },
   ])
