@@ -5,5 +5,6 @@ public enum Filter {
     PAYERID,
     PAYEEID,
     EXTERNALID,
-    WORKFLOWINSTANCEKEY
+    WORKFLOWINSTANCEKEY,
+    STATE
 }
