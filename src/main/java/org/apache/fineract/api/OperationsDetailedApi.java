@@ -272,6 +272,9 @@ public class OperationsDetailedApi {
             case WORKFLOWINSTANCEKEY:
                 spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
                 break;
+            case STATE:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(ids));
+                break;
         }
         PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
         Page<TransactionRequest> result;
@@ -313,5 +316,13 @@ public class OperationsDetailedApi {
             logger.warn("failed to parse TransactionRequestState {}, ignoring it", state);
             return null;
         }
+    }
+
+    private List<TransactionRequestState> parseStates(List<String> states) {
+        List<TransactionRequestState> stateList = new ArrayList<>();
+        for(String state: states) {
+            stateList.add(parseState(state));
+        }
+        return stateList;
     }
 }
