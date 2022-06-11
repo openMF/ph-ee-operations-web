@@ -20,7 +20,7 @@ import static org.apache.fineract.operations.TransactionRequestState.IN_PROGRESS
 public class TransactionRequest extends AbstractPersistableCustom<Long> {
 
     @Column(name = "WORKFLOW_INSTANCE_KEY")
-    private String workflowInstanceKey;
+    private Long workflowInstanceKey;
 
     @Column(name = "TRANSACTION_ID")
     private String transactionId;
@@ -78,16 +78,16 @@ public class TransactionRequest extends AbstractPersistableCustom<Long> {
     public TransactionRequest() {
     }
 
-    public TransactionRequest(String workflowInstanceKey) {
+    public TransactionRequest(Long workflowInstanceKey) {
         this.workflowInstanceKey = workflowInstanceKey;
         this.state = IN_PROGRESS;
     }
 
-    public String getWorkflowInstanceKey() {
+    public Long getWorkflowInstanceKey() {
         return workflowInstanceKey;
     }
 
-    public void setWorkflowInstanceKey(String workflowInstanceKey) {
+    public void setWorkflowInstanceKey(Long workflowInstanceKey) {
         this.workflowInstanceKey = workflowInstanceKey;
     }
 

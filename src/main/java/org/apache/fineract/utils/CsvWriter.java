@@ -6,7 +6,6 @@ import org.apache.fineract.exception.WriteToCsvException;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
-import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -140,12 +139,8 @@ public class CsvWriter<T> {
         private List<T> data;
         private String[] nameMapping;
 
-        public Builder<T> setPrintWriter(HttpServletResponse response) throws WriteToCsvException {
-            this.printWriter = performErrorProneTask(
-                    new WriteToCsvException(
-                            ErrorCode.CSV_GET_WRITER,
-                            "Unable to create csv bean writer instance"),
-                    response::getWriter) ;
+        public Builder<T> setPrintWriter(PrintWriter printWriter) throws WriteToCsvException {
+            this.printWriter = printWriter;
             return this;
         }
 
@@ -175,9 +170,11 @@ public class CsvWriter<T> {
             if(data == null) {
                 throw new CsvWriterException(ErrorCode.CSV_BUILDER,"Data can't be null");
             }
+            if(data.isEmpty()) {
+                throw new CsvWriterException(ErrorCode.EMPTY_RESULT, "No matching records");
+            }
             if(nameMapping == null) {
                 setNameMapping((Class<T>) this.data.get(0).getClass());
-                throw new CsvWriterException(ErrorCode.CSV_BUILDER, "Name mapping can't be null");
             }
             if(csvHeader == null) {
                 this.csvHeader = getCsvHeader(nameMapping);

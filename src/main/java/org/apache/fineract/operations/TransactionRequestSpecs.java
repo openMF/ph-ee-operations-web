@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.domain.Specifications;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.Date;
@@ -43,4 +44,11 @@ public class TransactionRequestSpecs {
             return cr;
         }));
     }
+
+    /*public static Specifications<TransactionRequest> filterByErrorDescription(List<String> errorDescriptions) {
+        return where(((root, query, cb) -> {
+            Join<TransactionRequest, Variable> txnVariables = root.join(TransactionRequest_.WORKFLOW_INSTANCE_KEY);
+            return cb.equal();
+        }));
+    }*/
 }
