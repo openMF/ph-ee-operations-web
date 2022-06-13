@@ -1,6 +1,5 @@
 package org.apache.fineract.api;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import org.apache.fineract.data.ErrorCode;
 import org.apache.fineract.exception.WriteToCsvException;
 import org.apache.fineract.operations.*;
@@ -308,15 +307,6 @@ public class OperationsDetailedApi {
         }
         return null;
     }
-
-    /*@GetMapping("/test")
-    public List<TransactionRequest> test() {
-        List<String> ec = new ArrayList<>();
-        ec.add("\"AMS Local is disabled\"");
-        List<TransactionRequest> result = transactionRequestRepository.filterByErrorDescription(ec);
-        logger.info("Query response: " + result);
-        return result;
-    }*/
 
     /*
      * Generates the exhaustive errorDescription list by prefixing and suffixing it with double quotes (")
