@@ -271,7 +271,7 @@ public class OperationsDetailedApi {
                 spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, ids);
                 break;
             case WORKFLOWINSTANCEKEY:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, parseWorkflowInstanceKey(ids));
+                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
                 break;
             case STATE:
                 spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(ids));
@@ -319,21 +319,6 @@ public class OperationsDetailedApi {
             errorDesc.add(String.format("\"%s\"", s));
         }
         return errorDesc;
-    }
-
-    /*
-     * Generate List<Long> of workflowInstanceKey from List<String>
-     */
-    private List<Long> parseWorkflowInstanceKey(List<String> keys) {
-        List<Long> workflowInstanceKeys = new ArrayList<>();
-        for(String key: keys) {
-            try {
-                workflowInstanceKeys.add(Long.parseLong(key));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return workflowInstanceKeys;
     }
 
     /*

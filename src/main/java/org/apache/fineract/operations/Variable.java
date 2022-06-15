@@ -22,7 +22,7 @@ public class Variable extends AbstractPersistableCustom<Long> {
 
     @Column(name = "WORKFLOW_INSTANCE_KEY")
     @Index(name = "idx_workflowInstanceKey")
-    private Long workflowInstanceKey;
+    private String workflowInstanceKey;
 
     @Column(name = "TIMESTAMP")
     private Long timestamp;
@@ -42,11 +42,11 @@ public class Variable extends AbstractPersistableCustom<Long> {
         this.workflowKey = workflowKey;
     }
 
-    public Long getWorkflowInstanceKey() {
+    public String getWorkflowInstanceKey() {
         return workflowInstanceKey;
     }
 
-    public void setWorkflowInstanceKey(Long workflowInstanceKey) {
+    public void setWorkflowInstanceKey(String workflowInstanceKey) {
         this.workflowInstanceKey = workflowInstanceKey;
     }
 
