@@ -1,11 +1,15 @@
 package org.apache.fineract.utils;
 
+import org.apache.fineract.data.ErrorCode;
 import org.apache.fineract.exception.WriteToCsvException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import static org.apache.fineract.utils.CsvWriter.performErrorProneTask;
 
 public class CsvUtility {
 
@@ -18,11 +22,20 @@ public class CsvUtility {
         String headerValue = "attachment; filename=" + filename;
         response.setHeader(headerKey, headerValue);
 
+        PrintWriter printWriter = performErrorProneTask(
+                new WriteToCsvException(
+                        ErrorCode.CSV_GET_WRITER,
+                        "Unable get writer from HttpServletResponse"),
+                response::getWriter) ;
+
+        //System.out.println("Print writer fetch success");
+
         CsvWriter<T> writer = new CsvWriter.Builder<T>()
-                .setPrintWriter(response)
+                .setPrintWriter(printWriter)
                 .setData(listOfData)
                 .build();
 
+        //System.out.println("Writer object created success");
         writer.write();
     }
 

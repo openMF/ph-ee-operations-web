@@ -7,5 +7,6 @@ public enum ErrorCode {
     CSV_STREAM,
     CSV_BUILDER,
     INVALID_FILTER,
-    FILTER_ID
+    FILTER_ID,
+    EMPTY_RESULT
 }

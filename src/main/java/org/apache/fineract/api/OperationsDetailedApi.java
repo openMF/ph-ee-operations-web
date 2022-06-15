@@ -259,6 +259,7 @@ public class OperationsDetailedApi {
             res.put("developerMessage", "Possible filter values are " + EnumSet.allOf(Filter.class));
             return res;
         }
+        List<TransactionRequest> data = null;
         switch (filter) {
             case TRANSACTIONID:
                 spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, ids);
@@ -275,16 +276,28 @@ public class OperationsDetailedApi {
             case STATE:
                 spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(ids));
                 break;
+            case ERRORDESCRIPTION:
+                data = transactionRequestRepository.filterByErrorDescription(parseErrorDescription(ids));
+                break;
         }
-        PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
-        Page<TransactionRequest> result;
-        if(spec == null) {
-            result = transactionRequestRepository.findAll(pager);
+        if(filter == Filter.ERRORDESCRIPTION && data != null) {
+
         } else {
-            result = transactionRequestRepository.findAll(spec, pager);
+            PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
+            Page<TransactionRequest> result;
+            if (spec == null) {
+                result = transactionRequestRepository.findAll(pager);
+            } else {
+                result = transactionRequestRepository.findAll(spec, pager);
+            }
+            data = result.getContent();
+        }
+        logger.info("Result: " + data);
+        if(data == null || data.isEmpty()) {
+            return null;
         }
         try {
-            CsvUtility.writeToCsv(response, result.getContent());
+            CsvUtility.writeToCsv(response, data);
         } catch (WriteToCsvException e) {
             Map<String, String> res = new HashMap<>();
             res.put("errorCode", e.getErrorCode());
@@ -295,10 +308,29 @@ public class OperationsDetailedApi {
         return null;
     }
 
+    /*
+     * Generates the exhaustive errorDescription list by prefixing and suffixing it with double quotes (")
+     *
+     * Example: [ "AMS Local is disabled"] => [ "AMS Local is disabled", "\"AMS Local is disabled\""]
+     */
+    private List<String> parseErrorDescription(List<String> description) {
+        List<String> errorDesc = new ArrayList<>(description);
+        for (String s: description) {
+            errorDesc.add(String.format("\"%s\"", s));
+        }
+        return errorDesc;
+    }
+
+    /*
+     * Parses the [Filter] enum from filter string
+     */
     private Filter parseFilter(String filterBy) {
         return filterBy == null ? null : Filter.valueOf(filterBy.toUpperCase());
     }
 
+    /*
+     * Parses the [TransferStatus] enum from transactionStatus string
+     */
     private TransferStatus parseStatus(@RequestParam(value = "transactionStatus", required = false) String
                                                transactionStatus) {
         try {
@@ -309,6 +341,9 @@ public class OperationsDetailedApi {
         }
     }
 
+    /*
+     * Parses the [TransactionRequestState] enum from transactionState string
+     */
     private TransactionRequestState parseState(String state) {
         try {
             return state == null ? null : TransactionRequestState.valueOf(state);
@@ -318,6 +353,9 @@ public class OperationsDetailedApi {
         }
     }
 
+    /*
+     * Parses the list of [TransactionRequestState] enum from list of transactionState string
+     */
     private List<TransactionRequestState> parseStates(List<String> states) {
         List<TransactionRequestState> stateList = new ArrayList<>();
         for(String state: states) {
