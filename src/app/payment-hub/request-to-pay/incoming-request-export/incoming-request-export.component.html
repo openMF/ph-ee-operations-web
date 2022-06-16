@@ -1,0 +1,28 @@
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+    <form #postForm="ngForm" (ngSubmit)="exportCSV(postForm.value,postForm.id)" class="csv-form" >
+        <div class="container-fluid" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+          <mat-form-field fxFlex="50%">
+            <mat-label for="querytype" class="form-control">Filter By</mat-label>
+            <select id="querytype" name="cars" class="form-control" required ngModel matNativeControl>
+              <option value="transactionid">TRANSACTION ID</option>
+              <option value="payerid">PAYER ID</option>
+              <option value="payeeid">PAYEE ID</option>
+              <option value="externalid">EXTERNALID</option>
+              <option value="workflowinstancekey">WORKFLOWINSTANCEKEY</option>
+            </select>
+          </mat-form-field>
+          <mat-form-field class="example-full-width form-group" fxFlex="50%">
+      
+            <mat-label for="querytype" class="form-control">Value</mat-label>
+            <input matInput type="textArea" class="form-control col-sm-4" id="filterBy" required ngModel name="transactionid"
+            placeholder="comma-separated-list">
+          </mat-form-field>
+        </div>
+        
+        
+        <button mat-stroked-button type="submit" [disabled]="!postForm.valid">
+          Export CSV
+        </button>
+      </form>
+</div>
+

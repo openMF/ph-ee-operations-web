@@ -51,6 +51,27 @@
         </mat-nav-list>
 
       </div>
+      <div fxFlex="50%">
+
+        <mat-nav-list>
+
+          <mat-list-item [routerLink]="['incomingrequesttopayexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Incoming Request to Pay</h4>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="['outgoingrequesttopayexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Outgoing Request to Pay</h4>
+          </mat-list-item>
+
+        </mat-nav-list>
+
+      </div>
 
     </div>
 

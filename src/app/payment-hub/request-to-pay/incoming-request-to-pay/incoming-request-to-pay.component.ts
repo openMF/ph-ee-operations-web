@@ -17,6 +17,7 @@ import { RequestToPayService } from '../service/request-to-pay.service';
 import { RequestToPayDataSource} from '../dataSource /requestToPay.datasource'
 /** Custom Data Source */
 import { formatDate } from '../helper/date-format.helper';
+import { transactionStatusData as statuses } from '../helper/incoming-reqest.helper'
 
 import { DfspEntry } from '../model/dfsp.model';
 @Component({
@@ -41,6 +42,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   filteredDfspEntries: any;
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
+  transactionStatusData = statuses;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -85,7 +87,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       value: ''
     },
     {
-      type: 'status',
+      type: 'state',
       value: ''
     },
     {
@@ -199,7 +201,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'status');
+          this.applyFilter(filterValue, 'state');
         })
       )
       .subscribe();
@@ -353,6 +355,21 @@ export class IncomingRequestToPayComponent implements OnInit {
                         val);
                         this.downLoadFile(val,"application/csv")
         })
+}
+/**
+   * Displays office name in form control input.
+   * @param {any} office Office data.
+   * @returns {string} Office name if valid otherwise undefined.
+   */
+displayStatus(status?: any): string | undefined {
+  const elements = this.transactionStatusData.filter((option) => option.value === status);
+  return elements.length > 0 ? elements[0].option : undefined;
+}
+
+displayCSS(status?: any): string | undefined {
+
+  const elements = this.transactionStatusData.filter((option) => option.value === status);
+  return elements.length > 0 ? elements[0].css : undefined;
 }
 /**
      * Method is use to download file.
