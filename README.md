@@ -4,6 +4,7 @@ UI component for the Payment Hub EE application.
 
 This project is based on the **openMF/web-app** to provide the same UX as we have for Fineract 1.x.
 
+
 ## Getting started
 
 1. Ensure you have the following installed in your system:
