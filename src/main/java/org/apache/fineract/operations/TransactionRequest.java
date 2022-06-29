@@ -4,13 +4,11 @@ package org.apache.fineract.operations;
 
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import static org.apache.fineract.operations.TransactionRequestState.IN_PROGRESS;
 
@@ -74,6 +72,17 @@ public class TransactionRequest extends AbstractPersistableCustom<Long> {
 
     @Column(name = "SCENARIO")
     private String scenario;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionRequest")
+    private List<Variable> variables;
+
+    public List<Variable> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(List<Variable> variables) {
+        this.variables = variables;
+    }
 
     public TransactionRequest() {
     }

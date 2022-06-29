@@ -1,11 +1,10 @@
 package org.apache.fineract.operations;
 
-import org.springframework.data.jpa.domain.JpaSort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Path;
+import org.springframework.stereotype.Component;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.Date;
 import java.util.List;
@@ -45,10 +44,20 @@ public class TransactionRequestSpecs {
         }));
     }
 
-    /*public static Specifications<TransactionRequest> filterByErrorDescription(List<String> errorDescriptions) {
+    public static Specifications<TransactionRequest> filterByErrorDescription(List<String> errorDescriptions) {
         return where(((root, query, cb) -> {
-            Join<TransactionRequest, Variable> txnVariables = root.join(TransactionRequest_.WORKFLOW_INSTANCE_KEY);
-            return cb.equal();
+            Join<Variable, TransactionRequest> txnVariables = root.join("variables");
+
+            Predicate a = cb.equal(txnVariables.get("name"), "errorDescription");
+
+            Path<String> group = txnVariables.get("value");
+            CriteriaBuilder.In<String> cr = cb.in(group);
+            for(String errorDesc: errorDescriptions) {
+                cr.value(errorDesc);
+            }
+
+            return cb.and(cr, a);
         }));
-    }*/
+    }
+
 }

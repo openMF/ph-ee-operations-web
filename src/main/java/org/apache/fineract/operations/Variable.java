@@ -4,14 +4,7 @@ package org.apache.fineract.operations;
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.eclipse.persistence.annotations.Index;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "variables")
@@ -33,6 +26,19 @@ public class Variable extends AbstractPersistableCustom<Long> {
     @Lob
     @Column(name = "VALUE")
     private String value;
+
+    @JoinColumn(name = "WORKFLOW_INSTANCE_KEY", insertable=false, updatable=false,
+            referencedColumnName = "WORKFLOW_INSTANCE_KEY")
+    @ManyToOne()
+    private TransactionRequest transactionRequest;
+
+    public TransactionRequest getTransactionRequest() {
+        return transactionRequest;
+    }
+
+    public void setTransactionRequest(TransactionRequest transactionRequest) {
+        this.transactionRequest = transactionRequest;
+    }
 
     public Long getWorkflowKey() {
         return workflowKey;

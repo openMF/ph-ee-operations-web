@@ -227,8 +227,6 @@ public class OperationsDetailedApi {
      * @param page the count/number of page which we want to fetch
      * @param size the size of the single page defaults to [10000]
      * @param sortedOrder the order of sorting [ASC] or [DESC], defaults to [DESC]
-     * @param filterBy type of filter we want to apply, @see [Filter]
-     * @param ids the list of ids to match the query with
      */
     @PostMapping("/transactionRequests/export")
     public Map<String, String> filterTransactionRequests(
@@ -236,65 +234,91 @@ public class OperationsDetailedApi {
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
-            @RequestParam(value = "filterBy", defaultValue = "TRANSACTIONID") String filterBy,
-            @RequestBody(required = true) List<String> ids) {
+            @RequestParam(value = "startFrom", required = false) String startFrom,
+            @RequestParam(value = "startTo", required = false) String startTo,
+            @RequestParam(value = "state", required = false) String state,
+            @RequestBody Map<String, List<String>> body) {
 
-        if(ids.isEmpty()) {
-            Map<String, String> res = new HashMap<>();
-            res.put("errorCode", ErrorCode.FILTER_ID.name());
-            res.put("errorDescription", "List of ids can't be empty");
-            res.put("developerMessage", "Provide list of ids as body which belongs to any one of these domains " + EnumSet.allOf(Filter.class));
-            return  res;
+        List<String> filterByList = new ArrayList<>(body.keySet());
+
+        List<Specifications<TransactionRequest>> specs = new ArrayList<>();
+        if (state != null && parseState(state) != null) {
+            specs.add(TransactionRequestSpecs.match(TransactionRequest_.state, parseState(state)));
+        }
+        try {
+            if (startFrom != null && startTo != null) {
+                specs.add(TransactionRequestSpecs.between(TransactionRequest_.startedAt, dateFormat().parse(startFrom), dateFormat().parse(startTo)));
+            } else if (startFrom != null) {
+                specs.add(TransactionRequestSpecs.later(TransactionRequest_.startedAt, dateFormat().parse(startFrom)));
+            } else if (startTo != null) {
+                specs.add(TransactionRequestSpecs.earlier(TransactionRequest_.startedAt, dateFormat().parse(startTo)));
+            }
+        } catch (Exception e) {
+            logger.warn("failed to parse dates {} / {}", startFrom, startTo);
         }
 
         Specifications<TransactionRequest> spec = null;
-        Filter filter;
-        try {
-            filter = parseFilter(filterBy);
-            logger.info("Filter parsed successfully " + filter.name());
-        } catch (Exception e) {
-            Map<String, String> res = new HashMap<>();
-            res.put("errorCode", ErrorCode.INVALID_FILTER.name());
-            res.put("errorDescription", "Invalid filter value " + filterBy);
-            res.put("developerMessage", "Possible filter values are " + EnumSet.allOf(Filter.class));
-            return res;
-        }
-        List<TransactionRequest> data = null;
-        switch (filter) {
-            case TRANSACTIONID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, ids);
-                break;
-            case PAYERID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.payerPartyId, ids);
-                break;
-            case PAYEEID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, ids);
-                break;
-            case WORKFLOWINSTANCEKEY:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
-                break;
-            case STATE:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(ids));
-                break;
-            case ERRORDESCRIPTION:
-                data = transactionRequestRepository.filterByErrorDescription(parseErrorDescription(ids));
-                break;
-        }
-        if(filter == Filter.ERRORDESCRIPTION && data != null) {
 
-        } else {
+        List<TransactionRequest> data = new ArrayList<>();
+        for (String filterBy : filterByList) {
+            List<String> ids = body.get(filterBy);
+            if (ids.isEmpty()) { continue; }
+            Filter filter;
+            try {
+                filter = parseFilter(filterBy);
+                logger.info("Filter parsed successfully " + filter.name());
+            } catch (Exception e) {
+                Map<String, String> res = new HashMap<>();
+                res.put("errorCode", ErrorCode.INVALID_FILTER.name());
+                res.put("errorDescription", "Invalid filter value " + filterBy);
+                res.put("developerMessage", "Possible filter values are " + EnumSet.allOf(Filter.class));
+                logger.info("Unable to parse filter " + filterBy);
+                logger.info(res.toString());
+                continue;
+            }
+
+            switch (filter) {
+                case TRANSACTIONID:
+                    spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, ids);
+                    break;
+                case PAYERID:
+                    spec = TransactionRequestSpecs.in(TransactionRequest_.payerPartyId, ids);
+                    break;
+                case PAYEEID:
+                    spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, ids);
+                    break;
+                case WORKFLOWINSTANCEKEY:
+                    spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
+                    break;
+                case STATE:
+                    spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(ids));
+                    break;
+                case ERRORDESCRIPTION:
+                    spec = TransactionRequestSpecs.filterByErrorDescription(parseErrorDescription(ids));
+                    break;
+            }
+
             PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
             Page<TransactionRequest> result;
             if (spec == null) {
                 result = transactionRequestRepository.findAll(pager);
             } else {
+                for (int i = 1; i < specs.size(); i++) {
+                    spec = spec.and(specs.get(i));
+                }
                 result = transactionRequestRepository.findAll(spec, pager);
             }
-            data = result.getContent();
+            data.addAll(result.getContent());
+
+            logger.info("Result for " + filter + " : " + data);
         }
-        logger.info("Result: " + data);
-        if(data == null || data.isEmpty()) {
-            return null;
+        if(data.isEmpty()) {
+            Map<String, String> res = new HashMap<>();
+            res.put("errorCode", "404");
+            res.put("errorDescription", "Empty response");
+            res.put("developerMessage", "Empty response");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return  res;
         }
         try {
             CsvUtility.writeToCsv(response, data);
