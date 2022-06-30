@@ -183,3 +183,5 @@ To
         this.onLoginSuccess({} as any);
         return of(true);
     }
+
+#Auto
