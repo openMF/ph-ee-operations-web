@@ -2,8 +2,9 @@ package org.apache.fineract.operations;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -73,9 +74,11 @@ public class TransactionRequest extends AbstractPersistableCustom<Long> {
     @Column(name = "SCENARIO")
     private String scenario;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionRequest")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionRequest", fetch = FetchType.LAZY)
     private List<Variable> variables;
 
+    @JsonIgnore
+    @JsonManagedReference
     public List<Variable> getVariables() {
         return variables;
     }

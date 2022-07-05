@@ -1,6 +1,7 @@
 package org.apache.fineract.operations;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.eclipse.persistence.annotations.Index;
 
@@ -32,6 +33,7 @@ public class Variable extends AbstractPersistableCustom<Long> {
     @ManyToOne()
     private TransactionRequest transactionRequest;
 
+    @JsonBackReference
     public TransactionRequest getTransactionRequest() {
         return transactionRequest;
     }
