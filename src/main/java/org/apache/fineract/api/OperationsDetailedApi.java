@@ -115,6 +115,8 @@ public class OperationsDetailedApi {
             specs.add(TransferSpecs.multiMatch(Transfer_.payerPartyId, Transfer_.payeePartyId, partyId));
         }
         try {
+            logger.info("StartTo: " + startTo);
+            logger.info("StartFrom: " + startFrom);
             if (startFrom != null && startTo != null) {
                 specs.add(TransferSpecs.between(Transfer_.startedAt, dateFormat().parse(startFrom), dateFormat().parse(startTo)));
             } else if (startFrom != null) {
