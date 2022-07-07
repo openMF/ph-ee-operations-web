@@ -279,6 +279,9 @@ public class OperationsDetailedApi {
             case ERRORDESCRIPTION:
                 data = transactionRequestRepository.filterByErrorDescription(parseErrorDescription(ids));
                 break;
+            case EXTERNALID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.externalId, ids);
+                break;
         }
         if(filter == Filter.ERRORDESCRIPTION && data != null) {
 
