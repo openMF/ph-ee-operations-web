@@ -305,7 +305,7 @@ public class OperationsDetailedApi {
             if (spec == null) {
                 result = transactionRequestRepository.findAll(pager);
             } else {
-                for (int i = 1; i < specs.size(); i++) {
+                for (int i = 0; i < specs.size(); i++) {
                     spec = spec.and(specs.get(i));
                 }
                 result = transactionRequestRepository.findAll(spec, pager);
