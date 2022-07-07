@@ -75,7 +75,18 @@ public class TransactionRequest extends AbstractPersistableCustom<Long> {
     @Column(name = "SCENARIO")
     private String scenario;
 
+    @Column(name = "EXTERNAL_ID")
+    private String externalId;
+
     public TransactionRequest() {
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public TransactionRequest(String workflowInstanceKey) {
