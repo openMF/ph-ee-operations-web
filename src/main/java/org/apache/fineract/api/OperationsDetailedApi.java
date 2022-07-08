@@ -298,6 +298,9 @@ public class OperationsDetailedApi {
                 case ERRORDESCRIPTION:
                     spec = TransactionRequestSpecs.filterByErrorDescription(parseErrorDescription(ids));
                     break;
+                case EXTERNALID:
+                    spec = TransactionRequestSpecs.in(TransactionRequest_.externalId, ids);
+                    break;
             }
 
             PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
