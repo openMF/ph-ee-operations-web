@@ -234,9 +234,10 @@ public class OperationsDetailedApi {
      * @param startTo     use for filtering records before this date
      * @param state       filter based on state of the transaction
      */
-    @PostMapping("/transactionRequests/export")
+    @PostMapping("/transactionRequests")
     public Map<String, String> filterTransactionRequests(
             HttpServletResponse response,
+            @RequestParam(value = "command", required = false, defaultValue = "export") String command,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
@@ -244,6 +245,13 @@ public class OperationsDetailedApi {
             @RequestParam(value = "startTo", required = false) String startTo,
             @RequestParam(value = "state", required = false) String state,
             @RequestBody Map<String, List<String>> body) {
+
+        if(!command.equalsIgnoreCase("export")) {
+            return new ErrorResponse.Builder()
+                    .setErrorCode(""+HttpServletResponse.SC_NOT_FOUND)
+                    .setErrorDescription(command + " not supported")
+                    .setDeveloperMessage("Possible supported command is " + command).build();
+        }
 
         List<String> filterByList = new ArrayList<>(body.keySet());
 
