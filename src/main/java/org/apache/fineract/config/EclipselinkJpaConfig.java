@@ -48,7 +48,7 @@ public class EclipselinkJpaConfig extends JpaBaseConfiguration {
         map.put("eclipselink.jdbc.batch-writing.size", "1000");
         map.put("eclipselink.cache.shared.default", "false");
 
-        map.put("eclipselink.logging.level.sql", "FINE");
+        map.put("eclipselink.logging.level.sql", "INFO");
         map.put("eclipselink.logging.parameters", "true");
         map.put("eclipselink.logging.session", "true");
         map.put("eclipselink.logging.thread", "true");
