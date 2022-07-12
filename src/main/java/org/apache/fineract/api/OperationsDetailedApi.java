@@ -1,6 +1,6 @@
 package org.apache.fineract.api;
 
-import org.apache.fineract.data.ErrorCode;
+import org.apache.fineract.data.ErrorResponse;
 import org.apache.fineract.exception.WriteToCsvException;
 import org.apache.fineract.operations.*;
 import org.apache.fineract.utils.CsvUtility;
@@ -12,15 +12,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+
 import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 
 
@@ -223,92 +223,171 @@ public class OperationsDetailedApi {
 
     /**
      * Filter the [TransactionRequests] based on multiple type of ids
-     * @param response instance of HttpServletResponse
-     * @param page the count/number of page which we want to fetch
-     * @param size the size of the single page defaults to [10000]
+     *
+     * @param response    instance of HttpServletResponse
+     * @param page        the count/number of page which we want to fetch
+     * @param size        the size of the single page defaults to [10000]
      * @param sortedOrder the order of sorting [ASC] or [DESC], defaults to [DESC]
-     * @param filterBy type of filter we want to apply, @see [Filter]
-     * @param ids the list of ids to match the query with
+     * @param startFrom   use for filtering records after this date, format: "yyyy-MM-dd HH:mm:ss"
+     * @param startTo     use for filtering records before this date
+     * @param state       filter based on state of the transaction
      */
-    @PostMapping("/transactionRequests/export")
+    @PostMapping("/transactionRequests")
     public Map<String, String> filterTransactionRequests(
             HttpServletResponse response,
+            @RequestParam(value = "command", required = false, defaultValue = "export") String command,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "10000") Integer size,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder,
-            @RequestParam(value = "filterBy", defaultValue = "TRANSACTIONID") String filterBy,
-            @RequestBody(required = true) List<String> ids) {
+            @RequestParam(value = "startFrom", required = false) String startFrom,
+            @RequestParam(value = "startTo", required = false) String startTo,
+            @RequestParam(value = "state", required = false) String state,
+            @RequestBody Map<String, List<String>> body) {
 
-        if(ids.isEmpty()) {
-            Map<String, String> res = new HashMap<>();
-            res.put("errorCode", ErrorCode.FILTER_ID.name());
-            res.put("errorDescription", "List of ids can't be empty");
-            res.put("developerMessage", "Provide list of ids as body which belongs to any one of these domains " + EnumSet.allOf(Filter.class));
-            return  res;
+        if(!command.equalsIgnoreCase("export")) {
+            return new ErrorResponse.Builder()
+                    .setErrorCode(""+HttpServletResponse.SC_NOT_FOUND)
+                    .setErrorDescription(command + " not supported")
+                    .setDeveloperMessage("Possible supported command is " + command).build();
+        }
+
+        List<String> filterByList = new ArrayList<>(body.keySet());
+
+        List<Specifications<TransactionRequest>> specs = new ArrayList<>();
+        if (state != null && parseState(state) != null) {
+            specs.add(TransactionRequestSpecs.match(TransactionRequest_.state, parseState(state)));
+            logger.info("State filter added");
+        }
+        try {
+            specs.add(getDateSpecification(startTo, startFrom));
+            logger.info("Date filter parsed successful");
+        } catch (Exception e) {
+            logger.warn("failed to parse dates {} / {}", startFrom, startTo);
         }
 
         Specifications<TransactionRequest> spec = null;
-        Filter filter;
-        try {
-            filter = parseFilter(filterBy);
-            logger.info("Filter parsed successfully " + filter.name());
-        } catch (Exception e) {
-            Map<String, String> res = new HashMap<>();
-            res.put("errorCode", ErrorCode.INVALID_FILTER.name());
-            res.put("errorDescription", "Invalid filter value " + filterBy);
-            res.put("developerMessage", "Possible filter values are " + EnumSet.allOf(Filter.class));
-            return res;
-        }
-        List<TransactionRequest> data = null;
-        switch (filter) {
-            case TRANSACTIONID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, ids);
-                break;
-            case PAYERID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.payerPartyId, ids);
-                break;
-            case PAYEEID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, ids);
-                break;
-            case WORKFLOWINSTANCEKEY:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, ids);
-                break;
-            case STATE:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(ids));
-                break;
-            case ERRORDESCRIPTION:
-                data = transactionRequestRepository.filterByErrorDescription(parseErrorDescription(ids));
-                break;
-            case EXTERNALID:
-                spec = TransactionRequestSpecs.in(TransactionRequest_.externalId, ids);
-                break;
-        }
-        if(filter == Filter.ERRORDESCRIPTION && data != null) {
-
-        } else {
-            PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
-            Page<TransactionRequest> result;
-            if (spec == null) {
-                result = transactionRequestRepository.findAll(pager);
-            } else {
-                result = transactionRequestRepository.findAll(spec, pager);
+        List<TransactionRequest> data = new ArrayList<>();
+        for (String filterBy : filterByList) {
+            List<String> ids = body.get(filterBy);
+            if (ids.isEmpty()) {
+                continue;
             }
-            data = result.getContent();
+            Filter filter;
+            try {
+                filter = parseFilter(filterBy);
+                logger.info("Filter parsed successfully " + filter.name());
+            } catch (Exception e) {
+                logger.info("Unable to parse filter " + filterBy + " skipping");
+                continue;
+            }
+            spec = getFilterSpecs(filter, ids);
+            Page<TransactionRequest> result = executeRequest(spec, specs, page, size, sortedOrder);
+            data.addAll(result.getContent());
+            logger.info("Result for " + filter + " : " + data);
         }
-        logger.info("Result: " + data);
-        if(data == null || data.isEmpty()) {
-            return null;
+        if (data.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return new ErrorResponse.Builder()
+                    .setErrorCode(""+HttpServletResponse.SC_NOT_FOUND)
+                    .setErrorDescription("Empty response")
+                    .setDeveloperMessage("Empty response").build();
         }
         try {
             CsvUtility.writeToCsv(response, data);
         } catch (WriteToCsvException e) {
-            Map<String, String> res = new HashMap<>();
-            res.put("errorCode", e.getErrorCode());
-            res.put("errorDescription", e.getErrorDescription());
-            res.put("developerMessage", e.getDeveloperMessage());
-            return  res;
+            return new ErrorResponse.Builder()
+                    .setErrorCode(e.getErrorCode())
+                    .setErrorDescription(e.getErrorDescription())
+                    .setDeveloperMessage(e.getDeveloperMessage()).build();
         }
         return null;
+    }
+
+    /*
+     * Returns respective [TransactionRequest] specifications based on filter
+     * @param filter the filter we want to apply
+     * @param listOfValues the values to which we want to apply filter
+     */
+    private Specifications<TransactionRequest> getFilterSpecs(Filter filter, List<String> listOfValues) {
+        Specifications<TransactionRequest> spec = null;
+        switch (filter) {
+            case TRANSACTIONID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.transactionId, listOfValues);
+                break;
+            case PAYERID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.payerPartyId, listOfValues);
+                break;
+            case PAYEEID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.payeePartyId, listOfValues);
+                break;
+            case WORKFLOWINSTANCEKEY:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.workflowInstanceKey, listOfValues);
+                break;
+            case STATE:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.state, parseStates(listOfValues));
+                break;
+            case ERRORDESCRIPTION:
+                spec = TransactionRequestSpecs.filterByErrorDescription(parseErrorDescription(listOfValues));
+                break;
+            case EXTERNALID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.externalId, listOfValues);
+                break;
+        }
+        return spec;
+    }
+
+    /*
+     * Parse the date filter and return the specification accordingly
+     * @param startTo date before which we want all the records, in format "yyyy-MM-dd HH:mm:ss"
+     * @param startFrom date after which we want all the records, in format "yyyy-MM-dd HH:mm:ss"
+     */
+    private Specifications<TransactionRequest> getDateSpecification(String startTo, String startFrom) throws Exception {
+        if (startFrom != null && startTo != null) {
+            return TransactionRequestSpecs.between(TransactionRequest_.startedAt, dateFormat().parse(startFrom), dateFormat().parse(startTo));
+        } else if (startFrom != null) {
+            return TransactionRequestSpecs.later(TransactionRequest_.startedAt, dateFormat().parse(startFrom));
+        } else if (startTo != null) {
+            return TransactionRequestSpecs.earlier(TransactionRequest_.startedAt, dateFormat().parse(startTo));
+        } else {
+            throw new Exception("Both dates(startTo, startFrom empty, skipping");
+        }
+    }
+
+    /*
+     * Executes the transactionRequest api request with specifications and returns the paged result
+     * @param baseSpec the base specification in which all the other spec needed to be merged
+     * @param extraSpecs the list of specification which is required to be merged in [baseSpec]
+     * @param page the page number we want to fetch
+     * @param size the size of single page or number of elements in single page
+     * @param sortedOrder the order of sorting to be applied ASC OR DESC
+     */
+    private Page<TransactionRequest> executeRequest(
+            Specifications<TransactionRequest> baseSpec, List<Specifications<TransactionRequest>> extraSpecs,
+            int page, int size, String sortedOrder) {
+        PageRequest pager = new PageRequest(page, size, new Sort(Sort.Direction.valueOf(sortedOrder), "startedAt"));
+        Page<TransactionRequest> result;
+        if (baseSpec == null) {
+            result = transactionRequestRepository.findAll(pager);
+            logger.info("Getting data without spec");
+        } else {
+            Specifications<TransactionRequest> combineSpecs = combineSpecs(baseSpec, extraSpecs);
+            result = transactionRequestRepository.findAll(combineSpecs, pager);
+        }
+        return result;
+    }
+
+    /*
+     * Combines the multiple specifications into one using and clause
+     * @param baseSpec the base specification in which all the other spec needed to be merged
+     * @param specs the list of specification which is required to be merged in [baseSpec]
+     */
+    private <T> Specifications<T> combineSpecs(Specifications<T> baseSpec,
+                                                            List<Specifications<T>> specs) {
+        logger.info("Combining specs " + specs.size());
+        for (Specifications<T> specifications : specs) {
+            baseSpec = baseSpec.and(specifications);
+        }
+        return baseSpec;
     }
 
     /*
@@ -318,7 +397,7 @@ public class OperationsDetailedApi {
      */
     private List<String> parseErrorDescription(List<String> description) {
         List<String> errorDesc = new ArrayList<>(description);
-        for (String s: description) {
+        for (String s : description) {
             errorDesc.add(String.format("\"%s\"", s));
         }
         return errorDesc;
@@ -361,7 +440,7 @@ public class OperationsDetailedApi {
      */
     private List<TransactionRequestState> parseStates(List<String> states) {
         List<TransactionRequestState> stateList = new ArrayList<>();
-        for(String state: states) {
+        for (String state : states) {
             stateList.add(parseState(state));
         }
         return stateList;
