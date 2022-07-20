@@ -64,6 +64,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   lengthElement: number;
   /* Requests to pay data. */
   requestToPayData: any;
+  requestToPayDatas: any;
   /* Requests to incoming data. */
   requestToPayIncomingData: requestInterface[] = [];
 
@@ -147,6 +148,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         currencies: any;
       }) => {
         this.requestToPayData = data.requestsToPay.content;
+        this.requestToPayDatas = data.requestsToPay;
         this.currenciesData = data.currencies;
         this.dfspEntriesData = data.dfspEntries;
       }
@@ -155,8 +157,8 @@ export class IncomingRequestToPayComponent implements OnInit {
       if (request.direction === "INCOMING")
         this.requestToPayIncomingData.push(request);
     }
-    this.lengthElement = this.requestToPayIncomingData.length;
-    console.log(this.requestToPayIncomingData.length);
+    this.lengthElement = this.requestToPayDatas.totalElements;
+    console.log(this.requestToPayDatas);
     console.log(this.dataSource);
   }
 
@@ -440,12 +442,6 @@ export class IncomingRequestToPayComponent implements OnInit {
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
     console.log(this.dataSource);
-    this.dataSource.getRequestsPay(
-      this.filterTransactionsBy,
-      " ",
-      "asc",
-      1,
-      10
-    );
+    this.dataSource.getRequestsPay(this.filterTransactionsBy);
   }
 }
