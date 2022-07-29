@@ -1,29 +1,89 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-    <form #postForm="ngForm" (ngSubmit)="exportCSV(postForm.value,postForm.id)" class="csv-form" >
-        <div class="container-fluid" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-          <mat-form-field fxFlex="50%">
-            <mat-label for="querytype" class="form-control">Filter By</mat-label>
-            <select id="querytype" name="cars" class="form-control" required ngModel matNativeControl>
-              <option value="transactionid">TRANSACTION ID</option>
-              <option value="payerid">PAYER ID</option>
-              <option value="payeeid">PAYEE ID</option>
-              <option value="externalid">EXTERNALID</option>
-              <option value="workflowinstancekey">WORKFLOWINSTANCEKEY</option>
-              <option value="errordescription">ERRORDESCRIPTION</option>
-            </select>
-          </mat-form-field>
-          <mat-form-field class="example-full-width form-group" fxFlex="50%">
-      
-            <mat-label for="querytype" class="form-control">Value</mat-label>
-            <input matInput type="textArea" class="form-control col-sm-4" id="filterBy" required ngModel name="transactionid"
-            placeholder="comma-separated-list">
-          </mat-form-field>
-        </div>
-        
-        
-        <button mat-stroked-button type="submit" [disabled]="!postForm.valid">
-          Export CSV
-        </button>
-      </form>
-</div>
+<div
+  class="container"
+  fxLayout="row wrap"
+  fxLayoutGap="2%"
+  fxLayout.lt-md="column"
+>
+  <form
+    #postForm="ngForm"
+    (ngSubmit)="exportCSV(postForm.value, postForm.id)"
+    class="csv-form"
+  >
+    <div
+      class="container-fluid"
+      fxLayout="row wrap"
+      fxLayoutGap="5%"
+      fxLayout.lt-md="column"
+    >
+      <mat-form-field>
+        <mat-label>TRANSACTION ID</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="transactionid"
+          placeholder="comma-separated-list"
+          id="transactionid"
+          (keyup)="arrayConvert($event)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>External ID</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="externalid"
+          placeholder="comma-separated-list"
+          id="externalid"
+          (keyup)="arrayConvert($event)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>WORKFLOW INSTANCE KEY</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="workflowinstancekey"
+          placeholder="comma-separated-list"
+          id="workflowinstancekey"
+          (keyup)="arrayConvert($event)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>START DATE</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="startdate"
+          placeholder="comma-separated-list"
+          id="startdate"
+          (keyup)="arrayConvert($event)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label for="querytype" class="form-control">Filter By</mat-label>
+        <select
+          id="querytype"
+          name="cars"
+          class="form-control col-sm-4"
+          ngModel
+          matNativeControl
+        >
+          <option value="ACCEPTED">ACCEPTED</option>
+          <option value="FAILED">Declined</option>
+        </select>
+      </mat-form-field>
+    </div>
 
+    <button mat-stroked-button type="submit" [disabled]="!postForm.valid">
+      Export CSV
+    </button>
+  </form>
+</div>
