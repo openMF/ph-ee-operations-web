@@ -24,14 +24,14 @@ export class IncomingRequestExportComponent implements OnInit {
   }
   exportCSV(filterBy: any, filterName: string) {
     const exportURl =
-      "api/v1/transactionRequests?command=export&state=" +
+      "/api/v1/transactionRequests?command=export&state=" +
       filterBy.cars +
       "&startTo=" +
       filterBy.startdate;
     var postData = {
       transactionId: filterBy.transactionid.split(","),
       externalid: filterBy.externalid.split(","),
-      payeeid: filterBy.workflowinstancekey.split(","),
+      workflowinstancekey: filterBy.workflowinstancekey.split(","),
     };
 
     console.log(Object.values(postData).toString().split(","));
