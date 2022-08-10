@@ -25,15 +25,18 @@ export class IncomingRequestExportComponent implements OnInit {
   exportCSV(filterBy: any, filterName: string) {
     let body = new HttpParams();
     body = body.set("command", "export");
-    let startDate = filterBy.startdate;
+    let startFrom = filterBy.startdate;
+    let startTo = filterBy.enddate;
     let state = filterBy.cars;
-    if (startDate != "") {
-      body = body.set("startDate", filterBy.startdate);
+    if (startFrom != "") {
+      body = body.set("startFrom", filterBy.startdate);
     }
     if (state != "") {
       body = body.set("state", filterBy.cars);
     }
-
+    if (startTo != "") {
+      body = body.set("startTo", filterBy.enddate);
+    }
     console.log(body);
     const exportURl = "/api/v1/transactionRequests?" + body;
 
@@ -41,9 +44,9 @@ export class IncomingRequestExportComponent implements OnInit {
       transactionId: filterBy.transactionid.split(","),
       externalid: filterBy.externalid.split(","),
       workflowinstancekey: filterBy.workflowinstancekey.split(","),
-      errordescription: filterBy.errordescription.split(","),
-      payeeid: filterBy.payeeid.split(","),
-      payerid: filterBy.payerid.split(","),
+      errorDescription: filterBy.errordescription.split(","),
+      payeeId: filterBy.payeeid.split(","),
+      payerId: filterBy.payerid.split(","),
     };
 
     console.log(Object.values(postData).toString().split(","));
