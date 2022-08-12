@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -94,6 +95,8 @@ public class BatchApi {
 
         List<Transfer> transfers = transferRepository.findAllByBatchId(batch.getBatchId());
 
+        List<Batch> allBatches = batchRepository.findAllByBatchId(batch.getBatchId());
+
         Long completed = 0L;
         Long failed = 0L;
         Long total = 0L;
@@ -118,6 +121,35 @@ public class BatchApi {
                 ongoingAmount = ongoingAmount.add(amount);
             }
         }
+
+        // calculating matrices for sub batches
+        AtomicReference<Long> subBatchFailed = new AtomicReference<>(0L);
+        AtomicReference<Long> subBatchCompleted = new AtomicReference<>(0L);
+        AtomicReference<Long> subBatchOngoing = new AtomicReference<>(0L);
+        AtomicReference<Long> subBatchTotal = new AtomicReference<>(0L);
+        allBatches.forEach(bt -> {
+            if (bt.getSubBatchId() == null || bt.getSubBatchId().isEmpty()) {
+                return;
+            }
+            if (bt.getFailed() != null) {
+                subBatchFailed.updateAndGet(v -> v + bt.getFailed());
+            }
+            if (bt.getCompleted() != null) {
+                subBatchCompleted.updateAndGet(v -> v + bt.getCompleted());
+            }
+            if (bt.getOngoing() != null) {
+                subBatchOngoing.updateAndGet(v -> v + bt.getOngoing());
+            }
+            if (bt.getTotalTransactions() != null) {
+                subBatchTotal.updateAndGet(v -> v + bt.getTotalTransactions());
+            }
+        });
+
+        // updating the data with sub batches details
+        completed += subBatchCompleted.get();
+        failed += subBatchFailed.get();
+        total += subBatchTotal.get();
+        ongoing += subBatchOngoing.get();
 
         batch.setResult_file(createDetailsFile(transfers));
         batch.setCompleted(completed);
