@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -106,50 +105,51 @@ public class BatchApi {
         BigDecimal ongoingAmount = BigDecimal.ZERO;
         BigDecimal failedAmount = BigDecimal.ZERO;
 
-        for(int i=0; i<transfers.size(); i++) {
+        for (Transfer transfer : transfers) {
             total++;
-            BigDecimal amount = transfers.get(i).getAmount();
+            BigDecimal amount = transfer.getAmount();
             totalAmount = totalAmount.add(amount);
-            if (transfers.get(i).getStatus().equals(TransferStatus.COMPLETED)) {
+            if (transfer.getStatus().equals(TransferStatus.COMPLETED)) {
                 completed++;
                 completedAmount = completedAmount.add(amount);
-            } else if (transfers.get(i).getStatus().equals(TransferStatus.FAILED)) {
+            } else if (transfer.getStatus().equals(TransferStatus.FAILED)) {
                 failed++;
                 failedAmount = failedAmount.add(amount);
-            } else if (transfers.get(i).getStatus().equals(TransferStatus.IN_PROGRESS)) {
+            } else if (transfer.getStatus().equals(TransferStatus.IN_PROGRESS)) {
                 ongoing++;
                 ongoingAmount = ongoingAmount.add(amount);
             }
         }
 
         // calculating matrices for sub batches
-        AtomicReference<Long> subBatchFailed = new AtomicReference<>(0L);
-        AtomicReference<Long> subBatchCompleted = new AtomicReference<>(0L);
-        AtomicReference<Long> subBatchOngoing = new AtomicReference<>(0L);
-        AtomicReference<Long> subBatchTotal = new AtomicReference<>(0L);
-        allBatches.forEach(bt -> {
+        Long subBatchFailed = 0L;
+        Long subBatchCompleted = 0L;
+        Long subBatchOngoing = 0L;
+        Long subBatchTotal = 0L;
+
+        for (Batch bt: allBatches) {
             if (bt.getSubBatchId() == null || bt.getSubBatchId().isEmpty()) {
-                return;
+                continue;
             }
             if (bt.getFailed() != null) {
-                subBatchFailed.updateAndGet(v -> v + bt.getFailed());
+                subBatchFailed += bt.getFailed();
             }
             if (bt.getCompleted() != null) {
-                subBatchCompleted.updateAndGet(v -> v + bt.getCompleted());
+                subBatchCompleted += bt.getCompleted();
             }
             if (bt.getOngoing() != null) {
-                subBatchOngoing.updateAndGet(v -> v + bt.getOngoing());
+                subBatchOngoing += bt.getOngoing();
             }
             if (bt.getTotalTransactions() != null) {
-                subBatchTotal.updateAndGet(v -> v + bt.getTotalTransactions());
+                subBatchTotal += bt.getTotalTransactions();
             }
-        });
+        }
 
         // updating the data with sub batches details
-        completed += subBatchCompleted.get();
-        failed += subBatchFailed.get();
-        total += subBatchTotal.get();
-        ongoing += subBatchOngoing.get();
+        completed += subBatchCompleted;
+        failed += subBatchFailed;
+        total += subBatchTotal;
+        ongoing += subBatchOngoing;
 
         batch.setResult_file(createDetailsFile(transfers));
         batch.setCompleted(completed);
@@ -164,10 +164,6 @@ public class BatchApi {
                 batch.getFailed(), batch.getCompleted(), totalAmount, completedAmount,
                 ongoingAmount, failedAmount, batch.getResult_file(), batch.getResultGeneratedAt(), batch.getNote());
     }
-
-//    private BatchDTO transformBatchResponse(Batch batch) {
-//        return new BatchDTO(batch.getBatchId(), batch.getRequestId(), batch.getTotalTransactions(), batch.getOngoing(), batch.getFailed(), batch.getCompleted(), batch.getResult_file(), batch.getResultGeneratedAt(), batch.getNote());
-//    }
 
     private String createDetailsFile(List<Transfer> transfers) {
         String CSV_SEPARATOR = ",";
