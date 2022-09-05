@@ -10,9 +10,9 @@ export let environment = {
   name: "kubernetes",
   production: false,
   version: env.npm_package_version,
-  serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+  serverUrl: "",
   oauth: {
-    enabled: "true",
+    enabled: "true", // For connecting to Mifos X using OAuth2 Authentication change the value to true
     serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
     basicAuth: "true",
     basicAuthToken: 'Y2xpZW50Og=='
