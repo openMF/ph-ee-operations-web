@@ -168,15 +168,19 @@ public class BatchApi {
             }
             if (bt.getFailed() != null) {
                 subBatchFailed += bt.getFailed();
+                failedAmount = failedAmount.add(BigDecimal.valueOf(bt.getFailedAmount()));
             }
             if (bt.getCompleted() != null) {
                 subBatchCompleted += bt.getCompleted();
+                completedAmount = completedAmount.add(BigDecimal.valueOf(bt.getCompletedAmount()));
             }
             if (bt.getOngoing() != null) {
                 subBatchOngoing += bt.getOngoing();
+                ongoingAmount = ongoingAmount.add(BigDecimal.valueOf(bt.getOngoingAmount()));
             }
             if (bt.getTotalTransactions() != null) {
                 subBatchTotal += bt.getTotalTransactions();
+                totalAmount = totalAmount.add(BigDecimal.valueOf(bt.getTotalAmount()));
             }
         }
 
@@ -186,7 +190,9 @@ public class BatchApi {
         total += subBatchTotal;
         ongoing += subBatchOngoing;
 
-        batch.setResult_file(createDetailsFile(transfers));
+        if (batch.getResult_file() == null || (batch.getResult_file() != null && batch.getResult_file().isEmpty())) {
+            batch.setResult_file(createDetailsFile(transfers));
+        }
         batch.setCompleted(completed);
         batch.setFailed(failed);
         batch.setResultGeneratedAt(new Date());
