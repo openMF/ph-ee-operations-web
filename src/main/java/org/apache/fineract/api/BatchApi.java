@@ -5,7 +5,10 @@ import org.apache.fineract.operations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
 import org.springframework.http.HttpStatus;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +39,23 @@ public class BatchApi {
     @Value("${application.bucket-name}")
     private String bucketName;
 
+    @GetMapping("/batches")
+    public Page<Batch> getBatches(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                  @RequestParam(value = "sortedBy", required = false) String sortedBy,
+                                  @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder
+    ) {
+        Specifications<Batch> specifications = BatchSpecs.match(Batch_.subBatchId, null);
+
+        PageRequest pager;
+        if (sortedBy == null || "startedAt".equals(sortedBy)) {
+            pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), "startedAt"));
+        } else {
+            pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), sortedBy));
+        }
+
+        return batchRepository.findAll(specifications, pager);
+    }
 
     @GetMapping("/batch")
     public BatchDTO batchDetails(@RequestParam(value = "batchId", required = false) String batchId,
@@ -57,10 +79,23 @@ public class BatchApi {
     }
 
     @GetMapping("/batch/detail")
-    public ResponseEntity<List<Transfer>> batchDetails(@RequestParam(value = "batchId") String batchId,
+    public ResponseEntity<List<Transfer>> batchDetails(HttpServletResponse httpServletResponse,
+                                                       @RequestParam(value = "batchId") String batchId,
                                                        @RequestParam(value = "status", defaultValue = "ALL") String status,
                                                        @RequestParam(value = "pageNo", defaultValue = "0") Integer pageNo,
-                                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+                                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                                       @RequestParam(value = "command", required = false, defaultValue = "json") String command) {
+
+        if (command.equalsIgnoreCase("download")) {
+            Batch batch = batchRepository.findByBatchId(batchId);
+            if (batch != null && batch.getResult_file() != null) {
+                httpServletResponse.setHeader("Location", batch.getResult_file());
+                httpServletResponse.setStatus(302);
+            } else {
+                httpServletResponse.setStatus(404);
+            }
+            return null;
+        }
 
         List<Transfer> transfers;
 
@@ -133,15 +168,19 @@ public class BatchApi {
             }
             if (bt.getFailed() != null) {
                 subBatchFailed += bt.getFailed();
+                failedAmount = failedAmount.add(BigDecimal.valueOf(bt.getFailedAmount()));
             }
             if (bt.getCompleted() != null) {
                 subBatchCompleted += bt.getCompleted();
+                completedAmount = completedAmount.add(BigDecimal.valueOf(bt.getCompletedAmount()));
             }
             if (bt.getOngoing() != null) {
                 subBatchOngoing += bt.getOngoing();
+                ongoingAmount = ongoingAmount.add(BigDecimal.valueOf(bt.getOngoingAmount()));
             }
             if (bt.getTotalTransactions() != null) {
                 subBatchTotal += bt.getTotalTransactions();
+                totalAmount = totalAmount.add(BigDecimal.valueOf(bt.getTotalAmount()));
             }
         }
 
@@ -151,7 +190,9 @@ public class BatchApi {
         total += subBatchTotal;
         ongoing += subBatchOngoing;
 
-        batch.setResult_file(createDetailsFile(transfers));
+        if (batch.getResult_file() == null || (batch.getResult_file() != null && batch.getResult_file().isEmpty())) {
+            batch.setResult_file(createDetailsFile(transfers));
+        }
         batch.setCompleted(completed);
         batch.setFailed(failed);
         batch.setResultGeneratedAt(new Date());
