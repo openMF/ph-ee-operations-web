@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
 import org.springframework.http.HttpStatus;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,10 +79,23 @@ public class BatchApi {
     }
 
     @GetMapping("/batch/detail")
-    public ResponseEntity<List<Transfer>> batchDetails(@RequestParam(value = "batchId") String batchId,
+    public ResponseEntity<List<Transfer>> batchDetails(HttpServletResponse httpServletResponse,
+                                                       @RequestParam(value = "batchId") String batchId,
                                                        @RequestParam(value = "status", defaultValue = "ALL") String status,
                                                        @RequestParam(value = "pageNo", defaultValue = "0") Integer pageNo,
-                                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+                                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                                       @RequestParam(value = "command", required = false, defaultValue = "json") String command) {
+
+        if (command.equalsIgnoreCase("download")) {
+            Batch batch = batchRepository.findByBatchId(batchId);
+            if (batch != null && batch.getResult_file() != null) {
+                httpServletResponse.setHeader("Location", batch.getResult_file());
+                httpServletResponse.setStatus(302);
+            } else {
+                httpServletResponse.setStatus(404);
+            }
+            return null;
+        }
 
         List<Transfer> transfers;
 
