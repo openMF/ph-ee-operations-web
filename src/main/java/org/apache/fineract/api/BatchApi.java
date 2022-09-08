@@ -5,7 +5,10 @@ import org.apache.fineract.operations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,23 @@ public class BatchApi {
     @Value("${application.bucket-name}")
     private String bucketName;
 
+    @GetMapping("/batches")
+    public Page<Batch> getBatches(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                  @RequestParam(value = "sortedBy", required = false) String sortedBy,
+                                  @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder
+    ) {
+        Specifications<Batch> specifications = BatchSpecs.match(Batch_.subBatchId, null);
+
+        PageRequest pager;
+        if (sortedBy == null || "startedAt".equals(sortedBy)) {
+            pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), "startedAt"));
+        } else {
+            pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), sortedBy));
+        }
+
+        return batchRepository.findAll(specifications, pager);
+    }
 
     @GetMapping("/batch")
     public BatchDTO batchDetails(@RequestParam(value = "batchId", required = false) String batchId,
