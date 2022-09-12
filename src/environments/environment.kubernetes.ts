@@ -13,7 +13,7 @@ export let environment = {
   serverUrl: "",
   oauth: {
     enabled: "true", // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+    serverUrl: "https://ops-bk.sandbox.fynarfin.io",
     basicAuth: "true",
     basicAuthToken: 'Y2xpZW50Og=='
   },

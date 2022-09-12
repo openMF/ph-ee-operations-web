@@ -10,10 +10,10 @@ export let environment = {
   name: "dev",
   production: false,
   version: env.npm_package_version + "-dev",
-  serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+  serverUrl: "https://ops-bk.sandbox.fynarfin.io",
   oauth: {
     enabled: "true", // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+    serverUrl: "https://ops-bk.sandbox.fynarfin.io",
     basicAuth: "true",
     basicAuthToken: 'Y2xpZW50Og=='
   },
