@@ -2,74 +2,97 @@ package org.apache.fineract.operations;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 public class BatchDTO {
 
-    private String batchId;
+    private String batch_id;
 
-    private String requestId;
+    private String request_id;
 
-    private Long totalTransactions;
+    private Long total;
 
     private Long ongoing;
 
     private Long failed;
 
-    private Long completed;
+    private Long successful;
 
-    private BigDecimal total_amount;
+    private BigDecimal totalAmount;
 
-    private BigDecimal completed_amount;
+    private BigDecimal successfulAmount;
 
-    private BigDecimal ongoing_amount;
+    private BigDecimal pendingAmount;
 
-    private BigDecimal failed_amount;
+    private BigDecimal failedAmount;
 
-    private String result_file;
+    private String file;
 
-    private Date resultGeneratedAt;
+    private String notes;
 
-    private String note;
+    private String created_at;
 
-    public BatchDTO(String batchId, String requestId, Long totalTransactions, Long ongoing, Long failed, Long completed, BigDecimal total_amount, BigDecimal completed_amount, BigDecimal ongoing_amount, BigDecimal failed_amount, String result_file, Date resultGeneratedAt, String note) {
-        this.batchId = batchId;
-        this.requestId = requestId;
-        this.totalTransactions = totalTransactions;
+    private String status;
+
+    private String modes;
+
+    private String purpose;
+
+    public BatchDTO(String batchId, String requestId, Long totalTransactions, Long ongoing, Long failed, Long completed, BigDecimal total_amount, BigDecimal completed_amount, BigDecimal ongoing_amount, BigDecimal failed_amount, String result_file, String note) {
+        this.batch_id = batchId;
+        this.request_id = requestId;
+        this.total = totalTransactions;
         this.ongoing = ongoing;
         this.failed = failed;
-        this.completed = completed;
-        this.total_amount = total_amount;
-        this.completed_amount = completed_amount;
-        this.ongoing_amount = ongoing_amount;
-        this.failed_amount = failed_amount;
-        this.result_file = result_file;
-        this.resultGeneratedAt = resultGeneratedAt;
-        this.note = note;
+        this.successful = completed;
+        this.totalAmount = total_amount;
+        this.successfulAmount = completed_amount;
+        this.pendingAmount = ongoing_amount;
+        this.failedAmount = failed_amount;
+        this.file = result_file;
+        this.notes = note;
     }
 
-    public String getBatchId() {
-        return batchId;
+    public BatchDTO(String batch_id, String request_id, Long total, Long ongoing, Long failed, Long successful, BigDecimal totalAmount, BigDecimal successfulAmount, BigDecimal pendingAmount, BigDecimal failedAmount, String file, String notes, String created_at, String status, String modes, String purpose) {
+        this.batch_id = batch_id;
+        this.request_id = request_id;
+        this.total = total;
+        this.ongoing = ongoing;
+        this.failed = failed;
+        this.successful = successful;
+        this.totalAmount = totalAmount;
+        this.successfulAmount = successfulAmount;
+        this.pendingAmount = pendingAmount;
+        this.failedAmount = failedAmount;
+        this.file = file;
+        this.notes = notes;
+        this.created_at = created_at;
+        this.status = status;
+        this.modes = modes;
+        this.purpose = purpose;
     }
 
-    public void setBatchId(String batchId) {
-        this.batchId = batchId;
+    public String getBatch_id() {
+        return batch_id;
     }
 
-    public String getRequestId() {
-        return requestId;
+    public void setBatch_id(String batch_id) {
+        this.batch_id = batch_id;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public String getRequest_id() {
+        return request_id;
     }
 
-    public Long getTotalTransactions() {
-        return totalTransactions;
+    public void setRequest_id(String request_id) {
+        this.request_id = request_id;
     }
 
-    public void setTotalTransactions(Long totalTransactions) {
-        this.totalTransactions = totalTransactions;
+    public Long getTotal() {
+        return total;
+    }
+
+    public void setTotal(Long total) {
+        this.total = total;
     }
 
     public Long getOngoing() {
@@ -88,67 +111,91 @@ public class BatchDTO {
         this.failed = failed;
     }
 
-    public Long getCompleted() {
-        return completed;
+    public Long getSuccessful() {
+        return successful;
     }
 
-    public void setCompleted(Long completed) {
-        this.completed = completed;
+    public void setSuccessful(Long successful) {
+        this.successful = successful;
     }
 
-    public BigDecimal getTotal_amount() {
-        return total_amount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTotal_amount(BigDecimal total_amount) {
-        this.total_amount = total_amount;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public BigDecimal getCompleted_amount() {
-        return completed_amount;
+    public BigDecimal getSuccessfulAmount() {
+        return successfulAmount;
     }
 
-    public void setCompleted_amount(BigDecimal completed_amount) {
-        this.completed_amount = completed_amount;
+    public void setSuccessfulAmount(BigDecimal successfulAmount) {
+        this.successfulAmount = successfulAmount;
     }
 
-    public BigDecimal getOngoing_amount() {
-        return ongoing_amount;
+    public BigDecimal getPendingAmount() {
+        return pendingAmount;
     }
 
-    public void setOngoing_amount(BigDecimal ongoing_amount) {
-        this.ongoing_amount = ongoing_amount;
+    public void setPendingAmount(BigDecimal pendingAmount) {
+        this.pendingAmount = pendingAmount;
     }
 
-    public BigDecimal getFailed_amount() {
-        return failed_amount;
+    public BigDecimal getFailedAmount() {
+        return failedAmount;
     }
 
-    public void setFailed_amount(BigDecimal failed_amount) {
-        this.failed_amount = failed_amount;
+    public void setFailedAmount(BigDecimal failedAmount) {
+        this.failedAmount = failedAmount;
     }
 
-    public String getResult_file() {
-        return result_file;
+    public String getFile() {
+        return file;
     }
 
-    public void setResult_file(String result_file) {
-        this.result_file = result_file;
+    public void setFile(String file) {
+        this.file = file;
     }
 
-    public Date getResultGeneratedAt() {
-        return resultGeneratedAt;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setResultGeneratedAt(Date resultGeneratedAt) {
-        this.resultGeneratedAt = resultGeneratedAt;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
-    public String getNote() {
-        return note;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getModes() {
+        return modes;
+    }
+
+    public void setModes(String modes) {
+        this.modes = modes;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 }

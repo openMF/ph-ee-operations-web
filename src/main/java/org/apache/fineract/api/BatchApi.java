@@ -127,6 +127,8 @@ public class BatchApi {
 
     private BatchDTO generateDetails (Batch batch) {
 
+        StringBuilder modes = new StringBuilder();
+
         List<Transfer> transfers = transferRepository.findAllByBatchId(batch.getBatchId());
 
         List<Batch> allBatches = batchRepository.findAllByBatchId(batch.getBatchId());
@@ -163,6 +165,12 @@ public class BatchApi {
         Long subBatchTotal = 0L;
 
         for (Batch bt: allBatches) {
+            if (bt.getPaymentMode() != null && !modes.toString().contains(bt.getPaymentMode())) {
+                if (!modes.toString().equals("")) {
+                    modes.append(",");
+                }
+                modes.append(bt.getPaymentMode());
+            }
             if (bt.getSubBatchId() == null || bt.getSubBatchId().isEmpty()) {
                 continue;
             }
@@ -200,10 +208,26 @@ public class BatchApi {
         batch.setTotalTransactions(total);
         batchRepository.save(batch);
 
-        return new BatchDTO(batch.getBatchId(),
+        BatchDTO response = new BatchDTO(batch.getBatchId(),
                 batch.getRequestId(), batch.getTotalTransactions(), batch.getOngoing(),
                 batch.getFailed(), batch.getCompleted(), totalAmount, completedAmount,
-                ongoingAmount, failedAmount, batch.getResult_file(), batch.getResultGeneratedAt(), batch.getNote());
+                ongoingAmount, failedAmount, batch.getResult_file(), batch.getNote());
+
+        response.setCreated_at(""+batch.getStartedAt());
+        response.setModes(modes.toString());
+        response.setPurpose("Unknown purpose");
+
+        if (batch.getCompleted().longValue() == batch.getTotalTransactions().longValue()) {
+            response.setStatus("COMPLETED");
+        } else if (batch.getOngoing() != 0 && batch.getCompletedAt() == null) {
+            response.setStatus("Pending");
+        } else if (batch.getFailed().longValue() == batch.getFailed().longValue()) {
+            response.setStatus("Failed");
+        } else {
+            response.setStatus("UNKNOWN");
+        }
+
+        return response;
     }
 
     private String createDetailsFile(List<Transfer> transfers) {
