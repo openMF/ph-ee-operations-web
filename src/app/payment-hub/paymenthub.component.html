@@ -1,13 +1,8 @@
 <div class="container">
-
   <mat-card>
-
-    <div fxLayout="row" fxLayout.lt-md="column">
-
+    <div fxLayout="row" fxLayout.lt-md="column" class="payment-hub-ee-wrap">
       <div fxFlex="50%">
-
         <mat-nav-list>
-
           <mat-list-item [routerLink]="['incomingtransactions']">
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
@@ -23,15 +18,11 @@
             <h4 matLine>Search Outgoing Transactions</h4>
             <p matLine>Advanced search option for outgoing transactions</p>
           </mat-list-item>
-
         </mat-nav-list>
-
       </div>
 
       <div fxFlex="50%">
-
         <mat-nav-list>
-
           <mat-list-item [routerLink]="['incomingrequesttopay']">
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
@@ -47,14 +38,10 @@
             <h4 matLine>Search Outgoing Request to Pay</h4>
             <p matLine>Advanced search option for outgoing request to pays</p>
           </mat-list-item>
-
         </mat-nav-list>
-
       </div>
       <div fxFlex="50%">
-
         <mat-nav-list>
-
           <mat-list-item [routerLink]="['incomingrequesttopayexport']">
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
@@ -68,13 +55,8 @@
             </mat-icon>
             <h4 matLine>Export Outgoing Request to Pay</h4>
           </mat-list-item>
-
         </mat-nav-list>
-
       </div>
-
     </div>
-
   </mat-card>
-
 </div>

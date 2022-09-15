@@ -1,0 +1,104 @@
+<div class="container bulk-btn">
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Choose an Option</mat-label>
+      <mat-select [formControl]="template" multiple>
+        <mat-option
+          *ngFor="let templateItem of templates"
+          [value]="templateItem"
+          >{{ templateItem }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary">Download CSV Template</button>
+  </div>
+  <div class="form-group">
+    <input
+      type="file"
+      class="file-input"
+      (change)="onFileSelected($event)"
+      #fileUpload
+    />
+
+    <div class="file-upload">
+      {{ fileName || "No file uploaded yet." }}
+
+      <button
+        mat-mini-fab
+        color="primary"
+        class="upload-btn"
+        (click)="fileUpload.click()"
+      >
+        <mat-icon>attach_file</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="transactionId">
+      <th mat-header-cell *matHeaderCellDef>Transaction Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.transactionId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="startedAt">
+      <th mat-header-cell *matHeaderCellDef>Started At</th>
+      <td mat-cell *matCellDef="let element">{{ element.startedAt }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="completedAt">
+      <th mat-header-cell *matHeaderCellDef>Completed At</th>
+      <td mat-cell *matCellDef="let element">{{ element.completedAt }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <form
+    class="batch-summary-wrap"
+    #batchSummaryForm="ngForm"
+    (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
+  >
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Enter Batch ID</mat-label>
+      <input
+        matInput
+        class="form-control col-sm-4 batch-summary-id"
+        ngModel
+        name="batchid"
+        id="batch-id"
+      />
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!batchSummaryForm.valid"
+    >
+      View Batch Details
+    </button>
+  </form>
+  <p>Batch summary</p>
+
+  <div *ngFor="let batches of BatchSummaryData">
+    <li>Batch Id : {{ batches.batch_id }}</li>
+    <li>Request Id : {{ batches.request_id }}</li>
+    <li>Total : {{ batches.total }}</li>
+    <li>Amount Total : {{ batches.totalAmount }}</li>
+    <li>Status : {{ batches.status }}</li>
+    <li>Successful : {{ batches.successful }}</li>
+    <li>Failed : {{ batches.failed }}</li>
+    <li>Ongoing : {{ batches.ongoing }}</li>
+  </div>
+</div>

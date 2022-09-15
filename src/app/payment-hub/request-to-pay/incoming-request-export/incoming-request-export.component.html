@@ -25,7 +25,6 @@
           name="transactionid"
           placeholder="comma-separated-list"
           id="transactionid"
-          (keyup)="arrayConvert($event)"
         />
       </mat-form-field>
       <mat-form-field>
@@ -38,7 +37,6 @@
           name="externalid"
           placeholder="comma-separated-list"
           id="externalid"
-          (keyup)="arrayConvert($event)"
         />
       </mat-form-field>
       <mat-form-field>
@@ -51,7 +49,6 @@
           name="workflowinstancekey"
           placeholder="comma-separated-list"
           id="workflowinstancekey"
-          (keyup)="arrayConvert($event)"
         />
       </mat-form-field>
       <mat-form-field>
@@ -64,7 +61,18 @@
           name="startdate"
           placeholder="comma-separated-list"
           id="startdate"
-          (keyup)="arrayConvert($event)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>END DATE</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="enddate"
+          placeholder="comma-separated-list"
+          id="enddate"
         />
       </mat-form-field>
       <mat-form-field>
@@ -79,7 +87,44 @@
           <option value="">STATUS</option>
           <option value="ACCEPTED">ACCEPTED</option>
           <option value="FAILED">FAILED</option>
+          <option value="IN_PROGRESS">PENDING/INCOMPLETE</option>
         </select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Error Description</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="errordescription"
+          placeholder="comma-separated-list"
+          id="errordescription"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Payer Id</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="payerid"
+          placeholder="comma-separated-list"
+          id="payerid"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Payee Id</mat-label>
+        <input
+          matInput
+          type="textArea"
+          class="form-control col-sm-4"
+          ngModel
+          name="payeeid"
+          placeholder="comma-separated-list"
+          id="payeeid"
+        />
       </mat-form-field>
     </div>
 
