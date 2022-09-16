@@ -30,6 +30,7 @@ import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -60,6 +61,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootApplication
+@EnableConfigurationProperties
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
         FlywayAutoConfiguration.class,

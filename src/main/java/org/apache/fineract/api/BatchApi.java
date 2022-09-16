@@ -1,5 +1,6 @@
 package org.apache.fineract.api;
 
+import org.apache.fineract.config.PaymentModeConfiguration;
 import org.apache.fineract.file.FileTransferService;
 import org.apache.fineract.operations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
 import org.springframework.http.HttpStatus;
-
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
+import static org.apache.fineract.core.service.OperatorUtils.strip;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -33,8 +36,14 @@ public class BatchApi {
     private BatchRepository batchRepository;
 
     @Autowired
+    private VariableRepository variableRepository;
+
+    @Autowired
     @Qualifier("awsStorage")
     private FileTransferService fileTransferService;
+
+    @Autowired
+    private PaymentModeConfiguration paymentModeConfig;
 
     @Value("${application.bucket-name}")
     private String bucketName;
@@ -143,6 +152,15 @@ public class BatchApi {
         BigDecimal failedAmount = BigDecimal.ZERO;
 
         for (Transfer transfer : transfers) {
+            Optional<Variable> variable = variableRepository.findByWorkflowInstanceKeyAndVariableName("paymentMode",
+                    transfer.getWorkflowInstanceKey());
+            if (variable.isPresent()) {
+                // this will prevent 2x count of variables by eliminating data from transfers table
+                if (paymentModeConfig.getByMode(strip(variable.get().getValue()))
+                        .getType().equalsIgnoreCase("BATCH")) {
+                    continue;
+                }
+            }
             total++;
             BigDecimal amount = transfer.getAmount();
             totalAmount = totalAmount.add(amount);

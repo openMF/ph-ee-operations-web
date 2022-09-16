@@ -70,5 +70,10 @@ cloud:
     blob:
       connection-string:
 
+payment:
+  modes:
+    - id: "slcb"
+      type: "BATCH"
+
 application:
   bucket-name: paymenthub-ee-dev
