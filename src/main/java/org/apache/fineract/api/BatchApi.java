@@ -88,7 +88,7 @@ public class BatchApi {
     }
 
     @GetMapping("/batch/detail")
-    public ResponseEntity<List<Transfer>> batchDetails(HttpServletResponse httpServletResponse,
+    public Page<Transfer> batchDetails(HttpServletResponse httpServletResponse,
                                                        @RequestParam(value = "batchId") String batchId,
                                                        @RequestParam(value = "status", defaultValue = "ALL") String status,
                                                        @RequestParam(value = "pageNo", defaultValue = "0") Integer pageNo,
@@ -106,7 +106,7 @@ public class BatchApi {
             return null;
         }
 
-        List<Transfer> transfers;
+        Page<Transfer> transfers;
 
         if (status.equalsIgnoreCase(TransferStatus.COMPLETED.toString()) ||
                 status.equalsIgnoreCase(TransferStatus.IN_PROGRESS.toString()) ||
@@ -116,7 +116,7 @@ public class BatchApi {
             transfers = transferRepository.findAllByBatchId(batchId, new PageRequest(pageNo, pageSize));
         }
 
-        return new ResponseEntity<List<Transfer>>(transfers, new HttpHeaders(), HttpStatus.OK);
+        return transfers;
     }
 
     @GetMapping("/batch/transactions")
