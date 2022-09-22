@@ -1,5 +1,5 @@
 <div class="container bulk-btn">
-  <div>
+  <!-- <div>
     <mat-form-field appearance="fill">
       <mat-label>Choose an Option</mat-label>
       <mat-select [formControl]="template" multiple>
@@ -11,7 +11,7 @@
       </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary">Download CSV Template</button>
-  </div>
+  </div> -->
   <div class="form-group">
     <input
       type="file"
@@ -29,7 +29,7 @@
         class="upload-btn"
         (click)="fileUpload.click()"
       >
-        <mat-icon>attach_file</mat-icon>
+        <!-- <mat-icon>attach_file</mat-icon> -->
       </button>
     </div>
   </div>
@@ -69,8 +69,8 @@
     #batchSummaryForm="ngForm"
     (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
   >
-    <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Enter Batch ID</mat-label>
+    <mat-form-field class="example-full-width">
+      <label>Enter Batch ID</label>
       <input
         matInput
         class="form-control col-sm-4 batch-summary-id"

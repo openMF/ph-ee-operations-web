@@ -6,29 +6,6 @@ import {
   JsonpClientBackend,
 } from "@angular/common/http";
 import { FormControl } from "@angular/forms";
-export interface PeriodicElement {
-  position: number;
-  transactionId: string;
-  status: string;
-  completedAt: number;
-  startedAt: number;
-}
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    position: 1,
-    transactionId: "e5eea064-1445-4d32-bc55-bd9826c779a0",
-    startedAt: 1629130966000,
-    completedAt: 1629130967000,
-    status: "IN_PROGRESS",
-  },
-  {
-    position: 2,
-    transactionId: "3cc88b24-1df6-48e2-8b1f-5dbd02ba96b7",
-    startedAt: 1629130966000,
-    completedAt: 1629150766000,
-    status: "IN_PROGRESS",
-  },
-];
 
 @Component({
   selector: "mifosx-bulk-batch-export",
@@ -48,7 +25,6 @@ export class BulkBatchExportComponent {
   ];
   BatchSummaryData: any[] = [];
   batchId: string;
-  dataSource = ELEMENT_DATA;
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
   }

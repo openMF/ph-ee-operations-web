@@ -1,0 +1,95 @@
+<div class="container">Get all Batches</div>
+<button (click)="getPosts()" class="hidden">GetPosts</button>
+
+<table
+  mat-table
+  [dataSource]="getBatchesContent"
+  class="mat-elevation-z8 demo-table container"
+>
+  <!-- Position Column -->
+  <ng-container matColumnDef="Batch Id">
+    <th mat-header-cell *matHeaderCellDef>Batch Id</th>
+    <td mat-cell *matCellDef="let element">
+      <form
+        class="batch-summary-wrap"
+        #batchSummaryForm="ngForm"
+        (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
+      >
+        <mat-form-field
+          class="example-full-width"
+          appearance="fill"
+          class="hidden"
+        >
+          <mat-label hidden>Enter Batch ID</mat-label>
+          <input
+            matInput
+            class="form-control col-sm-4 batch-summary-id"
+            ngModel="{{ element.batchId }}"
+            name="batchid"
+            id="batch-id"
+            hidden
+          />
+        </mat-form-field>
+
+        <button color="" type="submit" [disabled]="!batchSummaryForm.valid">
+          {{ element.batchId }}
+        </button>
+      </form>
+    </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="Request Id">
+    <th mat-header-cell *matHeaderCellDef>Request Id</th>
+    <td mat-cell *matCellDef="let element">{{ element.requestId }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+<mat-paginator
+  #paginator
+  [length]="100"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  aria-label="Select page"
+>
+</mat-paginator>
+<div class="container">
+  <div>
+    <p>Batch summary</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Batch Id</th>
+          <th>Request Id</th>
+          <th>Total</th>
+          <th>Amount Total</th>
+          <th>Status</th>
+          <th>Successful</th>
+          <th>Failed</th>
+          <th>Ongoing</th>
+          <th>Details</th>
+        </tr>
+        <tr *ngFor="let batches of BatchSummaryData" class="container">
+          <td>{{ batches.batch_id }}</td>
+          <td>{{ batches.request_id }}</td>
+          <td>{{ batches.total }}</td>
+          <td>{{ batches.totalAmount }}</td>
+          <td>{{ batches.status }}</td>
+          <td>{{ batches.failed }}</td>
+          <td>{{ batches.ongoing }}</td>
+          <td>
+            <button
+              [value]="batches.batch_id"
+              (click)="getBatchDetails($event.target.value)"
+            >
+              View Batch Details
+            </button>
+          </td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
