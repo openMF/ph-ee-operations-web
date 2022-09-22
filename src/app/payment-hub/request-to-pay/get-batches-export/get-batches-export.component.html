@@ -45,7 +45,7 @@
   <table
     mat-table
     [dataSource]="dataSource"
-    class="mat-elevation-z8 demo-table container"
+    class="mat-elevation-z8 demo-table"
   >
     <!-- Position Column -->
     <ng-container matColumnDef="Batch Id">
@@ -98,7 +98,9 @@
     </ng-container>
     <ng-container matColumnDef="Total">
       <th mat-header-cell *matHeaderCellDef>Total</th>
-      <td mat-cell *matCellDef="let element">{{ element.total }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.totalTransactions }}
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -170,7 +170,7 @@ const routes: Routes = [
           ],
         },
         {
-          path: "getbatchesexport",
+          path: "getbatchexport",
           data: {
             title: extract(""),
             breadcrumb: "Get all batches",

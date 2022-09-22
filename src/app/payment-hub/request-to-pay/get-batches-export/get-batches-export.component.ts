@@ -46,7 +46,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
   }
   public getPosts() {
     this.posts = this.http.get<any[]>(
-      "/api/v1/batches?page=1&size=100&sortedBy=requestFile&sortedOrder=asc"
+      "/api/v1/batches?page=2&size=10&sortedBy=requestFile&sortedOrder=asc"
     );
 
     this.posts.subscribe((data) => {
@@ -66,11 +66,16 @@ export class GetBatchesExportComponent implements AfterViewInit {
     if (file) {
       this.fileName = file.name;
 
-      const formData = new FormData();
+      const formdata = new FormData();
 
-      formData.append("thumbnail", file);
+      formdata.append("data", "download.csv");
+      formdata.append("requestId", "3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8");
+      formdata.append("purpose", "iliydufkgiku");
 
-      const upload$ = this.http.post("/api/thumbnail-upload", formData);
+      const upload$ = this.http.post(
+        "/bulk/transfer/3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8/download.csv",
+        formdata
+      );
 
       upload$.subscribe();
     }
