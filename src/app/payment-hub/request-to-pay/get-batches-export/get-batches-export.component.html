@@ -1,95 +1,114 @@
-<div class="container">Get all Batches</div>
-<button (click)="getPosts()" class="hidden">GetPosts</button>
+<div class="container bulk-btn">
+  <mat-card
+    ><div>
+      <mat-form-field appearance="fill">
+        <mat-label>Choose an Option</mat-label>
+        <mat-select [formControl]="template" multiple>
+          <mat-option
+            *ngFor="let templateItem of templates"
+            [value]="templateItem"
+            >{{ templateItem }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Download CSV Template</button>
+    </div></mat-card
+  >
+  <mat-card
+    ><div class="form-group">
+      <input
+        type="file"
+        class="file-input"
+        (change)="onFileSelected($event)"
+        #fileUpload
+      />
 
-<table
-  mat-table
-  [dataSource]="getBatchesContent"
-  class="mat-elevation-z8 demo-table container"
->
-  <!-- Position Column -->
-  <ng-container matColumnDef="Batch Id">
-    <th mat-header-cell *matHeaderCellDef>Batch Id</th>
-    <td mat-cell *matCellDef="let element">
-      <form
-        class="batch-summary-wrap"
-        #batchSummaryForm="ngForm"
-        (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
-      >
-        <mat-form-field
-          class="example-full-width"
-          appearance="fill"
-          class="hidden"
+      <div class="file-upload">
+        {{ fileName || "No file uploaded yet." }}
+
+        <button
+          mat-mini-fab
+          color="primary"
+          class="upload-btn"
+          (click)="fileUpload.click()"
         >
-          <mat-label hidden>Enter Batch ID</mat-label>
-          <input
-            matInput
-            class="form-control col-sm-4 batch-summary-id"
-            ngModel="{{ element.batchId }}"
-            name="batchid"
-            id="batch-id"
-            hidden
-          />
-        </mat-form-field>
-
-        <button color="" type="submit" [disabled]="!batchSummaryForm.valid">
-          {{ element.batchId }}
+          <!-- <mat-icon>attach_file</mat-icon> -->
         </button>
-      </form>
-    </td>
-  </ng-container>
+      </div>
+    </div></mat-card
+  >
+</div>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="Request Id">
-    <th mat-header-cell *matHeaderCellDef>Request Id</th>
-    <td mat-cell *matCellDef="let element">{{ element.requestId }}</td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
-<mat-paginator
-  #paginator
-  [length]="100"
-  [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 25, 100]"
-  aria-label="Select page"
->
-</mat-paginator>
+<div class="container"><mat-card-title>Get all Batches</mat-card-title></div>
+<button (click)="getPosts()" class="hidden">GetPosts</button>
 <div class="container">
-  <div>
-    <p>Batch summary</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Batch Id</th>
-          <th>Request Id</th>
-          <th>Total</th>
-          <th>Amount Total</th>
-          <th>Status</th>
-          <th>Successful</th>
-          <th>Failed</th>
-          <th>Ongoing</th>
-          <th>Details</th>
-        </tr>
-        <tr *ngFor="let batches of BatchSummaryData" class="container">
-          <td>{{ batches.batch_id }}</td>
-          <td>{{ batches.request_id }}</td>
-          <td>{{ batches.total }}</td>
-          <td>{{ batches.totalAmount }}</td>
-          <td>{{ batches.status }}</td>
-          <td>{{ batches.failed }}</td>
-          <td>{{ batches.ongoing }}</td>
-          <td>
-            <button
-              [value]="batches.batch_id"
-              (click)="getBatchDetails($event.target.value)"
-            >
-              View Batch Details
-            </button>
-          </td>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8 demo-table container"
+  >
+    <!-- Position Column -->
+    <ng-container matColumnDef="Batch Id">
+      <th mat-header-cell *matHeaderCellDef>Batch Id</th>
+      <td mat-cell *matCellDef="let element">
+        <form
+          class="batch-summary-wrap"
+          #batchSummaryForm="ngForm"
+          (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
+        >
+          <mat-form-field
+            class="example-full-width"
+            appearance="fill"
+            class="hidden"
+          >
+            <mat-label hidden>Enter Batch ID</mat-label>
+            <input
+              matInput
+              class="form-control col-sm-4 batch-summary-id"
+              ngModel="{{ element.batchId }}"
+              name="batchid"
+              id="batch-id"
+              hidden
+            />
+          </mat-form-field>
+
+          <button color="" type="submit" [disabled]="!batchSummaryForm.valid">
+            {{ element.batchId }}
+          </button>
+        </form>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Request Id">
+      <th mat-header-cell *matHeaderCellDef>Request Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.requestId }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Completed">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+      <td mat-cell *matCellDef="let element">{{ element.completed }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Completion Time">
+      <th mat-header-cell *matHeaderCellDef>Completion Time</th>
+      <td mat-cell *matCellDef="let element">{{ element.completedAt }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Failed">
+      <th mat-header-cell *matHeaderCellDef>Failed</th>
+      <td mat-cell *matCellDef="let element">{{ element.failed }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Total">
+      <th mat-header-cell *matHeaderCellDef>Total</th>
+      <td mat-cell *matCellDef="let element">{{ element.total }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    #paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
 </div>
