@@ -1,0 +1,13 @@
+.get-batches {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.bulk-btn {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  table {
+    width: 100%;
+  }
+}
