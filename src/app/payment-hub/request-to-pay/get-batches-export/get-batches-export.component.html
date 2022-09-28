@@ -16,6 +16,7 @@
   >
   <mat-card
     ><div class="form-group">
+      <label>Upload Batch File here</label>
       <input
         type="file"
         class="file-input"
@@ -32,7 +33,7 @@
           class="upload-btn"
           (click)="fileUpload.click()"
         >
-          <!-- <mat-icon>attach_file</mat-icon> -->
+          <mat-icon>attach_file</mat-icon>
         </button>
       </div>
     </div></mat-card
@@ -51,11 +52,7 @@
     <ng-container matColumnDef="Batch Id">
       <th mat-header-cell *matHeaderCellDef>Batch Id</th>
       <td mat-cell *matCellDef="let element">
-        <form
-          class="batch-summary-wrap"
-          #batchSummaryForm="ngForm"
-          (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
-        >
+        <form class="batch-summary-wrap" #batchSummaryForm="ngForm">
           <mat-form-field
             class="example-full-width"
             appearance="fill"
@@ -72,7 +69,13 @@
             />
           </mat-form-field>
 
-          <button color="" type="submit" [disabled]="!batchSummaryForm.valid">
+          <button
+            color=""
+            type="submit"
+            [disabled]="!batchSummaryForm.valid"
+            [value]="element.batchId"
+            (click)="getBatchSummaryinfo($event.target.value)"
+          >
             {{ element.batchId }}
           </button>
         </form>
@@ -111,6 +114,8 @@
     [pageSizeOptions]="[5, 10, 20]"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
+    [length]="lengthGetBatches"
+    [pageSize]=""
   >
   </mat-paginator>
 </div>

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnInit } from "@angular/core";
 import {
   HttpClient,
   HttpParams,
@@ -16,7 +16,7 @@ import { MatTableDataSource } from "@angular/material/table";
   templateUrl: "./bulk-batch-export.component.html",
   styleUrls: ["./bulk-batch-export.component.scss"],
 })
-export class BulkBatchExportComponent {
+export class BulkBatchExportComponent implements OnInit {
   template = new FormControl("");
   templates: string[] = ["Mojaloo", "Program"];
   fileToUpload: File | null = null;
@@ -26,6 +26,9 @@ export class BulkBatchExportComponent {
     "Transaction Id",
     "Completion Time",
     "Start Time",
+    "Amount",
+    "Currency",
+    "Status",
   ];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   getDetailsData: any;
@@ -59,9 +62,8 @@ export class BulkBatchExportComponent {
   }
 
   getBatchSummary(batchIdName: any) {
-    const url = `/api/v1/batch?batchId=${batchIdName.batchid}`;
+    const url = `/api/v1/batch?batchId=${batchIdName}`;
     console.log(url);
-    console.log(batchIdName.batchid);
     this.http.get(url).subscribe((data) => {
       this.BatchSummaryData.push(data);
     });
@@ -79,5 +81,8 @@ export class BulkBatchExportComponent {
       );
       this.dataSourceGetDetails.paginator = this.paginator;
     });
+  }
+  ngOnInit() {
+    this.getBatchSummary(history.state.data);
   }
 }
