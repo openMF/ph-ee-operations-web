@@ -51,7 +51,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
   }
   public getPosts() {
     this.posts = this.http.get<any[]>(
-      `/api/v1/batches?page=20&size=5&sortedBy=requestFile&sortedOrder=asc`
+      `/api/v1/batches?page=3&size=20&sortedBy=requestFile&sortedOrder=asc`
     );
 
     this.posts.subscribe((data) => {
@@ -103,6 +103,36 @@ export class GetBatchesExportComponent implements AfterViewInit {
     this.router.navigate(["/paymenthubee/getbatchexport/bulkbatchesexport"], {
       state: { data: batchidsummarydata },
     });
+  }
+  formatDate(date: string) {
+    if (!date) {
+      return undefined;
+    }
+    var date2 = new Date(date);
+    const year = date2.getFullYear();
+    const month = "0" + (date2.getMonth() + 1);
+    const day = "0" + date2.getDate();
+    // Hours part from the timestamp
+    const hours = "0" + date2.getHours();
+    // Minutes part from the timestamp
+    const minutes = "0" + date2.getMinutes();
+    // Seconds part from the timestamp
+    const seconds = "0" + date2.getSeconds();
+
+    // Will display time in 2020-04-10 18:04:36 format
+    return (
+      year +
+      "-" +
+      month.substr(-2) +
+      "-" +
+      day.substr(-2) +
+      "  " +
+      hours.substr(-2) +
+      ":" +
+      minutes.substr(-2) +
+      ":" +
+      seconds.substr(-2)
+    );
   }
   ngAfterViewInit() {
     this.currentPageIndex = 0;

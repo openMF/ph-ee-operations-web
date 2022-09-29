@@ -22,13 +22,18 @@ export class BulkBatchExportComponent implements OnInit {
   fileToUpload: File | null = null;
   batchid: any;
   displayedColumns: string[] = [
-    "Batch Id",
     "Transaction Id",
     "Completion Time",
     "Start Time",
     "Amount",
     "Currency",
     "Status",
+    "Payer DFSP",
+    "Payee DFSP",
+    "Payer Party ID",
+    "Payee Party ID",
+    "Payee Party ID Type",
+    "WorkFlow Instance Key",
   ];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   getDetailsData: any;
@@ -81,6 +86,39 @@ export class BulkBatchExportComponent implements OnInit {
       );
       this.dataSourceGetDetails.paginator = this.paginator;
     });
+  }
+  formatDateSummary(date: string) {
+    if (!date) {
+      return undefined;
+    }
+    var date2 = new Date(date);
+    const year = date2.getFullYear();
+    const month = "0" + (date2.getMonth() + 1);
+    const day = "0" + date2.getDate();
+    // Hours part from the timestamp
+    const hours = "0" + date2.getHours();
+    // Minutes part from the timestamp
+    const minutes = "0" + date2.getMinutes();
+    // Seconds part from the timestamp
+    const seconds = "0" + date2.getSeconds();
+
+    // Will display time in 2020-04-10 18:04:36 format
+    return (
+      year +
+      "-" +
+      month.substr(-2) +
+      "-" +
+      day.substr(-2) +
+      "  " +
+      hours.substr(-2) +
+      ":" +
+      minutes.substr(-2) +
+      ":" +
+      seconds.substr(-2)
+    );
+  }
+  shortenValueDetails(value: any) {
+    return value && value.length > 15 ? value.slice(0, 13) + "..." : value;
   }
   ngOnInit() {
     this.getBatchSummary(history.state.data);
