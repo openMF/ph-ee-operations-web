@@ -91,20 +91,20 @@ export class GetBatchesExportComponent implements AfterViewInit {
           formdata
         );
 
-        upload$.subscribe((res: any) => {
+      upload$.subscribe((res) => {
+        if (res) {
+          this.resbatch = res;
+          console.log(this.resbatch.batch_id);
           if (res) {
-            this.resbatch = res;
-            console.log(this.resbatch.batch_id);
-            if (res) {
-              this.router.navigate(
-                ["/paymenthubee/getbatchexport/bulkbatchesexport"],
-                {
-                  state: { data: this.resbatch.batch_id },
-                }
-              );
-            }
+            this.router.navigate(
+              ["/paymenthubee/getbatchexport/bulkbatchesexport"],
+              {
+                state: { data: this.resbatch.batch_id },
+              }
+            );
           }
-        });
+        }
+      });
     }
   }
   getBatchID(batchIdValue: any) {
