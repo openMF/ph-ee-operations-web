@@ -36,6 +36,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
   batchId: string;
   firstPage: any;
   pageIndex: number = 0;
+  resbatch: any;
   displayedColumns: string[] = [
     "Batch Id",
     "Request Id",
@@ -78,7 +79,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
 
       const formdata = new FormData();
 
-      formdata.append("data", `${this.fileName}`);
+      formdata.append("data", event.target.files[0], this.fileName);
       formdata.append("requestId", "3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8");
       formdata.append("purpose", "iliydufkgiku");
 
@@ -89,7 +90,20 @@ export class GetBatchesExportComponent implements AfterViewInit {
           formdata
         );
 
-      upload$.subscribe();
+      upload$.subscribe((res) => {
+        if (res) {
+          this.resbatch = res;
+          console.log(this.resbatch.batch_id);
+          if (res) {
+            this.router.navigate(
+              ["/paymenthubee/getbatchexport/bulkbatchesexport"],
+              {
+                state: { data: this.resbatch.batch_id },
+              }
+            );
+          }
+        }
+      });
     }
   }
   getBatchID(batchIdValue: any) {
