@@ -35,11 +35,8 @@ export class GetBatchesExportComponent implements AfterViewInit {
   batchIdSummary: string;
   batchId: string;
   firstPage: any;
-<<<<<<< HEAD
   pageIndex: number = 0;
   resbatch: any;
-=======
->>>>>>> cd06cce24ca0c861e69c10c260525f2986dfc51c
   displayedColumns: string[] = [
     "Batch Id",
     "Request Id",
@@ -56,11 +53,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
   }
   public getPosts() {
     this.posts = this.http.get<any[]>(
-<<<<<<< HEAD
-      `/api/v1/batches?page=0&size=30&sortedBy=requestFile&sortedOrder=asc`
-=======
-      `/api/v1/batches?page=3&size=20&sortedBy=requestFile&sortedOrder=asc`
->>>>>>> cd06cce24ca0c861e69c10c260525f2986dfc51c
+      `/api/v1/batches?page=3&size=30&sortedBy=requestFile&sortedOrder=asc`
     );
 
     this.posts.subscribe((data) => {
