@@ -351,9 +351,7 @@ export class IncomingRequestToPayComponent implements OnInit {
     );
   }
 
-  shortenValue(value: any) {
-    return value && value.length > 15 ? value.slice(0, 13) + "..." : value;
-  }
+  
 
   displayCurrencyName(currency?: any): string | undefined {
     return currency

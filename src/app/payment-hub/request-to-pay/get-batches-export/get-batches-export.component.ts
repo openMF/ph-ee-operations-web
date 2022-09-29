@@ -35,6 +35,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
   batchIdSummary: string;
   batchId: string;
   firstPage: any;
+  pageIndex: number = 0;
   displayedColumns: string[] = [
     "Batch Id",
     "Request Id",
@@ -51,7 +52,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
   }
   public getPosts() {
     this.posts = this.http.get<any[]>(
-      `/api/v1/batches?page=3&size=20&sortedBy=requestFile&sortedOrder=asc`
+      `/api/v1/batches?page=0&size=30&sortedBy=requestFile&sortedOrder=asc`
     );
 
     this.posts.subscribe((data) => {
@@ -62,10 +63,9 @@ export class GetBatchesExportComponent implements AfterViewInit {
       console.log(this.getBatchesData.totalElements);
       this.dataSource = new MatTableDataSource<any>(this.getBatchesContent);
       this.dataSource.paginator = this.paginator;
-      this.currentPageIndex = this.currentPageIndex + 1;
-      console.log(this.currentPageIndex);
     });
   }
+
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
   }
@@ -78,14 +78,14 @@ export class GetBatchesExportComponent implements AfterViewInit {
 
       const formdata = new FormData();
 
-      formdata.append("data", "download.csv");
+      formdata.append("data", `${this.fileName}`);
       formdata.append("requestId", "3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8");
       formdata.append("purpose", "iliydufkgiku");
 
       const upload$ = this.http
         .disableApiPrefix()
         .post(
-          "https://bulk-connector.sandbox.fynarfin.io/bulk/transfer/3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8/download.csv",
+          `https://bulk-connector.sandbox.fynarfin.io/bulk/transfer/3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8/${this.fileName}`,
           formdata
         );
 
