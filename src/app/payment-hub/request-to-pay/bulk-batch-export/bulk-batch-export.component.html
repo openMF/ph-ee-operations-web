@@ -1,50 +1,36 @@
 <div class="container batch-summary">
-  <form
-    class="batch-summary-wrap"
-    #batchSummaryForm="ngForm"
-    (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
-  >
-    <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Enter Batch ID</mat-label>
-      <input
-        matInput
-        class="form-control col-sm-4 batch-summary-id"
-        ngModel
-        name="batchid"
-        id="batch-id"
-      />
-    </mat-form-field>
-
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!batchSummaryForm.valid"
-    >
-      View Batch Summary
-    </button>
-  </form>
   <p>Batch summary</p>
 
   <div *ngFor="let batches of BatchSummaryData">
     <mat-card class="batch-details-card"
       ><mat-card-title>Batch Id : {{ batches.batch_id }}</mat-card-title>
-      <mat-card-subtitle
-        >Request Id : {{ batches.request_id }}</mat-card-subtitle
-      >
-      <mat-card-subtitle>Total : {{ batches.total }}</mat-card-subtitle>
-      <mat-card-subtitle
-        >Amount Total : {{ batches.totalAmount }}</mat-card-subtitle
-      >
-      <mat-card-subtitle>Status : {{ batches.status }}</mat-card-subtitle>
-      <mat-card-subtitle
-        >Successful : {{ batches.successful }}</mat-card-subtitle
-      >
-      <mat-card-subtitle>Failed : {{ batches.failed }}</mat-card-subtitle>
+      <div class="batch-details-card_box">
+        <mat-card-subtitle
+          ><span>Request Id :</span> {{ batches.request_id }}</mat-card-subtitle
+        >
+        <mat-card-subtitle
+          ><span>Total :</span> {{ batches.total }}</mat-card-subtitle
+        >
+        <mat-card-subtitle
+          ><span>Amount Total :</span>
+          {{ batches.totalAmount }}</mat-card-subtitle
+        >
+        <mat-card-subtitle
+          ><span>Status : </span>{{ batches.status }}</mat-card-subtitle
+        >
+        <mat-card-subtitle
+          ><span>Successful :</span> {{ batches.successful }}</mat-card-subtitle
+        >
+        <mat-card-subtitle
+          ><span>Failed :</span> {{ batches.failed }}</mat-card-subtitle
+        >
 
-      <mat-card-subtitle>Ongoing : {{ batches.ongoing }}</mat-card-subtitle>
+        <mat-card-subtitle
+          ><span>Ongoing :</span> {{ batches.ongoing }}</mat-card-subtitle
+        >
+      </div>
       <button
-        class="primary"
+        class="primary batch-details_button"
         [value]="batches.batch_id"
         (click)="getBatchDetails($event.target.value)"
       >
@@ -55,39 +41,9 @@
     <table
       mat-table
       [dataSource]="dataSourceGetDetails"
-      class="mat-elevation-z8 demo-table container"
+      class="mat-elevation-z8 demo-table"
     >
       <!-- Position Column -->
-      <ng-container matColumnDef="Batch Id">
-        <th mat-header-cell *matHeaderCellDef>Batch Id</th>
-        <td mat-cell *matCellDef="let element">
-          <form
-            class="batch-summary-wrap"
-            #batchSummaryForm="ngForm"
-            (ngSubmit)="getBatchSummary(batchSummaryForm.value)"
-          >
-            <mat-form-field
-              class="example-full-width"
-              appearance="fill"
-              class="hidden"
-            >
-              <mat-label hidden>Enter Batch ID</mat-label>
-              <input
-                matInput
-                class="form-control col-sm-4 batch-summary-id"
-                ngModel="{{ element.batchId }}"
-                name="batchid"
-                id="batch-id"
-                hidden
-              />
-            </mat-form-field>
-
-            <button color="" type="submit" [disabled]="!batchSummaryForm.valid">
-              {{ element.batchId }}
-            </button>
-          </form>
-        </td>
-      </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="Request Id">
@@ -100,11 +56,56 @@
       </ng-container>
       <ng-container matColumnDef="Completion Time">
         <th mat-header-cell *matHeaderCellDef>Completion Time</th>
-        <td mat-cell *matCellDef="let element">{{ element.completedAt }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ formatDateSummary(element.completedAt) }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="Start Time">
         <th mat-header-cell *matHeaderCellDef>Start Time</th>
-        <td mat-cell *matCellDef="let element">{{ element.startedAt }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ formatDateSummary(element.startedAt) }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Currency">
+        <th mat-header-cell *matHeaderCellDef>Currency</th>
+        <td mat-cell *matCellDef="let element">{{ element.currency }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Payer DFSP">
+        <th mat-header-cell *matHeaderCellDef>Payer DFSP</th>
+        <td mat-cell *matCellDef="let element">{{ element.payerDfspId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Payee DFSP">
+        <th mat-header-cell *matHeaderCellDef>Payee DFSP</th>
+        <td mat-cell *matCellDef="let element">{{ element.payeeDfspId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Payer Party ID">
+        <th mat-header-cell *matHeaderCellDef>Payer Party ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.payerPartyId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Payee Party ID">
+        <th mat-header-cell *matHeaderCellDef>Payee Party ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.payeePartyId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Payee Party ID Type">
+        <th mat-header-cell *matHeaderCellDef>Payee Party ID Type</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.payeePartyIdType }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="WorkFlow Instance Key">
+        <th mat-header-cell *matHeaderCellDef>WorkFlow Instance Key</th>
+        <td mat-cell *matCellDef="let element">
+          {{ shortenValueDetails(element.workflowInstanceKey) }}
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -112,7 +113,7 @@
     </table>
     <mat-paginator
       #paginator
-      [pageSizeOptions]="[5, 10, 20]"
+      [pageSizeOptions]="[20, 50, 100]"
       showFirstLastButtons
       aria-label="Select page of periodic elements"
     >

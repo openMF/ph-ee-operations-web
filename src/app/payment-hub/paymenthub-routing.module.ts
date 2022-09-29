@@ -173,25 +173,25 @@ const routes: Routes = [
           path: "getbatchexport",
           data: {
             title: extract(""),
-            breadcrumb: "Get all batches",
+            breadcrumb: "Batches",
           },
           children: [
             {
               path: "",
               component: GetBatchesExportComponent,
             },
-          ],
-        },
-        {
-          path: "bulkbatchesexport",
-          data: {
-            title: extract(""),
-            breadcrumb: "Batch summary",
-          },
-          children: [
             {
-              path: "",
-              component: BulkBatchExportComponent,
+              path: "bulkbatchesexport",
+              data: {
+                title: extract(""),
+                breadcrumb: "Batch summary",
+              },
+              children: [
+                {
+                  path: "",
+                  component: BulkBatchExportComponent,
+                },
+              ],
             },
           ],
         },

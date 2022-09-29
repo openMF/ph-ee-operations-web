@@ -25,11 +25,16 @@ export class GetBatchesExportComponent implements AfterViewInit {
   fileToUpload: File | null = null;
   posts: Observable<any>;
   getBatchesContent: any;
-
+  lengthGetBatches: any;
+  pageSize: any;
+  currentPageIndex: any = 0;
+  getBatchesData: any;
+  pageNumber: any;
   dataSource: any;
   BatchSummaryData: any[] = [];
   batchIdSummary: string;
   batchId: string;
+  firstPage: any;
   displayedColumns: string[] = [
     "Batch Id",
     "Request Id",
@@ -46,14 +51,19 @@ export class GetBatchesExportComponent implements AfterViewInit {
   }
   public getPosts() {
     this.posts = this.http.get<any[]>(
-      "/api/v1/batches?page=2&size=10&sortedBy=requestFile&sortedOrder=asc"
+      `/api/v1/batches?page=3&size=20&sortedBy=requestFile&sortedOrder=asc`
     );
 
     this.posts.subscribe((data) => {
+      this.getBatchesData = data;
+      this.lengthGetBatches = this.getBatchesData.totalElements;
+      this.firstPage = this.getBatchesData.first;
       this.getBatchesContent = data.content.map((i: any) => i);
-      console.log(this.getBatchesContent);
+      console.log(this.getBatchesData.totalElements);
       this.dataSource = new MatTableDataSource<any>(this.getBatchesContent);
       this.dataSource.paginator = this.paginator;
+      this.currentPageIndex = this.currentPageIndex + 1;
+      console.log(this.currentPageIndex);
     });
   }
   handleFileInput(files: FileList) {
@@ -72,10 +82,12 @@ export class GetBatchesExportComponent implements AfterViewInit {
       formdata.append("requestId", "3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8");
       formdata.append("purpose", "iliydufkgiku");
 
-      const upload$ = this.http.post(
-        "/bulk/transfer/3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8/download.csv",
-        formdata
-      );
+      const upload$ = this.http
+        .disableApiPrefix()
+        .post(
+          "https://bulk-connector.sandbox.fynarfin.io/bulk/transfer/3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8/download.csv",
+          formdata
+        );
 
       upload$.subscribe();
     }
@@ -84,20 +96,46 @@ export class GetBatchesExportComponent implements AfterViewInit {
     this.batchIdSummary = batchIdValue;
     console.log(this.batchIdSummary);
   }
-  getBatchDetails(batch_id: any) {
-    const batchDetails = `/api/v1/batch/detail?batchId=${batch_id}`;
-    this.http.get(batchDetails).subscribe((data) => {
-      console.log(data);
+
+  getBatchSummaryinfo(batchidsummarydata: any) {
+    console.log(batchidsummarydata);
+
+    this.router.navigate(["/paymenthubee/getbatchexport/bulkbatchesexport"], {
+      state: { data: batchidsummarydata },
     });
   }
-  // ngOnInit() {
-  //   this.getPosts();
-  //   this.dataSource = new MatTableDataSource<any>(this.getBatchesContent);
-  //   console.log(this.dataSource);
-  //   this.dataSource.paginator = this.paginator;
-  // }
+  formatDate(date: string) {
+    if (!date) {
+      return undefined;
+    }
+    var date2 = new Date(date);
+    const year = date2.getFullYear();
+    const month = "0" + (date2.getMonth() + 1);
+    const day = "0" + date2.getDate();
+    // Hours part from the timestamp
+    const hours = "0" + date2.getHours();
+    // Minutes part from the timestamp
+    const minutes = "0" + date2.getMinutes();
+    // Seconds part from the timestamp
+    const seconds = "0" + date2.getSeconds();
 
+    // Will display time in 2020-04-10 18:04:36 format
+    return (
+      year +
+      "-" +
+      month.substr(-2) +
+      "-" +
+      day.substr(-2) +
+      "  " +
+      hours.substr(-2) +
+      ":" +
+      minutes.substr(-2) +
+      ":" +
+      seconds.substr(-2)
+    );
+  }
   ngAfterViewInit() {
+    this.currentPageIndex = 0;
     this.getPosts();
   }
 }

@@ -12,4 +12,31 @@
     margin: 0;
     width: 100%;
   }
+  .mat-card-title {
+    font-size: 32px;
+  }
+  .mat-card-subtitle {
+    font-size: 24px;
+  }
+}
+.batch-details-card_box {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .mat-card-subtitle {
+    max-width: 48%;
+    width: 100%;
+    span {
+      font-weight: 500;
+      color: #000;
+    }
+  }
+}
+.batch-details_button {
+  background: #1074b9;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  font-size: 16px;
+  border-radius: 5px;
 }
