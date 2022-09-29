@@ -18,7 +18,7 @@ import { MatTableDataSource } from "@angular/material/table";
 })
 export class BulkBatchExportComponent implements OnInit {
   template = new FormControl("");
-  templates: string[] = ["Mojaloo", "Program"];
+  templates: string[] = ["Mojaloop", "Program"];
   fileToUpload: File | null = null;
   batchid: any;
   displayedColumns: string[] = [
