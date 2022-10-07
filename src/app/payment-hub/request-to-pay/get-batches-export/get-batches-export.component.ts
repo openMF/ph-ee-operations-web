@@ -71,23 +71,39 @@ export class GetBatchesExportComponent implements AfterViewInit {
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
   }
+  generateUUID() { 
+    var d = new Date().getTime();
+    var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16;
+        if(d > 0){
+            r = (d + r)%16 | 0;
+            d = Math.floor(d/16);
+        } else {
+            r = (d2 + r)%16 | 0;
+            d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+}
   fileName = "";
+  reqId = ""
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
     if (file) {
       this.fileName = file.name;
-
+      this.reqId = this.generateUUID();
       const formdata = new FormData();
-
+      
       formdata.append("data", event.target.files[0], this.fileName);
-      formdata.append("requestId", "3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8");
+      formdata.append("requestId",  this.reqId);
       formdata.append("purpose", "iliydufkgiku");
 
       const upload$ = this.http
         .disableApiPrefix()
         .post(
-          `https://bulk-connector.sandbox.fynarfin.io/bulk/transfer/3a4dfab5-0f4f-4e78-b6b5-1aff3859d4e8/${this.fileName}`,
+          `https://bulk-connector.sandbox.fynarfin.io/bulk/transfer/${this.reqId}/${this.fileName}`,
           formdata
         );
 
@@ -107,6 +123,8 @@ export class GetBatchesExportComponent implements AfterViewInit {
       });
     }
   }
+
+
   getBatchID(batchIdValue: any) {
     this.batchIdSummary = batchIdValue;
     console.log(this.batchIdSummary);
