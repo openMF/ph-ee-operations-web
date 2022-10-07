@@ -40,3 +40,18 @@
   font-size: 16px;
   border-radius: 5px;
 }
+.batch-summary {
+  .demo-table {
+    tr {
+      th {
+        min-width: 250px;
+      }
+      td {
+        min-width: 250px;
+      }
+    }
+  }
+}
+.batch-summary-table_wrap {
+  overflow: scroll;
+}
