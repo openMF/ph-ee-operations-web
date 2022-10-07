@@ -82,7 +82,10 @@ public class BatchApi {
                 return generateDetails(batch);
             }
         } else {
-            return null;
+           Batch batch1 = new Batch();
+           batch1.setBatchId(batchId);
+           batch1.setRequestId(requestId);
+           return generateDetails(batch1);
         }
 
     }
