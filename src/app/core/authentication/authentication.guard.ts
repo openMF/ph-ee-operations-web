@@ -6,6 +6,9 @@ import { Router, CanActivate } from '@angular/router';
 import { Logger } from '../logger/logger.service';
 import { AuthenticationService } from './authentication.service';
 
+/** Environment Configuration */
+import { environment } from '../../../environments/environment';
+
 /** Initialize logger */
 const log = new Logger('AuthenticationGuard');
 
@@ -28,7 +31,7 @@ export class AuthenticationGuard implements CanActivate {
    * @returns {boolean} True if user is authenticated.
    */
   canActivate(): boolean {
-    if (this.authenticationService.isAuthenticated()) {
+    if (this.authenticationService.isAuthenticated() || !environment.auth.enabled) {
       return true;
     }
 

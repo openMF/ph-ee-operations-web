@@ -394,7 +394,11 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
    */
   getTransactions() {
     this.dataSource = new TransactionsDataSource(this.transactionsService);
-    this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    if (this.sort && this.paginator) {
+      this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    } else {
+      this.dataSource.getTransactions(this.filterTransactionsBy, '', '', 0, 10);
+    }
   }
 
   openRetryResolveDialog(workflowInstanceKey: any, action: string) {

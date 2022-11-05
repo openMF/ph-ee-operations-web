@@ -27,7 +27,11 @@ export class HomeComponent implements OnInit {
    */
   ngOnInit() {
     const credentials = this.authenticationService.getCredentials();
-    this.username = credentials.username;
+    if (credentials) {
+      this.username = credentials.username;
+    } else {
+      this.username = 'User';
+    }
   }
 
 }
