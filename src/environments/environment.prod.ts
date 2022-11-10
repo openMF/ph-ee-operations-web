@@ -14,5 +14,9 @@ export let environment = {
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],
-  externalConfigurationFile: ""
+  externalConfigurationFile: "",
+  auth: {
+    enabled: true,
+    tenant: "default"
+  }
 };

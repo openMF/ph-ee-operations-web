@@ -10,6 +10,8 @@ import { switchMap, take, filter, catchError } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { Router } from '@angular/router';
 
+import { environment } from '../../../environments/environment';
+
 /** Http request options headers. */
 const httpOptions = {
   headers: {}
@@ -42,6 +44,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
 
     this.retrieveAuthData();
+    if (!environment.auth.enabled) {
+      return next.handle(this.injectToken(request));
+    }
+
     if (request.url.indexOf('/oauth/token') !== -1) {
       return next.handle(this.injectToken(request));
     }

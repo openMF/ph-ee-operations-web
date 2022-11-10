@@ -25,14 +25,18 @@ export class SidenavComponent implements OnInit {
    * @param {AuthenticationService} authenticationService Authentication Service.
    */
   constructor(private router: Router,
-              private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService) { }
 
   /**
    * Sets the username of the authenticated user.
    */
   ngOnInit() {
     const credentials = this.authenticationService.getCredentials();
-    this.username = credentials.username;
+    if (credentials) {
+      this.username = credentials.username;
+    } else {
+      this.username = 'User';
+    }
   }
 
   /**

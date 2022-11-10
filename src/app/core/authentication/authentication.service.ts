@@ -48,7 +48,7 @@ export class AuthenticationService {
   private refreshAccessToken = false;
   private loggedIn = false;
   private authorizationToken: String;
-  private tenantId: String;
+  private tenantId: String = environment.auth.tenant;
   private username: String;
   private accessTokenExpirationTime = 1;
 
