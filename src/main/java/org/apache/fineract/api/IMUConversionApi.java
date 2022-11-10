@@ -1,5 +1,7 @@
 package org.apache.fineract.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.data.IMUConversionData;
 import org.apache.fineract.operations.CurrencyRate;
 import org.apache.fineract.operations.CurrencyRateLock;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
+@SecurityRequirement(name = "auth")
 @RequestMapping("/api/v1")
 public class IMUConversionApi {
     @Autowired
@@ -93,7 +96,7 @@ public class IMUConversionApi {
             }
             currencyRates.add(exchange);
         }
-        currencyRateRepository.save(currencyRates);
+        currencyRateRepository.saveAll(currencyRates);
     }
 
     @DeleteMapping(path = "/imuexchange/master", consumes = MediaType.APPLICATION_JSON_VALUE)

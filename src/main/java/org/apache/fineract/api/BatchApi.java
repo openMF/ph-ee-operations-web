@@ -1,5 +1,10 @@
 package org.apache.fineract.api;
 
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.config.PaymentModeConfiguration;
 import org.apache.fineract.file.FileTransferService;
 import org.apache.fineract.operations.*;
@@ -27,6 +32,7 @@ import java.util.Optional;
 import static org.apache.fineract.core.service.OperatorUtils.strip;
 
 @RestController
+@SecurityRequirement(name = "auth")
 @RequestMapping("/api/v1")
 public class BatchApi {
     @Autowired

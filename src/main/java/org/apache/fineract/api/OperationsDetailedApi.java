@@ -1,5 +1,7 @@
 package org.apache.fineract.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.data.ErrorResponse;
 import org.apache.fineract.exception.WriteToCsvException;
 import org.apache.fineract.operations.*;
@@ -12,7 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -26,6 +28,9 @@ import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 
 @RestController
 @RequestMapping("/api/v1")
+@SecurityRequirement(name = "auth")
+@Tag(name = "Operations Detailed API")
+@SecurityRequirement(name = "api")
 public class OperationsDetailedApi {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

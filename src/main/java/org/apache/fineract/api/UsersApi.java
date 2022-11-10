@@ -18,6 +18,8 @@
  */
 package org.apache.fineract.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.organisation.role.Role;
 import org.apache.fineract.organisation.role.RoleRepository;
 import org.apache.fineract.organisation.user.AppUser;
@@ -43,7 +45,9 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.fineract.api.AssignmentAction.ASSIGN;
 
 @RestController
+@SecurityRequirement(name = "auth")
 @RequestMapping("/api/v1")
+@Tag(name = "Users API")
 public class UsersApi {
 
     @Autowired
@@ -62,7 +66,7 @@ public class UsersApi {
 
     @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AppUser retrieveOne(@PathVariable("userId") Long userId, HttpServletResponse response) {
-        AppUser user = appuserRepository.findOne(userId);
+        AppUser user = appuserRepository.findById(userId).get();
         if(user != null) {
             return user;
         } else {
@@ -73,7 +77,7 @@ public class UsersApi {
 
     @GetMapping(path = "/user/{userId}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<Role> retrieveRoles(@PathVariable("userId") Long userId, HttpServletResponse response) {
-        AppUser user = appuserRepository.findOne(userId);
+        AppUser user = appuserRepository.findById(userId).get();
         if(user != null) {
             return user.getRoles();
         } else {
@@ -97,7 +101,7 @@ public class UsersApi {
 
     @PutMapping(path = "/user/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable("userId") Long userId, @RequestBody AppUser appUser, HttpServletResponse response) {
-        AppUser existing = appuserRepository.findOne(userId);
+        AppUser existing = appuserRepository.findById(userId).get();
         if (existing != null) {
             appUser.setId(userId);
             appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
@@ -110,8 +114,8 @@ public class UsersApi {
 
     @DeleteMapping(path = "/user/{userId}", produces = MediaType.TEXT_HTML_VALUE)
     public void delete(@PathVariable("userId") Long userId, HttpServletResponse response) {
-        if(appuserRepository.exists(userId)) {
-            appuserRepository.delete(userId);
+        if(appuserRepository.findById(userId).isPresent()) {
+            appuserRepository.deleteById(userId);
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -120,7 +124,7 @@ public class UsersApi {
     @PutMapping(path = "/user/{userId}/roles", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void userAssignment(@PathVariable("userId") Long userId, @RequestParam("action") AssignmentAction action,
                                @RequestBody EntityAssignments assignments, HttpServletResponse response) {
-        AppUser existingUser = appuserRepository.findOne(userId);
+        AppUser existingUser = appuserRepository.findById(userId).get();
         if (existingUser != null) {
             Collection<Role> rolesToAssign = existingUser.getRoles();
             List<Long> existingRoleIds = rolesToAssign.stream()
@@ -135,7 +139,7 @@ public class UsersApi {
                         }
                     })
                     .map(id -> {
-                        Role r = roleRepository.findOne(id);
+                        Role r = roleRepository.findById(id).get();
                         if (r == null) {
                             throw new RuntimeException("Invalid role id: " + id + " can not continue assignment!");
                         } else {

@@ -53,7 +53,8 @@ public class TenantAwareHeaderFilter extends GenericFilterBean {
         task.start();
 
         try {
-            if(!EXCLUDED_URL.equals(request.getServletPath())) {
+            if(!EXCLUDED_URL.equals(request.getServletPath()) &&
+                    !request.getServletPath().contains("swagger") && !request.getServletPath().contains("api-docs") ) {
                 String tenantIdentifier = request.getHeader(TENANT_IDENTIFIER_REQUEST_HEADER);
                 if (tenantIdentifier == null || tenantIdentifier.length() < 1) {
                     tenantIdentifier = request.getParameter(TENANT_IDENTIFIER_REQUEST_PARAM);

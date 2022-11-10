@@ -19,6 +19,8 @@
 package org.apache.fineract.api;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.organisation.permission.Permission;
 import org.apache.fineract.organisation.permission.PermissionRepository;
 import org.apache.fineract.organisation.role.Role;
@@ -43,6 +45,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.fineract.api.AssignmentAction.ASSIGN;
 
 @RestController
+@SecurityRequirement(name = "auth")
 @RequestMapping("/api/v1")
 public class RolesApi {
 
@@ -59,7 +62,7 @@ public class RolesApi {
 
     @GetMapping(path = "/role/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Role retrieveOne(@PathVariable("roleId") Long roleId, HttpServletResponse response) {
-        Role role = roleRepository.findOne(roleId);
+        Role role = roleRepository.findById(roleId).get();
         if(role != null) {
             return role;
         } else {
@@ -70,7 +73,7 @@ public class RolesApi {
 
     @GetMapping(path = "/role/{roleId}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<Permission> retrievePermissions(@PathVariable("roleId") Long roleId, HttpServletResponse response) {
-        Role role = roleRepository.findOne(roleId);
+        Role role = roleRepository.findById(roleId).get();
         if(role != null) {
             return role.getPermissions();
         } else {
@@ -92,7 +95,7 @@ public class RolesApi {
 
     @PutMapping(path = "/role/{roleId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable("roleId") Long roleId, @RequestBody Role role, HttpServletResponse response) {
-        Role existing = roleRepository.findOne(roleId);
+        Role existing = roleRepository.findById(roleId).get();
         if (existing != null) {
             role.setId(roleId);
             role.setAppUsers(existing.getAppusers());
@@ -105,8 +108,8 @@ public class RolesApi {
 
     @DeleteMapping(path = "/role/{roleId}")
     public void delete(@PathVariable("roleId") Long roleId, HttpServletResponse response) {
-        if(roleRepository.exists(roleId)) {
-            roleRepository.delete(roleId);
+        if(roleRepository.existsById(roleId)) {
+            roleRepository.deleteById(roleId);
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -115,7 +118,7 @@ public class RolesApi {
     @PutMapping(path = "/role/{roleId}/permissions", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void permissionAssignment(@PathVariable("roleId") Long roleId, @RequestParam("action") AssignmentAction action,
                                      @RequestBody EntityAssignments assignments, HttpServletResponse response) {
-        Role existingRole = roleRepository.findOne(roleId);
+        Role existingRole = roleRepository.findById(roleId).get();
         if (existingRole != null) {
             Collection<Permission> permissionToAssign = existingRole.getPermissions();
             List<Long> existingPermissionIds = permissionToAssign.stream()
@@ -130,7 +133,7 @@ public class RolesApi {
                         }
                     })
                     .map(id -> {
-                        Permission p = permissionRepository.findOne(id);
+                        Permission p = permissionRepository.findById(id).get();
                         if (p == null) {
                             throw new RuntimeException("Invalid permission id: " + id + " can not continue assignment!");
                         } else {

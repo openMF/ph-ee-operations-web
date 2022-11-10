@@ -1,5 +1,7 @@
 package org.apache.fineract.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.operations.ErrorCode;
 import org.apache.fineract.operations.ErrorCodeRepository;
 import org.slf4j.Logger;
@@ -34,7 +36,7 @@ public class ErrorCodesCRUDApi {
 
     @GetMapping("/{id}")
     public ErrorCode getSpecificErrorCode(@PathVariable Long id) {
-        return errorCodesRepository.findOne(id);
+        return errorCodesRepository.findById(id).get();
     }
 
     @GetMapping("/filter")
@@ -62,7 +64,7 @@ public class ErrorCodesCRUDApi {
     @DeleteMapping("/{id}")
     public ErrorCode deleteErrorCode(@PathVariable Long id) {
         ErrorCode errorCode = getSpecificErrorCode(id);
-        errorCodesRepository.delete(id);
+        errorCodesRepository.deleteById(id);
         return errorCode;
     }
 }

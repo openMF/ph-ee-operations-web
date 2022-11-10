@@ -18,6 +18,8 @@
  */
 package org.apache.fineract.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.organisation.permission.Permission;
 import org.apache.fineract.organisation.permission.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ import java.util.List;
 
 
 @RestController
+@SecurityRequirement(name = "auth")
 @RequestMapping("/api/v1")
 public class PermissionsApi {
 
@@ -49,7 +52,7 @@ public class PermissionsApi {
 
     @GetMapping(path = "/permission/{permissionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Permission retrieveOne(@PathVariable("permissionId") Long permissionId, HttpServletResponse response) {
-        Permission permission = permissionRepository.findOne(permissionId);
+        Permission permission = permissionRepository.findById(permissionId).get();
         if(permission != null) {
             return permission;
         } else {
@@ -71,7 +74,7 @@ public class PermissionsApi {
 
     @PutMapping(path = "/permission/{permissionId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable("permissionId") Long permissionId, @RequestBody Permission permission, HttpServletResponse response) {
-        Permission existing = permissionRepository.findOne(permissionId);
+        Permission existing = permissionRepository.findById(permissionId).get();
         if (existing != null) {
             permission.setId(permissionId);
             permission.setRoles(existing.getRoles());
@@ -83,8 +86,8 @@ public class PermissionsApi {
 
     @DeleteMapping(path = "/permission/{permissionId}")
     public void delete(@PathVariable("permissionId") Long permissionId, HttpServletResponse response) {
-        if(permissionRepository.exists(permissionId)) {
-            permissionRepository.delete(permissionId);
+        if(permissionRepository.existsById(permissionId)) {
+            permissionRepository.deleteById(permissionId);
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
