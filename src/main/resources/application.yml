@@ -42,7 +42,7 @@ server:
 
 rest:
   authorization:
-    enabled: true
+    enabled: false
     settings:
       - endpoint: "/api/v1/transfer/*/refund"
         authority: "hasAuthority('REFUND')"

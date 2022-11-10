@@ -11,10 +11,11 @@ services:
       - "3306:3306"
 
   operations-app:
-    image: paymenthubee.azurecr.io/phee/operations-app
+    build: .
     ports:
       - 5000:5000
     environment:
       FINERACT_DATASOURCE_CORE_HOST: operations-mysql
+      SPRING_PROFILES_ACTIVE: bb
     depends_on:
       - operations-mysql
