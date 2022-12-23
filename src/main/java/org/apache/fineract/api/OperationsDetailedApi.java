@@ -43,8 +43,8 @@ public class OperationsDetailedApi {
 
     @GetMapping("/transfers")
     public Page<Transfer> transfers(
-            @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "size") Integer size,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "1") Integer size,
             @RequestParam(value = "payerPartyId", required = false) String payerPartyId,
             @RequestParam(value = "payerDfspId", required = false) String payerDfspId,
             @RequestParam(value = "payeePartyId", required = false) String payeePartyId,
@@ -59,6 +59,7 @@ public class OperationsDetailedApi {
             @RequestParam(value = "sortedBy", required = false) String sortedBy,
             @RequestParam(value = "partyId", required = false) String partyId,
             @RequestParam(value = "partyIdType", required = false) String partyIdType,
+            @RequestParam(value = "clientCorrelationId", required = false) String clientCorrelationId,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
         List<Specifications<Transfer>> specs = new ArrayList<>();
 
@@ -92,6 +93,9 @@ public class OperationsDetailedApi {
         }
         if (transactionId != null) {
             specs.add(TransferSpecs.match(Transfer_.transactionId, transactionId));
+        }
+        if (clientCorrelationId != null) {
+            specs.add(TransferSpecs.match(Transfer_.clientCorrelationId, clientCorrelationId));
         }
         if (status != null && parseStatus(status) != null) {
             specs.add(TransferSpecs.match(Transfer_.status, parseStatus(status)));
@@ -165,6 +169,7 @@ public class OperationsDetailedApi {
             @RequestParam(value = "startFrom", required = false) String startFrom,
             @RequestParam(value = "startTo", required = false) String startTo,
             @RequestParam(value = "direction", required = false) String direction,
+            @RequestParam(value = "clientCorrelationId", required = false) String clientCorrelationId,
             @RequestParam(value = "sortedBy", required = false) String sortedBy,
             @RequestParam(value = "sortedOrder", required = false, defaultValue = "DESC") String sortedOrder) {
         List<Specifications<TransactionRequest>> specs = new ArrayList<>();
@@ -191,6 +196,9 @@ public class OperationsDetailedApi {
         }
         if (currency != null) {
             specs.add(TransactionRequestSpecs.match(TransactionRequest_.currency, currency));
+        }
+        if (clientCorrelationId != null) {
+            specs.add(TransactionRequestSpecs.match(TransactionRequest_.clientCorrelationId, clientCorrelationId));
         }
         if (direction != null) {
             specs.add(TransactionRequestSpecs.match(TransactionRequest_.direction, direction));
@@ -336,6 +344,10 @@ public class OperationsDetailedApi {
                 break;
             case EXTERNALID:
                 spec = TransactionRequestSpecs.in(TransactionRequest_.externalId, listOfValues);
+                break;
+
+            case CLIENTCORRELATIONID:
+                spec = TransactionRequestSpecs.in(TransactionRequest_.clientCorrelationId, listOfValues);
                 break;
         }
         return spec;
