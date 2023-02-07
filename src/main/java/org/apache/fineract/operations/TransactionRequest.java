@@ -80,6 +80,9 @@ public class TransactionRequest extends AbstractPersistableCustom<Long> {
     @Column(name = "CLIENTCORRELATIONID")
     private String clientCorrelationId;
 
+    @Column(name = "ERROR_INFORMATION")
+    private String errorInformation;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionRequest", fetch = FetchType.LAZY)
     private List<Variable> variables;
 
@@ -283,5 +286,44 @@ public class TransactionRequest extends AbstractPersistableCustom<Long> {
 
     public void setClientCorrelationId(String clientCorrelationId) {
         this.clientCorrelationId = clientCorrelationId;
+    }
+
+    public String getErrorInformation() {
+        return errorInformation;
+    }
+
+    public void setErrorInformation(String errorInformation) {
+        this.errorInformation = errorInformation;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionRequest{" +
+                "workflowInstanceKey='" + workflowInstanceKey + '\'' +
+                ", transactionId='" + transactionId + '\'' +
+                ", startedAt=" + startedAt +
+                ", completedAt=" + completedAt +
+                ", state=" + state +
+                ", payeeDfspId='" + payeeDfspId + '\'' +
+                ", payeePartyId='" + payeePartyId + '\'' +
+                ", payeePartyIdType='" + payeePartyIdType + '\'' +
+                ", payeeFee=" + payeeFee +
+                ", payeeQuoteCode='" + payeeQuoteCode + '\'' +
+                ", payerDfspId='" + payerDfspId + '\'' +
+                ", payerPartyId='" + payerPartyId + '\'' +
+                ", payerPartyIdType='" + payerPartyIdType + '\'' +
+                ", payerFee=" + payerFee +
+                ", payerQuoteCode='" + payerQuoteCode + '\'' +
+                ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                ", direction='" + direction + '\'' +
+                ", authType='" + authType + '\'' +
+                ", initiatorType='" + initiatorType + '\'' +
+                ", scenario='" + scenario + '\'' +
+                ", externalId='" + externalId + '\'' +
+                ", clientCorrelationId='" + clientCorrelationId + '\'' +
+                ", errorInformation='" + errorInformation + '\'' +
+                ", variables=" + variables +
+                '}';
     }
 }

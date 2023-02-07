@@ -1,0 +1,2 @@
+ALTER TABLE `transaction_requests`
+    ADD `ERROR_INFORMATION` LONGTEXT;

@@ -227,7 +227,6 @@ public class OperationsDetailedApi {
             for (int i = 1; i < specs.size(); i++) {
                 compiledSpecs = compiledSpecs.and(specs.get(i));
             }
-
             return transactionRequestRepository.findAll(compiledSpecs, pager);
         } else {
             return transactionRequestRepository.findAll(pager);
