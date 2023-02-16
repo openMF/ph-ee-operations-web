@@ -22,6 +22,6 @@ export let environment = {
   externalConfigurationFile: "configuration.properties", // When provided, the external configuration file content will override this environment settings based on naming conventions
   auth: {
     enabled: false,
-    tenant: "default"
+    tenant: "phdefault"
   }
 };
