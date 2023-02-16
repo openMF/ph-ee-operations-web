@@ -22,6 +22,6 @@ export let environment = {
   externalConfigurationFile: "configuration.properties",
   auth: {
     enabled: false,
-    tenant: "default"
+    tenant: "phdefault"
   }
 };
