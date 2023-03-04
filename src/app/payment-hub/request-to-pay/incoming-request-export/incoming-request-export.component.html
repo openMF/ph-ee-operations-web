@@ -51,7 +51,7 @@
           id="workflowinstancekey"
         />
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field (click)="startDatePicker.open()">
         <mat-label>START DATE</mat-label>
         <input
           matInput
@@ -59,11 +59,14 @@
           class="form-control col-sm-4"
           ngModel
           name="startdate"
-          placeholder="comma-separated-list"
+          placeholder="Start Date"
           id="startdate"
+          [matDatepicker]="startDatePicker"
         />
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field (click)="endDatePicker.open()">
         <mat-label>END DATE</mat-label>
         <input
           matInput
@@ -71,9 +74,12 @@
           class="form-control col-sm-4"
           ngModel
           name="enddate"
-          placeholder="comma-separated-list"
+          placeholder="End Date"
           id="enddate"
+          [matDatepicker]="endDatePicker"
         />
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
         <mat-label for="querytype" class="form-control">Filter By</mat-label>
