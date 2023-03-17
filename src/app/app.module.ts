@@ -36,6 +36,7 @@ import { PaymentHubModule } from './payment-hub/paymenthub.module';
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
 
+import { DatePipe } from '@angular/common';
 
 export function initConfig(config: AppConfig) {
   return () => config.load();
@@ -64,7 +65,8 @@ export function initConfig(config: AppConfig) {
     AppRoutingModule,
   ],
   declarations: [WebAppComponent, NotFoundComponent],
-  providers: [AppConfig,
+  providers: [DatePipe,
+    AppConfig,
     {
       provide: APP_INITIALIZER,
       useFactory: initConfig,

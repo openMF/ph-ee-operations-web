@@ -5,6 +5,7 @@ import {
   HttpHeaders,
   JsonpClientBackend,
 } from "@angular/common/http";
+import { Dates } from "../../../core/utils/dates";
 @Component({
   selector: "mifosx-incoming-request-export",
   templateUrl: "./incoming-request-export.component.html",
@@ -13,7 +14,8 @@ import {
 export class IncomingRequestExportComponent implements OnInit {
   csvExport: [];
   csvName: string;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private dateUtils: Dates) {}
 
   ngOnInit(): void {}
   onSubmit() {
@@ -25,17 +27,17 @@ export class IncomingRequestExportComponent implements OnInit {
   exportCSV(filterBy: any, filterName: string) {
     let body = new HttpParams();
     body = body.set("command", "export");
-    let startFrom = filterBy.startdate;
-    let startTo = filterBy.enddate;
+    let startFrom = this.dateUtils.formatDate(filterBy.startdate, 'yyyy-MM-dd HH:mm:ss')
+    let startTo = this.dateUtils.formatDate(filterBy.enddate, 'yyyy-MM-dd HH:mm:ss')
     let state = filterBy.cars;
     if (startFrom != "") {
-      body = body.set("startFrom", filterBy.startdate);
+      body = body.set("startFrom", startFrom);
     }
     if (state != "") {
       body = body.set("state", filterBy.cars);
     }
     if (startTo != "") {
-      body = body.set("startTo", filterBy.enddate);
+      body = body.set("startTo", startTo);
     }
     console.log(body);
     const exportURl = "/api/v1/transactionRequests?" + body;
