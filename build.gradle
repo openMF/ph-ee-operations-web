@@ -14,6 +14,10 @@ repositories {
     maven {
         url = uri('https://repo.maven.apache.org/maven2')
     }
+
+    maven {
+        url = uri('https://fynarfin.jfrog.io/artifactory/fyn-libs-snapshot-local/')
+    }
 }
 
 dependencies {
@@ -41,6 +45,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation "org.springdoc:springdoc-openapi-ui:1.6.11"
+    implementation 'org.mifos:ph-ee-connector-common:1.2.2-SNAPSHOT'
 }
 
 group = 'org.apache.fineract'

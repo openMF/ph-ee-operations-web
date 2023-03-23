@@ -1,21 +1,27 @@
 package org.apache.fineract.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.fineract.data.ErrorResponse;
 import org.apache.fineract.exception.WriteToCsvException;
 import org.apache.fineract.operations.*;
 import org.apache.fineract.utils.CsvUtility;
+import org.mifos.connector.common.channel.dto.PhErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
@@ -41,8 +47,11 @@ public class OperationsDetailedApi {
     @Autowired
     private TransactionRequestRepository transactionRequestRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @GetMapping("/transfers")
-    public Page<Transfer> transfers(
+    public Page<TransferResponse> transfers(
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "1") Integer size,
             @RequestParam(value = "payerPartyId", required = false) String payerPartyId,
@@ -142,16 +151,40 @@ public class OperationsDetailedApi {
             pager = new PageRequest(page, size, new Sort(Sort.Direction.fromString(sortedOrder), sortedBy));
         }
 
+        Page<Transfer> transferPage;
         if (specs.size() > 0) {
             Specifications<Transfer> compiledSpecs = specs.get(0);
             for (int i = 1; i < specs.size(); i++) {
                 compiledSpecs = compiledSpecs.and(specs.get(i));
             }
-
-            return transferRepository.findAll(compiledSpecs, pager);
+            transferPage = transferRepository.findAll(compiledSpecs, pager);
         } else {
-            return transferRepository.findAll(pager);
+            transferPage =  transferRepository.findAll(pager);
         }
+
+        List<TransferResponse> transferResponseList = new ArrayList<>();
+        int i = 0;
+        for (Transfer transfer: transferPage.getContent()) {
+            TransferResponse transferResponse = null;
+            try {
+                String json = transfer.getErrorInformation();
+                transfer.setErrorInformation(null);
+                transferResponse = objectMapper.readValue(objectMapper.writeValueAsString(transfer),
+                        TransferResponse.class);
+                transferResponse.parseErrorInformation(json, objectMapper);
+                transferResponseList.add(transferResponse);
+            } catch (Exception e) {
+                logger.error("Error parsing errorInformation into DTO: {}", e.getMessage());
+                e.printStackTrace();
+                if (transferResponse != null) {
+                    transferResponseList.add(transferResponse);
+                }
+            }
+        }
+
+        Page<TransferResponse> paginatedTransferResponse = new PageImpl<>(transferResponseList, transferPage.getPageable(), transferPage.getTotalPages());
+
+        return paginatedTransferResponse;
     }
 
     @GetMapping("/transactionRequests")
