@@ -27,6 +27,8 @@ caching:
 
 security:
   filter-order: 4
+  jws:
+    enable: false
 
 spring:
   resources:
