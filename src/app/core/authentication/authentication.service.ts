@@ -110,14 +110,18 @@ export class AuthenticationService {
     this.username = loginContext.username;
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
-    //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
+
     if (environment.oauth.enabled === 'true') {
 
-      httpParams = httpParams.set('grant_type', 'password');
-      if (environment.oauth.basicAuth === "true") {
+      const body = new FormData();
+      this.username = loginContext.username;
+      body.append('username', loginContext.username);
+      body.append('password', loginContext.password);
+      body.append('grant_type', 'password');
+      if (environment.oauth.basicAuth === 'true') {
         this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, body)
         .pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
@@ -177,15 +181,15 @@ export class AuthenticationService {
 
       const oAuthRefreshToken = oAuthData.refresh_token;
       this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
-      let httpParams = new HttpParams();
-      httpParams = httpParams.set('grant_type', 'refresh_token');
-      httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    
+
+      const body = new FormData();
+      body.append('refresh_token', oAuthRefreshToken);
+      body.append('grant_type', 'refresh_token');
       if (environment.oauth.basicAuth === 'true') {
         this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       }
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, body)
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
@@ -196,7 +200,6 @@ export class AuthenticationService {
         this.storage.setItem(this.credentialsStorageKey, JSON.stringify(credentials));
         return of(true);
       }));
-    
   }
 
   /**
