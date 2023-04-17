@@ -127,6 +127,7 @@ export class AuthenticationService {
             // TODO: fix UserDetails API
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
             this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
+            this.refreshTokenOnExpiry(tokenResponse.expires_in);
             return of(true);
           })
         );
