@@ -1,10 +1,6 @@
 package org.apache.fineract.api;
 
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.config.PaymentModeConfiguration;
 import org.apache.fineract.file.FileTransferService;
 import org.apache.fineract.operations.*;
@@ -15,14 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
-import org.springframework.http.HttpStatus;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
@@ -155,6 +148,8 @@ public class BatchApi {
         Long failed = 0L;
         Long total = 0L;
         Long ongoing = 0L;
+        Double batchFailedPercent = 0.0;
+        Double batchCompletedPercent = 0.0;
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal completedAmount = BigDecimal.ZERO;
         BigDecimal ongoingAmount = BigDecimal.ZERO;
@@ -191,6 +186,7 @@ public class BatchApi {
         Long subBatchOngoing = 0L;
         Long subBatchTotal = 0L;
 
+
         for (Batch bt: allBatches) {
             if (bt.getPaymentMode() != null && !modes.toString().contains(bt.getPaymentMode())) {
                 if (!modes.toString().equals("")) {
@@ -223,6 +219,8 @@ public class BatchApi {
         completed += subBatchCompleted;
         failed += subBatchFailed;
         total += subBatchTotal;
+
+
         ongoing += subBatchOngoing;
 
         if (batch.getResult_file() == null || (batch.getResult_file() != null && batch.getResult_file().isEmpty())) {
@@ -234,15 +232,19 @@ public class BatchApi {
         batch.setOngoing(ongoing);
         batch.setTotalTransactions(total);
         batchRepository.save(batch);
+        batchCompletedPercent = (double) batch.getCompleted() / total * 100;
+        batchFailedPercent = (double) batch.getFailed() / total * 100;
 
         BatchDTO response = new BatchDTO(batch.getBatchId(),
                 batch.getRequestId(), batch.getTotalTransactions(), batch.getOngoing(),
                 batch.getFailed(), batch.getCompleted(), totalAmount, completedAmount,
-                ongoingAmount, failedAmount, batch.getResult_file(), batch.getNote());
+                ongoingAmount, failedAmount, batch.getResult_file(), batch.getNote(),
+                batchCompletedPercent.toString(), batchFailedPercent.toString());
 
         response.setCreated_at(""+batch.getStartedAt());
         response.setModes(modes.toString());
         response.setPurpose("Unknown purpose");
+       System.out.println("Batch details generated for batchId: " + response.getSuccessPercentage());
 
         if (batch.getCompleted().longValue() == batch.getTotalTransactions().longValue()) {
             response.setStatus("COMPLETED");
