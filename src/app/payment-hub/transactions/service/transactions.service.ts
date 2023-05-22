@@ -38,7 +38,8 @@ export class TransactionsService {
       }
     });
     params += 'page=' + page + '&size=' + count;
-    return this.http.get('/api/v1/transfers?' + params).pipe(map((transactions: any) => transactions as Transactions));
+    const transactionsObservable = this.http.get('/api/v1/transfers?' + params).pipe(map((transactions: any) => transactions as Transactions));
+    return transactionsObservable;
   }
 
   getDfspEntries(): Observable<DfspEntry[]> {
