@@ -2,6 +2,9 @@
   <button *ngIf="hasRefundAccess()" mat-raised-button color="primary" (click)="openReturnDialog()">
     Refund
   </button>
+  <button *ngIf="hasRecallAccess()" mat-raised-button color="primary" (click)="openRecallDialog()">
+    Recall
+  </button>
 
   <button mat-raised-button color="primary" (click)="openBPMNDialog()">
     BPMN Diagram

@@ -215,6 +215,10 @@ export class TransactionDetailsComponent implements OnInit {
     return this.datasource.transfer.direction === 'INCOMING' && this.authService.hasAccess('REFUND');
   }
 
+  hasRecallAccess() {
+    return this.datasource.transfer.direction === 'OUTGOING' && this.authService.hasAccess('RECALL');
+  }
+
   openReturnDialog() {
     if (!this.hasRefundAccess()) {
       return;
@@ -241,5 +245,15 @@ export class TransactionDetailsComponent implements OnInit {
         );
       }
     });
+  }
+
+  openRecallDialog() {
+    if (!this.hasRecallAccess()) {
+      return;
+    }
+    return this.transactionsService.recall(this.getTransferId()).subscribe(
+      res => this.alertService.alert({ type: 'Recall Success', message: `Recall request was successfully initiated!` }),
+      err => this.alertService.alert({ type: 'Recall Error', message: `Recall request was failed` })
+    );
   }
 }

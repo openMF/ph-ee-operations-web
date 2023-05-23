@@ -53,6 +53,10 @@ export class TransactionsService {
     return this.http.post('/api/v1/transfer/' + id + '/refund', comment);
   }
 
+  recall(id: string): Observable<any> {
+    return this.http.post('/api/v1/transfer/' + id + '/recall', null);
+  }
+
   /**
    * Get details of a Transaction.
    *
