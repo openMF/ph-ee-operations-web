@@ -251,9 +251,30 @@ export class TransactionDetailsComponent implements OnInit {
     if (!this.hasRecallAccess()) {
       return;
     }
-    return this.transactionsService.recall(this.getTransferId()).subscribe(
-      res => this.alertService.alert({ type: 'Recall Success', message: `Recall request was successfully initiated!` }),
-      err => this.alertService.alert({ type: 'Recall Error', message: `Recall request was failed` })
-    );
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'comment',
+        label: 'Reason',
+        type: 'text',
+        required: false
+      }),
+    ];
+    const data = {
+      title: 'Do you wish to recall this transaction?',
+      layout: { addButtonText: 'Confirm' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        return this.transactionsService.recall(this.getTransferId()).subscribe(
+            res => this.alertService.alert({
+              type: 'Recall Success',
+              message: `Recall request was successfully initiated!`
+            }),
+            err => this.alertService.alert({type: 'Recall Error', message: `Recall request was failed`})
+        );
+      }
+    });
   }
 }
