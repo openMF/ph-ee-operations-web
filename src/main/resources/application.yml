@@ -11,6 +11,10 @@ fineract:
       subprotocol: mysql
       driverclass_name: com.mysql.cj.jdbc.Driver
 
+# Interface time zone reference : https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+interface:
+  timezone: "Asia/Kolkata"
+
 token:
   user:
     access-validity-seconds: 600
