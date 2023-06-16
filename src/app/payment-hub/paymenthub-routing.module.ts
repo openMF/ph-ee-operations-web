@@ -24,7 +24,12 @@ import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-
 import { DfspResolver } from './transactions/resolver/dfsp.resolver';
 import { RequestToPayResolver } from './request-to-pay/common-resolvers/request-to-pay.resolver';
 import { ViewRequestToPayResolver } from './request-to-pay/common-resolvers/view-request-to-pay.resolver';
-import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component'
+import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component';
+import {ListTasksComponent} from './tasks/list/list-tasks.component';
+import {MyTasksComponent} from './tasks/my/my-tasks.component';
+import {ListTaskViewComponent} from './tasks/list/view/list-task-view.component';
+import {ZeebeTaskResolver} from './tasks/zeebe-task.resolver';
+import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
 
 /** Payment HUB Routes */
 const routes: Routes = [
@@ -140,7 +145,43 @@ const routes: Routes = [
               component: IncomingRequestExportComponent,
             }
           ]
-        }
+        },
+        {
+          path: 'listtasks',
+          data: { title: extract('List Tasks'), breadcrumb: 'List Tasks' },
+          children: [
+            {
+              path: '',
+              component: ListTasksComponent,
+            },
+            {
+              path: 'view/:id',
+              component: ListTaskViewComponent,
+              data: { title: extract('View Task'), routeParamBreadcrumb: 'id' },
+              resolve: {
+                taskData: ZeebeTaskResolver,
+              }
+            }
+          ]
+        },
+        {
+          path: 'mytasks',
+          data: { title: extract('My Tasks'), breadcrumb: 'My Tasks' },
+          children: [
+            {
+              path: '',
+              component: MyTasksComponent,
+            },
+            {
+              path: 'view/:id',
+              component: MyTaskViewComponent,
+              data: { title: extract('View My Task'), routeParamBreadcrumb: 'id' },
+              resolve: {
+                taskData: ZeebeTaskResolver,
+              }
+            }
+          ]
+        },
       ]
     },
   ])
@@ -159,7 +200,8 @@ const routes: Routes = [
     TransactionResolver,
     DfspResolver,
     RequestToPayResolver,
-    ViewRequestToPayResolver
+    ViewRequestToPayResolver,
+    ZeebeTaskResolver,
   ]
 })
 export class PaymentHubRoutingModule { }

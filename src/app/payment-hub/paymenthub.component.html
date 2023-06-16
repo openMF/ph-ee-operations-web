@@ -68,9 +68,53 @@
             </mat-icon>
             <h4 matLine>Export Outgoing Request to Pay</h4>
           </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </div>
+
+  </mat-card>
+
+  <mat-card>
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+
+      <div fxFlex="50%">
+
+        <mat-nav-list>
+
+          <mat-list-item [routerLink]="['listtasks']">
+            <mat-icon matListIcon>
+              <fa-icon icon="search" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>List Tasks</h4>
+            <p matLine>List Tasks</p>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="['mytasks']">
+            <mat-icon matListIcon>
+              <fa-icon icon="search" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>My Tasks</h4>
+            <p matLine>My Tasks</p>
+          </mat-list-item>
 
         </mat-nav-list>
 
+      </div>
+
+      <div fxFlex="50%">
+
+        <mat-nav-list>
+
+
+        </mat-nav-list>
+
+      </div>
+      <div fxFlex="50%">
+
+        <mat-nav-list>
+
+        </mat-nav-list>
       </div>
 
     </div>

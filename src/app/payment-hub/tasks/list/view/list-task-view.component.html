@@ -1,0 +1,18 @@
+<div class="form">
+    <div style="text-align:center">
+        <h1>
+            {{datasource.description}}
+        </h1>
+
+        <table>
+            <tr *ngFor="let formData of taskFormData; let i = index">
+                <td>{{formData.description}}</td>
+                <td>{{formData.value}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div *ngIf="datasource.assignable===true">
+        <button  mat-raised-button (click)="claim()">Claim</button>
+    </div>
+</div>

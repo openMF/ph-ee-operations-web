@@ -1,0 +1,112 @@
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Name</mat-label>
+    <input matInput [formControl]="name" >
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Assignee</mat-label>
+    <input matInput [formControl]="assignee" >
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Candidate Role</mat-label>
+    <input matInput [formControl]="candidateRole" >
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Previous submitter</mat-label>
+    <input matInput [formControl]="previousSubmitter" >
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>State</mat-label>
+    <mat-select [formControl]="taskState">
+      <ng-container *ngFor="let filter of taskStates">
+        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+          {{ filter.option }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+<div class="mat-elevation-z8 container">
+
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      *ngIf="row.assignable===true">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endToEndId">
+      <th mat-header-cell *matHeaderCellDef> End To End ID </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.endToEndId }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.description}}> {{ transaction.description }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="assignee">
+      <th mat-header-cell *matHeaderCellDef> Assignee </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.assignee }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="candidateRoles">
+      <th mat-header-cell *matHeaderCellDef> Candidate Roles </th>
+      <td mat-cell *matCellDef="let transaction">
+        <div *ngFor="let candidateRole of transaction.candidateRoles">
+          <span>{{candidateRole}}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="previousSubmitters">
+      <th mat-header-cell *matHeaderCellDef> Previous Submitters </th>
+      <td mat-cell *matCellDef="let transaction">
+        <div *ngFor="let submitter of transaction.previousSubmitters">
+          <span>{{submitter}}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="assignable">
+      <th mat-header-cell *matHeaderCellDef> Claimable </th>
+      <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.notAssignableReason}}>
+        <fa-icon *ngIf="!transaction.assignable" icon="triangle-exclamation" size="lg" style="color: #f39c12"></fa-icon>
+        <fa-icon *ngIf="transaction.assignable" icon="check-circle" size="lg" style="color: #00ce00"></fa-icon>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.id]" class="select-row"></tr>
+  </table>
+
+  <mat-paginator (page)="pageChanged()" [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
+
+  <div>
+    <button  mat-raised-button (click)="claimSelected()">Claim Selected</button>
+  </div>
+
+</div>

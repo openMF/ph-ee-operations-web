@@ -1,0 +1,22 @@
+<div class="form">
+    <div style="text-align:center">
+        <h1>
+            {{datasource.description}}
+        </h1>
+
+        <table>
+            <tr *ngFor="let formData of taskFormData; let i = index">
+                <td>{{formData.description}}</td>
+                <td>{{formData.value}}</td>
+            </tr>
+        </table>
+    </div>
+    <div style="text-align:center">
+        <mifosx-dynamic-form [fields]="fieldConfigs" (submit)="submit($event)">
+        </mifosx-dynamic-form>
+    </div>
+
+    <div>
+        <button  mat-raised-button (click)="unclaim()">Unclaim</button>
+    </div>
+</div>

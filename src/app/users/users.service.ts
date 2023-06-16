@@ -22,14 +22,14 @@ export class UsersService {
    * @returns {Observable<any>} Users data
    */
   getUsers(): Observable<any> {
-    return this.http.get('/users');
+    return this.http.get('/api/v1/users');
   }
 
   /**
    * @returns {Observable<any>} Users template data
    */
   getUsersTemplate(): Observable<any> {
-    return this.http.get('/users/template');
+    return this.http.get('/api/v1/users/template');
   }
 
   /**
@@ -37,7 +37,7 @@ export class UsersService {
    * @returns {Observable<any>}
    */
   createUser(user: any): Observable<any> {
-    return this.http.post('/users', user);
+    return this.http.post('/api/v1/users', user);
   }
 
   /**
@@ -45,7 +45,7 @@ export class UsersService {
    * @returns {Observable<any>} User.
    */
   getUser(userId: string): Observable<any> {
-    return this.http.get(`/users/${userId}`);
+    return this.http.get(`/api/v1/users/${userId}`);
   }
 
   /**
@@ -53,7 +53,7 @@ export class UsersService {
    * @returns {Observable<any>}
    */
   deleteUser(userId: string): Observable<any> {
-    return this.http.delete(`/users/${userId}`);
+    return this.http.delete(`/api/v1/users/${userId}`);
   }
 
   /**

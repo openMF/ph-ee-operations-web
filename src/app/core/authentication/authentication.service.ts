@@ -1,25 +1,25 @@
 /** Angular Imports */
-import { Injectable, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, of, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 /** Custom Services */
-import { AlertService } from '../alert/alert.service';
+import {AlertService} from '../alert/alert.service';
 
 /** Environment Configuration */
-import { environment } from '../../../environments/environment';
+import {environment} from '../../../environments/environment';
 
 /** Custom Models */
-import { LoginContext } from './login-context.model';
-import { Credentials } from './credentials.model';
-import { OAuth2Token } from './o-auth2-token.model';
-import { AppConfig } from 'app/app.config';
+import {LoginContext} from './login-context.model';
+import {Credentials} from './credentials.model';
+import {OAuth2Token} from './o-auth2-token.model';
+import {AppConfig} from 'app/app.config';
 
 import jwt_decode from 'jwt-decode';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 
 /**
  * Authentication workflow.
@@ -112,16 +112,17 @@ export class AuthenticationService {
     httpParams = httpParams.set('password', loginContext.password);
 
     if (environment.oauth.enabled === 'true') {
-
-      const body = new FormData();
       this.username = loginContext.username;
-      body.append('username', loginContext.username);
-      body.append('password', loginContext.password);
-      body.append('grant_type', 'password');
-      if (environment.oauth.basicAuth === 'true') {
-        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-      }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, body)
+      const payload = new HttpParams()
+          .set('username', loginContext.username)
+          .set('password', loginContext.password)
+          .set('grant_type', 'password')
+          .set('client_id', 'community-app')
+          .set('scope', 'ALL');
+      // if (environment.oauth.basicAuth === 'true') {
+      //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
+      // }
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, payload)
         .pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
@@ -183,14 +184,14 @@ export class AuthenticationService {
       const oAuthRefreshToken = oAuthData.refresh_token;
       this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
 
-      const body = new FormData();
-      body.append('refresh_token', oAuthRefreshToken);
-      body.append('grant_type', 'refresh_token');
-      if (environment.oauth.basicAuth === 'true') {
-        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-      }
+    const payload = new HttpParams()
+        .set('refresh_token', oAuthRefreshToken)
+        .set('grant_type', 'refresh_token');
+      // if (environment.oauth.basicAuth === 'true') {
+      //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
+      // }
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, body)
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, payload)
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));

@@ -22,7 +22,7 @@ export class SystemService {
    * @returns {Observable<any>} Fetches Roles and Permissions
    */
   getRoles(): Observable<any> {
-    return this.http.get('/roles');
+    return this.http.get('/api/v1/roles');
   }
 
   /**
@@ -30,7 +30,7 @@ export class SystemService {
    * @returns {Observable<any>}
    */
   createRole(role: any): Observable<any> {
-    return this.http.post('/roles', role);
+    return this.http.post('/api/v1/roles', role);
   }
 
   /**
