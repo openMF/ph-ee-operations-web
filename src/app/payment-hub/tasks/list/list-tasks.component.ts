@@ -15,6 +15,7 @@ import {ListTasksDatasource} from './list-tasks.datasource';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ZeebeTask} from '../zeebe-tasks.model';
 import {ZeebeTaskService} from '../zeebe-task.service';
+import {AuthenticationService} from '../../../core/authentication/authentication.service';
 
 /**
  * Transactions component.
@@ -25,7 +26,7 @@ import {ZeebeTaskService} from '../zeebe-task.service';
   styleUrls: ['./list-tasks.component.scss']
 })
 export class ListTasksComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['select', 'endToEndId', 'name', 'description', 'assignee', 'candidateRoles', 'previousSubmitters', 'assignable'];
+  displayedColumns: string[] = ['select', 'businessKey', 'name', 'description', 'assignee', 'candidateRoles', 'previousSubmitters', 'assignable'];
   dataSource: ListTasksDatasource;
   selection = new SelectionModel<ZeebeTask>(true, []);
   taskState = new FormControl();
@@ -33,6 +34,7 @@ export class ListTasksComponent implements OnInit, AfterViewInit {
   assignee = new FormControl();
   candidateRole = new FormControl();
   previousSubmitter = new FormControl();
+  userName: string;
   taskStates = [
     {
       option: 'All',
@@ -84,10 +86,13 @@ export class ListTasksComponent implements OnInit, AfterViewInit {
    * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private taskService: ZeebeTaskService,
+              private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     public dialog: MatDialog) {
   }
   ngOnInit() {
+    const credentials = this.authenticationService.getCredentials();
+    this.userName = credentials.username;
     this.dataSource = new ListTasksDatasource(this.taskService);
   }
   ngAfterViewInit() {
@@ -207,5 +212,9 @@ export class ListTasksComponent implements OnInit, AfterViewInit {
   pageChanged() {
     this.loadTasksPage();
     this.selection.clear();
+  }
+
+  decideRoute(row: any) {
+    return row.assignee === this.userName ? '/paymenthubee/mytasks/view' : '/paymenthubee/listtasks/view';
   }
 }

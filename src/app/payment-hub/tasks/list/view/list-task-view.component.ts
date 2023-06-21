@@ -48,7 +48,8 @@ export class ListTaskViewComponent implements OnInit {
 
   claim() {
     const keys: number[] = [this.datasource.id];
-    this.taskService.claim(keys).subscribe();
-    this.router.navigate(['/paymenthubee/mytasks/view/' + this.datasource.id]);
+    this.taskService.claim(keys).subscribe(value => {
+      this.router.navigate(['/paymenthubee/mytasks/view/' + this.datasource.id]);
+    });
   }
 }

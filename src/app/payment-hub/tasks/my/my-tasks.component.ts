@@ -14,6 +14,7 @@ import {ZeebeTask} from '../zeebe-tasks.model';
 import {ZeebeTaskService} from '../zeebe-task.service';
 import {FormControl} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {AuthenticationService} from '../../../core/authentication/authentication.service';
 
 /**
  * Transactions component.
@@ -24,7 +25,7 @@ import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
   styleUrls: ['./my-tasks.component.scss']
 })
 export class MyTasksComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['select', 'endToEndId', 'name', 'description', 'assignee', 'candidateRoles'];
+  displayedColumns: string[] = ['select', 'businessKey', 'name', 'description', 'assignee', 'candidateRoles'];
   dataSource: MyTasksDatasource;
   selection = new SelectionModel<ZeebeTask>(true, []);
   name = new FormControl();
@@ -46,8 +47,8 @@ export class MyTasksComponent implements OnInit, AfterViewInit {
    * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private tasksService: ZeebeTaskService,
-    private route: ActivatedRoute,
-    public dialog: MatDialog) {
+              private route: ActivatedRoute,
+              public dialog: MatDialog) {
   }
 
   /**

@@ -11,12 +11,12 @@
             </tr>
         </table>
     </div>
-    <div style="text-align:center">
+    <div style="text-align:center" *ngIf="datasource.assignee === userName">
         <mifosx-dynamic-form [fields]="fieldConfigs" (submit)="submit($event)">
         </mifosx-dynamic-form>
     </div>
 
-    <div>
+    <div *ngIf="datasource.assignee === userName">
         <button  mat-raised-button (click)="unclaim()">Unclaim</button>
     </div>
 </div>

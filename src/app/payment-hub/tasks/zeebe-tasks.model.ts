@@ -3,7 +3,7 @@ import { Paging } from './paging.model';
 /** Payment HUB Transaction model. */
 export interface ZeebeTask {
   id: number;
-  endToEndId: string;
+  businessKey: string;
   name: string;
   description: string;
   assignee: string;
