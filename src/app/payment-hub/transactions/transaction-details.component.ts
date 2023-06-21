@@ -215,6 +215,10 @@ export class TransactionDetailsComponent implements OnInit {
     return this.datasource.transfer.direction === 'INCOMING' && this.authService.hasAccess('REFUND');
   }
 
+  hasRecallAccess() {
+    return this.datasource.transfer.direction === 'OUTGOING' && this.authService.hasAccess('RECALL');
+  }
+
   openReturnDialog() {
     if (!this.hasRefundAccess()) {
       return;
@@ -238,6 +242,37 @@ export class TransactionDetailsComponent implements OnInit {
         return this.transactionsService.refund(this.getTransferId(), response.data.value).subscribe(
           res => this.alertService.alert({ type: 'Refund Success', message: `Refund request was successfully initiated!` }),
           err => this.alertService.alert({ type: 'Refund Error', message: `Refund request was failed` })
+        );
+      }
+    });
+  }
+
+  openRecallDialog() {
+    if (!this.hasRecallAccess()) {
+      return;
+    }
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'comment',
+        label: 'Reason',
+        type: 'text',
+        required: false
+      }),
+    ];
+    const data = {
+      title: 'Do you wish to recall this transaction?',
+      layout: { addButtonText: 'Confirm' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        return this.transactionsService.recall(this.getTransferId()).subscribe(
+            res => this.alertService.alert({
+              type: 'Recall Success',
+              message: `Recall request was successfully initiated!`
+            }),
+            err => this.alertService.alert({type: 'Recall Error', message: `Recall request was failed`})
         );
       }
     });

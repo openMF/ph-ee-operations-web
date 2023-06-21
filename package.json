@@ -52,6 +52,7 @@
     "rxjs": "6.6.7",
     "sass": "^1.47.0",
     "tslib": "^2.0.0",
+    "vkbeautify": "^0.99.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -67,6 +68,7 @@
     "@types/jwt-decode": "^2.2.1",
     "@types/lodash": "4.14.132",
     "@types/node": "^12.11.1",
+    "@types/vkbeautify": "^0.99.2",
     "codelyzer": "^5.1.2",
     "hads": "1.7.3",
     "htmlhint": "0.11.0",
