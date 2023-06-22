@@ -30,6 +30,7 @@ import {RadiobuttonComponent} from './tasks/task-view/components/radiobutton/rad
 import {SelectComponent} from './tasks/task-view/components/select/select.component';
 import {ListTaskViewComponent} from './tasks/list/view/list-task-view.component';
 import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
+import {RadiobuttonBooleanComponent} from './tasks/task-view/components/radiobuttonboolean/radiobuttonboolean.component';
 
 /**
  * Payment HUB Module
@@ -63,6 +64,7 @@ import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
     DynamicFormComponent,
     InputComponent,
     RadiobuttonComponent,
+    RadiobuttonBooleanComponent,
     SelectComponent,
     DynamicFormComponent,
     ListTaskViewComponent,
