@@ -15,7 +15,7 @@ This project is based on the **openMF/web-app** to provide the same UX as we hav
 
 2. Install [angular-cli](https://github.com/angular/angular-cli) globally.
 ```
-npm install -g @angular/cli@12.2.16
+npm install -g @angular/cli@13.3.9
 ```
 
 3. Clone the project locally into your system.
@@ -27,7 +27,7 @@ git clone git@github.com:openMF/ph-ee-operations-web.git
 
 5. Install the dependencies.
 ```
-npm install --force
+npm install
 ```
 
 6. To preview the app, run the following command and navigate to `http://localhost:4200/`.
