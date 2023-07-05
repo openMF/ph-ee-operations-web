@@ -10,4 +10,5 @@ export interface TransactionSearch {
   timeTo: string;
   dateFormat: string;
   locale: string;
+  endToEndIdentification: string;
 }

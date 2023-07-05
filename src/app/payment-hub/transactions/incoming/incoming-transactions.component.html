@@ -66,10 +66,13 @@
     <ngx-mat-datetime-picker #transactionDateToPicker [showSpinners]="true" [showSeconds]="true"
        [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
     </ngx-mat-datetime-picker> -->
- </mat-form-field>
+  </mat-form-field>
 
+  <mat-form-field fxFlex="20%">
+    <mat-label>End to End Identification</mat-label>
+    <input matInput [formControl]="endToEndIdentification">
+  </mat-form-field>
 </div>
-
 
 <!-- Autocomplete data -->
 <mat-autocomplete autoActiveFirstOption #currenciesAutocomplete="matAutocomplete" [displayWith]="displayCurrencyName">

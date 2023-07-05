@@ -52,6 +52,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
   transactionDateTo = new FormControl();
+  endToEndIdentification = new FormControl();
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
@@ -99,6 +100,10 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     {
       type: 'startTo',
       value: ''
+    },
+    {
+        type: 'endToEndIdentification',
+        value: ''
     }
   ];
 
@@ -244,6 +249,16 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
+
+    this.endToEndIdentification.valueChanges
+        .pipe(
+            debounceTime(500),
+            distinctUntilChanged(),
+            tap((filterValue) => {
+                this.applyFilter(filterValue, 'endToEndIdentification');
+            })
+        )
+        .subscribe();
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 

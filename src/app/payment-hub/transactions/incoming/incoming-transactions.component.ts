@@ -40,6 +40,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   payerDfspName = new FormControl();
   status = new FormControl();
   amount = new FormControl();
+  endToEndIdentification = new FormControl();
   currencyCode = new FormControl();
   filteredCurrencies: any;
   filteredDfspEntries: any;
@@ -96,6 +97,10 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'startTo',
+      value: ''
+    },
+    {
+      type: 'endToEndIdentification',
       value: ''
     }
   ];
@@ -242,6 +247,16 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
+
+    this.endToEndIdentification.valueChanges
+        .pipe(
+            debounceTime(500),
+            distinctUntilChanged(),
+            tap((filterValue) => {
+              this.applyFilter(filterValue, 'endToEndIdentification');
+            })
+        )
+        .subscribe();
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
