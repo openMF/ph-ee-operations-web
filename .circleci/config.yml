@@ -29,7 +29,6 @@ jobs:
             fi
 
             # Build and tag the Docker image
-            ./gradlew bootJar
             docker build -t "openmf/ph-ee-operations-web:$IMAGE_TAG" .
 
             # Push the Docker image to Docker Hub
@@ -54,7 +53,6 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            ./gradlew bootJar
             docker build -t openmf/ph-ee-operations-web:latest .
 
       # Log in to DockerHub using environment variables
