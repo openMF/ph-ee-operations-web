@@ -2,7 +2,7 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image: circleci/openjdk:17-buster-node-browsers-legacy
+      - image: circleci/openjdk:8-buster-node-browsers-legacy
 
 jobs:
   build_and_push_tag_image:
@@ -29,6 +29,7 @@ jobs:
             fi
 
             # Build and tag the Docker image
+            ./gradlew clean
             ./gradlew bootJar
             docker build -t "openmf/ph-ee-operations-app:$IMAGE_TAG" .
 
@@ -54,6 +55,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
+            ./gradlew clean
             ./gradlew bootJar
             docker build -t openmf/ph-ee-operations-app:latest .
 
