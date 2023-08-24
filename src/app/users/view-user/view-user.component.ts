@@ -8,6 +8,7 @@ import { UsersService } from '../users.service';
 
 /** Custom Components */
 import { DeleteDialogComponent } from 'app/shared/delete-dialog/delete-dialog.component';
+import { ConfirmDialogComponent } from 'app/shared/confirm-dialog/confirm-dialog.component';
 
 /**
  * View user component.
@@ -30,9 +31,9 @@ export class ViewUserComponent implements OnInit {
    * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private usersService: UsersService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private dialog: MatDialog) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog) {
     this.route.data.subscribe((data: { user: any }) => {
       this.userData = data.user;
     });
@@ -58,4 +59,37 @@ export class ViewUserComponent implements OnInit {
     });
   }
 
+  /**
+   * activates the user and redirects to users.
+   */
+  activate() {
+    const activateUserDialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { deleteContext: `user ${this.userData.id}`, action: 'Activate' }
+    });
+    activateUserDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.delete) {
+        this.usersService.activateUser(this.userData.id)
+          .subscribe(() => {
+            this.router.navigate(['/users']);
+          });
+      }
+    });
+  }
+
+  /**
+   * deactivate the user and redirects to users.
+   */
+  deactivate() {
+    const deactivateUserDialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { deleteContext: `user ${this.userData.id}`, action: 'Deactivate' }
+    });
+    deactivateUserDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.delete) {
+        this.usersService.deactivateUser(this.userData.id)
+          .subscribe(() => {
+            this.router.navigate(['/users']);
+          });
+      }
+    });
+  }
 }

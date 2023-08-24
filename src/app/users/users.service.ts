@@ -66,6 +66,22 @@ export class UsersService {
   }
 
   /**
+   * @param {string} userId user ID of user.
+   * @returns {Observable<any>}
+   */
+  activateUser(userId: string): Observable<any> {
+    return this.http.post(`/api/v1/user/${userId}/activate`, {});
+  }
+
+  /**
+   * @param {string} userId user ID of user.
+   * @returns {Observable<any>}
+   */
+  deactivateUser(userId: string): Observable<any> {
+    return this.http.post(`/api/v1/user/${userId}/deactivate`, {});
+  }
+
+  /**
    * @param {any} officeId ID of office to retrieve staff from.
    * @returns {Observable<any>} Staff data.
    */

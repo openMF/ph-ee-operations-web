@@ -15,6 +15,7 @@ import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 /** Custom Modules */
 import { IconsModule } from './icons.module';
 import { MaterialModule } from './material.module';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 /**
  * Shared Module
@@ -31,6 +32,7 @@ import { MaterialModule } from './material.module';
   declarations: [
     FormfieldComponent,
     FormDialogComponent,
+    ConfirmDialogComponent,
     DeleteDialogComponent,
     FileUploadComponent,
     FooterComponent,
@@ -50,6 +52,7 @@ import { MaterialModule } from './material.module';
   ],
   entryComponents: [
     FormDialogComponent,
+    ConfirmDialogComponent,
     DeleteDialogComponent
   ]
 })
