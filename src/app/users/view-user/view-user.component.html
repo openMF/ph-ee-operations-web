@@ -71,6 +71,35 @@
           </span>
         </div>
 
+        <div fxFlex="50%" class="mat-body-strong">
+          Assigned Currencies
+        </div>
+
+        <div fxFlex="50%">
+          <span *ngFor="let currency of userData.currenciesList">
+            {{ currency }}
+          </span>
+        </div>
+
+        <div fxFlex="50%" class="mat-body-strong">
+          Assigned Payee Party Id Types
+        </div>
+
+        <div fxFlex="50%">
+          <span *ngFor="let payeePartyIdType of userData.payeePartyIdTypesList">
+            {{ payeePartyIdType }}
+          </span>
+        </div>
+
+        <div fxFlex="50%" class="mat-body-strong">
+          Assigned Payee Party Ids 
+        </div>
+
+        <div fxFlex="50%">
+          <span *ngFor="let payeePartyId of userData.payeePartyIdsList">
+            {{ payeePartyId }}
+          </span>
+        </div>
       </div>
 
     </mat-card-content>

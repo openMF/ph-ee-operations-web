@@ -50,7 +50,7 @@
           </mat-form-field>
 
           <div fxFlex="48%" class="password-never-expires-wrapper">
-            <mat-checkbox labelPosition="before" formControlName="passwordNeverExpires" >
+            <mat-checkbox labelPosition="before" formControlName="passwordNeverExpires">
               Override password expiry policy
             </mat-checkbox>
           </div>
@@ -77,31 +77,11 @@
             </mat-error>
           </mat-form-field>
 
-          <p fxFlex="98%" class="reset-password-error" *ngIf="userForm.errors?.passwordsDoNotMatch &&
+          <p fxFlex="98%" class="reset-password-error"
+            *ngIf="userForm.errors?.passwordsDoNotMatch &&
           (!userForm.controls.password.hasError('required') && !userForm.controls.repeatPassword.hasError('required'))">
-          Passwords <strong>do not match</strong>
-          </p>      
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Office</mat-label>
-            <mat-select required formControlName="officeId">
-              <mat-option *ngFor="let office of officesData" [value]="office.id">
-                {{ office.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="userForm.controls.officeId.hasError('required')">
-              Office is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Staff</mat-label>
-            <mat-select formControlName="staffId">
-              <mat-option *ngFor="let staff of staffData" [value]="staff.id">
-                {{ staff.displayName }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+            Passwords <strong>do not match</strong>
+          </p>
 
           <mat-form-field fxFlex="48%">
             <mat-label>Roles</mat-label>

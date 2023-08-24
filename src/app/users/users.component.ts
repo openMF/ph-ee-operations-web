@@ -21,7 +21,7 @@ export class UsersComponent implements OnInit {
   /** Users data. */
   usersData: any;
   /** Columns to be displayed in users table. */
-  displayedColumns: string[] = ['firstname', 'lastname', 'email', 'officeName'];
+  displayedColumns: string[] = ['firstname', 'lastname', 'email', 'enabled'];
   /** Data source for users table. */
   dataSource: MatTableDataSource<any>;
 
