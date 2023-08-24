@@ -16,6 +16,7 @@ import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 import { IconsModule } from './icons.module';
 import { MaterialModule } from './material.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 /**
  * Shared Module
@@ -23,33 +24,39 @@ import { TranslateModule } from '@ngx-translate/core';
  * Modules and components that are shared throughout the application should be here.
  */
 @NgModule({
-    imports: [
-        CommonModule,
-        IconsModule,
-        MaterialModule,
-        ReactiveFormsModule,
-        TranslateModule.forRoot()
-    ],
-    declarations: [
-        FormfieldComponent,
-        FormDialogComponent,
-        DeleteDialogComponent,
-        FileUploadComponent,
-        FooterComponent,
-        LanguageSelectorComponent,
-        ThemePickerComponent,
-    ],
-    exports: [
-        FileUploadComponent,
-        FooterComponent,
-        LanguageSelectorComponent,
-        ThemePickerComponent,
-        CommonModule,
-        IconsModule,
-        MaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
-        TranslateModule
-    ]
+  imports: [
+    CommonModule,
+    IconsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    TranslateModule.forRoot()
+  ],
+  declarations: [
+    FormfieldComponent,
+    FormDialogComponent,
+    ConfirmDialogComponent,
+    DeleteDialogComponent,
+    FileUploadComponent,
+    FooterComponent,
+    LanguageSelectorComponent,
+    ThemePickerComponent,
+  ],
+  exports: [
+    FileUploadComponent,
+    FooterComponent,
+    LanguageSelectorComponent,
+    ThemePickerComponent,
+    CommonModule,
+    IconsModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule
+  ],
+  entryComponents: [
+    FormDialogComponent,
+    ConfirmDialogComponent,
+    DeleteDialogComponent
+  ]
 })
 export class SharedModule { }

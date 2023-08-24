@@ -11,6 +11,15 @@
     <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp;
     Change Password
   </button>
+
+  <button mat-raised-button color="success" (click)="deactivate()" *ngIf="userData.enabled">
+    <fa-icon icon="toggle-off"></fa-icon>&nbsp;&nbsp;
+    Deactivate
+  </button>
+  <button mat-raised-button color="green" (click)="activate()" *ngIf="!userData.enabled">
+    <fa-icon icon="toggle-on"></fa-icon>&nbsp;&nbsp;
+    Activate
+  </button>
 </div>
 
 <div class="container">
