@@ -11,6 +11,8 @@ import { map } from 'rxjs/operators';
 
 /** Custom Services */
 import { AuthenticationService } from '../../authentication/authentication.service';
+import { Credentials } from 'app/core/authentication/credentials.model';
+import { Utils } from 'app/core/utils/utils';
 
 /**
  * Toolbar component.
@@ -32,6 +34,9 @@ import { AuthenticationService } from '../../authentication/authentication.servi
   ]
 })
 export class ToolbarComponent implements OnInit {
+
+  authorities: string[] = [];
+  credentials: Credentials
 
   /** Subscription to breakpoint observer for handset. */
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -56,12 +61,15 @@ export class ToolbarComponent implements OnInit {
    */
   constructor(private breakpointObserver: BreakpointObserver,
     private router: Router,
+    private utils: Utils,
     private authenticationService: AuthenticationService) { }
 
   /**
    * Subscribes to breakpoint for handset.
    */
   ngOnInit() {
+    this.credentials = this.authenticationService.getCredentials();
+    this.authorities = this.getUserAuthorities(this.credentials) ?? [];
     this.isHandset$.subscribe(isHandset => {
       if (isHandset && this.sidenavCollapsed) {
         this.toggleSidenavCollapse(false);
@@ -70,8 +78,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   displayUser() {
-    const credentials = this.authenticationService.getCredentials();
-    return credentials ? credentials.username + ' - ' + credentials.tenantId : '';
+    return this.credentials ? this.credentials.username + ' - ' + this.credentials.tenantId : '';
   }
 
   /**
@@ -104,4 +111,12 @@ export class ToolbarComponent implements OnInit {
       .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
   }
 
+  /**
+   * Parse a user's token to get the permissions/authorities given to a user.
+   */
+  getUserAuthorities(credentials: Credentials) {
+    return this.utils.parseJwtToken(credentials.accessToken).authorities
+  }
+
+ 
 }
