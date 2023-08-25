@@ -22,7 +22,7 @@ export let environment = {
     basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
   },
   auth: {
-    enabled: window['env']['authEnabled'] || false,
+    enabled: window['env']['authEnabled'] || true,
     tenant: window['env']['platformTenantId'] || 'phdefault'
   },
   defaultLanguage: window['env']['defaultLanguage'] || "en",
