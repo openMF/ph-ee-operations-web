@@ -126,8 +126,6 @@ export class CreateUserComponent implements OnInit {
     }
     this.usersService.createUser(data).subscribe((response: any) => {
       let rolesData = { "entityIds": user.roles }
-      console.log("response")
-      console.log(response)
       this.usersService.assignRoles(response.id,rolesData).subscribe((response: any) => {
         this.router.navigate(['../'], { relativeTo: this.route });
       });
