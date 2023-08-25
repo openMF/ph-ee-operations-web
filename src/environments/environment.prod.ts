@@ -17,6 +17,6 @@ export let environment = {
   externalConfigurationFile: "",
   auth: {
     enabled: true,
-    tenant: "phdefault"
+    tenant: "oaf"
   }
 };
