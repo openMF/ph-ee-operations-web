@@ -91,4 +91,32 @@ export class UsersService {
     return this.http.get('/api/v1/staff', { params: httpParams });
   }
 
+  /**
+   * @param {any} list list of allowed currencies.
+   * @returns {Observable<any>}
+   */
+  editCurrencies(id: any, list: any): Observable<any> {
+    return this.http.put('/api/v1/user/' + id + '/currencies', list);
+  }
+
+  /**
+   * @param {any} list list of allowed PayeePartyIdTypes.
+   * @returns {Observable<any>}
+   */
+  editPayeePartyIdTypes(id: any, list: any): Observable<any> {
+    return this.http.put('/api/v1/user/' + id + '/payeePartyIdTypes', list);
+  }
+
+  /**
+   * @param {any} list list of allowed PayeePartyIds.
+   * @returns {Observable<any>}
+   */
+  editPayeePartyIds(id: any, list: any): Observable<any> {
+    return this.http.put('/api/v1/user/' + id + '/payeePartyIds', list);
+  }
+
+  fetchAmsList(): Observable<any> {
+    return this.http.get('/api/v1/ams/sources');
+  }
+
 }
