@@ -80,8 +80,8 @@
           </span>
         </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Assigned Currencies
+        <div fxFlex="30%" class="mat-body-strong">
+          Assigned Country Currencies
         </div>
 
         <div fxFlex="50%">
@@ -89,9 +89,15 @@
             {{ currency }}
           </span>
         </div>
+        <div fxFlex="20%">
+          <button mat-raised-button color="primary" (click)="editCurrencies()">
+            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+            Edit
+          </button>
+        </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Assigned Payee Party Id Types
+        <div fxFlex="30%" class="mat-body-strong">
+          Assigned AMS
         </div>
 
         <div fxFlex="50%">
@@ -99,15 +105,28 @@
             {{ payeePartyIdType }}
           </span>
         </div>
+        <div fxFlex="20%">
+          <button mat-raised-button color="primary" (click)="editPayePartyIdTypes()">
+            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+            Edit
+          </button>
+        </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Assigned Payee Party Ids 
+        <div fxFlex="30%" class="mat-body-strong">
+          Assigned Shop/Account ID 
         </div>
 
         <div fxFlex="50%">
           <span *ngFor="let payeePartyId of userData.payeePartyIdsList">
             {{ payeePartyId }}
           </span>
+        </div>
+
+        <div fxFlex="20%">
+          <button mat-raised-button color="primary" (click)="editPayePartyIds()">
+            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+            Edit
+          </button>
         </div>
       </div>
 

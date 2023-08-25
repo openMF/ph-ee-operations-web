@@ -9,6 +9,10 @@ import { UsersService } from '../users.service';
 /** Custom Components */
 import { DeleteDialogComponent } from 'app/shared/delete-dialog/delete-dialog.component';
 import { ConfirmDialogComponent } from 'app/shared/confirm-dialog/confirm-dialog.component';
+import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
+import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
+import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
+import { AlertService } from 'app/core/alert/alert.service';
 
 /**
  * View user component.
@@ -22,6 +26,7 @@ export class ViewUserComponent implements OnInit {
 
   /** User Data. */
   userData: any;
+  amsList: any[]
 
   /**
    * Retrieves the user data from `resolve`.
@@ -31,6 +36,7 @@ export class ViewUserComponent implements OnInit {
    * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private usersService: UsersService,
+    private alertService: AlertService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog) {
@@ -40,6 +46,9 @@ export class ViewUserComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usersService.fetchAmsList().subscribe(res => {
+      this.amsList = res;
+    });
   }
 
   /**
@@ -74,6 +83,110 @@ export class ViewUserComponent implements OnInit {
           });
       }
     });
+  }
+
+  /**
+   * edit the Currencies assigned to user and reloads data
+   */
+  editCurrencies() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'list',
+        label: 'Allowed Currencies (Comma Separated)',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Assign Country Currencies',
+      layout: { addButtonText: 'Save' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        this.usersService.editCurrencies(this.userData.id, response.data.value.list.split(',')).subscribe(
+          res => {
+            this.alertService.alert({ type: 'Edit Success', message: `Edit request was successful!` });
+            this.reloadCurrentUserData();
+          },
+          err => this.alertService.alert({ type: 'Edit Error', message: `Edit request failed` })
+        );
+      }
+    });
+
+  }
+
+  /**
+   * edit the Account Nos/Shops assigned to user and reloads data
+   */
+  editPayePartyIds() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'list',
+        label: 'Allowed Shop/Account ID (Comma Separated)',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Assign Shop/Account ID',
+      layout: { addButtonText: 'Save' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        this.usersService.editPayeePartyIds(this.userData.id, response.data.value.list.split(',')).subscribe(
+          res => {
+            this.alertService.alert({ type: 'Edit Success', message: `Edit request was successful!` });
+            this.reloadCurrentUserData();
+          },
+          err => this.alertService.alert({ type: 'Edit Error', message: `Edit request failed` })
+        );
+      }
+    });
+
+  }
+
+  /**
+   * edit the AMS assigned to user and reloads data
+   */
+  editPayePartyIdTypes() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'list',
+        label: 'Allowed AMS (Comma Separated)',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Assign AMS',
+      subTitle:'Options: '.concat(this.amsList.map(obj => obj.id).join(',')),
+      layout: { addButtonText: 'Save' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        this.usersService.editPayeePartyIdTypes(this.userData.id, response.data.value.list.split(',')).subscribe(
+          res => {
+            this.alertService.alert({ type: 'Edit Success', message: `Edit request was successful!` });
+            this.reloadCurrentUserData();
+          },
+          err => this.alertService.alert({ type: 'Edit Error', message: `Edit request failed` })
+        );
+      }
+    });
+
+  }
+
+  reloadCurrentUserData() {
+    this.usersService.getUser(this.userData.id).subscribe((res) => {
+        this.userData = res;
+      });
+    
   }
 
   /**
