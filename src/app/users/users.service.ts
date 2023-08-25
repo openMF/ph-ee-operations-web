@@ -22,14 +22,14 @@ export class UsersService {
    * @returns {Observable<any>} Users data
    */
   getUsers(): Observable<any> {
-    return this.http.get('/users');
+    return this.http.get('/api/v1/users');
   }
 
   /**
    * @returns {Observable<any>} Users template data
    */
   getUsersTemplate(): Observable<any> {
-    return this.http.get('/users/template');
+    return this.http.get('/api/v1/roles');
   }
 
   /**
@@ -37,7 +37,16 @@ export class UsersService {
    * @returns {Observable<any>}
    */
   createUser(user: any): Observable<any> {
-    return this.http.post('/users', user);
+    return this.http.post('/api/v1/user', user);
+  }
+
+  /**
+   * @param {any} id id of user to be updated.
+   * @param {any} roleData Roles to be assigned.
+   * @returns {Observable<any>}
+   */
+  assignRoles(id: any, roleData: any): Observable<any> {
+    return this.http.put('/api/v1/user/' + id + '/roles?action=ASSIGN', roleData);
   }
 
   /**
@@ -45,7 +54,7 @@ export class UsersService {
    * @returns {Observable<any>} User.
    */
   getUser(userId: string): Observable<any> {
-    return this.http.get(`/users/${userId}`);
+    return this.http.get(`/api/v1/user/${userId}`);
   }
 
   /**
@@ -53,7 +62,23 @@ export class UsersService {
    * @returns {Observable<any>}
    */
   deleteUser(userId: string): Observable<any> {
-    return this.http.delete(`/users/${userId}`);
+    return this.http.delete(`/api/v1/user/${userId}`);
+  }
+
+  /**
+   * @param {string} userId user ID of user.
+   * @returns {Observable<any>}
+   */
+  activateUser(userId: string): Observable<any> {
+    return this.http.post(`/api/v1/user/${userId}/activate`, {});
+  }
+
+  /**
+   * @param {string} userId user ID of user.
+   * @returns {Observable<any>}
+   */
+  deactivateUser(userId: string): Observable<any> {
+    return this.http.post(`/api/v1/user/${userId}/deactivate`, {});
   }
 
   /**
@@ -63,7 +88,7 @@ export class UsersService {
   getStaff(officeId: any): Observable<any> {
     const httpParams = new HttpParams()
       .set('officeId', officeId.toString());
-    return this.http.get('/staff', { params: httpParams });
+    return this.http.get('/api/v1/staff', { params: httpParams });
   }
 
 }

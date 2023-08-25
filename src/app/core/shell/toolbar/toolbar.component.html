@@ -17,7 +17,8 @@
         <fa-icon class="mr-05" icon="money-bill-alt" size="lg"></fa-icon>
         Payment Hub EE
       </a>
-      <a mat-tab-link class="tab-link" [matMenuTriggerFor]="adminMenu" #adminMenuTrigger="matMenuTrigger">
+      
+      <a *ngIf="authorities.includes('ALL_FUNCTIONS')" mat-tab-link class="tab-link" [matMenuTriggerFor]="adminMenu" #adminMenuTrigger="matMenuTrigger">
         <fa-icon class="mr-05" icon="shield-alt" size="lg"></fa-icon>
         Admin
       </a>

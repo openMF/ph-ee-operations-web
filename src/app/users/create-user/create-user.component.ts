@@ -36,15 +36,15 @@ export class CreateUserComponent implements OnInit {
    * @param {Router} router Router for navigation.
    */
   constructor(private formBuilder: FormBuilder,
-              private usersService: UsersService,
-              private route: ActivatedRoute,
-              private router: Router) {
+    private usersService: UsersService,
+    private route: ActivatedRoute,
+    private router: Router) {
     this.route.data.subscribe((data: {
-        usersTemplate: any
-      }) => {
-        this.officesData = data.usersTemplate.allowedOffices;
-        this.rolesData = data.usersTemplate.availableRoles;
-      });
+      usersTemplate: any
+    }) => {
+      this.officesData = [];
+      this.rolesData = data.usersTemplate;
+    });
   }
 
   /**
@@ -67,8 +67,8 @@ export class CreateUserComponent implements OnInit {
       'lastname': ['', [Validators.required, Validators.pattern('(^[A-z]).*')]],
       'sendPasswordToEmail': [true],
       'passwordNeverExpires': [false],
-      'officeId': ['', Validators.required],
-      'staffId': [''],
+      'officeId': [undefined],
+      'staffId': [undefined],
       'roles': ['', Validators.required]
     }, { validator: confirmPasswordValidator });
   }
@@ -108,9 +108,27 @@ export class CreateUserComponent implements OnInit {
    * if successful redirects to users.
    */
   submit() {
-    const user = this.userForm.value;
-    this.usersService.createUser(user).subscribe((response: any) => {
-      this.router.navigate(['../'], { relativeTo: this.route });
+    let user = this.userForm.value;
+    let data = {
+      "email": user.email,
+      "username": user.username,
+      "firstname": user.firstname,
+      "lastname": user.lastname,
+      "password": user.password,
+      "accountNonExpired": true,
+      "accountNonLocked": true,
+      "credentialsNonExpired": true,
+      "enabled": true,
+      "firstTimeLoginRemaining": false,
+      "deleted": false,
+      "passwordNeverExpires": true,
+      "lastTimePasswordUpdated": Date.now()
+    }
+    this.usersService.createUser(data).subscribe((response: any) => {
+      let rolesData = { "entityIds": user.roles }
+      this.usersService.assignRoles(response.id,rolesData).subscribe((response: any) => {
+        this.router.navigate(['../'], { relativeTo: this.route });
+      });
     });
   }
 
