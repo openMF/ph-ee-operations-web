@@ -20,6 +20,7 @@ import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
+import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { RetryResolveDialogComponent } from '../retry-resolve-dialog/retry-resolve-dialog.component';
 
 /**
@@ -41,6 +42,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   payeeDfspId = new FormControl();
   payeeDfspName = new FormControl();
   status = new FormControl();
+  paymentStatus = new FormControl();
   amount = new FormControl();
   currencyCode = new FormControl();
   filteredCurrencies: any;
@@ -48,6 +50,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
+  paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -83,6 +86,10 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'status',
+      value: ''
+    },
+    {
+      type: 'paymentStatus',
       value: ''
     },
     {
@@ -205,6 +212,16 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'status');
+        })
+      )
+      .subscribe();
+
+    this.paymentStatus.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'paymentStatus');
         })
       )
       .subscribe();

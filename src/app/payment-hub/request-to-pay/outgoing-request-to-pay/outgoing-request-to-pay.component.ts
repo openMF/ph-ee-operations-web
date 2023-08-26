@@ -15,6 +15,8 @@ import { RequestToPayService } from '../service/request-to-pay.service';
 
 /** Custom Data Source */
 import { formatDate } from '../helper/date-format.helper';
+import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
+import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from '../model/dfsp.model';
 
@@ -36,10 +38,16 @@ export class OutgoingRequestToPayComponent implements OnInit {
   requestToPayOutgoingData: Array<any> = [];
 
   /** Columns to be displayed in request to pay table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'state'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'stat'];
 
   /** Data source for request to pay table. */
   dataSource: MatTableDataSource<any>;
+
+  status = new FormControl();
+  paymentStatus = new FormControl();
+
+  transactionStatusData = statuses;
+  paymentStatusData = paymenStatuses;
 
   dfspEntriesData:  DfspEntry[];
   currenciesData: any;

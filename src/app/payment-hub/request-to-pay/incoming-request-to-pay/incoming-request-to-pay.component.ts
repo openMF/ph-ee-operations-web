@@ -28,7 +28,8 @@ import { RequestToPayService } from "../service/request-to-pay.service";
 import { RequestToPayDataSource } from "../dataSource /requestToPay.datasource";
 /** Custom Data Source */
 import { formatDate } from "../helper/date-format.helper";
-import { transactionStatusData as statuses } from "../helper/incoming-reqest.helper";
+import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
+import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from "../model/dfsp.model";
 @Component({
@@ -46,6 +47,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   payerDfspId = new FormControl();
   payerDfspName = new FormControl();
   status = new FormControl();
+  paymentStatus = new FormControl();
   amount = new FormControl();
   currencyCode = new FormControl();
   filteredCurrencies: any;
@@ -53,6 +55,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
+  paymentStatusData = paymenStatuses;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -238,6 +241,16 @@ export class IncomingRequestToPayComponent implements OnInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "state");
+        })
+      )
+      .subscribe();
+
+    this.paymentStatus.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, "paymentStatus");
         })
       )
       .subscribe();

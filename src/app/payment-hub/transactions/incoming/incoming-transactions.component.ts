@@ -16,6 +16,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
 import { formatDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
+import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { RetryResolveDialogComponent } from '../retry-resolve-dialog/retry-resolve-dialog.component';
@@ -39,6 +40,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   payerDfspId = new FormControl();
   payerDfspName = new FormControl();
   status = new FormControl();
+  paymentStatus = new FormControl();
   amount = new FormControl();
   endToEndIdentification = new FormControl();
   currencyCode = new FormControl();
@@ -47,6 +49,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
+  paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -81,6 +84,10 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'status',
+      value: ''
+    },
+    {
+      type: 'paymentStatus',
       value: ''
     },
     {
@@ -203,6 +210,16 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'status');
+        })
+      )
+      .subscribe();
+
+    this.paymentStatus.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'paymentStatus');
         })
       )
       .subscribe();
@@ -330,18 +347,12 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     return value && value.length > 15 ? value.slice(0, 13) + '...' : value;
   }
 
-  /**
-   * Displays office name in form control input.
-   * @param {any} office Office data.
-   * @returns {string} Office name if valid otherwise undefined.
-   */
   displayStatus(status?: any): string | undefined {
     const elements = this.transactionStatusData.filter((option) => option.value === status);
     return elements.length > 0 ? elements[0].option : undefined;
   }
 
   displayCSS(status?: any): string | undefined {
-
     const elements = this.transactionStatusData.filter((option) => option.value === status);
     return elements.length > 0 ? elements[0].css : undefined;
   }
@@ -418,5 +429,4 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       },
     });
   }
-
 }
