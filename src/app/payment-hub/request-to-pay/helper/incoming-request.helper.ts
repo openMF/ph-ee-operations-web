@@ -1,16 +1,16 @@
 export const transactionStatusData = [
     {
-        option: 'ACCEPTED',
+        option: 'Accepted',
         value: 'ACCEPTED',
         css: 'green'
     },
     {
-        option: 'FAILED',
+        option: 'Failed',
         value: 'FAILED',
         css: 'red'
     },
     {
-        option: 'IN PROGRESS',
+        option: 'In progress',
         value: 'IN_PROGRESS',
         css: 'orange'
     },
