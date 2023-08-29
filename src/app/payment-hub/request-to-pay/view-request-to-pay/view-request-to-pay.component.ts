@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
-import { formatDate, formatUTCDate } from '../helper/date-format.helper';
+import { formatDate, formatLocalDate } from '../../transactions/helper/date-format.helper';
 import { DfspEntry } from '../model/dfsp.model';
 import { requestToPayStatesData as statuses } from '../helper/request-to-pay.helper';
 
@@ -131,7 +131,7 @@ export class ViewRequestToPayComponent implements OnInit {
     if (!timestamp) {
       return undefined;
     }
-    return formatUTCDate(new Date(timestamp));
+    return formatLocalDate(new Date(timestamp));
   }
 
   formatDate(date: string) {

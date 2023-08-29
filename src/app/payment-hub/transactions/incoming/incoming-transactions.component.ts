@@ -14,7 +14,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDate, formatUTCDate } from '../helper/date-format.helper';
+import { formatDate, formatLocalDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
@@ -298,7 +298,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     if (!timestamp) {
       return undefined;
     }
-    return formatUTCDate(new Date(timestamp));
+    return formatLocalDate(new Date(timestamp));
   }
 
   convertTimestampToDate(timestamp: any) {

@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { TransactionsService } from './service/transactions.service';
-import { formatDate, formatUTCDate } from './helper/date-format.helper';
+import { formatDate, formatLocalDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
 
@@ -147,7 +147,7 @@ export class TransactionDetailsComponent implements OnInit {
     if (!timestamp) {
       return undefined;
     }
-    return formatUTCDate(new Date(timestamp));
+    return formatLocalDate(new Date(timestamp));
   }
 
   formatDate(date: string) {

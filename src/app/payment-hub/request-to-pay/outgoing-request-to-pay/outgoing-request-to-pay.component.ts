@@ -14,7 +14,7 @@ import { merge, of } from 'rxjs';
 import { RequestToPayService } from '../service/request-to-pay.service';
 
 /** Custom Data Source */
-import { formatDate } from '../helper/date-format.helper';
+import { formatDate } from '../../transactions/helper/date-format.helper';
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
 import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
