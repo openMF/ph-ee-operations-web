@@ -259,7 +259,7 @@
     </ng-container>
 
     <ng-container matColumnDef="timestamp">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
       <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
     </ng-container>
 
@@ -299,7 +299,7 @@
         <table mat-table [dataSource]="transaction.datasource" matSort> 
         
           <ng-container matColumnDef="timestamp">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
             <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
           </ng-container>
 
@@ -354,7 +354,7 @@
     </ng-container>
 
     <ng-container matColumnDef="timestamp">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time (UTC) </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
       <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToDate(transaction.timestamp)) }} </td>
     </ng-container>
 
