@@ -3,12 +3,8 @@ package org.apache.fineract.operations;
 
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity

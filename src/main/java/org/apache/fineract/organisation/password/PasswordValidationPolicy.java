@@ -18,14 +18,13 @@
  */
 package org.apache.fineract.organisation.password;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "m_password_validation_policy")

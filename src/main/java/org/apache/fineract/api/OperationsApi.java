@@ -2,8 +2,6 @@ package org.apache.fineract.api;
 
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.fineract.operations.Batch;
 import org.apache.fineract.operations.BatchRepository;
 import org.apache.fineract.operations.BusinessKey;
 import org.apache.fineract.operations.BusinessKeyRepository;
@@ -39,7 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

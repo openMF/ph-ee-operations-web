@@ -1,16 +1,24 @@
 package org.apache.fineract.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.fineract.data.ErrorResponse;
 import org.apache.fineract.exception.WriteToCsvException;
-import org.apache.fineract.operations.*;
+import org.apache.fineract.operations.Filter;
+import org.apache.fineract.operations.TransactionRequest;
+import org.apache.fineract.operations.TransactionRequestRepository;
+import org.apache.fineract.operations.TransactionRequestSpecs;
+import org.apache.fineract.operations.TransactionRequestState;
+import org.apache.fineract.operations.TransactionRequest_;
+import org.apache.fineract.operations.Transfer;
+import org.apache.fineract.operations.TransferRepository;
+import org.apache.fineract.operations.TransferResponse;
+import org.apache.fineract.operations.TransferSpecs;
+import org.apache.fineract.operations.TransferStatus;
+import org.apache.fineract.operations.Transfer_;
 import org.apache.fineract.utils.CsvUtility;
 import org.apache.fineract.utils.DateUtil;
-import org.mifos.connector.common.channel.dto.PhErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +27,20 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.fineract.core.service.OperatorUtils.dateFormat;
 

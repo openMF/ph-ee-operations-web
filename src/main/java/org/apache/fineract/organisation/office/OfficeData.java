@@ -18,11 +18,11 @@
  */
 package org.apache.fineract.organisation.office;
 
+import org.joda.time.LocalDate;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-
-import org.joda.time.LocalDate;
 
 /**
  * Immutable data object for office data.

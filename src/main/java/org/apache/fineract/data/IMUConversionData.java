@@ -1,6 +1,5 @@
 package org.apache.fineract.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;

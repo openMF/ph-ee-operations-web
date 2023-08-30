@@ -19,7 +19,6 @@
 package org.apache.fineract.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.fineract.organisation.permission.Permission;
 import org.apache.fineract.organisation.permission.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

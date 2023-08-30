@@ -1,13 +1,22 @@
 package org.apache.fineract.operations;
 
-import org.eclipse.persistence.annotations.Index;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
+import org.eclipse.persistence.annotations.Index;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "batches")
 public class Batch extends AbstractPersistableCustom<Long> {
 
@@ -72,171 +81,22 @@ public class Batch extends AbstractPersistableCustom<Long> {
     @Column(name = "PAYMENT_MODE")
     private String paymentMode;
 
-    public Batch() {
-    }
+    @Column(name = "REGISTERING_INSTITUTION_ID")
+    private String registeringInstitutionId;
+
+    @Column(name = "PAYER_FSP")
+    private String payerFsp;
+
+    @Column(name = "CLIENT_CORRELATION_ID")
+    private String correlationId;
+
+    @Column(name = "APPROVED_AMOUNT")
+    private Long approvedAmount;
+
+    @Column(name = "APPROVED_COUNT")
+    private Long approvedCount;
 
     public Batch(Long workflowInstanceKey) {
         this.workflowInstanceKey = workflowInstanceKey;
     }
-
-    public String getBatchId() {
-        return batchId;
-    }
-
-    public void setBatchId(String batchId) {
-        this.batchId = batchId;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    public String getRequestFile() {
-        return requestFile;
-    }
-
-    public void setRequestFile(String requestFile) {
-        this.requestFile = requestFile;
-    }
-
-    public Long getTotalTransactions() {
-        return totalTransactions;
-    }
-
-    public void setTotalTransactions(Long totalTransactions) {
-        this.totalTransactions = totalTransactions;
-    }
-
-    public Long getOngoing() {
-        return ongoing;
-    }
-
-    public void setOngoing(Long ongoing) {
-        this.ongoing = ongoing;
-    }
-
-    public Long getFailed() {
-        return failed;
-    }
-
-    public void setFailed(Long failed) {
-        this.failed = failed;
-    }
-
-    public Long getCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(Long completed) {
-        this.completed = completed;
-    }
-
-    public String getResult_file() {
-        return result_file;
-    }
-
-    public void setResult_file(String result_file) {
-        this.result_file = result_file;
-    }
-
-    public Date getResultGeneratedAt() {
-        return resultGeneratedAt;
-    }
-
-    public void setResultGeneratedAt(Date resultGeneratedAt) {
-        this.resultGeneratedAt = resultGeneratedAt;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public Long getWorkflowKey() {
-        return workflowKey;
-    }
-
-    public void setWorkflowKey(Long workflowKey) {
-        this.workflowKey = workflowKey;
-    }
-
-    public Long getWorkflowInstanceKey() {
-        return workflowInstanceKey;
-    }
-
-    public void setWorkflowInstanceKey(Long workflowInstanceKey) {
-        this.workflowInstanceKey = workflowInstanceKey;
-    }
-
-    public Date getStartedAt() {
-        return startedAt;
-    }
-
-    public void setStartedAt(Date startedAt) {
-        this.startedAt = startedAt;
-    }
-
-    public Date getCompletedAt() {
-        return completedAt;
-    }
-
-    public void setCompletedAt(Date completedAt) {
-        this.completedAt = completedAt;
-    }
-
-    public String getSubBatchId() {
-        return subBatchId;
-    }
-
-    public void setSubBatchId(String subBatchId) {
-        this.subBatchId = subBatchId;
-    }
-
-    public Long getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(Long totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Long getOngoingAmount() {
-        return ongoingAmount;
-    }
-
-    public void setOngoingAmount(Long ongoingAmount) {
-        this.ongoingAmount = ongoingAmount;
-    }
-
-    public Long getFailedAmount() {
-        return failedAmount;
-    }
-
-    public void setFailedAmount(Long failedAmount) {
-        this.failedAmount = failedAmount;
-    }
-
-    public Long getCompletedAmount() {
-        return completedAmount;
-    }
-
-    public void setCompletedAmount(Long completedAmount) {
-        this.completedAmount = completedAmount;
-    }
-
-    public String getPaymentMode() {
-        return paymentMode;
-    }
-
-    public void setPaymentMode(String mode) {
-        this.paymentMode = mode;
-    }
 }
-

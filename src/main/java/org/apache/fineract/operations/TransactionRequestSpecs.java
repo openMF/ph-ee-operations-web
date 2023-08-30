@@ -1,10 +1,11 @@
 package org.apache.fineract.operations;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.stereotype.Component;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.*;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.Date;
 import java.util.List;

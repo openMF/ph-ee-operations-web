@@ -19,8 +19,8 @@
 package org.apache.fineract.organisation.group;
 
 import org.apache.fineract.organisation.code.CodeValue;
-import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.apache.fineract.organisation.office.Office;
+import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.apache.fineract.organisation.staff.Staff;
 import org.apache.fineract.organisation.user.AppUser;
 

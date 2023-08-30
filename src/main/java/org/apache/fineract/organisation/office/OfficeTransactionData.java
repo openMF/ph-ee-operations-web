@@ -18,10 +18,10 @@
  */
 package org.apache.fineract.organisation.office;
 
+import org.joda.time.LocalDate;
+
 import java.math.BigDecimal;
 import java.util.Collection;
-
-import org.joda.time.LocalDate;
 
 /**
  * Immutable data object for office transactions.

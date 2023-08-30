@@ -19,9 +19,9 @@
 package org.apache.fineract.organisation.staff;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.apache.fineract.organisation.document.Image;
 import org.apache.fineract.organisation.office.Office;
+import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.joda.time.LocalDate;
 
 import javax.persistence.Column;

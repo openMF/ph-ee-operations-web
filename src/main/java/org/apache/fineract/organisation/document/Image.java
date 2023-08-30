@@ -18,11 +18,11 @@
  */
 package org.apache.fineract.organisation.document;
 
+import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_image")

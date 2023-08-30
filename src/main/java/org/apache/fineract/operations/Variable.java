@@ -5,7 +5,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.fineract.organisation.parent.AbstractPersistableCustom;
 import org.eclipse.persistence.annotations.Index;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "variables")
