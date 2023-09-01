@@ -300,6 +300,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
+    this.loadTransactionsPage();
     // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   onSubmit() {

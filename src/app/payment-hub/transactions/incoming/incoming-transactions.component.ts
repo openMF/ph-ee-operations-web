@@ -282,6 +282,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         tap(() => this.loadTransactionsPage())
       )
       .subscribe();
+
+    this.loadTransactionsPage();
   }
 
   /**
