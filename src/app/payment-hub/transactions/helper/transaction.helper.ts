@@ -15,6 +15,11 @@ export const transactionStatusData = [
         css: 'orange'
     },
     {
+        option: 'Exception',
+        value: 'EXCEPTION',
+        css: 'red'
+    },
+    {
         option: '',
         value: 'UNKNOWN',
         hidden: true
