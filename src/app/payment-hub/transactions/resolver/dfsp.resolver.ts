@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+
 
 /** rxjs Imports */
 import { Observable } from 'rxjs';
@@ -14,7 +14,7 @@ import { DfspEntry } from '../model/dfsp.model';
  * Currencies data resolver.
  */
 @Injectable()
-export class DfspResolver implements Resolve<DfspEntry[]> {
+export class DfspResolver  {
 
     /**
      * @param {TransactionsService} transactionsService Transactions service.

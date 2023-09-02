@@ -9,19 +9,22 @@ import env from "./.env";
 export let environment = {
   name: "dev",
   production: false,
-  version: env.npm_package_version + "-dev",
-  serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
+  version: env.phee.version + "-dev",
+  serverUrl: window['env']['serverApiUrl'] || "https://paymenthub.qa.oneacrefund.org/opsapp",
+  serverUrls: window['env']['serverApiUrls'] || "https://paymenthub.qa.oneacrefund.org/opsapp",
+  apiPath: window['env']['apiPath'] || '/opsapp/api',
+  apiVersion: window['env']['apiVersion'] || '/v1',
   oauth: {
-    enabled: "false", // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
-    basicAuth: "true",
-    basicAuthToken: 'Y2xpZW50Og=='
+    // For connecting to Mifos X using OAuth2 Authentication change the value to true
+    enabled: window['env']['oauthEnabled'] || false, 
+    serverUrl: window['env']['oauthServerUrl'] || "https://paymenthub.qa.oneacrefund.org/opsapp",
+    basicAuth: window['env']['oauthBasicAuth'] || true,
+    basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
   },
-  defaultLanguage: "en-US",
-  supportedLanguages: ["en-US", "fr-FR"],
-  externalConfigurationFile: "configuration.properties",
   auth: {
-    enabled: false,
-    tenant: "phdefault"
-  }
+    enabled: window['env']['authEnabled'] || false,
+    tenant: window['env']['platformTenantId'] || 'phdefault'
+  },
+  defaultLanguage: window['env']['defaultLanguage'] || "en",
+  supportedLanguages: window['env']['supportedLanguages'] || ["en", "fr"]
 };

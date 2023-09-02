@@ -1,9 +1,9 @@
 /** Angular Imports */
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
 /** Custom Data Source */
@@ -98,25 +98,25 @@ export class AuditTrailsComponent implements OnInit, AfterViewInit {
     }
   ];
   /** User form control. */
-  user = new FormControl('');
+  user = new UntypedFormControl('');
   /** From date form control. */
-  fromDate = new FormControl();
+  fromDate = new UntypedFormControl();
   /** Checked from date form control. */
-  checkedFromDate = new FormControl();
+  checkedFromDate = new UntypedFormControl();
   /** Processing result form control. */
-  processingResult = new FormControl();
+  processingResult = new UntypedFormControl();
   /** Action name form control. */
-  actionName = new FormControl();
+  actionName = new UntypedFormControl();
   /** Resource ID form control. */
-  resourceId = new FormControl('');
+  resourceId = new UntypedFormControl('');
   /** To date form control. */
-  toDate = new FormControl();
+  toDate = new UntypedFormControl();
   /** Checked to date form control. */
-  checkedToDate = new FormControl();
+  checkedToDate = new UntypedFormControl();
   /** Entity name form control. */
-  entityName = new FormControl();
+  entityName = new UntypedFormControl();
   /** Checker form control. */
-  checker = new FormControl();
+  checker = new UntypedFormControl();
 
   /** Paginator for audit trails table. */
   @ViewChild(MatPaginator) paginator: MatPaginator;

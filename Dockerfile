@@ -1,20 +1,46 @@
-FROM node:16.13.0 as builder
+###############
+### STAGE 1: Build app
+###############
+ARG BUILDER_IMAGE=node:19-alpine
+ARG NGINX_IMAGE=nginx:1.19.3
 
-RUN apt-get update && apt-get install -y vim
+FROM $BUILDER_IMAGE as builder
+ARG NPM_REGISTRY_URL=https://registry.npmjs.org/
+ARG BUILD_ENVIRONMENT_OPTIONS="--configuration production"
+ARG PUPPETEER_DOWNLOAD_HOST_ARG=https://storage.googleapis.com
+ARG PUPPETEER_CHROMIUM_REVISION_ARG=1011831
 
-RUN npm install -g @angular/cli@12.2.16
+RUN apk add --no-cache git
 
-#CMD ng serve --host 0.0.0.0 --disable-host-check --configuration kubernetes
+WORKDIR /usr/src/app
 
-ADD . /app
-WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-RUN npm rebuild node-sass --force
-RUN npm install --force
-RUN ng build --configuration kubernetes
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
-FROM nginx:1.19.3
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder /app/dist/web-app /usr/share/nginx/html
-EXPOSE 4200
-CMD ["nginx", "-g", "daemon off;"]
+# Export Puppeteer env variables for installation with non-default registry.
+ENV PUPPETEER_DOWNLOAD_HOST $PUPPETEER_DOWNLOAD_HOST_ARG
+ENV PUPPETEER_CHROMIUM_REVISION $PUPPETEER_CHROMIUM_REVISION_ARG
+
+COPY ./ /usr/src/app/
+
+RUN npm cache clear --force
+
+RUN npm config set fetch-retry-maxtimeout 120000
+RUN npm config set registry $NPM_REGISTRY_URL --location=global
+
+RUN npm install --location=global @angular/cli@16.2.3
+
+RUN npm install
+
+RUN ng build --output-path=/dist $BUILD_ENVIRONMENT_OPTIONS
+
+###############
+### STAGE 2: Serve app with nginx ###
+###############
+FROM $NGINX_IMAGE
+
+COPY --from=builder /dist /usr/share/nginx/html
+
+EXPOSE 80
+
+# When the container starts, replace the env.js with values from environment variables
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/assets/env.template.js > /usr/share/nginx/html/assets/env.js && exec nginx -g 'daemon off;'"]
