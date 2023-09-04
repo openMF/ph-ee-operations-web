@@ -247,8 +247,14 @@ public class BatchApi {
                 failed++;
                 failedAmount = failedAmount.add(amount);
             } else if (transfer.getStatus().equals(TransferStatus.IN_PROGRESS)) {
-                ongoing++;
-                ongoingAmount = ongoingAmount.add(amount);
+                if(transfer.getCompletedAt().toString().isEmpty()) {
+                    ongoing++;
+                    ongoingAmount = ongoingAmount.add(amount);
+                }
+                else {
+                    completed++;
+                    completedAmount = completedAmount.add(amount);
+                }
             }
         }
 
