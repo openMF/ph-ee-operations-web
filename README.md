@@ -15,7 +15,7 @@ This project is based on the **openMF/web-app** to provide the same UX as we hav
 
 2. Install [angular-cli](https://github.com/angular/angular-cli) globally.
 ```
-npm install -g @angular/cli@12.2.16
+npm install -g @angular/cli@16.2.1
 ```
 
 3. Clone the project locally into your system.
@@ -27,10 +27,12 @@ git clone git@github.com:openMF/ph-ee-operations-web.git
 
 5. Install the dependencies.
 ```
-npm install --force
+npm install
 ```
 
-6. To preview the app, run the following command and navigate to `http://localhost:4200/`.
+6. Before to run the app, set the environment variables as you need it, please see the environment variable details above
+
+7. To preview the app, run the following command and navigate to `http://localhost:4200/`.
 ```
 ng serve
 ```
@@ -55,10 +57,44 @@ Run `ng generate component component-name` to generate a new component. You can 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
 
-## Environment configuration
+## Environment variables
 
-You can find the configuration file in the `environments` directory.
+You can set the parameters now using environment variables:
 Please modify them accordingly your needs (serverUrl, authServerUrl, etc.)
+
+The environment variables to be set are:
+
+
+`PH_BACKEND_SERVER_URL`
+Setting for the Payment Hub server url to backend services
+
+`PH_BACKEND_SERVER_API_PATH`
+Setting for the APIs path calls, Default value `/opsapp/api`
+
+`PH_BACKEND_SERVER_API_VERSION`
+Setting for the APIs version calls, Default value `/v1`
+
+`PH_PLATFORM_TENANT_ID`
+Setting for the Platform Tenant Identifier used in the APIs calls, Default value `phdefault`
+
+`PH_OAUTH_ENABLED`
+Boolean value to Enable or Disable the OAuth authentication
+
+`PH_OAUTH_SERVER_URL`
+Setting for the server url to OAuth services
+
+`PH_OAUTH_BASIC_AUTH`
+Boolean value to Enable or Disable the Basic Authentication for OAuth
+
+`PH_OAUTH_BASIC_AUTH_TOKEN`
+Setting the Authentication Token for OAuth authentication
+
+`PH_DEFAULT_LANGUAGE`
+Setting for Languages (i18n) still under development
+Default language to be used, by default `en` (English US)
+
+`PH_SUPPORTED_LANGUAGES`
+Language list of available languages, splited by colon, like en,fr,es
 
 ## Profiles
 
@@ -75,58 +111,28 @@ You can define various settings based on these profiles.
 
 To build the application with the kubernetes profile: `npm build --configuration kubernetes`
 
+## Docker compose
+It is possible to do a 'one-touch' installation of Mifos X Web App using containers (AKA "Docker").
+Fineract now packs the Mifos community-app web UI in it's docker deploy.
+
+As Prerequisites, you must have `docker` and `docker-compose` installed on your machine; see
+[Docker Install](https://docs.docker.com/install/) and
+[Docker Compose Install](https://docs.docker.com/compose/install/).
+
+Now to run a new MifosX Web App instance you can simply:
+
+1. `git clone https://github.com/openMF/ph-ee-operations-web.git ; cd ph-ee-operations-web`
+
+1. for windows, use `git clone https://github.com/openMF/ph-ee-operations-web.git --config core.autocrlf=input ; cd ph-ee-operations-web`
+
+2. `docker-compose up -d`
+
+3. Access the webapp on http://localhost:4200 in your browser.
+
 ## Mocked backend
 
 To use mocked responses please do the following modifications:
 
-
-### Transaction service
-Change
-
-    getTransactions(fields: any, page: number, count: number): Observable<Transactions> {
-        let params = '';
-        fields.forEach((field: any) => {
-        if (field.value !== undefined && field.value !== null && field.value !== '') {
-            params += field.type + '=' + field.value + '&';
-        }
-        });
-        params += 'page=' + page + '&size=' + count;
-
-        return this.http.get('/transactions?' + params).pipe(map((transactions: any) => transactions as Transactions));
-    }
-
-To
-
-    getTransactions(fields: any, page: number, count: number): Observable<Transactions> {
-        let params = '';
-        fields.forEach((field: any) => {
-        if (field.value !== undefined && field.value !== null && field.value !== '') {
-            params += field.type + '=' + field.value + '&';
-        }
-        });
-        params += 'page=' + page + '&size=' + count;
-        
-        return this.http
-        .disableApiPrefix()
-        .get('/assets/mock/payment-hub/transactions.mock.json?' + params)
-        .pipe(map((transactions: any) => transactions as Transactions));
-    }
-
-
-  Also change
-
-    getTransactionDetail(id: string): Observable<TransactionDetails> {
-        return this.http.get('/transaction/' + id).pipe(map((transaction: any) => transaction as TransactionDetails));
-    }
-
-To
-
-    getTransactionDetail(id: string): Observable<TransactionDetails> {
-        return this.http
-            .disableApiPrefix()
-            .get('/assets/mock/payment-hub/transaction-details.mock.json')
-            .pipe(map((transaction: TransactionDetails) => transaction as TransactionDetails));
-    }
 
 ### Authentication Service
 

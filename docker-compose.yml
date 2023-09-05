@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         - BUILD_ENVIRONMENT_OPTIONS=--configuration production
-        - BUILDER_IMAGE=node:16-alpine
+        - BUILDER_IMAGE=node:20-alpine
         - NGINX_IMAGE=nginx:1.19.3
         - NPM_REGISTRY_URL=https://registry.npmjs.org/
         - PUPPETEER_DOWNLOAD_HOST_ARG=https://storage.googleapis.com
@@ -15,10 +15,17 @@ services:
     ports:
       - '4200:80'
     environment:
-      - FINERACT_API_URLS=https://dev.mifos.io,https://demo.mifos.io,https://qa.mifos.io,https://staging.mifos.io,https://mobile.mifos.io,https://demo.fineract.dev,https://localhost:8443
-      - FINERACT_API_URL=https://localhost:8443
-      - FINERACT_API_PROVIDER=/fineract-provider/api
-      - FINERACT_API_VERSION=/v1
-      - FINERACT_PLATFORM_TENANT_IDENTIFIER=default
-      - MIFOS_DEFAULT_LANGUAGE=en-US
-      - MIFOS_SUPPORTED_LANGUAGES=en-US,fr-FR
+      - PH_BACKEND_SERVER_URLS=https://paymenthub.qa.oneacrefund.org
+      - PH_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org
+      - PH_BACKEND_SERVER_API_PATH=/opsapp/api
+      - PH_BACKEND_SERVER_API_VERSION=/v1
+      - PH_PLATFORM_TENANT_ID=phdefault
+      - PH_PLATFORM_TENANT_IDS=phdefault
+      - PH_DEFAULT_LANGUAGE=en
+      - PH_SUPPORTED_LANGUAGES=en,fr,es
+      # Authentication variables
+      - PH_AUTH_ENABLED=false
+      - PH_OAUTH_ENABLED=false
+      - PH_OAUTH_SERVER_URL=https://paymenthub.qa.oneacrefund.org
+      - PH_OAUTH_BASIC_AUTH=true
+      - PH_OAUTH_BASIC_AUTH_TOKEN=
