@@ -9,10 +9,10 @@ import {
 import { Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 
-import { FormControl, NgForm } from "@angular/forms";
+import { UntypedFormControl, NgForm } from "@angular/forms";
 @Component({
   selector: "mifosx-get-batches-export",
   templateUrl: "./get-batches-export.component.html",
@@ -20,7 +20,7 @@ import { FormControl, NgForm } from "@angular/forms";
 })
 export class GetBatchesExportComponent implements AfterViewInit {
   @Output() redirect: EventEmitter<any> = new EventEmitter();
-  template = new FormControl("");
+  template = new UntypedFormControl("");
   templates: string[] = ["Mojaloo", "Program"];
   fileToUpload: File | null = null;
   posts: Observable<any>;

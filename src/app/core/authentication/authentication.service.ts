@@ -1,9 +1,9 @@
 /** Angular Imports */
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
@@ -16,10 +16,8 @@ import { environment } from '../../../environments/environment';
 import { LoginContext } from './login-context.model';
 import { Credentials } from './credentials.model';
 import { OAuth2Token } from './o-auth2-token.model';
-import { AppConfig } from 'app/app.config';
 
 import jwt_decode from 'jwt-decode';
-import { Router } from '@angular/router';
 
 /**
  * Authentication workflow.
@@ -41,9 +39,9 @@ export class AuthenticationService {
 
   private credentials: Credentials;
   /** Key to store credentials in storage. */
-  private credentialsStorageKey = 'mifosXCredentials';
+  private credentialsStorageKey = 'pheeCredentials';
   /** Key to store oauth token details in storage. */
-  private oAuthTokenDetailsStorageKey = 'mifosXOAuthTokenDetails';
+  private oAuthTokenDetailsStorageKey = 'pheeOAuthTokenDetails';
 
   private refreshAccessToken = false;
   private loggedIn = false;
@@ -59,13 +57,10 @@ export class AuthenticationService {
    * @param {AlertService} alertService Alert Service.
    */
   constructor(private http: HttpClient,
-    private alertService: AlertService, private config: AppConfig, private router: Router) {
+    private alertService: AlertService) {
     this.storage = sessionStorage;
 
-    config.load().then(value => {
-      this.init();
-    });
-
+    this.init();
   }
 
   init() {

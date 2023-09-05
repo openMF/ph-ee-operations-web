@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router } from '@angular/router';
 
 /** Custom Services */
 import { Logger } from '../logger/logger.service';
@@ -16,7 +16,7 @@ const log = new Logger('AuthenticationGuard');
  * Route access authorization.
  */
 @Injectable()
-export class AuthenticationGuard implements CanActivate {
+export class AuthenticationGuard  {
 
   /**
    * @param {Router} router Router for navigation.

@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { NgModule } from "@angular/core";
-import { MatDialogModule } from "@angular/material/dialog";
+import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
 
 /** Custom Modules */
 import { SharedModule } from "../shared/shared.module";
@@ -26,30 +26,25 @@ import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bul
  * All components related to payment hub functions should be declared here.
  */
 @NgModule({
-  imports: [
-    MatDialogModule,
-    SharedModule,
-    PaymentHubRoutingModule,
-    PipesModule,
-  ],
-  declarations: [
-    IncomingTransactionsComponent,
-    OutgoingTransactionsComponent,
-    TransactionDetailsComponent,
-    PaymentHubComponent,
-    BpmnDialogComponent,
-    RetryResolveDialogComponent,
-    IncomingRequestToPayComponent,
-    OutgoingRequestToPayComponent,
-    ViewRequestToPayComponent,
-    IncomingRequestExportComponent,
-    BulkBatchExportComponent,
-    GetBatchesExportComponent,
-  ],
-  entryComponents: [
-    PaymentHubComponent,
-    BpmnDialogComponent,
-    RetryResolveDialogComponent,
-  ],
+    imports: [
+        MatDialogModule,
+        SharedModule,
+        PaymentHubRoutingModule,
+        PipesModule,
+    ],
+    declarations: [
+        IncomingTransactionsComponent,
+        OutgoingTransactionsComponent,
+        TransactionDetailsComponent,
+        PaymentHubComponent,
+        BpmnDialogComponent,
+        RetryResolveDialogComponent,
+        IncomingRequestToPayComponent,
+        OutgoingRequestToPayComponent,
+        ViewRequestToPayComponent,
+        IncomingRequestExportComponent,
+        BulkBatchExportComponent,
+        GetBatchesExportComponent,
+    ]
 })
 export class PaymentHubModule {}

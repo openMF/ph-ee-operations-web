@@ -5,19 +5,19 @@ import {
   HttpHeaders,
   JsonpClientBackend,
 } from "@angular/common/http";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { FormsModule } from "@angular/forms";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 @Component({
   selector: "mifosx-bulk-batch-export",
   templateUrl: "./bulk-batch-export.component.html",
   styleUrls: ["./bulk-batch-export.component.scss"],
 })
 export class BulkBatchExportComponent implements OnInit {
-  template = new FormControl("");
+  template = new UntypedFormControl("");
   templates: string[] = ["Mojaloop", "Program"];
   fileToUpload: File | null = null;
   batchid: any;

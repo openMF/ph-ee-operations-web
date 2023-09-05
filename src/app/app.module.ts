@@ -1,12 +1,13 @@
 /** Angular Imports */
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 /** Tanslation Imports */
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 /** Chart Imports */
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -19,9 +20,6 @@ import { WebAppComponent } from './web-app.component';
 
 /** Not Found Component */
 import { NotFoundComponent } from './not-found/not-found.component';
-
-/** Load config dynamically */
-import { AppConfig } from './app.config';
 
 /** Custom Modules */
 import { CoreModule } from './core/core.module';
@@ -36,11 +34,7 @@ import { PaymentHubModule } from './payment-hub/paymenthub.module';
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
 
-import { DatePipe } from '@angular/common';
-
-export function initConfig(config: AppConfig) {
-  return () => config.load();
-}
+import { DatePipe, LocationStrategy } from '@angular/common';
 
 /**
  * App Module
@@ -53,7 +47,13 @@ export function initConfig(config: AppConfig) {
     BrowserAnimationsModule,
     HttpClientModule,
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient, LocationStrategy]
+      }
+    }),
     NgxChartsModule,
     CoreModule,
     HomeModule,
@@ -65,14 +65,11 @@ export function initConfig(config: AppConfig) {
     AppRoutingModule,
   ],
   declarations: [WebAppComponent, NotFoundComponent],
-  providers: [DatePipe,
-    AppConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initConfig,
-      deps: [AppConfig],
-      multi: true
-    }],
+  providers: [DatePipe],
   bootstrap: [WebAppComponent]
 })
 export class AppModule { }
+
+export function httpTranslateLoader(http: HttpClient, locationStrategy: LocationStrategy) {
+  return new TranslateHttpLoader(http, `/assets/translations/`, '.json');
+}
