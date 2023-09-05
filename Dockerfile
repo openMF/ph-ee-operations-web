@@ -20,7 +20,7 @@ RUN dnf -y upgrade && \
 # Install nginx
     dnf -y install nginx && \
 # Create the non-root user to run the application
-    dnf -y install shadow-utils && \
+    dnf -y install shadow-utils vim && \
     groupadd --system --gid 1000 nginxgroup && \
     useradd --uid 1000 --gid nginxgroup --no-user-group nginxuser && \
     dnf -y remove shadow-utils && \

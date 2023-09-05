@@ -116,14 +116,14 @@ export class AuthenticationService {
       const payload = new HttpParams()
           .set('username', loginContext.username)
           .set('password', loginContext.password)
-          .set('grant_type', 'password')
-          .set('client_id', 'community-app')
-          .set('scope', 'ALL');
+          //.set('grant_type', 'password')
+          //.set('client_id', 'community-app')
+          //.set('scope', 'ALL');
       // if (environment.oauth.basicAuth === 'true') {
       //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       // }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, payload)
-        .pipe(
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/login`, payload);
+        /*.pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
@@ -131,7 +131,7 @@ export class AuthenticationService {
             this.refreshTokenOnExpiry(tokenResponse.expires_in);
             return of(true);
           })
-        );
+        );*/
     } else {
       return this.http.post('/authentication', {}, { params: httpParams })
         .pipe(
@@ -141,6 +141,31 @@ export class AuthenticationService {
           })
         );
     }
+  }
+
+  token(code: string) {
+    this.storage = localStorage;
+    const payload = new HttpParams()
+          .set('client_id', 'community-app')
+          .set('client_secret', environment.oauth.oauthClientSecret)
+          .set('grant_type', 'authorization_code')
+          .set('redirect_uri', environment.oauth.oauthCallbackUrl)
+          .set('code_verifier', this.storage.getItem('codeVerifier'))
+          .set('code', code)
+
+    this.storage.removeItem('codeVerifier')
+    this.storage = sessionStorage;
+
+    return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth2/token`, payload)
+        .pipe(
+          map((tokenResponse: OAuth2Token) => {
+            // TODO: fix UserDetails API
+            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+            this.onLoginSuccess({ username: 'mifos', accessToken: tokenResponse.access_token, authenticated: true, tenantId: 'binx' } as any);
+            this.refreshTokenOnExpiry(tokenResponse.expires_in);
+            return of(true);
+          })
+        );
   }
 
   /**
@@ -191,7 +216,7 @@ export class AuthenticationService {
       //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       // }
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, payload)
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth2/token`, payload)
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
