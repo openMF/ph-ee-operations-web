@@ -1,24 +1,26 @@
-<div fxLayput="row" fxLayoutAlign="end" fxLayoutGap="2%" fxLayout.lt-md="column" class="container m-b-20">
-
-  <!-- <button mat-raised-button color="primary" [routerLink]="['/dashboard']">
-    <fa-icon icon="tachometer-alt"></fa-icon>&nbsp;&nbsp;
-    Dashboard
-  </button> -->
-
-</div>
-
 <div class="container">
+  <div fxLayout="row" fxLayout.lt-md="column" class="payment-hub-ee-wrap">
+    <mat-nav-list>
+      <mat-list-item fxFlex="33%" [routerLink]="['/paymenthub']">
+        <mat-icon matListIcon>
+          <fa-icon icon="search" size="sm"></fa-icon>
+        </mat-icon>
+        <h4 matLine class="title">Payment Hub</h4>
+      </mat-list-item>
 
-  <mat-card>
+      <mat-list-item fxFlex="33%" [routerLink]="['/vouchers']">
+        <mat-icon matListIcon>
+          <fa-icon icon="search" size="sm"></fa-icon>
+        </mat-icon>
+        <h4 matLine class="title">Vouchers</h4>
+      </mat-list-item>
 
-    <mat-card-header>
-      <mat-card-title class="title">
-        Welcome, {{ username }}!
-      </mat-card-title>
-    </mat-card-header>
-
-    <img mat-card-image src="assets/images/mifos_lg-logo.jpg" alt="Mifos X">
-
-  </mat-card>
-
+      <mat-list-item fxFlex="33%" [routerLink]="['/account-management']">
+        <mat-icon matListIcon>
+          <fa-icon icon="search" size="sm"></fa-icon>
+        </mat-icon>
+        <h4 matLine class="title">Account Management</h4>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
 </div>

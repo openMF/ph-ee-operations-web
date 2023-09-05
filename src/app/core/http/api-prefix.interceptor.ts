@@ -25,12 +25,12 @@ export class ApiPrefixInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let baseUrl = '';
 
-    console.log(request.url);
-    const versionRegex = /^\/(v[1-9][0-9]*\/).*$/;
+    // console.log(request.url);
+    const versionRegex = /\/(v[1-9][0-9]*\/).*/;
     if (versionRegex.test(request.url)) {
-      baseUrl = this.settingsService.baseServerUrl;
+      baseUrl = this.settingsService.serverHost;
     }
-    console.log(baseUrl + request.url);
+    // console.log(baseUrl + request.url);
 
     /**
      * Ignore URLs that are complete for i18n

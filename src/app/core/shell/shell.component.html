@@ -13,20 +13,24 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="!(isHandset$ | async)">
 
-    <mifosx-sidenav [sidenavCollapsed]="sidenavCollapsed"></mifosx-sidenav>
+    <mifosx-sidenav 
+      [sidenavCollapsed]="sidenavCollapsed"
+      (sideNavControl)="sideNavControl($event)"
+    >
+    </mifosx-sidenav>
 
   </mat-sidenav>
 
   <!-- Content -->
   <mat-sidenav-content>
-
-    <!-- Toolbar -->
-    <mifosx-toolbar [sidenav]="sidenav" (collapse)="toggleCollapse($event)"></mifosx-toolbar>
     <!-- Progress Bar -->
     <mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
 
-    <!-- Breadcrumb -->
-    <mifosx-breadcrumb></mifosx-breadcrumb>
+    <div class="vertical-space"></div>
+    <!-- Toolbar -->
+    <mifosx-toolbar [sidenav]="sidenav" (collapse)="toggleCollapse($event)"></mifosx-toolbar>
+    <div class="vertical-space"></div>
+
     <!-- Content -->
     <mifosx-content></mifosx-content>
     <!-- Footer -->

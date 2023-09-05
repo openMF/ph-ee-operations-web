@@ -1,4 +1,4 @@
-<div
+<div class="sidenav" color="primary"
   [ngClass]="{
   'sidebar-full': !sidenavCollapsed,
   'sidebar-compact': sidenavCollapsed
@@ -6,53 +6,38 @@
 
   <div class="navigation-panel" fxLayout="column">
 
-    <!-- TODO: Allow customization by organization -->
-    <div class="app-brand">
-      <img src="assets/images/MifosX_logo.png" alt="app-logo" class="app-logo">
-      <span class="app-logo-text text-muted">Mifos</span>
-    </div>
-
-    <div class="app-user">
-      <div class="app-user-photo">
-        <!-- TODO: Decision to be taken on providing this feature -->
-        <img src="assets/images/user_placeholder.png" alt="app-user-photo">
-      </div>
-      <span class="app-user-name mb-05">
-        {{ username }}
-      </span>
-      <div class="app-user-controls">
-        <button class="text-muted xs-button" mat-icon-button matTooltip="Settings" [routerLink]="['/settings']">
-          <fa-icon icon="cog"></fa-icon>
-        </button>
-        <button class="text-muted xs-button" mat-icon-button matTooltip="Sign Out" (click)="logout()">
-          <fa-icon icon="sign-out-alt"></fa-icon>
-        </button>
-      </div>
-    </div>
-
     <div class="app-sidenav">
 
-      <!-- TODO: Generate frequently accessed routes dynamically -->
-      <div class="mt-1 mb-1 nav-item-sep">
-        <mat-divider></mat-divider>
-        <span class="text-muted icon-menu-title">Frequently Accessed</span>
-      </div>
-      <div class="icon-menu">
-        <div class="icon-menu-item">
-          <button mat-raised-button matTooltip="Home" [routerLink]="['/home']">
-            <fa-icon icon="home" size="lg"></fa-icon>
-          </button>
+      <div class="m-t-30 m-b-1 nav-item-sep center">
+        <div class="app-brand" [routerLink]="['/home']">
+          <img src="assets/images/app_logo.png" alt="app-logo" class="app-logo">
+          <span *ngIf="!sidenavCollapsed" #logo class="app-logo-text text-muted">{{ 'APP_NAME' | translate }}</span>
         </div>
       </div>
 
-      <div class="nav-item-sep">
-        <mat-divider></mat-divider>
-        <span class="text-muted">Main Items</span>
-      </div>
-
       <mat-nav-list>
+        <mat-list-item [routerLink]="['/dashboard']" matTooltip="Dashboard">
+          <mat-icon matListIcon >
+            <fa-icon icon="tachometer-alt" size="lg"></fa-icon>
+          </mat-icon>
+          <a *ngIf="!sidenavCollapsed" matLine #dashboard>{{ 'labels.menus.Dashboard' | translate }}</a>
+        </mat-list-item>
+        <mat-list-item [routerLink]="['/settings']" matTooltip="Settings">
+          <mat-icon matListIcon >
+            <fa-icon icon="cog" size="lg"></fa-icon>
+          </mat-icon>
+          <a *ngIf="!sidenavCollapsed" matLine #dashboard>{{ 'labels.menus.Settings' | translate }}</a>
+        </mat-list-item>
       </mat-nav-list>
 
+      <div class="sidenav-collapse">
+        <button *ngIf="!sidenavCollapsed" mat-icon-button matTooltip="Close" (click)="sideNavCollapsed(true)">
+          <fa-icon icon="arrow-left" size="lg"></fa-icon>
+        </button>
+        <button *ngIf="sidenavCollapsed" mat-icon-button matTooltip="Open" (click)="sideNavCollapsed(false)">
+          <fa-icon icon="arrow-right" size="lg"></fa-icon>
+        </button>
+      </div>
     </div>
 
   </div>

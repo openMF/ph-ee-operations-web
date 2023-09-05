@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ServiceWorkerModule } from '@angular/service-worker';
 
 /** Tanslation Imports */
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -46,7 +45,6 @@ import { DatePipe, LocationStrategy } from '@angular/common';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

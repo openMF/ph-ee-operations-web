@@ -1,0 +1,36 @@
+.container {
+  width: 75rem;
+}
+
+.mat-list-base .mat-list-item {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-list-base .mat-list-item {
+  font-size: 1.75rem;
+}
+
+.mat-list-base .mat-focus-indicator {
+  font-size: 1.85rem;
+  color: white;
+  background-color: red;
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
+  border: 0.15rem solid;
+  height: 150px;
+  vertical-align: middle;
+}
+
+.big-option {
+  min-height: 150px;
+}
+
+.payment-hub-ee-wrap {
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}

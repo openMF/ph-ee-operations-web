@@ -236,9 +236,10 @@ export class AuthenticationService {
    * @returns {boolean} True if the user is authenticated.
    */
   isAuthenticated(): boolean {
-    return !!(JSON.parse(
+    return true;
+    /*return !!(JSON.parse(
       sessionStorage.getItem(this.credentialsStorageKey) || this.getStoreageItem(this.credentialsStorageKey)
-    ));
+    ));*/
   }
 
   /**

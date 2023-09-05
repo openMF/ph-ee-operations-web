@@ -1,8 +1,23 @@
 .container {
-  max-width: 37rem;
+  width: 35rem;
+}
 
-  .title {
-    font-size: 1.25rem;
-    font-weight: 500;
-  }
+mat-list-item {
+  border: 1px;
+  border-radius: 15px;
+  vertical-align: middle;
+  min-height: 40px;
+}
+
+.mat-list-base .mat-list-item .mat-list-item-content {
+  background: red;
+}
+
+.payment-hub-ee-wrap {
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 500;
 }

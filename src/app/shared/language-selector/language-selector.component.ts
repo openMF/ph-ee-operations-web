@@ -28,10 +28,10 @@ export class LanguageSelectorComponent implements OnInit {
    */
    constructor(private translateService: TranslateService,
     private settingsService: SettingsService) {
-    this.languageSelector.setValue(this.currentLanguage);
   }
 
   ngOnInit() {
+    this.languageSelector.patchValue(this.currentLanguage);
   }
 
   /**

@@ -2,7 +2,7 @@
 
 // import { AuthenticationService } from './authentication.service';
 
-// const credentialsStorageKey = 'mifosXCredentials';
+// const credentialsStorageKey = 'pheeCredentials';
 
 // describe('AuthenticationService', () => {
 //   let authenticationService: AuthenticationService;

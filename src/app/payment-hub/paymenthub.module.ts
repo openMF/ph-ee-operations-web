@@ -20,6 +20,9 @@ import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/
 import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
 import { GetBatchesExportComponent } from "./request-to-pay/get-batches-export/get-batches-export.component";
 import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bulk-batch-export.component";
+import { FilterSelectorComponent } from './filter-selector/filter-selector.component';
+import { BatchesComponent } from './batches/batches.component';
+import { SubBatchesComponent } from './sub-batches/sub-batches.component';
 /**
  * Payment HUB Module
  *
@@ -45,6 +48,9 @@ import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bul
         IncomingRequestExportComponent,
         BulkBatchExportComponent,
         GetBatchesExportComponent,
+        FilterSelectorComponent,
+        BatchesComponent,
+        SubBatchesComponent,
     ]
 })
 export class PaymentHubModule {}

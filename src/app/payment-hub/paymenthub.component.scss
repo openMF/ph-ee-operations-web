@@ -1,3 +1,20 @@
+.container {
+  width: 35rem;
+
+
+}
+
+mat-list-item {
+  border: 1px;
+  border-radius: 15px;
+  vertical-align: middle;
+  min-height: 40px;
+}
+
+.mat-list-base .mat-list-item .mat-list-item-content {
+  background: red;
+}
+
 .green {
   color: green;
 }

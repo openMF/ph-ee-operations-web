@@ -27,23 +27,26 @@ import { ViewRequestToPayResolver } from "./request-to-pay/common-resolvers/view
 import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
 import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bulk-batch-export.component";
 import { GetBatchesExportComponent } from "./request-to-pay/get-batches-export/get-batches-export.component";
+import { BatchesComponent } from "./batches/batches.component";
+import { SubBatchesComponent } from "./sub-batches/sub-batches.component";
 /** Payment HUB Routes */
 const routes: Routes = [
   Route.withShell([
     {
-      path: "paymenthubee",
+      path: "paymenthub",
+      component: PaymentHubComponent,
       data: { title: extract("Payment Hub EE"), breadcrumb: "Payment Hub EE" },
       children: [
         {
-          path: "",
-          component: PaymentHubComponent,
+          path: "batches",
+          component: BatchesComponent,
         },
         {
-          path: "incomingtransactions",
-          data: {
-            title: extract("Search Incoming Transactions"),
-            breadcrumb: "Incoming Transactions",
-          },
+          path: "sub-batches",
+          component: SubBatchesComponent,
+        },
+        {
+          path: "transactions",
           children: [
             {
               path: "",

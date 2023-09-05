@@ -1,0 +1,55 @@
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+  <h1>HOLA</h1>
+  <mat-card class="container">
+
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="batchReferenceNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Batch Reference Number </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.batchId }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="startedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time (UTC) </th>
+        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="completedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time (UTC) </th>
+        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceMinistry">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Ministry </th>
+        <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.transactionId}}> {{
+          shortenValue(transaction.transactionId) }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.amount }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let transaction"
+          [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">
+          {{ transaction.status }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.workflowInstanceKey]"
+        class="select-row"></tr>
+
+    </table>
+
+    <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]"
+      showFirstLastButtons='false'></mat-paginator>
+
+  </mat-card>
+
+</div>
