@@ -8,12 +8,12 @@
     "fineract",
     "angular"
   ],
-  "homepage": "https://github.com/openMF/web-app",
+  "homepage": "https://github.com/openMF/ph-ee-operations-web",
   "license": "MPL-2.0",
   "scripts": {
     "ng": "ng",
     "build": "npm run env -s && ng build --configuration production --output-hashing=none",
-    "build:prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --output-hashing=none --base-href=\"/web-app/\"",
+    "build:prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --output-hashing=none --base-href=\"/ph-ee-operations-web/\"",
     "start": "npm run env -s && ng serve --aot --proxy-config proxy.conf.js",
     "serve:sw": "npm run build -s && npx http-server ./dist -p 4200",
     "lint": "ng lint && stylelint \"src/**/*.scss\" --syntax scss && htmlhint \"src\" --config .htmlhintrc",
@@ -91,10 +91,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openMF/web-app.git"
+    "url": "https://github.com/openMF/ph-ee-operations-web.git"
   },
   "bugs": {
-    "url": "https://github.com/openMF/web-app/issues"
+    "url": "https://github.com/openMF/ph-ee-operations-web/issues"
   },
   "engines": {
     "node": ">= 8.9.0",
