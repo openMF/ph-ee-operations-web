@@ -129,6 +129,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       value: "",
     },
   ];
+  dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
 
   /** Paginator for requesttopay table. */
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -267,9 +268,9 @@ export class IncomingRequestToPayComponent implements OnInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        tap((filterValue) => {
+        tap((filterValue: moment.Moment) => {
           if (filterValue) {
-            this.applyFilter(filterValue, "startFrom");
+            this.applyFilter(filterValue.format(this.dateTimeFormat), "startFrom");
           }
         })
       )
@@ -279,9 +280,9 @@ export class IncomingRequestToPayComponent implements OnInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        tap((filterValue) => {
+        tap((filterValue: moment.Moment) => {
           if (filterValue) {
-            this.applyFilter(filterValue, "startTo");
+            this.applyFilter(filterValue.format(this.dateTimeFormat), "startTo");
           }
         })
       )
