@@ -30,7 +30,7 @@ export class RecallsService {
    * Gets all the filtered recalls.
    *
    */
-  getRecalls(fields: any, page: number, count: number): Observable<Recalls> {
+  getRecalls(fields: any, page: number, count: number, orderBy: string, sortOrder: string): Observable<Recalls> {
     let params = '';
     fields.forEach((field: any) => {
       if (field.value !== undefined && field.value !== null && field.value !== '') {
@@ -38,6 +38,12 @@ export class RecallsService {
       }
     });
     params += 'page=' + page + '&size=' + count;
+    if (orderBy) {
+      params += '&sortedBy=' + orderBy;
+    }
+    if (sortOrder) {
+      params += '&sortedOrder=' + sortOrder;
+    }
     const recallsObservable = this.http.get('/api/v1/recalls?' + params).pipe(map((recalls: any) => recalls as Recalls));
     return recallsObservable;
   }

@@ -11,6 +11,7 @@ import { Transactions } from '../model/transaction.model';
 import { TransactionDetails } from '../model/transaction-details.model';
 import { Currency } from '../model/currency.model';
 import { DfspEntry } from '../model/dfsp.model';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 /**
  * Payment Hub - Transactions.
@@ -30,7 +31,7 @@ export class TransactionsService {
    * Gets all the filtered transactions.
    *
    */
-  getTransactions(fields: any, page: number, count: number): Observable<Transactions> {
+  getTransactions(fields: any, page: number, count: number, orderBy: string, sortOrder: string): Observable<Transactions> {
     let params = '';
     fields.forEach((field: any) => {
       if (field.value !== undefined && field.value !== null && field.value !== '') {
@@ -38,6 +39,12 @@ export class TransactionsService {
       }
     });
     params += 'page=' + page + '&size=' + count;
+    if (orderBy) {
+      params += '&sortedBy=' + orderBy;
+    }
+    if (sortOrder) {
+      params += '&sortedOrder=' + sortOrder;
+    }
     const transactionsObservable = this.http.get('/api/v1/transfers?' + params).pipe(map((transactions: any) => transactions as Transactions));
     return transactionsObservable;
   }

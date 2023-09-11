@@ -41,7 +41,7 @@ export class RecallsDataSource implements DataSource<Recall> {
         const page = pageIndex;
         const count = limit;
 
-        this.recallsService.getRecalls(filterBy, page, count)
+        this.recallsService.getRecalls(filterBy, page, count, orderBy, sortOrder)
             .subscribe((recalls: Recalls) => {
                 const filteredRecalls: FilteredRecord<Recall> = new FilteredRecalls(recalls);
                 this.recordsSubject.next(filteredRecalls.totalFilteredRecords);

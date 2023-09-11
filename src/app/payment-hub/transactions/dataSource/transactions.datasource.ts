@@ -41,7 +41,7 @@ export class TransactionsDataSource implements DataSource<Transaction> {
         const page = pageIndex;
         const count = limit;
 
-        this.transactionsService.getTransactions(filterBy, page, count)
+        this.transactionsService.getTransactions(filterBy, page, count, orderBy, sortOrder)
             .subscribe((transactions: Transactions) => {
                 const filteredTransactions: FilteredRecord<Transaction> = new FilteredTransactions(transactions);
                 this.recordsSubject.next(filteredTransactions.totalFilteredRecords);
