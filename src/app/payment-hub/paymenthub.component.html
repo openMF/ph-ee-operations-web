@@ -4,7 +4,7 @@
 
     <div fxLayout="row" fxLayout.lt-md="column">
 
-      <div fxFlex="50%">
+      <div fxFlex="33.3%">
 
         <mat-nav-list>
 
@@ -24,12 +24,23 @@
             <p matLine>Advanced search option for outgoing transactions</p>
           </mat-list-item>
 
+          <mat-list-item [routerLink]="['incomingrequesttopayexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Incoming Request to Pay</h4>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="['outgoingrequesttopayexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Outgoing Request to Pay</h4>
+          </mat-list-item>
         </mat-nav-list>
 
       </div>
-
-      <div fxFlex="50%">
-
+      <div fxFlex="33.3%">
         <mat-nav-list>
 
           <mat-list-item [routerLink]="['incomingrequesttopay']">
@@ -51,24 +62,26 @@
         </mat-nav-list>
 
       </div>
-      <div fxFlex="50%">
-
+      <div fxFlex="33.3%">
         <mat-nav-list>
 
-          <mat-list-item [routerLink]="['incomingrequesttopayexport']">
+          <mat-list-item [routerLink]="['incomingrecalls']">
             <mat-icon matListIcon>
-              <fa-icon icon="download" size="sm"></fa-icon>
+              <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Export Incoming Request to Pay</h4>
+            <h4 matLine>Search Incoming Recalls</h4>
+            <p matLine>Advanced search option for incoming recalls</p>
           </mat-list-item>
 
-          <mat-list-item [routerLink]="['outgoingrequesttopayexport']">
+          <mat-list-item [routerLink]="['outgoingrecalls']">
             <mat-icon matListIcon>
-              <fa-icon icon="download" size="sm"></fa-icon>
+              <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Export Outgoing Request to Pay</h4>
+            <h4 matLine>Search Outgoing Recalls</h4>
+            <p matLine>Advanced search option for outgoing recalls</p>
           </mat-list-item>
         </mat-nav-list>
+
       </div>
     </div>
 

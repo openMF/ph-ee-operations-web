@@ -8,16 +8,19 @@ import { PaymentHubRoutingModule } from './paymenthub-routing.module';
 import { PipesModule } from '../pipes/pipes.module';
 
 /** Custom Components */
-import { IncomingTransactionsComponent } from './transactions/incoming/incoming-transactions.component';
-import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-transactions.component';
-import { PaymentHubComponent } from './paymenthub.component';
-import { TransactionDetailsComponent } from './transactions/transaction-details.component';
-import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
-import { RetryResolveDialogComponent } from './transactions/retry-resolve-dialog/retry-resolve-dialog.component';
-import { IncomingRequestToPayComponent } from './request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component';
-import { OutgoingRequestToPayComponent } from './request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component';
-import { ViewRequestToPayComponent } from './request-to-pay/view-request-to-pay/view-request-to-pay.component';
-import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component';
+import { IncomingTransactionsComponent } from "./transactions/incoming/incoming-transactions.component";
+import { OutgoingTransactionsComponent } from "./transactions/outgoing/outgoing-transactions.component";
+import { PaymentHubComponent } from "./paymenthub.component";
+import { TransactionDetailsComponent } from "./transactions/transaction-details.component";
+import { IncomingRequestToPayComponent } from "./request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component";
+import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component";
+import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/view-request-to-pay.component";
+import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
+import { IncomingRecallsComponent } from './recalls/incoming/incoming-recalls.component';
+import { OutgoingRecallsComponent } from './recalls/outgoing/outgoing-recalls.component';
+import { RecallDetailsComponent } from './recalls/recall-details.component';
+import { BpmnDialogComponent } from './common/bpmn-dialog/bpmn-dialog.component';
+import { RetryResolveDialogComponent } from './common/retry-resolve-dialog/retry-resolve-dialog.component';
 import {ListTasksComponent} from './tasks/list/list-tasks.component';
 import {MyTasksComponent} from './tasks/my/my-tasks.component';
 import {ButtonComponent} from './tasks/task-view/components/button/button.component';
@@ -48,6 +51,9 @@ import {RadiobuttonBooleanComponent} from './tasks/task-view/components/radiobut
     IncomingTransactionsComponent,
     OutgoingTransactionsComponent,
     TransactionDetailsComponent,
+    IncomingRecallsComponent,
+    OutgoingRecallsComponent,
+    RecallDetailsComponent,
     PaymentHubComponent,
     BpmnDialogComponent,
     RetryResolveDialogComponent,

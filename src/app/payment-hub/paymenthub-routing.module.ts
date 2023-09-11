@@ -11,15 +11,18 @@ import { Route } from '../core/route/route.service';
 import { extract } from '../core/i18n/i18n.service';
 
 /** Custom Components */
-import { IncomingTransactionsComponent } from './transactions/incoming/incoming-transactions.component';
-import { TransactionDetailsComponent } from './transactions/transaction-details.component';
-import { PaymentHubComponent } from './paymenthub.component';
-import { IncomingRequestToPayComponent } from './request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component';
-import { OutgoingRequestToPayComponent } from './request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component';
-import { ViewRequestToPayComponent } from './request-to-pay/view-request-to-pay/view-request-to-pay.component';
-
+import { IncomingTransactionsComponent } from "./transactions/incoming/incoming-transactions.component";
+import { TransactionDetailsComponent } from "./transactions/transaction-details.component";
+import { PaymentHubComponent } from "./paymenthub.component";
+import { IncomingRequestToPayComponent } from "./request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component";
+import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component";
+import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/view-request-to-pay.component";
+import { IncomingRecallsComponent } from './recalls/incoming/incoming-recalls.component';
+import { OutgoingRecallsComponent } from './recalls/outgoing/outgoing-recalls.component';
+import { RecallDetailsComponent } from './recalls/recall-details.component';
 import { CurrenciesResolver } from './transactions/resolver/currencies.resolver';
 import { TransactionResolver } from './transactions/resolver/transaction.resolver';
+import { RecallResolver } from './recalls/resolver/recall.resolver';
 import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-transactions.component';
 import { DfspResolver } from './transactions/resolver/dfsp.resolver';
 import { RequestToPayResolver } from './request-to-pay/common-resolvers/request-to-pay.resolver';
@@ -83,6 +86,52 @@ const routes: Routes = [
               data: { title: extract('View Transaction'), routeParamBreadcrumb: 'id' },
               resolve: {
                 transaction: TransactionResolver,
+                dfspEntries: DfspResolver
+              }
+            }
+          ]
+        },
+        {
+          path: 'incomingrecalls',
+          data: { title: extract('Search Incoming Recalls'), breadcrumb: 'Incoming Recalls' },
+          children: [
+            {
+              path: '',
+              component: IncomingRecallsComponent,
+              resolve: {
+                currencies: CurrenciesResolver,
+                dfspEntries: DfspResolver
+              }
+            },
+            {
+              path: 'view/:id',
+              component: RecallDetailsComponent,
+              data: { title: extract('View Recall'), routeParamBreadcrumb: 'id' },
+              resolve: {
+                recall: RecallResolver,
+                dfspEntries: DfspResolver
+              }
+            }
+          ]
+        },
+        {
+          path: 'outgoingrecalls',
+          data: { title: extract('Search Outgoing Recalls'), breadcrumb: 'Outgoing Recalls' },
+          children: [
+            {
+              path: '',
+              component: OutgoingRecallsComponent,
+              resolve: {
+                currencies: CurrenciesResolver,
+                dfspEntries: DfspResolver
+              }
+            },
+            {
+              path: 'view/:id',
+              component: RecallDetailsComponent,
+              data: { title: extract('View Recall'), routeParamBreadcrumb: 'id' },
+              resolve: {
+                recall: RecallResolver,
                 dfspEntries: DfspResolver
               }
             }
@@ -198,6 +247,7 @@ const routes: Routes = [
   providers: [
     CurrenciesResolver,
     TransactionResolver,
+    RecallResolver,
     DfspResolver,
     RequestToPayResolver,
     ViewRequestToPayResolver,

@@ -10,7 +10,7 @@ import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 
 /** Custom Services */
 /** Custom Data Source */
-import {RetryResolveDialogComponent} from '../../transactions/retry-resolve-dialog/retry-resolve-dialog.component';
+import {RetryResolveDialogComponent} from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
 import {ListTasksDatasource} from './list-tasks.datasource';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ZeebeTask} from '../zeebe-tasks.model';

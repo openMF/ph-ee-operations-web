@@ -14,24 +14,25 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 /** Custom Services */
 
 /** Custom Data Source */
-import { TransactionsDataSource } from '../dataSource/transactions.datasource';
+import { RecallsDataSource } from '../dataSource/recalls.datasource';
 import { formatDate, formatLocalDate } from '../helper/date-format.helper';
-import { TransactionsService } from '../service/transactions.service';
+import { RecallsService } from '../service/recalls.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
-import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
+import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
+import { recallStatusData as recallStatuses } from '../helper/recall.helper';
+import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
 
 /**
- * Transactions component.
+ * Outgoing Recalls component.
  */
 @Component({
-  selector: 'mifosx-outgoing-transactions',
-  templateUrl: './outgoing-transactions.component.html',
-  styleUrls: ['./outgoing-transactions.component.scss']
+  selector: 'mifosx-outgoing-recalls',
+  templateUrl: './outgoing-recalls.component.html',
+  styleUrls: ['./outgoing-recalls.component.scss']
 })
-export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
+export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
 
   /** Minimum transaction date allowed. */
   minDate = new Date(2000, 0, 1);
@@ -42,6 +43,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   payeeDfspId = new FormControl();
   payeeDfspName = new FormControl();
   status = new FormControl();
+  recallStatus = new FormControl();
   paymentStatus = new FormControl();
   amount = new FormControl();
   currencyCode = new FormControl();
@@ -49,7 +51,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   filteredDfspEntries: any;
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
-  transactionStatusData = statuses;
+  recallStatusData = recallStatuses;
+  transactionStatusData = transactionStatuses;
   paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
@@ -59,11 +62,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'actions'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'recallStatus', 'actions'];
   /** Data source for transactions table. */
-  dataSource: TransactionsDataSource;
+  dataSource: RecallsDataSource;
   /** Journal entries filter. */
-  filterTransactionsBy = [
+  filterRecallsBy = [
     {
       type: 'payeePartyId',
       value: ''
@@ -86,6 +89,10 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'status',
+      value: ''
+    },
+    {
+      type: 'recallStatus',
       value: ''
     },
     {
@@ -125,7 +132,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
    * @param {ActivatedRoute} route Activated Route.
    * @param {MatDialog} dialog Dialog reference.
    */
-  constructor(private transactionsService: TransactionsService,
+  constructor(private recallsService: RecallsService,
     private route: ActivatedRoute,
     public dialog: MatDialog) {
     this.route.data.subscribe((data: {
@@ -143,7 +150,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.setFilteredCurrencies();
     this.setFilteredDfspEntries();
-    this.getTransactions();
+    this.getRecalls();
   }
 
   /**
@@ -216,6 +223,16 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
+      this.recallStatus.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'recallStatus');
+        })
+      )
+      .subscribe();
+
     this.paymentStatus.valueChanges
       .pipe(
         debounceTime(500),
@@ -281,21 +298,21 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadTransactionsPage())
+        tap(() => this.loadRecallsPage())
       )
       .subscribe();
 
-    this.loadTransactionsPage();
+    this.loadRecallsPage();
   }
 
   /**
-   * Loads a page of transactions.
+   * Loads a page of recalls.
    */
-  loadTransactionsPage() {
+  loadRecallsPage() {
     if (!this.sort.direction) {
       delete this.sort.active;
     }
-    this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    this.dataSource.getRecalls(this.filterRecallsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   /**
@@ -305,9 +322,9 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
    */
   applyFilter(filterValue: string, property: string) {
     this.paginator.pageIndex = 0;
-    const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
-    this.filterTransactionsBy[findIndex].value = filterValue;
-    this.loadTransactionsPage();
+    const findIndex = this.filterRecallsBy.findIndex(filter => filter.type === property);
+    this.filterRecallsBy[findIndex].value = filterValue;
+    this.loadRecallsPage();
   }
 
   /**
@@ -426,12 +443,12 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   /**
    * Initializes the data source for journal entries table and loads the first page.
    */
-  getTransactions() {
-    this.dataSource = new TransactionsDataSource(this.transactionsService);
+  getRecalls() {
+    this.dataSource = new RecallsDataSource(this.recallsService);
     if (this.sort && this.paginator) {
-      this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+      this.dataSource.getRecalls(this.filterRecallsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
     } else {
-      this.dataSource.getTransactions(this.filterTransactionsBy, '', '', 0, 10);
+      this.dataSource.getRecalls(this.filterRecallsBy, '', '', 0, 10);
     }
   }
 

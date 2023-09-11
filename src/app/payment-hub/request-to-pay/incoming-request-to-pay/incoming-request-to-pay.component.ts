@@ -456,6 +456,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
     console.log(this.dataSource);
+    console.log(this.sort);
     this.dataSource.getRequestsPay(this.filterTransactionsBy);
   }
 }

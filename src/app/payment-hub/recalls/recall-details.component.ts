@@ -12,10 +12,10 @@ import { from } from 'rxjs';
 import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
-import { TransactionsService } from './service/transactions.service';
+import { RecallsService } from './service/recalls.service';
 import { formatDate, formatLocalDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
-import { transactionStatusData as statuses } from './helper/transaction.helper';
+import { transactionStatusData as transactionStatuses } from './helper/recall.helper';
 
 /** Dialog Components */
 import { BpmnDialogComponent } from '../common/bpmn-dialog/bpmn-dialog.component'
@@ -29,12 +29,12 @@ import { AlertService } from 'app/core/alert/alert.service';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
 
 /**
- * View transaction component.
+ * View recall component.
  */
 @Component({
-  selector: 'mifosx-transaction-details',
-  templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.scss'],
+  selector: 'mifosx-recall-details',
+  templateUrl: './recall-details.component.html',
+  styleUrls: ['./recall-details.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
@@ -43,7 +43,7 @@ import { AuthenticationService } from 'app/core/authentication/authentication.se
     ]),
   ],
 })
-export class TransactionDetailsComponent implements OnInit {
+export class RecallDetailsComponent implements OnInit {
 
   // TODO: Update once language and date settings are setup
 
@@ -59,17 +59,17 @@ export class TransactionDetailsComponent implements OnInit {
   taskList: MatTableDataSource<any>;
   businessAttributes: MatTableDataSource<any>;
   dfspEntriesData: DfspEntry[];
-  transactionStatusData = statuses;
+  transactionStatusData = transactionStatuses;
   tasks: Array<any> = [];
   counter: number = 0;
   expandedElement: Array<any> = [];
   /**
-   * @param {TransactionsService} transactionsService Transactions Service.
+   * @param {RecallsService} recallsService Recalls Service.
    * @param {ActivatedRoute} route Activated Route.
    * @param {Router} router Router for navigation.
    * @param {MatDialog} dialog Dialog reference.
    */
-  constructor(private transactionsService: TransactionsService,
+  constructor(private recallsService: RecallsService,
     private alertService: AlertService,
     private authService: AuthenticationService,
     private route: ActivatedRoute,
@@ -103,11 +103,11 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   /**
-   * Retrieves the transaction data from `resolve` and sets the transaction table.
+   * Retrieves the recall data from `resolve` and sets the transaction table.
    */
   ngOnInit() {
-    this.route.data.subscribe((data: { transaction: any }) => {
-      this.datasource = data.transaction;
+    this.route.data.subscribe((data: { recall: any }) => {
+      this.datasource = data.recall;
       this.setTransactionBusinessAttributes();
     });
     const source = from(this.datasource.tasks);
@@ -219,7 +219,8 @@ export class TransactionDetailsComponent implements OnInit {
     return this.datasource.transfer.direction === 'OUTGOING' && this.authService.hasAccess('RECALL');
   }
 
-  openReturnDialog() {
+  //TODO: @vector details-ből mit lehet csinálni a recall-al
+  /*openReturnDialog() {
     if (!this.hasRefundAccess()) {
       return;
     }
@@ -245,9 +246,11 @@ export class TransactionDetailsComponent implements OnInit {
         );
       }
     });
-  }
+  }*/
 
-  openRecallDialog() {
+
+  //TODO: @vector details-ből mit lehet csinálni a recall-al
+  /*openRecallDialog() {
     if (!this.hasRecallAccess()) {
       return;
     }
@@ -276,5 +279,5 @@ export class TransactionDetailsComponent implements OnInit {
         );
       }
     });
-  }
+  }*/
 }
