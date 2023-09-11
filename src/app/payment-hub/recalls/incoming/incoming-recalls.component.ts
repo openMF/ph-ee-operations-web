@@ -17,6 +17,7 @@ import { RecallsDataSource } from '../dataSource/recalls.datasource';
 import { formatDate, formatLocalDate } from '../helper/date-format.helper';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
 import { recallStatusData as recallStatuses } from '../helper/recall.helper';
+import { recallDirectionData as recallDirections } from '../helper/recall.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
 import { RecallsService } from '../service/recalls.service';
 import { DfspEntry } from '../model/dfsp.model';
@@ -42,6 +43,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   payerDfspName = new FormControl();
   status = new FormControl();
   recallStatus = new FormControl();
+  recallDirection = new FormControl();
   paymentStatus = new FormControl();
   amount = new FormControl();
   endToEndIdentification = new FormControl();
@@ -51,6 +53,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   recallStatusData = recallStatuses;
+  recallDirectionData = recallDirections;
   transactionStatusData = transactionStatuses;
   paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
@@ -60,7 +63,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status', 'recallStatus', 'actions'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status', 'recallStatus', 'recallDirection','actions'];
   /** Data source for transactions table. */
   dataSource: RecallsDataSource;
   /** Journal entries filter. */
@@ -91,6 +94,10 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'recallStatus',
+      value: ''
+    },
+    {
+      type: 'recallDirection',
       value: ''
     },
     {
@@ -227,6 +234,16 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'recallStatus');
+        })
+      )
+      .subscribe();
+
+    this.recallDirection.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'recallDirection');
         })
       )
       .subscribe();

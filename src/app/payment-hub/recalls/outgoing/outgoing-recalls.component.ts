@@ -21,6 +21,7 @@ import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
 import { recallStatusData as recallStatuses } from '../helper/recall.helper';
+import { recallDirectionData as recallDirections } from '../helper/recall.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
 
@@ -44,6 +45,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   payeeDfspName = new FormControl();
   status = new FormControl();
   recallStatus = new FormControl();
+  recallDirection = new FormControl();
   paymentStatus = new FormControl();
   amount = new FormControl();
   currencyCode = new FormControl();
@@ -52,6 +54,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   recallStatusData = recallStatuses;
+  recallDirectionData = recallDirections;
   transactionStatusData = transactionStatuses;
   paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
@@ -62,7 +65,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'recallStatus', 'actions'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'recallStatus', 'recallDirection','actions'];
   /** Data source for transactions table. */
   dataSource: RecallsDataSource;
   /** Journal entries filter. */
@@ -93,6 +96,10 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'recallStatus',
+      value: ''
+    },
+    {
+      type: 'recallDirection',
       value: ''
     },
     {
@@ -223,12 +230,22 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-      this.recallStatus.valueChanges
+    this.recallStatus.valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'recallStatus');
+        })
+      )
+      .subscribe();
+
+    this.recallDirection.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'recallDirection');
         })
       )
       .subscribe();

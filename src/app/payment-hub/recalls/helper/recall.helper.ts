@@ -44,6 +44,29 @@ export const recallStatusData = [
     }
 ];
 
+export const recallDirectionData = [
+    {
+        option: 'AFR incoming recall',
+        value: 'AFR.incoming.recall',
+        css: 'black'
+    },
+    {
+        option: 'AFR outgoing recall',
+        value: 'AFR.outgoing.recall',
+        css: 'black'
+    },
+    {
+        option: 'IG2 incoming recall',
+        value: 'IG2.incoming.recall',
+        css: 'black'
+    },
+    {
+        option: 'IG2 outgoing recall',
+        value: 'IG2.outgoing.recall',
+        css: 'black'
+    }
+];
+
 export const paymentStatusData = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},

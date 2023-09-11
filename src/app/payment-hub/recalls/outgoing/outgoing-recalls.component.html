@@ -48,6 +48,17 @@
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
+    <mat-label>Recall Direction</mat-label>
+    <mat-select [formControl]="recallDirection">
+      <ng-container *ngFor="let filter of recallDirectionData">
+        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+          {{ filter.option }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
     <mat-label>Payment Status</mat-label>
     <mat-select [formControl]="paymentStatus">
       <ng-container *ngFor="let filter of paymentStatusData">
@@ -166,8 +177,13 @@
     </ng-container>
 
     <ng-container matColumnDef="recallStatus">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Recall </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Recall Status </th>
     <td mat-cell *matCellDef="let transaction" [ngClass]="{'red': transaction.recallStatus==='SUCCESSFUL_REJECTED','green': transaction.recallStatus==='SUCCESSFUL_ACCEPTED'}">{{ transaction.recallStatus }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="recallDirection">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Recall Direction </th>
+    <td mat-cell *matCellDef="let transaction">{{ transaction.recallDirection }} </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
