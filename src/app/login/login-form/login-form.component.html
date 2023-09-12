@@ -1,6 +1,6 @@
 <form fxLayout="column" [formGroup]="loginForm" (ngSubmit)="login()" id="login-form">
 
-  <mat-form-field fxFlexAlign="center" class="login-input">
+<!--   <mat-form-field fxFlexAlign="center" class="login-input">
     <span matPrefix>
       <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
     </span>
@@ -36,17 +36,17 @@
     <mat-error *ngIf="loginForm.controls.tenant.hasError('required')">
       Tenant is <strong>required</strong>
     </mat-error>
-  </mat-form-field>
+  </mat-form-field> -->
 
   <mat-checkbox fxFlexAlign="center" formControlName="remember" class="m-t-10">Remember me</mat-checkbox>
 
-  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" [disabled]="!loginForm.valid">
+  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button">
     Login
     <mat-spinner [diameter]="20" *ngIf="loading"></mat-spinner>
   </button>
 
-  <button type="button" mat-button fxFlexAlign="center" class="login-button" (click)="forgotPassword()" [disabled]="loading">
+<!--   <button type="button" mat-button fxFlexAlign="center" class="login-button" (click)="forgotPassword()" [disabled]="loading">
     Forgot Password?
-  </button>
+  </button> -->
 
 </form>

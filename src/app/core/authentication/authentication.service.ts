@@ -19,6 +19,7 @@ import {OAuth2Token} from './o-auth2-token.model';
 import {AppConfig} from 'app/app.config';
 
 import jwt_decode from 'jwt-decode';
+import CryptoJS from 'crypto-js';
 import {Router} from '@angular/router';
 
 /**
@@ -96,6 +97,45 @@ export class AuthenticationService {
     return authorities.includes('ALL_FUNCTIONS') || authorities.includes(permission);
   }
 
+  authorize() {
+    //const state = this.strRandom(40);
+    const codeVerifier = this.strRandom(128);
+
+    this.storage = localStorage;
+
+    //this.storage.set('state', state);
+    this.storage.setItem('codeVerifier', codeVerifier);
+
+    const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
+
+    const codeChallenge = codeVerifierHash
+        .replace(/=/g, '')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
+
+    const params = [
+        'response_type=code',
+        //'state=' + state,
+        'client_id=community-app',
+        'client_secret=' + environment.oauth.oauthClientSecret,
+        'code_challenge=' + codeChallenge,
+        'code_challenge_method=S256',
+        'redirect_uri=' + encodeURIComponent(environment.oauth.oauthCallbackUrl),
+    ];
+
+    window.location.href = environment.oauth.oauthLoginUrl + '?' + params.join('&');
+  }
+
+  private strRandom(length: number) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
   /**
    * Authenticates the user.
    * @param {LoginContext} loginContext Login parameters.
@@ -103,9 +143,9 @@ export class AuthenticationService {
    */
   login(loginContext: LoginContext) {
     this.alertService.alert({ type: 'Authentication Start', message: 'Please wait...' });
-    this.rememberMe = loginContext.remember;
-    this.storage = this.rememberMe ? localStorage : sessionStorage;
-    this.tenantId = loginContext.tenant;
+    //this.rememberMe = loginContext.remember;
+    //this.storage = this.rememberMe ? localStorage : sessionStorage;
+    //this.tenantId = loginContext.tenant;
     let httpParams = new HttpParams();
     this.username = loginContext.username;
     httpParams = httpParams.set('username', loginContext.username);
@@ -116,14 +156,14 @@ export class AuthenticationService {
       const payload = new HttpParams()
           .set('username', loginContext.username)
           .set('password', loginContext.password)
-          .set('grant_type', 'password')
-          .set('client_id', 'community-app')
-          .set('scope', 'ALL');
+          //.set('grant_type', 'password')
+          //.set('client_id', 'community-app')
+          //.set('scope', 'ALL');
       // if (environment.oauth.basicAuth === 'true') {
       //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       // }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, payload)
-        .pipe(
+      return this.http.disableApiPrefix().get(`${environment.oauth.serverUrl}/login`);
+        /*.pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
@@ -131,7 +171,7 @@ export class AuthenticationService {
             this.refreshTokenOnExpiry(tokenResponse.expires_in);
             return of(true);
           })
-        );
+        );*/
     } else {
       return this.http.post('/authentication', {}, { params: httpParams })
         .pipe(
@@ -141,6 +181,31 @@ export class AuthenticationService {
           })
         );
     }
+  }
+
+  token(code: string) {
+    this.storage = localStorage;
+    const payload = new HttpParams()
+          .set('client_id', 'community-app')
+          .set('client_secret', environment.oauth.oauthClientSecret)
+          .set('grant_type', 'authorization_code')
+          .set('redirect_uri', environment.oauth.oauthCallbackUrl)
+          .set('code_verifier', this.storage.getItem('codeVerifier'))
+          .set('code', code)
+
+    this.storage.removeItem('codeVerifier')
+    this.storage = sessionStorage;
+
+    return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth2/token`, payload)
+        .pipe(
+          map((tokenResponse: OAuth2Token) => {
+            // TODO: fix UserDetails API
+            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+            this.onLoginSuccess({ username: 'mifos', accessToken: tokenResponse.access_token, authenticated: true, tenantId: 'binx' } as any);
+            this.refreshTokenOnExpiry(tokenResponse.expires_in);
+            return of(true);
+          })
+        );
   }
 
   /**
@@ -191,7 +256,7 @@ export class AuthenticationService {
       //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       // }
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, payload)
+      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth2/token`, payload)
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));

@@ -15,7 +15,11 @@ export let environment = {
     enabled: "true",
     serverUrl: "https://paymenthub.qa.oneacrefund.org/opsapp",
     basicAuth: "true",
-    basicAuthToken: 'Y2xpZW50Og=='
+    basicAuthToken: 'Y2xpZW50Og==',
+    oauthClientSecret: 'secret',
+    oauthLoginUrl: 'http://localhost:5000/oauth2/authorize',
+    oauthTokenUrl: 'http://localhost:5000/oauth2/token',
+    oauthCallbackUrl: 'http://localhost:4200/callback'
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],

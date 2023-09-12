@@ -27,6 +27,7 @@ import { AppConfig } from './app.config';
 import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
+import { CallbackModule } from './core/callback/callback.module';
 import { SettingsModule } from './settings/settings.module';
 import { SystemModule } from './system/system.module';
 import { UsersModule } from './users/users.module';
@@ -57,6 +58,7 @@ export function initConfig(config: AppConfig) {
     CoreModule,
     HomeModule,
     LoginModule,
+    CallbackModule,
     SettingsModule,
     SystemModule,
     UsersModule,
