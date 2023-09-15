@@ -13,7 +13,7 @@ RUN npm rebuild node-sass --force
 RUN npm install --force
 RUN ng build --configuration kubernetes
 
-FROM nginx:1.19.3
+FROM nginx:1.25.1
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/dist/web-app /usr/share/nginx/html
 EXPOSE 4200
