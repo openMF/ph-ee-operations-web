@@ -60,8 +60,8 @@ export class TransactionsService {
     return this.http.post('/api/v1/transfer/' + id + '/refund', comment);
   }
 
-  recall(id: string): Observable<any> {
-    return this.http.post('/api/v1/transfer/' + id + '/recall', "{}");
+  recall(id: string, comment: string): Observable<any> {
+    return this.http.post('/api/v1/transfer/' + id + '/recall', "{comment: " + comment + "}");
   }
 
   /**

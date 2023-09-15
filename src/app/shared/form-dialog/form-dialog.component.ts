@@ -6,6 +6,9 @@ import { FormfieldBase } from './formfield/model/formfield-base';
 
 import { FormGroupService } from './form-group.service';
 
+import { EventEmitter, Output } from '@angular/core';
+
+
 const layoutGap = 2;
 
 @Component({
@@ -14,6 +17,8 @@ const layoutGap = 2;
   styleUrls: ['./form-dialog.component.scss']
 })
 export class FormDialogComponent implements OnInit {
+
+  @Output() formSubmitted: EventEmitter<any> = new EventEmitter<any>();
 
   layout: {
     columns: number,
@@ -51,6 +56,11 @@ export class FormDialogComponent implements OnInit {
     if (!this.pristine) {
       this.form.markAsDirty();
     }
+  }
+
+  onConfirm() {
+    this.formSubmitted.emit(this.form.value);
+    this.dialogRef.close();
   }
 
 }

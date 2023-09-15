@@ -265,9 +265,9 @@ export class TransactionDetailsComponent implements OnInit {
       formfields: formfields
     };
     const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
-    editFundDialogRef.afterClosed().subscribe((response: any) => {
-      if (response.data) {
-        return this.transactionsService.recall(this.getTransferId()).subscribe(
+    editFundDialogRef.componentInstance.formSubmitted.subscribe((formData: any) => {
+      if (formData.comment) {
+        return this.transactionsService.recall(this.getTransferId(), formData.comment).subscribe(
             res => this.alertService.alert({
               type: 'Recall Success',
               message: `Recall request was successfully initiated!`
