@@ -30,13 +30,13 @@ export class IncomingRequestExportComponent implements OnInit {
     let startFrom = this.dateUtils.formatDate(filterBy.startdate, 'yyyy-MM-dd HH:mm:ss')
     let startTo = this.dateUtils.formatDate(filterBy.enddate, 'yyyy-MM-dd HH:mm:ss')
     let state = filterBy.cars;
-    if (startFrom != "") {
+    if (startFrom) {
       body = body.set("startFrom", startFrom);
     }
-    if (state != "") {
+    if (state) {
       body = body.set("state", filterBy.cars);
     }
-    if (startTo != "") {
+    if (startTo) {
       body = body.set("startTo", startTo);
     }
     console.log(body);
@@ -63,14 +63,13 @@ export class IncomingRequestExportComponent implements OnInit {
           headers: new HttpHeaders().append("Content-Type", "application/json"),
         }
       )
-      .subscribe((val) => {
+      .subscribe((val: Blob) => {
         console.log("POST call successful value returned in body", val);
-        this.downLoadFile(val, "application/csv");
+        this.downLoadFile(val);
       });
   }
-  downLoadFile(data: any, type: string) {
-    let blob = new Blob([data], { type: type });
-    let url = window.URL.createObjectURL(blob);
+  downLoadFile(data: Blob) {
+    let url = window.URL.createObjectURL(data);
     let pwa = window.open(url);
     if (!pwa || pwa.closed || typeof pwa.closed == "undefined") {
       alert("Please disable your Pop-up blocker and try again.");
