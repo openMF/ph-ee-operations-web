@@ -390,24 +390,8 @@ export class IncomingRequestToPayComponent implements OnInit {
     return entry ? entry.name : undefined;
   }
   exportCSV(filterBy: any, filterName: string) {
-    console.log(filterBy);
-    var postData = filterBy.transactionid.split(",");
-    console.log(postData);
-
-    this.http
-      .post(
-        "/api/v1/transactionRequests/export?filterBy=" + filterBy.cars,
-
-        postData,
-        {
-          responseType: "blob" as "json",
-          headers: new HttpHeaders().append("Content-Type", "application/json"),
-        }
-      )
-      .subscribe((val) => {
-        console.log("POST call successful value returned in body", val);
-        this.downLoadFile(val, "application/csv");
-      });
+    filterBy[filterBy.cars] = filterBy.val;
+    this.requestToPayService.exportCSV(filterBy, filterName);
   }
   /**
    * Displays office name in form control input.
