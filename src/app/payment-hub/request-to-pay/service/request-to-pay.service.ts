@@ -63,7 +63,7 @@ export class RequestToPayService {
     console.log(body);
     const exportURl = "/api/v1/transactionRequests?" + body;
 
-    var postData = {
+    const postData = {
       transactionId: filterBy.transactionid ? filterBy.transactionid.split(",") : [],
       externalid: filterBy.externalid ? filterBy.externalid.split(",") : [],
       workflowinstancekey: filterBy.workflowinstancekey ? filterBy.workflowinstancekey.split(",") : [],
