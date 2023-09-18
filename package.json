@@ -46,7 +46,7 @@
     "@ngx-translate/core": "11.0.1",
     "@swimlane/ngx-charts": "20.0.1",
     "angular-archwizard": "5.0.1",
-    "core-js": "2.5.0",
+    "core-js": "2.6.12",
     "jwt-decode": "^2.2.0",
     "lodash": "4.17.13",
     "rxjs": "6.6.7",
