@@ -48,7 +48,7 @@
     "angular-archwizard": "5.0.1",
     "core-js": "2.6.12",
     "jwt-decode": "^2.2.0",
-    "lodash": "4.17.13",
+    "lodash": "4.17.21",
     "rxjs": "6.6.7",
     "sass": "^1.47.0",
     "tslib": "^2.0.0",
