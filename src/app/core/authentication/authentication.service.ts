@@ -98,12 +98,12 @@ export class AuthenticationService {
   }
 
   authorize() {
-    //const state = this.strRandom(40);
+    const state = this.strRandom(40);
     const codeVerifier = this.strRandom(128);
 
     this.storage = localStorage;
 
-    //this.storage.set('state', state);
+    this.storage.setItem('state', state);
     this.storage.setItem('codeVerifier', codeVerifier);
 
     const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
@@ -115,7 +115,8 @@ export class AuthenticationService {
 
     const params = [
         'response_type=code',
-        //'state=' + state,
+        'state=' + state,
+        'scope=openid',
         'client_id=community-app',
         'client_secret=' + environment.oauth.oauthClientSecret,
         'code_challenge=' + codeChallenge,
@@ -190,18 +191,22 @@ export class AuthenticationService {
           .set('client_secret', environment.oauth.oauthClientSecret)
           .set('grant_type', 'authorization_code')
           .set('redirect_uri', environment.oauth.oauthCallbackUrl)
+          .set('state', this.storage.getItem('state'))
           .set('code_verifier', this.storage.getItem('codeVerifier'))
           .set('code', code)
 
     this.storage.removeItem('codeVerifier')
+    this.storage.removeItem('state')
     this.storage = sessionStorage;
 
     return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth2/token`, payload)
         .pipe(
           map((tokenResponse: OAuth2Token) => {
             // TODO: fix UserDetails API
+            const decoded = jwt_decode(tokenResponse.access_token)
+            this.tenantId = decoded['tenant'];
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
-            this.onLoginSuccess({ username: 'mifos', accessToken: tokenResponse.access_token, authenticated: true, tenantId: 'binx' } as any);
+            this.onLoginSuccess({ username: decoded['sub'], accessToken: tokenResponse.access_token, authenticated: true, tenantId: this.tenantId } as any);
             this.refreshTokenOnExpiry(tokenResponse.expires_in);
             return of(true);
           })
@@ -251,7 +256,9 @@ export class AuthenticationService {
 
     const payload = new HttpParams()
         .set('refresh_token', oAuthRefreshToken)
-        .set('grant_type', 'refresh_token');
+        .set('grant_type', 'refresh_token')
+        .set('client_id', 'community-app')
+        .set('client_secret', environment.oauth.oauthClientSecret);
       // if (environment.oauth.basicAuth === 'true') {
       //   this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
       // }

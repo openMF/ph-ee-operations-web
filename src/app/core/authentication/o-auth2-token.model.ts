@@ -6,6 +6,7 @@ export interface OAuth2Token {
   token_type: string;
   refresh_token: string;
   expires_in: number;
+  tenant: string;
   //scope: string;
   //jti: string;
 }
