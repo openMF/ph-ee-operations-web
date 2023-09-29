@@ -258,6 +258,12 @@ export class TransactionDetailsComponent implements OnInit {
         type: 'text',
         required: false
       }),
+      new InputBase({
+        controlName: 'recallAdditionalInformation',
+        label: 'Additional information',
+        type: 'text',
+        required: false
+      })
     ];
     const data = {
       title: 'Do you wish to recall this transaction?',
@@ -267,7 +273,7 @@ export class TransactionDetailsComponent implements OnInit {
     const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
     editFundDialogRef.componentInstance.formSubmitted.subscribe((formData: any) => {
       if (formData.comment) {
-        return this.transactionsService.recall(this.getTransferId(), formData.comment).subscribe(
+        return this.transactionsService.recall(this.getTransferId(), formData.comment, formData.recallAdditionalInformation).subscribe(
             res => this.alertService.alert({
               type: 'Recall Success',
               message: `Recall request was successfully initiated!`
