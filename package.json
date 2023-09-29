@@ -44,7 +44,7 @@
     "@fortawesome/fontawesome-svg-core": "1.3.0",
     "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@ngx-translate/core": "11.0.1",
-    "@swimlane/ngx-charts": "20.0.1",
+    "@swimlane/ngx-charts": "20.4.1",
     "angular-archwizard": "5.0.1",
     "core-js": "2.6.12",
     "jwt-decode": "^2.2.0",
