@@ -7,6 +7,9 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/c
 import { Observable, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { switchMap, take, filter, catchError } from 'rxjs/operators';
 
+/** Environment Configuration */
+import {environment} from '../../../environments/environment';
+
 import { AuthenticationService } from './authentication.service';
 import { Router } from '@angular/router';
 
@@ -42,7 +45,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
 
     this.retrieveAuthData();
-    if (request.url.indexOf('/oauth/token') !== -1) {
+    if (request.url == `${environment.oauth.serverUrl}/logout`) {
+      return next.handle(this.addCredentials(request));
+    }
+    if (request.url.indexOf('/oauth2/token') !== -1) {
       return next.handle(this.injectToken(request));
     }
     if (!this.authService.isLoggedIn) {
@@ -90,6 +96,16 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   injectToken(request: HttpRequest<any>) {
     return request.clone({ setHeaders: httpOptions.headers });
+  }
+
+  /*addCredentials(request: HttpRequest<any>) {
+    return request.clone();
+  }*/
+
+  addCredentials(request: HttpRequest<any>) {
+    return request.clone({
+      withCredentials: true,
+    });
   }
 
   setTenantId(tenantId: String) {
