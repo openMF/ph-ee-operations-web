@@ -45,7 +45,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
 
     this.retrieveAuthData();
-    if (request.url == `${environment.oauth.serverUrl}/login`) {
+    if (request.url == `${environment.oauth.serverUrl}/logout`) {
       return next.handle(this.addCredentials(request));
     }
     if (request.url.indexOf('/oauth2/token') !== -1) {
@@ -98,8 +98,14 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     return request.clone({ setHeaders: httpOptions.headers });
   }
 
-  addCredentials(request: HttpRequest<any>) {
+  /*addCredentials(request: HttpRequest<any>) {
     return request.clone();
+  }*/
+
+  addCredentials(request: HttpRequest<any>) {
+    return request.clone({
+      withCredentials: true,
+    });
   }
 
   setTenantId(tenantId: String) {

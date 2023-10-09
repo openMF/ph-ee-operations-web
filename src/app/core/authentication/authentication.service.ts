@@ -308,6 +308,7 @@ export class AuthenticationService {
    * @returns {Observable<boolean>} True if the user was logged out successfully.
    */
   logout(): Observable<boolean> {
+    this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/logout`, "{}").subscribe();
     this.loggedIn = false;
     this.setCredentials();
     return of(true);
