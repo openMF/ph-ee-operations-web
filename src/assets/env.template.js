@@ -12,8 +12,13 @@
     window["env"]["platformTenantIds"]  = '$PH_PLATFORM_TENANT_IDS';
   
     window["env"]["authEnabled"] = '$PH_AUTH_ENABLED';
+
     window["env"]["oauthEnabled"] = '$PH_OAUTH_ENABLED';
+    window["env"]["oauthType"] = '$PH_OAUTH_TYPE';
     window["env"]["oauthServerUrl"] = '$PH_OAUTH_SERVER_URL';
+    window["env"]["oauthRealm"] = '$PH_OAUTH_REALM';
+    window["env"]["oauthClientId"] = '$PH_OAUTH_CLIENT_ID';
+    window["env"]["oauthClientSecret"] = '$PH_OAUTH_CLIENT_SECRET';
     window["env"]["oauthBasicAuth"] = '$PH_OAUTH_BASIC_AUTH';
     window["env"]["oauthBasicAuthToken"] = '$PH_OAUTH_BASIC_AUTH_TOKEN';
   

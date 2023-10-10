@@ -52,10 +52,12 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   transactionDateFrom = new UntypedFormControl();
   /** Transaction date to form control. */
   transactionDateTo = new UntypedFormControl();
+  /** Transaction Type form control. */
+  transactionType = new UntypedFormControl();
   /** Transaction ID form control. */
   transactionId = new UntypedFormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status', 'actions'];
+  displayedColumns: string[] = ['batchReferenceNumber', 'startedAt', 'completedAt', 'sourceMinistry', 'bulkAmount', 'payerFspId', 'bulkAmount', 'status'];
   /** Data source for transactions table. */
   dataSource: TransactionsDataSource;
   /** Journal entries filter. */
@@ -408,6 +410,10 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         workflowInstanceKey: workflowInstanceKey
       },
     });
+  }
+
+  searchTransactions(): void {
+
   }
 
 }

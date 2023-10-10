@@ -1,79 +1,95 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Payer Id</mat-label>
-    <input matInput [formControl]="payerPartyId" >
-  </mat-form-field>
+  <mat-accordion class="filter-options">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3 class="m-r-10">Filters</h3>
+          <fa-icon icon="filter" size="xl"></fa-icon>
+        </mat-panel-title>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Payer DFSP Id</mat-label>
-    <input matInput [formControl]="payerDfspId" >
-  </mat-form-field>
+      </mat-expansion-panel-header>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Payer DFSP name</mat-label>
-    <input matInput [formControl]="payerDfspName" [matAutocomplete]="dfspEntriesAutocomplete">
-  </mat-form-field>
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Payee Id</mat-label>
-    <input matInput [formControl]="payeePartyId" >
-  </mat-form-field>
+        <mat-form-field fxFlex="25%" (click)="transactionDateFromPicker.open()">
+          <mat-label>From Date</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker"
+            [formControl]="transactionDateFrom">
+          <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #transactionDateFromPicker></mat-datepicker>
+        </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Transaction ID</mat-label>
-    <input matInput [formControl]="transactionId">
-  </mat-form-field>
+        <mat-form-field fxFlex="25%" (click)="transactionDateToPicker.open()">
+          <mat-label>To Date</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker"
+            [formControl]="transactionDateTo">
+          <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
+          <mat-datepicker #transactionDateToPicker></mat-datepicker>
+        </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Status</mat-label>
-    <mat-select [formControl]="status">
-      <ng-container *ngFor="let filter of transactionStatusData">
-        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
-          {{ filter.option }}
-        </mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
+        <mat-form-field fxFlex="25%">
+          <mat-label>Transaction Type</mat-label>
+          <input matInput [formControl]="transactionType">
+        </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Amount</mat-label>
-    <input matInput [formControl]="amount">
-  </mat-form-field>
+        <div fxFlex="20%" class="push-end m-t-15">
+          <button mat-raised-button color="primary" (click)="searchTransactions()">
+            <fa-icon icon="search" class="m-r-10"></fa-icon> Search
+          </button>
+        </div>
+      </div>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Currency</mat-label>
-    <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
-  </mat-form-field>
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Transaction Date From</mat-label>
-    <input matInput>
-    <!-- <input matInput [ngxMatDatetimePicker]="transactionDateFromPicker" placeholder="Choose a date" [formControl]="transactionDateFrom"
-       [min]="minDate" [max]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #transactionDateFromPicker [showSpinners]="true" [showSeconds]="true"
-       [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
-    </ngx-mat-datetime-picker> -->
- </mat-form-field>
+        <mat-form-field fxFlex="20%">
+          <mat-label>Source Ministry</mat-label>
+          <input matInput [formControl]="payerPartyId">
+        </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Transaction Date To</mat-label>
-    <input matInput>
-    <!-- <input matInput [ngxMatDatetimePicker]="transactionDateToPicker" placeholder="Choose a date" [formControl]="transactionDateTo"
-       [min]="minDate" [max]="maxDate" >
-    <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #transactionDateToPicker [showSpinners]="true" [showSeconds]="true"
-       [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
-    </ngx-mat-datetime-picker> -->
- </mat-form-field>
+        <mat-form-field fxFlex="20%">
+          <mat-label>Source Financial Institution</mat-label>
+          <input matInput [formControl]="payerDfspId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>Source Account Number</mat-label>
+          <input matInput [formControl]="payerDfspName">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>Amount</mat-label>
+          <input matInput [formControl]="amount">
+        </mat-form-field>
+      </div>
+
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+        <mat-form-field fxFlex="20%">
+          <mat-label>Destination Account Number</mat-label>
+          <input matInput [formControl]="transactionId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>Destination Financial Institution</mat-label>
+          <input matInput [formControl]="transactionId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>Transaction Reference Number</mat-label>
+          <input matInput [formControl]="transactionId">
+        </mat-form-field>
+
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 
 </div>
 
 
 <!-- Autocomplete data -->
 <mat-autocomplete autoActiveFirstOption #currenciesAutocomplete="matAutocomplete" [displayWith]="displayCurrencyName">
-  <mat-option *ngFor="let currency of filteredCurrencies | async" [value]="{ AlphabeticCode: currency.AlphabeticCode, Currency: currency.Currency }">
+  <mat-option *ngFor="let currency of filteredCurrencies | async"
+    [value]="{ AlphabeticCode: currency.AlphabeticCode, Currency: currency.Currency }">
     {{ currency.Currency}} ( {{ currency.AlphabeticCode }} )
   </mat-option>
 </mat-autocomplete>
@@ -84,84 +100,58 @@
   </mat-option>
 </mat-autocomplete>
 
-
 <div class="mat-elevation-z8 container">
 
   <table mat-table [dataSource]="dataSource" matSort>
 
+    <ng-container matColumnDef="batchReferenceNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Batch Reference Number </th>
+      <td mat-cell *matCellDef="let transaction"> {{
+        shortenValue(transaction.transactionId) }} </td>
+    </ng-container>
+
     <ng-container matColumnDef="startedAt">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time (UTC) </th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="completedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time (UTC) </th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time </th>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }}
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="transactionId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction ID </th>
-      <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.transactionId}}> {{ shortenValue(transaction.transactionId) }} </td>
+    <ng-container matColumnDef="sourceMinistry">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Ministry </th>
+      <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.transactionId}}> {{
+        shortenValue(transaction.transactionId) }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="payerPartyId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer Id </th>
+    <ng-container matColumnDef="bulkAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Bulk Amount </th>
       <td mat-cell *matCellDef="let transaction"> {{ transaction.payerPartyId }} </td>
     </ng-container>
 
-  
-
-    <ng-container matColumnDef="payerDfspId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer DFSP Id </th>
+    <ng-container matColumnDef="payerFspId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer FSP </th>
       <td mat-cell *matCellDef="let transaction"> {{ transaction.payerDfspId }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="payerDfspName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer DFSP Name </th>
-      <td mat-cell *matCellDef="let transaction"> {{ displayDfspName(getDfpsEntry(transaction.payerDfspId)) }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="payeePartyId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payee Id </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.payeePartyId }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.amount }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="currency">
-      <th mat-header-cell *matHeaderCellDef> Currency </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.currency }} </td>
     </ng-container>
 
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-    <td mat-cell *matCellDef="let transaction" [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">{{ transaction.status }} </td>
+      <td mat-cell *matCellDef="let transaction"
+        [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">
+        {{ transaction.status }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let transaction" (click)="$event.stopPropagation()">
-        <div *ngIf="transaction.status==='ACTION_NEEDED'"><button mat-button color="primary" (click)="openRetryResolveDialog(transaction.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="lg"></fa-icon></button><button mat-button class="green" (click)="openRetryResolveDialog(transaction.workflowInstanceKey,'resolve')" ><fa-icon icon="check" size="lg"></fa-icon></button></div>
-      </td>
-    </ng-container>
-
-    <!-- <ng-container matColumnDef="feeMethod">
-      <th mat-header-cell *matHeaderCellDef> Fee method </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.feeMethod }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="feeAmount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fee </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.payerFee+transaction.payeeFee }} </td>
-    </ng-container> -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.workflowInstanceKey]" class="select-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.workflowInstanceKey]"
+      class="select-row"></tr>
 
   </table>
 
-  <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
+  <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]"
+    showFirstLastButtons='false'></mat-paginator>
 
 </div>

@@ -1,24 +1,8 @@
-<div fxLayput="row" fxLayoutAlign="end" fxLayoutGap="2%" fxLayout.lt-md="column" class="container m-b-20">
-
-  <!-- <button mat-raised-button color="primary" [routerLink]="['/dashboard']">
-    <fa-icon icon="tachometer-alt"></fa-icon>&nbsp;&nbsp;
-    Dashboard
-  </button> -->
-
-</div>
-
-<div class="container">
-
-  <mat-card>
-
-    <mat-card-header>
-      <mat-card-title class="title">
-        Welcome, {{ username }}!
-      </mat-card-title>
-    </mat-card-header>
-
-    <img mat-card-image src="assets/images/mifos_lg-logo.jpg" alt="Mifos X">
-
-  </mat-card>
-
+<div class="container" fxLayout="row" fxLayout.lt-md="column">
+  <div *ngFor="let section of sections;">
+    <mifosx-list-item *userHasRole="section.roleName" 
+      [section]="section"
+      [classFormat]="">
+    </mifosx-list-item>
+  </div>
 </div>

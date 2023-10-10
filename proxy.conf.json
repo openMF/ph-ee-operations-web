@@ -1,0 +1,7 @@
+{
+    "/opsapp": {
+      "target": "https://ops-bk.sandbox.fynarfin.io",
+      "secure": true,
+      "changeOrigin": true
+    }
+  }

@@ -9,6 +9,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { DirectivesModule } from 'app/directives/directives.module';
 
 /**
  * Home Component
@@ -19,7 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     SharedModule,
     HomeRoutingModule,
-    TranslateModule.forRoot()
+    TranslateModule.forRoot(),
+    DirectivesModule
   ],
   declarations: [
     HomeComponent,

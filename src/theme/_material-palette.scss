@@ -1,0 +1,21 @@
+$mat-primary: (
+  100: #5ba2ec,
+  500: #1074b9,
+  700: #004989,
+  contrast: (
+    100: $dark-primary-text,
+    500: $light-primary-text,
+    700: $light-primary-text
+  )
+);
+
+$mat-accent: (
+  100: #e7ffa5,
+  500: #b4d575,
+  700: #83a447,
+  contrast: (
+    100: $dark-primary-text,
+    500: $dark-primary-text,
+    700: $dark-primary-text
+  )
+);
