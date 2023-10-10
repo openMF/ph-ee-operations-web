@@ -101,6 +101,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     }
   ];
+  dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
 
   /** Paginator for transactions table. */
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -229,8 +230,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startFrom');
+        tap((filterValue: moment.Moment) => {
+          this.applyFilter(filterValue.format(this.dateTimeFormat), 'startFrom');
         })
       )
       .subscribe();
@@ -239,8 +240,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+        tap((filterValue: moment.Moment) => {
+          this.applyFilter(filterValue.format(this.dateTimeFormat), 'startTo');
         })
       )
       .subscribe();
