@@ -171,7 +171,7 @@ export class SettingsService {
    * Returns Tenant Identifier
    */
   get tenantIdentifier(): string {
-    return localStorage.getItem('pheeTenantIdentifier') || environment.auth.tenant;
+    return localStorage.getItem('pheeTenantIdentifier') || environment.tenant;
   }
 
 }

@@ -1,26 +1,8 @@
-<div class="container">
-  <div fxLayout="row" fxLayout.lt-md="column" class="payment-hub-ee-wrap">
-    <mat-nav-list>
-      <mat-list-item fxFlex="33%" [routerLink]="['/paymenthub']">
-        <mat-icon matListIcon>
-          <fa-icon icon="search" size="sm"></fa-icon>
-        </mat-icon>
-        <h4 matLine class="title">Payment Hub</h4>
-      </mat-list-item>
-
-      <mat-list-item fxFlex="33%" [routerLink]="['/vouchers']">
-        <mat-icon matListIcon>
-          <fa-icon icon="search" size="sm"></fa-icon>
-        </mat-icon>
-        <h4 matLine class="title">Vouchers</h4>
-      </mat-list-item>
-
-      <mat-list-item fxFlex="33%" [routerLink]="['/account-management']">
-        <mat-icon matListIcon>
-          <fa-icon icon="search" size="sm"></fa-icon>
-        </mat-icon>
-        <h4 matLine class="title">Account Management</h4>
-      </mat-list-item>
-    </mat-nav-list>
+<div class="container" fxLayout="row" fxLayout.lt-md="column">
+  <div *ngFor="let section of sections;">
+    <mifosx-list-item *userHasRole="section.roleName" 
+      [section]="section"
+      [classFormat]="">
+    </mifosx-list-item>
   </div>
 </div>

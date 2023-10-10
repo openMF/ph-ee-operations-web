@@ -31,10 +31,10 @@
       </mat-nav-list>
 
       <div class="sidenav-collapse">
-        <button *ngIf="!sidenavCollapsed" mat-icon-button matTooltip="Close" (click)="sideNavCollapsed(true)">
+        <button mat-fab *ngIf="!sidenavCollapsed" matTooltip="Close" (click)="sideNavCollapsed(true)">
           <fa-icon icon="arrow-left" size="lg"></fa-icon>
         </button>
-        <button *ngIf="sidenavCollapsed" mat-icon-button matTooltip="Open" (click)="sideNavCollapsed(false)">
+        <button mat-fab *ngIf="sidenavCollapsed" matTooltip="Open" (click)="sideNavCollapsed(false)">
           <fa-icon icon="arrow-right" size="lg"></fa-icon>
         </button>
       </div>

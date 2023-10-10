@@ -16,6 +16,8 @@ import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 import { IconsModule } from './icons.module';
 import { MaterialModule } from './material.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { ListItemComponent } from './list-item/list-item.component';
+import { TenantSelectorComponent } from './tenant-selector/tenant-selector.component';
 
 /**
  * Shared Module
@@ -38,6 +40,8 @@ import { TranslateModule } from '@ngx-translate/core';
         FooterComponent,
         LanguageSelectorComponent,
         ThemePickerComponent,
+        ListItemComponent,
+        TenantSelectorComponent
     ],
     exports: [
         FileUploadComponent,
@@ -49,7 +53,9 @@ import { TranslateModule } from '@ngx-translate/core';
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,
-        TranslateModule
+        TranslateModule,
+        ListItemComponent,
+        TenantSelectorComponent
     ]
 })
 export class SharedModule { }

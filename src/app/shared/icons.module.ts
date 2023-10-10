@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 /** Angular Font Awesome Imports */
 import { FontAwesomeModule, FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, fas } from '@fortawesome/free-solid-svg-icons';
 import {
   faAnchor,
   faArchive,
@@ -87,6 +87,7 @@ import {
   faStop,
   faAngleDown,
   faAngleUp,
+  faTicket,
 } from '@fortawesome/free-solid-svg-icons';
 
 /** Add icons to the library for convenient access in other components. */
@@ -173,6 +174,11 @@ library.add(
   faAngleDown,
   faAngleUp,
   faUserCircle,
+  faTicket,
+  faFileAlt,
+  faFilter,
+  faUpload,
+  faFileUpload,
   fas,
 );
 

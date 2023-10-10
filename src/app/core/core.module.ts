@@ -14,7 +14,7 @@ import { ProgressBarService } from './progress-bar/progress-bar.service';
 import { I18nService } from './i18n/i18n.service';
 
 /** Custom Guards */
-import { AuthenticationGuard } from './authentication/authentication.guard';
+import { AuthenticationGuard } from './authentication/guard/authentication.guard';
 
 /** Custom Interceptors */
 import { ProgressInterceptor } from './progress-bar/progress.interceptor';

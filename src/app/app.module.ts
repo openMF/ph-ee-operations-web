@@ -1,5 +1,5 @@
 /** Angular Imports */
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -10,9 +10,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 /** Chart Imports */
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-
-/** Environment Configuration */
-import { environment } from 'environments/environment';
 
 /** Main Component */
 import { WebAppComponent } from './web-app.component';
@@ -34,6 +31,9 @@ import { PaymentHubModule } from './payment-hub/paymenthub.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { DatePipe, LocationStrategy } from '@angular/common';
+import { VouchersModule } from './vouchers/vouchers.module';
+import { AccountMapperModule } from './account-mapper/account-mapper.module';
+import { KeycloakAngularModule } from 'keycloak-angular';
 
 /**
  * App Module
@@ -52,6 +52,7 @@ import { DatePipe, LocationStrategy } from '@angular/common';
         deps: [HttpClient, LocationStrategy]
       }
     }),
+    KeycloakAngularModule,
     NgxChartsModule,
     CoreModule,
     HomeModule,
@@ -60,10 +61,14 @@ import { DatePipe, LocationStrategy } from '@angular/common';
     SystemModule,
     UsersModule,
     PaymentHubModule,
+    VouchersModule,
+    AccountMapperModule,
     AppRoutingModule,
   ],
   declarations: [WebAppComponent, NotFoundComponent],
-  providers: [DatePipe],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [WebAppComponent]
 })
 export class AppModule { }

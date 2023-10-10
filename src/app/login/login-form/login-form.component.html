@@ -1,5 +1,16 @@
 <form fxLayout="column" [formGroup]="loginForm" (ngSubmit)="login()" id="login-form">
 
+  <mat-form-field fxFlexAlign="center" class="login-input" *ngIf="tenantIdIsList()">
+    <span matPrefix>
+      <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
+    </span>
+    <mat-label>Tenant</mat-label>
+    <input matInput type="text" formControlName="tenant">
+    <mat-error *ngIf="loginForm.controls.tenant.hasError('required')">
+      Tenant is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
   <mat-form-field fxFlexAlign="center" class="login-input">
     <span matPrefix>
       <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
@@ -24,17 +35,6 @@
     </button>
     <mat-error *ngIf="loginForm.controls.password.hasError('required')">
       Password is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlexAlign="center" class="login-input">
-    <span matPrefix>
-      <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
-    </span>
-    <mat-label>Tenant</mat-label>
-    <input matInput type="text" autocomplete="off" formControlName="tenant">
-    <mat-error *ngIf="loginForm.controls.tenant.hasError('required')">
-      Tenant is <strong>required</strong>
     </mat-error>
   </mat-form-field>
 

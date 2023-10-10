@@ -1,6 +1,5 @@
 /** Angular Imports */
 import { NgModule } from "@angular/core";
-import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
 
 /** Custom Modules */
 import { SharedModule } from "../shared/shared.module";
@@ -30,7 +29,6 @@ import { SubBatchesComponent } from './sub-batches/sub-batches.component';
  */
 @NgModule({
     imports: [
-        MatDialogModule,
         SharedModule,
         PaymentHubRoutingModule,
         PipesModule,

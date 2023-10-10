@@ -1,31 +1,15 @@
 .container {
-  width: 35rem;
-
-
+  width: 80%;
 }
 
-mat-list-item {
-  border: 1px;
-  border-radius: 15px;
-  vertical-align: middle;
-  min-height: 40px;
-}
-
-.mat-list-base .mat-list-item .mat-list-item-content {
-  background: red;
-}
-
-.green {
-  color: green;
-}
-
-.red {
-  color: red;
-}
-
-.orange {
-  color: orange;
-}
 .payment-hub-ee-wrap {
   flex-wrap: wrap;
+  width: 100%;
+
+  mifosx-batches,
+  mifosx-sub-batches,
+  mifosx-filter-selector {
+    width: 100%;
+  }
+  
 }

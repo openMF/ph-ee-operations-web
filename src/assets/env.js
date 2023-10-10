@@ -12,8 +12,13 @@
     window["env"]["platformTenantIds"]  = 'gorilla';
   
     window["env"]["authEnabled"] = 'false';
+
     window["env"]["oauthEnabled"] = 'false';
-    window["env"]["oauthServerUrl"] = 'https://ops-bk.sandbox.fynarfin.io';
+    window["env"]["oauthType"] = 'keycloak';
+    window["env"]["oauthServerUrl"] = 'http://keycloak.sandbox.fynarfin.io/auth';
+    window["env"]["oauthRealm"] = 'paymenthub';
+    window["env"]["oauthClientId"] = 'opsapp';
+    window["env"]["oauthClientSecret"] = 'cRNPVfLctgkMPMLpXTLJPPT1fnz2wdI9';
     window["env"]["oauthBasicAuth"] = 'true';
     window["env"]["oauthBasicAuthToken"] = 'Y2xpZW50Og==';
   

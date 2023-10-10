@@ -5,9 +5,10 @@
 
       <mifosx-language-selector class="m-l-10 language" fxHide.lt-md></mifosx-language-selector>
 
-      <span fxFlex="auto" class="username">{{displayUser()}}</span>
+      <span fxFlex="auto"></span>
+      <div class="username" matTooltip="{{displayEmail()}}" >{{displayUser()}}</div>
 
-      <button mat-icon class="m-r-10" [matMenuTriggerFor]="applicationMenu">
+      <button mat-fab class="user-icon m-r-10" [matMenuTriggerFor]="applicationMenu">
           <fa-icon icon="user" size="lg"></fa-icon>
       </button>
     </div>

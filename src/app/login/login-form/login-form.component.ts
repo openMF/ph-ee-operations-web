@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 
 /** Custom Services */
 import { AuthenticationService } from '../../core/authentication/authentication.service';
+import { environment } from 'environments/environment';
 
 /**
  * Login form component.
@@ -24,6 +25,9 @@ export class LoginFormComponent implements OnInit {
   passwordInputType: string;
   /** True if loading. */
   loading = false;
+
+  tenantIdDefault: string = environment.tenant;
+  tenantIdsDefault: string[] = environment.tenants.split(',');
 
   /**
    * @param {FormBuilder} formBuilder Form Builder.
@@ -72,9 +76,13 @@ export class LoginFormComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       'username': ['', Validators.required],
       'password': ['', Validators.required],
-      'tenant': ['', Validators.required],
+      'tenant': [this.tenantIdDefault, Validators.required],
       'remember': false
     });
+  }
+
+  tenantIdIsList(): boolean {
+    return (this.tenantIdsDefault.length > 1);
   }
 
 }

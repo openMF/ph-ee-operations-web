@@ -29,6 +29,7 @@ import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bul
 import { GetBatchesExportComponent } from "./request-to-pay/get-batches-export/get-batches-export.component";
 import { BatchesComponent } from "./batches/batches.component";
 import { SubBatchesComponent } from "./sub-batches/sub-batches.component";
+
 /** Payment HUB Routes */
 const routes: Routes = [
   Route.withShell([
@@ -38,8 +39,13 @@ const routes: Routes = [
       data: { title: extract("Payment Hub EE"), breadcrumb: "Payment Hub EE" },
       children: [
         {
+          path: '',
+          redirectTo: 'batches',
+          pathMatch: 'full'
+        },
+        {
           path: "batches",
-          component: BatchesComponent,
+          component: BatchesComponent
         },
         {
           path: "sub-batches",

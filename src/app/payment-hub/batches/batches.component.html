@@ -1,48 +1,98 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+<div class="main-container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
 
-  <h1>HOLA</h1>
+  <mat-accordion class="filter-options">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3 class="m-r-10">Filters</h3>
+          <fa-icon icon="filter" size="xl"></fa-icon>
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+      
+        <mat-form-field fxFlex="30%" (click)="transactionDateFromPicker.open()">
+          <mat-label>From Date</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker" [formControl]="transactionDateFrom">
+          <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #transactionDateFromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="25%" (click)="transactionDateToPicker.open()">
+          <mat-label>To Date</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker"
+            [formControl]="transactionDateTo">
+          <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
+          <mat-datepicker #transactionDateToPicker></mat-datepicker>
+        </mat-form-field>
+
+        <div fxFlex="30%" class="push-end m-t-15">
+          <button mat-raised-button color="primary" (click)="searchBatches()">
+            <fa-icon icon="search" class="m-r-10"></fa-icon> Search
+          </button>
+        </div>
+      </div>
+
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+        <mat-form-field fxFlex="30%">
+          <mat-label>Source Ministry</mat-label>
+          <input matInput [formControl]="sourceMinistry" >
+        </mat-form-field>
+      
+        <mat-form-field fxFlex="30%">
+          <mat-label>Batch Reference Number</mat-label>
+          <input matInput [formControl]="batchReferenceNumber">
+        </mat-form-field>
+      
+        <mat-form-field fxFlex="30%">
+          <mat-label>Bulk Amount</mat-label>
+          <input matInput [formControl]="bulkAmount">
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
   <mat-card class="container">
-
 
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="batchReferenceNumber">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Batch Reference Number </th>
-        <td mat-cell *matCellDef="let transaction"> {{ transaction.batchId }} </td>
+        <td mat-cell *matCellDef="let item"> {{ item.batchId }} </td>
       </ng-container>
 
       <ng-container matColumnDef="startedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time (UTC) </th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }}
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
+        <td mat-cell *matCellDef="let item"> {{ formatDate(convertTimestampToUTCDate(item.startedAt)) }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="completedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time (UTC) </th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }}
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time </th>
+        <td mat-cell *matCellDef="let item"> {{ formatDate(convertTimestampToUTCDate(item.completedAt)) }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="sourceMinistry">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Ministry </th>
-        <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.transactionId}}> {{
-          shortenValue(transaction.transactionId) }} </td>
+        <td mat-cell *matCellDef="let item" matTooltip={{item.transactionId}}> {{
+          shortenValue(item.transactionId) }} </td>
       </ng-container>
 
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-        <td mat-cell *matCellDef="let transaction"> {{ transaction.amount }} </td>
+        <td mat-cell *matCellDef="let item"> {{ item.amount }} </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-        <td mat-cell *matCellDef="let transaction"
-          [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">
-          {{ transaction.status }} </td>
+        <td mat-cell *matCellDef="let item"
+          [ngClass]="{'red': item.status==='FAILED','green': item.status==='COMPLETED','orange': item.status==='ACTION_NEEDED'}">
+          {{ item.status }} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.workflowInstanceKey]"
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
         class="select-row"></tr>
 
     </table>

@@ -17,14 +17,19 @@ export let environment = {
   oauth: {
     // For connecting to Mifos X using OAuth2 Authentication change the value to true
     enabled: window['env']['oauthEnabled'] || false, 
+    type: window['env']['oauthType'] || "keycloak", 
     serverUrl: window['env']['oauthServerUrl'] || "https://paymenthub.qa.oneacrefund.org/opsapp",
+    realm: window['env']['oauthRealm'] || "paymenthub",
+    clientId: window['env']['oauthClientId'] || "opsapp",
+    clientSecret: window['env']['oauthClientSecret'] || "",
     basicAuth: window['env']['oauthBasicAuth'] || true,
     basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
   },
   auth: {
     enabled: window['env']['authEnabled'] || false,
-    tenant: window['env']['platformTenantId'] || 'phdefault'
   },
+  tenant: window['env']['platformTenantId'] || 'phdefault',
+  tenants: window['env']['platformTenantIds'] || 'phdefault',
   defaultLanguage: window['env']['defaultLanguage'] || "en",
   supportedLanguages: window['env']['supportedLanguages'] || ["en", "fr"]
 };
