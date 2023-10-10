@@ -1,7 +1,7 @@
 ###############
 ### STAGE 1: Build app
 ###############
-ARG BUILDER_IMAGE=node:20-alpine
+ARG BUILDER_IMAGE=node:19-alpine
 ARG NGINX_IMAGE=nginx:1.19.3
 
 FROM $BUILDER_IMAGE as builder
@@ -28,7 +28,7 @@ RUN npm config set fetch-retry-maxtimeout 120000
 
 RUN npm config set registry $NPM_REGISTRY_URL --location=global
 
-RUN npm install --location=global @angular/cli@16.2.1
+RUN npm install --location=global @angular/cli@16.2.3
 
 RUN npm install
 
