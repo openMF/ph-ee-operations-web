@@ -18,7 +18,6 @@ import { AuthenticationGuard } from './authentication/guard/authentication.guard
 
 /** Custom Interceptors */
 import { ProgressInterceptor } from './progress-bar/progress.interceptor';
-import { ApiPrefixInterceptor } from './http/api-prefix.interceptor';
 import { ErrorHandlerInterceptor } from './http/error-handler.interceptor';
 import { CacheInterceptor } from './http/cache.interceptor';
 import { AuthenticationInterceptor } from './authentication/authentication.interceptor';
@@ -69,7 +68,6 @@ import { ContentComponent } from './shell/content/content.component';
     },
     I18nService,
     HttpCacheService,
-    ApiPrefixInterceptor,
     ErrorHandlerInterceptor,
     CacheInterceptor,
     {

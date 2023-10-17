@@ -116,37 +116,6 @@ export class SettingsService {
   }
 
   /**
-   * Returns server setting
-   */
-  get server() {
-    if (localStorage.getItem('pheeServerURL')) {
-      return localStorage.getItem('pheeServerURL');
-    }
-    return environment.serverUrl;
-  }
-
-  /**
-   * Returns server url with api path without version
-   */
-  get baseServerUrl() {
-    return this.server + environment.apiPath;
-  }
-
-  /**
-   * Returns server url with api path and version
-   */
-  get serverUrl() {
-    return this.server + environment.apiPath + environment.apiVersion;
-  }
-
-  /**
-   * Returns server url with api path and version
-   */
-  get serverHost() {
-    return this.server;
-  }
-
-  /**
    * Returns min Past date
    */
   get minPastDate(): Date {

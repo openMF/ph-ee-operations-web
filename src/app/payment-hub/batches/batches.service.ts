@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class BatchesService {
 
-  apiPrefix: string = environment.apiPath + environment.apiVersion;
+  apiPrefix: string = environment.backend.operations;
 
   constructor(private http: HttpClient) { }
 

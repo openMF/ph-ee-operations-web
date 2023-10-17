@@ -15,17 +15,19 @@ services:
     ports:
       - '4200:80'
     environment:
-      - PH_BACKEND_SERVER_URLS=https://paymenthub.qa.oneacrefund.org
-      - PH_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org
-      - PH_BACKEND_SERVER_API_PATH=/opsapp/api
-      - PH_BACKEND_SERVER_API_VERSION=/v1
+      - PH_OPS_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
+      - PH_VOU_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
+      - PH_ACT_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
       - PH_PLATFORM_TENANT_ID=phdefault
       - PH_PLATFORM_TENANT_IDS=phdefault
-      - PH_DEFAULT_LANGUAGE=en
-      - PH_SUPPORTED_LANGUAGES=en,fr,es
-      # Authentication variables
       - PH_AUTH_ENABLED=false
       - PH_OAUTH_ENABLED=false
-      - PH_OAUTH_SERVER_URL=https://paymenthub.qa.oneacrefund.org
+      - PH_OAUTH_TYPE=keycloak
+      - PH_OAUTH_SERVER_URL=https://paymenthub.qa.oneacrefund.org/auth
+      - PH_OAUTH_REALM=paymenthub
+      - PH_OAUTH_CLIENT_ID=opsapp
+      - PH_OAUTH_CLIENT_SECRET=Y2xpZW50Og==
       - PH_OAUTH_BASIC_AUTH=true
-      - PH_OAUTH_BASIC_AUTH_TOKEN=
+      - PH_OAUTH_BASIC_AUTH_TOKEN=Y2xpZW50Og==
+      - PH_DEFAULT_LANGUAGE=en
+      - PH_SUPPORTED_LANGUAGES=en,fr,es
