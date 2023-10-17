@@ -48,13 +48,18 @@
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
-    <mat-label>Amount</mat-label>
-    <input matInput [formControl]="amount">
+    <mat-label>Currency</mat-label>
+    <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
-    <mat-label>Currency</mat-label>
-    <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
+    <mat-label>Amount From</mat-label>
+    <input matInput [formControl]="amountFrom">
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Amount To</mat-label>
+    <input matInput [formControl]="amountTo">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">

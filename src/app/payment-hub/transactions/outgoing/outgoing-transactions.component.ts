@@ -43,7 +43,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   payeeDfspName = new FormControl();
   status = new FormControl();
   paymentStatus = new FormControl();
-  amount = new FormControl();
+  amountFrom = new FormControl();
+  amountTo = new FormControl();
   currencyCode = new FormControl();
   filteredCurrencies: any;
   filteredDfspEntries: any;
@@ -93,7 +94,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'amount',
+      type: 'amountFrom',
+      value: ''
+    },
+    {
+      type: 'amountTo',
       value: ''
     },
     {
@@ -226,12 +231,22 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.amount.valueChanges
+    this.amountFrom.valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'amount');
+          this.applyFilter(filterValue, 'amountFrom');
+        })
+      )
+      .subscribe();
+
+    this.amountTo.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'amountTo');
         })
       )
       .subscribe();
