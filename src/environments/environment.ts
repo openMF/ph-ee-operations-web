@@ -10,10 +10,11 @@ export let environment = {
   name: "dev",
   production: false,
   version: env.phee.version + "-dev",
-  serverUrl: window['env']['serverApiUrl'] || "https://paymenthub.qa.oneacrefund.org/opsapp",
-  serverUrls: window['env']['serverApiUrls'] || "https://paymenthub.qa.oneacrefund.org/opsapp",
-  apiPath: window['env']['apiPath'] || '/opsapp/api',
-  apiVersion: window['env']['apiVersion'] || '/v1',
+  backend: {
+    operations: window['env']['serverApiUrlOps'] || "https://paymenthub.qa.oneacrefund.org/opsapp/api/v1",
+    vouchers: window['env']['serverApiUrlVou'] || "https://paymenthub.qa.oneacrefund.org/opsapp/api/v1",
+    account: window['env']['serverApiUrlAct'] || "https://paymenthub.qa.oneacrefund.org/opsapp/api/v1",
+  },
   oauth: {
     // For connecting to Mifos X using OAuth2 Authentication change the value to true
     enabled: window['env']['oauthEnabled'] || false, 

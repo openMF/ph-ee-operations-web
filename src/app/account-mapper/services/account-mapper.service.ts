@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AccountMapperService {
 
-  apiPrefix: string = environment.apiPath + environment.apiVersion;
+  apiPrefix: string = environment.backend.account;
 
   constructor(private http: HttpClient) { }
 

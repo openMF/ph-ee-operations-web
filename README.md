@@ -65,14 +65,14 @@ Please modify them accordingly your needs (serverUrl, authServerUrl, etc.)
 The environment variables to be set are:
 
 
-`PH_BACKEND_SERVER_URL`
-Setting for the Payment Hub server url to backend services
+`PH_OPS_BACKEND_SERVER_URL`
+Setting for the Payment Hub server url to Operations backend services
 
-`PH_BACKEND_SERVER_API_PATH`
-Setting for the APIs path calls, Default value `/opsapp/api`
+`PH_VOU_BACKEND_SERVER_URL`
+Setting for the Payment Hub server url to Vouchers backend services
 
-`PH_BACKEND_SERVER_API_VERSION`
-Setting for the APIs version calls, Default value `/v1`
+`PH_ACT_BACKEND_SERVER_URL`
+Setting for the Payment Hub server url to Account Management backend services
 
 `PH_PLATFORM_TENANT_ID`
 Setting for the Platform Tenant Identifier used in the APIs calls, Default value `phdefault`
@@ -88,6 +88,18 @@ Boolean value to Enable or Disable the Basic Authentication for OAuth
 
 `PH_OAUTH_BASIC_AUTH_TOKEN`
 Setting the Authentication Token for OAuth authentication
+
+`PH_OAUTH_TYPE`
+Set the OAuth authentication type, currently is only supported keycloak
+
+`PH_OAUTH_REALM`
+For the OAuth authentication with keycloak we need to define the realm
+
+`PH_OAUTH_CLIENT_ID`
+For the OAuth authentication with keycloak we need to define the client identifier to be used
+
+`PH_OAUTH_CLIENT_SECRET`
+For the OAuth authentication with keycloak we could to define the client secret to be used
 
 `PH_DEFAULT_LANGUAGE`
 Setting for Languages (i18n) still under development

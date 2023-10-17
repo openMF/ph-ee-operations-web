@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class VouchersService {
 
-  apiPrefix: string = environment.apiPath + environment.apiVersion;
+  apiPrefix: string = environment.backend.vouchers;
 
   constructor(private http: HttpClient) { }
 
