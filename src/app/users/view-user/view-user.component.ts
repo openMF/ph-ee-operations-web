@@ -182,6 +182,39 @@ export class ViewUserComponent implements OnInit {
 
   }
 
+  /**
+   * change a user's password
+   */
+   changePassword() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'password',
+        label: 'New User Password',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Change User Password',
+      layout: { addButtonText: 'Save' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        let appUser = {...this.userData, password: response.data.value.password}
+        this.usersService.changeUserPassword(this.userData.id, appUser).subscribe(
+          res => {
+            this.alertService.alert({ type: 'Edit Success', message: `Change User Password Request was successful!` });
+            this.reloadCurrentUserData();
+          },
+          err => this.alertService.alert({ type: 'Edit Error', message: `Change User Password request failed` })
+        );
+      }
+    });
+
+  }
+
   reloadCurrentUserData() {
     this.usersService.getUser(this.userData.id).subscribe((res) => {
         this.userData = res;
