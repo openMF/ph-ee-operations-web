@@ -9,14 +9,6 @@
         <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
 
           <mat-form-field fxFlex="48%">
-            <mat-label>Username</mat-label>
-            <input matInput required formControlName="username">
-            <mat-error *ngIf="userForm.controls.username.hasError('required')">
-              Username is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
             <mat-label>Email</mat-label>
             <input matInput [required]="userForm.controls.sendPasswordToEmail.value" formControlName="email">
             <mat-error *ngIf="userForm.controls.email.hasError('email')">
@@ -26,6 +18,7 @@
               Email is <strong>required</strong>
             </mat-error>
           </mat-form-field>
+          <br/>
 
           <mat-form-field fxFlex="48%">
             <mat-label>First Name</mat-label>

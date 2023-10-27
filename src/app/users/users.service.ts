@@ -118,12 +118,12 @@ export class UsersService {
   fetchAmsList(): Observable<any> {
     return this.http.get('/api/v1/ams/sources');
   }
-  
+
   /**
    * @param {any} appUser user to edit
    * @returns {Observable<any>}
    */
-   changeUserPassword(id: any, appUser: any): Observable<any> {
+   editUserDetails(id: any, appUser: any): Observable<any> {
     return this.http.put('/api/v1/user/' + id, appUser);
   }
 }
