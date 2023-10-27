@@ -215,7 +215,7 @@ export class ViewUserComponent implements OnInit {
 
   }
   /**
-   * edit user details
+   * edit user details, can add more if needed
    */
    editAppUser() {
     const formfields: FormfieldBase[] = [
