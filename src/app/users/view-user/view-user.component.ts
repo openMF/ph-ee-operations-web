@@ -190,7 +190,7 @@ export class ViewUserComponent implements OnInit {
       new InputBase({
         controlName: 'password',
         label: 'New User Password',
-        type: 'text',
+        type: 'password',
         required: true
       }),
     ];
