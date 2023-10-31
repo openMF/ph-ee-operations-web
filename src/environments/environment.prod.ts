@@ -14,6 +14,7 @@ export let environment = {
     operations: window['env']['serverApiUrlOps'] || "https://paymenthub.qa.oneacrefund.org/opsapp/api/v1",
     vouchers: window['env']['serverApiUrlVou'] || "https://paymenthub.qa.oneacrefund.org/opsapp/api/v1",
     account: window['env']['serverApiUrlAct'] || "https://paymenthub.qa.oneacrefund.org/opsapp/api/v1",
+    registeringInstituionId: window['env']['registeringInstitutionId'] || "default",
   },
   oauth: {
     // For connecting to Mifos X using OAuth2 Authentication change the value to true

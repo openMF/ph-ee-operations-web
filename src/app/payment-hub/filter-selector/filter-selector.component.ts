@@ -18,7 +18,7 @@ export class FilterSelectorComponent implements OnInit {
     this.sections = [
       {label: 'Main Batches', routeTo: ['paymenthub', 'batches'], active: true}, 
       {label: 'Sub Batches', routeTo: ['paymenthub', 'sub-batches'], active: false}, 
-      {label: 'Transactions', routeTo: ['paymenthub', 'transactions'], active: false}
+      {label: 'Transfers', routeTo: ['paymenthub', 'transfers'], active: false}
     ];      
   }
 

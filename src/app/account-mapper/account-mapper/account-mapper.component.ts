@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AccountMapperService } from '../services/account-mapper.service';
 import { UntypedFormControl } from '@angular/forms';
 import { TransactionsDataSource } from 'app/payment-hub/transactions/dataSource/transactions.datasource';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AccountData } from '../models/account-mapper.model';
+import { Dates } from 'app/core/utils/dates';
 
 @Component({
   selector: 'mifosx-account-mapper',
@@ -9,6 +14,10 @@ import { TransactionsDataSource } from 'app/payment-hub/transactions/dataSource/
   styleUrls: ['./account-mapper.component.scss']
 })
 export class AccountMapperComponent {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   /** government Entity form control. */
   governmentEntity = new UntypedFormControl();
   /** financial Institution form control. */
@@ -21,26 +30,47 @@ export class AccountMapperComponent {
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['governmentEntity', 'financialInstitution', 'functionalId', 'financialAddress'];
   /** Data source for transactions table. */
-  dataSource: TransactionsDataSource;
+  dataSource = new MatTableDataSource();
 
-  batchesData: any;
+  totalRows: number = 0;
+  currentPage: number = 0;
 
-  page: number = 0;
-  size: number = 100;
+  pageSize = 50;
+  isLoading = false;
 
-  constructor(private accountMapperService: AccountMapperService) { }
+  accountsData: AccountData;
+
+  constructor(private dates: Dates,
+    private accountMapperService: AccountMapperService) { }
 
   ngOnInit(): void {
     this.getAccounts();
   }
 
   getAccounts(): void {
-    this.accountMapperService.getAccounts(this.page, this.size, 'requestFile', 'asc')
-    .subscribe((batches: any) => {
-      this.batchesData = batches;
+    this.isLoading = true;
+    this.accountMapperService.getAccounts(this.currentPage, this.pageSize, 'requestFile', 'asc')
+    .subscribe((accounts: AccountData) => {
+      this.dataSource = new MatTableDataSource(accounts.content);
+      this.totalRows = accounts.totalElements;
+      this.isLoading = false;
+    }, (error: any) => {
+      this.isLoading = false;
     });
   }
 
+  convertTimestampToUTCDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return this.dates.formatUTCDate(new Date(timestamp));
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getAccounts();
+  }
 
   searchAccounts(): void {
 

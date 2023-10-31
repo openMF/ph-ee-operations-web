@@ -2,13 +2,14 @@
     window["env"] = window["env"] || {};
   
     // BackEnd Environment variables
-    window["env"]["serverApiUrlOps"]  = '$PH_OPS_BACKEND_SERVER_URL';
-    window["env"]["serverApiUrlVou"]  = '$PH_VOU_BACKEND_SERVER_URL';
-    window["env"]["serverApiUrlAct"]  = '$PH_ACT_BACKEND_SERVER_URL';
+    window["env"]["serverApiUrlOps"] = '$PH_OPS_BACKEND_SERVER_URL';
+    window["env"]["serverApiUrlVou"] = '$PH_VOU_BACKEND_SERVER_URL';
+    window["env"]["serverApiUrlAct"] = '$PH_ACT_BACKEND_SERVER_URL';
   
-    window["env"]["platformTenantId"]  = '$PH_PLATFORM_TENANT_ID';
-    window["env"]["platformTenantIds"]  = '$PH_PLATFORM_TENANT_IDS';
-  
+    window["env"]["registeringInstitutionId"] = '$PH_REGISTERING_INSTITUTION_ID';
+    window["env"]["platformTenantId"] = '$PH_PLATFORM_TENANT_ID';
+    window["env"]["platformTenantIds"] = '$PH_PLATFORM_TENANT_IDS';
+
     window["env"]["authEnabled"] = '$PH_AUTH_ENABLED';
 
     window["env"]["oauthEnabled"] = '$PH_OAUTH_ENABLED';

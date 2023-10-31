@@ -13,15 +13,9 @@
     </div>
 
     <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
-      <p>Payment Hub EE - Operations Management</p>
+      <p>{{ 'APP_NAME' | translate }}</p>
     </div>
 
-    <!--
-      Type of Form:
-        Login
-        Reset Password
-        Forgot Password (TODO: Decision to be taken on providing this feature.)
-    -->
     <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
       <mifosx-login-form *ngIf="!resetPassword && !twoFactorAuthenticationRequired"></mifosx-login-form>
       <mifosx-reset-password *ngIf="resetPassword"></mifosx-reset-password>

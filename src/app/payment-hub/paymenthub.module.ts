@@ -13,15 +13,11 @@ import { PaymentHubComponent } from "./paymenthub.component";
 import { TransactionDetailsComponent } from "./transactions/transaction-details.component";
 import { BpmnDialogComponent } from "./transactions/bpmn-dialog/bpmn-dialog.component";
 import { RetryResolveDialogComponent } from "./transactions/retry-resolve-dialog/retry-resolve-dialog.component";
-import { IncomingRequestToPayComponent } from "./request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component";
-import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component";
-import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/view-request-to-pay.component";
-import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
-import { GetBatchesExportComponent } from "./request-to-pay/get-batches-export/get-batches-export.component";
-import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bulk-batch-export.component";
 import { FilterSelectorComponent } from './filter-selector/filter-selector.component';
 import { BatchesComponent } from './batches/batches.component';
 import { SubBatchesComponent } from './sub-batches/sub-batches.component';
+import { DirectivesModule } from "app/directives/directives.module";
+import { TransfersComponent } from './transfers/transfers.component';
 /**
  * Payment HUB Module
  *
@@ -32,6 +28,7 @@ import { SubBatchesComponent } from './sub-batches/sub-batches.component';
         SharedModule,
         PaymentHubRoutingModule,
         PipesModule,
+        DirectivesModule
     ],
     declarations: [
         IncomingTransactionsComponent,
@@ -40,15 +37,10 @@ import { SubBatchesComponent } from './sub-batches/sub-batches.component';
         PaymentHubComponent,
         BpmnDialogComponent,
         RetryResolveDialogComponent,
-        IncomingRequestToPayComponent,
-        OutgoingRequestToPayComponent,
-        ViewRequestToPayComponent,
-        IncomingRequestExportComponent,
-        BulkBatchExportComponent,
-        GetBatchesExportComponent,
         FilterSelectorComponent,
         BatchesComponent,
         SubBatchesComponent,
+        TransfersComponent,
     ]
 })
 export class PaymentHubModule {}
