@@ -1,15 +1,35 @@
 {
-  "APP_NAME": "MifosX",
-  "About": "About",
-  "Home": "Home",
-  "Logged in as": "Logged in as",
-  "Login": "Login",
-  "Logout": "Logout",
-  "Password": "Password",
-  "Password is required": "Password is required",
-  "Username": "Username",
-  "Username is required": "Username is required",
-  "Username or password incorrect.": "Username or password incorrect",
-  "Remember me": "Remember me",
-  "Version": "Version"
+  "APP_NAME": "Payment Hub EE - Operations Management",
+  "languages": {
+    "en-US": "English",
+    "fr-FR": "French"
+  },
+  "labels": {
+    "buttons": {
+      "Login": "Login",
+      "Forgot Password?": "Forgot Password?",
+      "Cancel": "Cancel"
+    },
+    "errors": {
+      "Username or password incorrect.": "Username or password incorrect"
+    },
+    "inputs": {
+      "Tenant": "Tenant",
+      "Username": "Username",
+      "Password": "Password",
+      "Language": "Language"
+    },
+    "menus": {
+      "Login": "Login",
+      "Logout": "Logout"
+    
+    },
+    "texts": {
+      "Logged in as": "Logged in as",
+      "About": "About",
+      "Home": "Home",
+      "Remember me": "Remember me",
+      "Version": "Version"
+    }
+  }
 }

@@ -9,7 +9,6 @@ import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * Login Module
@@ -19,8 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   imports: [
     SharedModule,
-    LoginRoutingModule,
-    TranslateModule.forRoot()
+    LoginRoutingModule
   ],
   declarations: [
     LoginComponent,

@@ -26,21 +26,21 @@ export class LanguageSelectorComponent implements OnInit {
    * Sets the language of the application in the selector on initial setup.
    * @param {TranslateService} translateService Translate Service.
    */
-   constructor(private translateService: TranslateService,
+  constructor(private translateService: TranslateService,
     private settingsService: SettingsService) {
-  }
-
-  ngOnInit() {
     this.languageSelector.patchValue(this.currentLanguage);
   }
+
+  ngOnInit() { }
 
   /**
    * Sets a new language to be used by the application.
    * @param {string} language New language.
    */
   setLanguage() {
+    console.log(this.languageSelector.value);
     this.translateService.use(this.languageSelector.value);
-    this.settingsService.setLanguage({ name: '', code: this.languageSelector.value });
+    this.settingsService.setLanguage({ name: '', code: this.languageSelector.value.substring(0, 2) });
   }
 
   /**

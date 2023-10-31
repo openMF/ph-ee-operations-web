@@ -18,6 +18,8 @@ import { MaterialModule } from './material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ListItemComponent } from './list-item/list-item.component';
 import { TenantSelectorComponent } from './tenant-selector/tenant-selector.component';
+import { IdentifierComponent } from './identifier/identifier.component';
+import { PipesModule } from 'app/pipes/pipes.module';
 
 /**
  * Shared Module
@@ -30,7 +32,8 @@ import { TenantSelectorComponent } from './tenant-selector/tenant-selector.compo
         IconsModule,
         MaterialModule,
         ReactiveFormsModule,
-        TranslateModule.forRoot()
+        PipesModule,
+        TranslateModule
     ],
     declarations: [
         FormfieldComponent,
@@ -41,7 +44,8 @@ import { TenantSelectorComponent } from './tenant-selector/tenant-selector.compo
         LanguageSelectorComponent,
         ThemePickerComponent,
         ListItemComponent,
-        TenantSelectorComponent
+        TenantSelectorComponent,
+        IdentifierComponent
     ],
     exports: [
         FileUploadComponent,
@@ -55,7 +59,8 @@ import { TenantSelectorComponent } from './tenant-selector/tenant-selector.compo
         ReactiveFormsModule,
         TranslateModule,
         ListItemComponent,
-        TenantSelectorComponent
+        TenantSelectorComponent,
+        IdentifierComponent
     ]
 })
 export class SharedModule { }

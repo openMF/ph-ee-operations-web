@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Dates } from 'app/core/utils/dates';
-import { BatchesService } from './batches.service';
-import { Batch, BatchData } from './model/batch.model';
-import { UntypedFormControl } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Dates } from 'app/core/utils/dates';
+import { TransfersService } from './transfers.service';
+import { Transfer, TransferData } from './model/transfer.model';
+import { UntypedFormControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 
 @Component({
-  selector: 'mifosx-batches',
-  templateUrl: './batches.component.html',
-  styleUrls: ['./batches.component.scss']
+  selector: 'mifosx-transfers',
+  templateUrl: './transfers.component.html',
+  styleUrls: ['./transfers.component.scss']
 })
-export class BatchesComponent implements OnInit {
+export class TransfersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -21,6 +21,13 @@ export class BatchesComponent implements OnInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
+
+  payeePartyId = new UntypedFormControl();
+  payerPartyId = new UntypedFormControl();
+  payerDfspId = new UntypedFormControl();
+  payerDfspName = new UntypedFormControl();
+
+  amount = new UntypedFormControl();
   /** Transaction date from form control. */
   transactionDateFrom = new UntypedFormControl(new Date(new Date().setMonth(new Date().getMonth() - 1)));
   /** Transaction date to form control. */
@@ -32,12 +39,15 @@ export class BatchesComponent implements OnInit {
   /** Bulk Amount form control. */
   bulkAmount = new UntypedFormControl();
 
+  /** Transaction Type form control. */
+  transactionType = new UntypedFormControl();
+  /** Transaction ID form control. */
+  transactionId = new UntypedFormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['batchReferenceNumber', 'startedAt', 'completedAt', 'sourceMinistry', 'amount', 'status'];
+  displayedColumns: string[] = ['batchReferenceNumber', 'startedAt', 'completedAt', 'sourceMinistry', 'bulkAmount', 'payerFspId', 'status'];
   /** Data source for transactions table. */
   dataSource = new MatTableDataSource();
 
-  batchesData: Batch;
   totalRows: number = 0;
   currentPage: number = 0;
 
@@ -45,7 +55,7 @@ export class BatchesComponent implements OnInit {
   isLoading = false;
 
   constructor(private dates: Dates,
-    private batchesService: BatchesService) { }
+    private transfersService: TransfersService) { }
 
   ngOnInit(): void {
     this.getBatches();
@@ -53,11 +63,10 @@ export class BatchesComponent implements OnInit {
 
   getBatches(): void {
     this.isLoading = true;
-    this.batchesService.getBatches(this.currentPage, this.pageSize, 'requestFile', 'asc')
-    .subscribe((batches: Batch) => {
-      this.batchesData = batches;
-      this.dataSource = new MatTableDataSource(this.batchesData.data);
-      this.totalRows = batches.totalBatches;
+    this.transfersService.getTransfers(this.currentPage, this.pageSize, 'requestFile', 'asc')
+    .subscribe((transfers: TransferData) => {
+      this.dataSource = new MatTableDataSource(transfers.content);
+      this.totalRows = transfers.totalElements;
       this.isLoading = false;
     }, (error: any) => {
       this.isLoading = false;
@@ -77,17 +86,16 @@ export class BatchesComponent implements OnInit {
     this.getBatches();
   }
 
-  status(item: BatchData): string {
-    if (item.completed) {
+  status(item: Transfer): string {
+    if (item.status === 'COMPLETED') {
       return 'green';
-    }
-    if (item.ongoing) {
+    } else if (item.status === 'ON_GOING') {
       return 'yellow';
     }
     return 'red';
   }
 
-  searchBatches(): void {
+  searchTransactions(): void {
     
   }
 

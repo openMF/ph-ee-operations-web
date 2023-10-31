@@ -40,7 +40,12 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "lodash",
-              "@ckeditor/ckeditor5-build-classic"
+              "@ckeditor/ckeditor5-build-classic",
+              "moment",
+              "jwt-decode",
+              "js-sha256",
+              "base64-js",
+              "clone-deep"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

@@ -6,23 +6,23 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AccountMapperService {
+export class TransfersService {
 
-  apiPrefix: string = environment.backend.account;
-
-  constructor(private http: HttpClient) { }
+  apiPrefix: string = environment.backend.operations;
 
   /**
-   * @returns {Observable<any>} Users data
+   * @param {HttpClient} http Http Client to send requests.
    */
-  getAccounts(page: number, size: number, orderBy: string, sortOrder: string): Observable<any> {
+  constructor(private http: HttpClient) { }
+
+  getTransfers(page: number, size: number, orderBy: string, sortOrder: string): Observable<any> {
     let httpParams = new HttpParams()
     .set('page', page)
     .set('size', size)
     .set('sortOrder', sortOrder)
     .set('orderBy', orderBy);
 
-    return this.http.get(this.apiPrefix + '/beneficiaries', { params: httpParams });
+    return this.http.get(this.apiPrefix + '/transfers', { params: httpParams });
   }
 
 }

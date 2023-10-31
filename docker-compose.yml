@@ -20,6 +20,7 @@ services:
       - PH_ACT_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
       - PH_PLATFORM_TENANT_ID=phdefault
       - PH_PLATFORM_TENANT_IDS=phdefault
+      - PH_REGISTERING_INSTITUTION_ID=SocialInstitution
       - PH_AUTH_ENABLED=false
       - PH_OAUTH_ENABLED=false
       - PH_OAUTH_TYPE=keycloak

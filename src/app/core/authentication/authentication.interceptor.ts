@@ -4,10 +4,6 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/c
 
 /** rxjs Imports */
 import { Observable, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { switchMap, take, filter, catchError } from 'rxjs/operators';
-
-import { AuthenticationService } from './authentication.service';
-import { Router } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
 import { SettingsService } from 'app/settings/settings.service';
@@ -39,7 +35,15 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.settingsService.tenantIdentifier) {
-      httpOptions.headers['Platform-TenantId'] = this.settingsService.tenantIdentifier;
+      const url: string = request.url;
+      if ((url.indexOf('/batches') > 0) || (url.indexOf('/transactions') > 0)) {
+        httpOptions.headers['Platform-TenantId'] = this.settingsService.tenantIdentifier;
+        delete httpOptions.headers['X-Registering-Institution-ID'];
+      }
+      if ((url.indexOf('/vouchers') > 0) || (url.indexOf('/benefici') > 0)) {
+        httpOptions.headers['X-Registering-Institution-ID'] = environment.backend.registeringInstituionId;
+        delete httpOptions.headers['Platform-TenantId'];
+      }
     } else {
       delete httpOptions.headers['Platform-TenantId'];
     }

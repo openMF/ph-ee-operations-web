@@ -1,7 +1,7 @@
 import { Pageable, Sort } from "app/shared/models/data.model";
 
-export interface VoucherData {
-    content:          Voucher[];
+export interface AccountData {
+    content:          Account[];
     pageable:         Pageable;
     totalPages:       number;
     totalElements:    number;
@@ -14,14 +14,11 @@ export interface VoucherData {
     empty:            boolean;
 }
 
-export interface Voucher {
-    serialNumber:             string;
-    createdDate:              Date;
+export interface Account {
     registeringInstitutionId: string;
-    status:                   string;
+    payeeIdentity:            string;
+    paymentModality:          string;
+    financialAddress:         string;
+    bankingInstitutionCode:   string;
 }
 
-export interface Status {
-    code: string;
-    label: string;
-}
