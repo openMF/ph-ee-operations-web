@@ -15,6 +15,24 @@ import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 /** Custom Modules */
 import { IconsModule } from './icons.module';
 import { MaterialModule } from './material.module';
+import { NgxMatDateFormats, NgxMatDateAdapter, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
+import { MAT_DATE_LOCALE} from '@angular/material/core';
+import { AutoFormatDateTimeDirective } from './auto-format-date-time/auto-format-date-time.directive';
+
+const SIMPLE_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: SIMPLE_DATE_FORMAT
+  },
+  display: {
+    dateInput: SIMPLE_DATE_FORMAT,
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+};
 
 /**
  * Shared Module
@@ -23,6 +41,7 @@ import { MaterialModule } from './material.module';
  */
 @NgModule({
   imports: [
+    NgxMatMomentModule,
     CommonModule,
     IconsModule,
     MaterialModule,
@@ -36,6 +55,7 @@ import { MaterialModule } from './material.module';
     FooterComponent,
     LanguageSelectorComponent,
     ThemePickerComponent,
+    AutoFormatDateTimeDirective
   ],
   exports: [
     FileUploadComponent,
@@ -46,11 +66,16 @@ import { MaterialModule } from './material.module';
     IconsModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AutoFormatDateTimeDirective
   ],
   entryComponents: [
     FormDialogComponent,
     DeleteDialogComponent
+  ],
+  providers: [
+    {provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS},
   ]
 })
 export class SharedModule { }

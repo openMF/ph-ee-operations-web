@@ -1,9 +1,9 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 /** rxjs Imports */
@@ -14,7 +14,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDate, formatLocalDate } from '../helper/date-format.helper';
+import { dateTimeFormatValidator, formatDate, formatLocalDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
@@ -52,7 +52,9 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   transactionStatusData = statuses;
   paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
-  transactionDateFrom = new FormControl();
+  transactionDateFrom = new FormControl('', [
+    Validators.nullValidator// Custom pattern
+  ]);
   /** Transaction date to form control. */
   transactionDateTo = new FormControl();
   /** Transaction ID form control. */
@@ -130,7 +132,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
    */
   constructor(private transactionsService: TransactionsService,
     private route: ActivatedRoute,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private el: ElementRef) {
     this.route.data.subscribe((data: {
       currencies: any
       dfspEntries: DfspEntry[]
@@ -391,6 +394,17 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     }
     date = this.formatDate(date);
     return date.split(' ')[1];
+  }
+
+  formatDateForInput(value: string): string {
+    const date = new Date(value);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
   /**
