@@ -182,6 +182,80 @@ export class ViewUserComponent implements OnInit {
 
   }
 
+  /**
+   * change a user's password
+   */
+   changePassword() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'password',
+        label: 'New User Password',
+        type: 'password',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Change User Password',
+      layout: { addButtonText: 'Save' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        let appUser = {...this.userData, password: response.data.value.password}
+        this.usersService.editUserDetails(this.userData.id, appUser).subscribe(
+          res => {
+            this.alertService.alert({ type: 'Edit Success', message: `Change User Password Request was successful!` });
+            this.reloadCurrentUserData();
+          },
+          err => this.alertService.alert({ type: 'Edit Error', message: `Change User Password request failed` })
+        );
+      }
+    });
+
+  }
+  /**
+   * edit user details, can add more if needed
+   */
+   editAppUser() {
+    const formfields: FormfieldBase[] = [
+      new InputBase({
+        controlName: 'firstName',
+        label: 'First Name',
+        type: 'text',
+        required: true
+      }),
+      new InputBase({
+        controlName: 'lastName',
+        label: 'Last Name',
+        type: 'text',
+        required: true
+      }),
+    ];
+    const data = {
+      title: 'Edit User Details',
+      layout: { addButtonText: 'Save' },
+      formfields: formfields
+    };
+    const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
+    editFundDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.data) {
+        let appUser = {...this.userData,
+          firstname: response.data.value.firstName,
+          lastname: response.data.value.lastName
+        }
+        this.usersService.editUserDetails(this.userData.id, appUser).subscribe(
+          res => {
+            this.alertService.alert({ type: 'Edit Success', message: `Edit User Request was successful!` });
+            this.reloadCurrentUserData();
+          },
+          err => this.alertService.alert({ type: 'Edit Error', message: `Edit User request failed` })
+        );
+      }
+    });
+
+  }
+
   reloadCurrentUserData() {
     this.usersService.getUser(this.userData.id).subscribe((res) => {
         this.userData = res;
