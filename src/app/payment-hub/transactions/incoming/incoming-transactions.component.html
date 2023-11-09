@@ -91,6 +91,34 @@
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
+    <mat-label>Acceptance Date From</mat-label>
+    <input
+      matInput
+      placeholder="yyyy-MM-dd hh:mm:ss"
+      [ngxMatDatetimePicker]="acceptancePicker"
+      [formControl]="acceptanceDateFrom"
+      [min]="minDate"
+      [max]="maxDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="acceptancePicker"> </mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #acceptancePicker> </ngx-mat-datetime-picker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Acceptance Date To</mat-label>
+    <input
+      matInput
+      placeholder="yyyy-MM-dd hh:mm:ss"
+      [ngxMatDatetimePicker]="acceptancePickerTo"
+      [formControl]="acceptanceDateTo"
+      [min]="minDate"
+      [max]="maxDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="acceptancePickerTo"> </mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #acceptancePickerTo> </ngx-mat-datetime-picker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
     <mat-label>End to End Identification</mat-label>
     <input matInput [formControl]="endToEndIdentification">
   </mat-form-field>

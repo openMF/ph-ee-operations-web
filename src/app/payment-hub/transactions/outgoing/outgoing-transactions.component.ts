@@ -55,6 +55,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
   transactionDateTo = new FormControl();
+  acceptanceDateFrom = new FormControl();
+  acceptanceDateTo = new FormControl();
   endToEndIdentification = new FormControl();
   /** Transaction ID form control. */
   transactionId = new FormControl();
@@ -277,6 +279,26 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+        })
+      )
+      .subscribe();
+
+    this.acceptanceDateFrom.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'acceptanceDateFrom');
+        })
+      )
+      .subscribe();
+
+    this.acceptanceDateTo.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'acceptanceDateTo');
         })
       )
       .subscribe();

@@ -52,11 +52,11 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   transactionStatusData = statuses;
   paymentStatusData = paymentStatuses;
   /** Transaction date from form control. */
-  transactionDateFrom = new FormControl('', [
-    Validators.nullValidator// Custom pattern
-  ]);
+  transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
   transactionDateTo = new FormControl();
+  acceptanceDateFrom = new FormControl();
+  acceptanceDateTo = new FormControl();
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
@@ -279,6 +279,26 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+        })
+      )
+      .subscribe();
+
+    this.acceptanceDateFrom.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'acceptanceDateFrom');
+        })
+      )
+      .subscribe();
+
+    this.acceptanceDateTo.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(this.convertTimestampToDate(filterValue), 'acceptanceDateTo');
         })
       )
       .subscribe();
