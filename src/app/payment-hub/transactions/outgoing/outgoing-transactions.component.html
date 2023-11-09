@@ -153,6 +153,11 @@
         <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }} </td>
     </ng-container>
 
+    <ng-container matColumnDef="acceptanceDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Acceptance Date</th>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.acceptanceDate)) }} </td>
+  </ng-container>
+
     <ng-container matColumnDef="transactionId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction ID </th>
       <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.transactionId}}> {{ shortenValue(transaction.transactionId) }} </td>

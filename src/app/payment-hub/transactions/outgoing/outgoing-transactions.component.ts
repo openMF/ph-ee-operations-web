@@ -61,7 +61,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'actions'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'acceptanceDate', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for transactions table. */
   dataSource: TransactionsDataSource;
   /** Journal entries filter. */
@@ -112,6 +112,14 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'startTo',
+      value: ''
+    },
+    {
+      type: 'acceptanceDateFrom',
+      value: ''
+    },
+    {
+      type: 'acceptanceDateTo',
       value: ''
     },
     {
