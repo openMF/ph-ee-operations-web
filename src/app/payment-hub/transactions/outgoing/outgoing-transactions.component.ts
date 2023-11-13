@@ -14,7 +14,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDate, formatLocalDate } from '../helper/date-format.helper';
+import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
@@ -276,7 +276,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startFrom');
+          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -286,7 +286,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -296,7 +296,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'acceptanceDateFrom');
+          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'acceptanceDateFrom');
         })
       )
       .subscribe();
@@ -306,7 +306,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'acceptanceDateTo');
+          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'acceptanceDateTo');
         })
       )
       .subscribe();
@@ -421,6 +421,13 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       return undefined;
     }
     return formatDate(new Date(timestamp));
+  }
+
+  formatTimestampToUTCDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return formatUTCDate(new Date(timestamp));
   }
 
   convertTimestampToUTCDate(timestamp: any) {
