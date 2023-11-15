@@ -14,7 +14,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { dateTimeFormatValidator, formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
+import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';

@@ -14,7 +14,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { RecallsDataSource } from '../dataSource/recalls.datasource';
-import { formatDate, formatLocalDate } from '../helper/date-format.helper';
+import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
 import { recallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
@@ -299,7 +299,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startFrom');
+          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -309,7 +309,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.convertTimestampToDate(filterValue), 'startTo');
+          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -350,6 +350,13 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
       return undefined;
     }
     return formatLocalDate(new Date(timestamp));
+  }
+
+  formatTimestampToUTCDate(timestamp: any) {
+    if (!timestamp) {
+      return undefined;
+    }
+    return formatUTCDate(new Date(timestamp));
   }
 
   convertTimestampToDate(timestamp: any) {
