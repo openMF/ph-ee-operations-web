@@ -33,3 +33,10 @@ export const paymentStatusData = [
     {option: 'Suspended', value: 'SUSPENDED', css: 'green'},
     {option: 'Waiting for Fincrime decision', value: 'WAITING_FOR_FINCRIME_DECISION', css: 'green'}
 ];
+
+export const paymentSchemeData = [
+    {option: 'HCT_INST', value: 'HCT_INST', css: 'green'},
+    {option: 'IG2', value: 'IG2', css: 'green'},
+    {option: 'ON_US', value: 'ON_US', css: 'green'},
+    {option: 'IG2:RETURN', value: 'IG2:RETURN', css: 'green'}
+];

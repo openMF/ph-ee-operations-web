@@ -17,6 +17,7 @@ import { TransactionsDataSource } from '../dataSource/transactions.datasource';
 import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
+import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
@@ -41,6 +42,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   payerDfspName = new FormControl();
   status = new FormControl();
   paymentStatus = new FormControl();
+  paymentScheme = new FormControl();
   amountFrom = new FormControl();
   amountTo = new FormControl();
   endToEndIdentification = new FormControl();
@@ -51,6 +53,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
   paymentStatusData = paymentStatuses;
+  paymentSchemeData = paymentSchemes;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -91,6 +94,10 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'paymentStatus',
+      value: ''
+    },
+    {
+      type: 'paymentScheme',
       value: ''
     },
     {
@@ -236,6 +243,16 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'paymentStatus');
+        })
+      )
+      .subscribe();
+
+    this.paymentScheme.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'paymentScheme');
         })
       )
       .subscribe();

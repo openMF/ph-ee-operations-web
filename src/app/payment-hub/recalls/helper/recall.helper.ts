@@ -74,3 +74,8 @@ export const paymentStatusData = [
     {option: 'Suspended', value: 'SUSPENDED', css: 'green'},
     {option: 'Waiting for Fincrime decision', value: 'WAITING_FOR_FINCRIME_DECISION', css: 'green'}
 ];
+
+export const paymentSchemeData = [
+    {option: 'HCT_INST:RECALL', value: 'HCT_INST:RECALL', css: 'green'},
+    {option: 'IG2:RECALL', value: 'IG2:RECALL', css: 'green'}
+];
