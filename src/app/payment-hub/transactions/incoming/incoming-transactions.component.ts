@@ -1,10 +1,10 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
@@ -17,7 +17,6 @@ import { TransactionsDataSource } from '../dataSource/transactions.datasource';
 import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { incomingPaymentStatusData as paymentStatuses } from '../helper/transaction.helper';
-import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
@@ -37,17 +36,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  payeePartyId = new FormControl();
-  payerPartyId = new FormControl();
-  payerDfspId = new FormControl();
-  payerDfspName = new FormControl();
-  status = new FormControl();
-  paymentStatus = new FormControl();
-  paymentScheme = new FormControl();
-  amountFrom = new FormControl();
-  amountTo = new FormControl();
-  endToEndIdentification = new FormControl();
-  currencyCode = new FormControl();
+  filterForm: FormGroup;
   filteredCurrencies: any;
   filteredDfspEntries: any;
   currenciesData: any;
@@ -55,14 +44,6 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   transactionStatusData = statuses;
   paymentStatusData = paymentStatuses;
   paymentSchemeData = paymentSchemes;
-  /** Transaction date from form control. */
-  transactionDateFrom = new FormControl();
-  /** Transaction date to form control. */
-  transactionDateTo = new FormControl();
-  acceptanceDateFrom = new FormControl();
-  acceptanceDateTo = new FormControl();
-  /** Transaction ID form control. */
-  transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'acceptanceDate', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for transactions table. */
@@ -149,14 +130,32 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   constructor(private transactionsService: TransactionsService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private el: ElementRef) {
-    this.route.data.subscribe((data: {
-      currencies: any
-      dfspEntries: DfspEntry[]
-    }) => {
-      this.currenciesData = data.currencies;
-      this.dfspEntriesData = data.dfspEntries;
-    });
+    private formBuilder: FormBuilder) {
+      this.filterForm = this.formBuilder.group({
+        payeePartyId: new FormControl(),
+        payerPartyId: new FormControl(),
+        payerDfspId: new FormControl(),
+        payerDfspName: new FormControl(),
+        status: new FormControl(),
+        paymentStatus: new FormControl(),
+        paymentScheme: new FormControl(),
+        amountFrom: new FormControl(),
+        amountTo: new FormControl(),
+        endToEndIdentification: new FormControl(),
+        currencyCode: new FormControl(),
+        transactionDateFrom: new FormControl(),
+        transactionDateTo: new FormControl(),
+        acceptanceDateFrom: new FormControl(),
+        acceptanceDateTo: new FormControl(),
+        transactionId: new FormControl()
+      });
+      this.route.data.subscribe((data: {
+        currencies: any
+        dfspEntries: DfspEntry[]
+      }) => {
+        this.currenciesData = data.currencies;
+        this.dfspEntriesData = data.dfspEntries;
+      });
   }
 
   /**
@@ -168,13 +167,17 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     this.getTransactions();
   }
 
+  ngAfterViewInit() {
+    this.controlChange();
+  }
+
   /**
    * Subscribes to all search filters:
    * Office Name, GL Account, Transaction ID, Transaction Date From, Transaction Date To,
    * sort change and page change.
    */
-  ngAfterViewInit() {
-    this.payeePartyId.valueChanges
+  controlChange() {
+    this.filterForm.controls['payeePartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -184,7 +187,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.payerPartyId.valueChanges
+    this.filterForm.controls['payerPartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -194,7 +197,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.payerDfspId.valueChanges
+    this.filterForm.controls['payerDfspId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -204,21 +207,21 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.payerDfspName.valueChanges
+    this.filterForm.controls['payerDfspName'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
           const elements = this.dfspEntriesData.filter((option) => option.name === filterValue.name);
           if (elements.length === 1) {
-            this.payerDfspId.setValue(elements[0].id);
+            this.filterForm.controls['payerDfspId'].setValue(elements[0].id);
             filterValue = elements[0].name;
           }
         })
       )
       .subscribe();
 
-    this.transactionId.valueChanges
+    this.filterForm.controls['transactionId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -228,7 +231,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.status.valueChanges
+    this.filterForm.controls['status'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -238,7 +241,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.paymentStatus.valueChanges
+    this.filterForm.controls['paymentStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -248,7 +251,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.paymentScheme.valueChanges
+    this.filterForm.controls['paymentScheme'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -258,7 +261,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.amountFrom.valueChanges
+    this.filterForm.controls['amountFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -268,7 +271,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.amountTo.valueChanges
+    this.filterForm.controls['amountTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -278,7 +281,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.currencyCode.valueChanges
+    this.filterForm.controls['currencyCode'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -289,7 +292,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.transactionDateFrom.valueChanges
+    this.filterForm.controls['transactionDateFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -299,7 +302,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.transactionDateTo.valueChanges
+    this.filterForm.controls['transactionDateTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -309,7 +312,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.acceptanceDateFrom.valueChanges
+    this.filterForm.controls['acceptanceDateFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -319,7 +322,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.acceptanceDateTo.valueChanges
+    this.filterForm.controls['acceptanceDateTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -329,7 +332,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.endToEndIdentification.valueChanges
+    this.filterForm.controls['endToEndIdentification'].valueChanges
         .pipe(
             debounceTime(500),
             distinctUntilChanged(),
@@ -464,7 +467,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
    * Sets filtered gl accounts for autocomplete.
    */
   setFilteredCurrencies() {
-    this.filteredCurrencies = this.currencyCode.valueChanges
+    this.filteredCurrencies = this.filterForm.controls['currencyCode'].valueChanges
       .pipe(
         startWith(''),
         map((currency: any) => typeof currency === 'string' ? currency : currency.Currency + ' (' + currency.AlphabeticCode + ')'),
@@ -476,7 +479,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
    * Sets filtered gl accounts for autocomplete.
    */
   setFilteredDfspEntries() {
-    this.filteredDfspEntries = this.payerDfspName.valueChanges
+    this.filteredDfspEntries = this.filterForm.controls['payerDfspName'].valueChanges
       .pipe(
         startWith(''),
         map((entry: any) => typeof entry === 'string' ? entry : entry.name + ' (' + entry.id + ')'),
@@ -517,4 +520,16 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       },
     });
   }
+
+  resetFilters() {
+    this.filterForm.reset({}, { emitEvent: false });
+    this.paginator.pageIndex = 0;
+    this.filterTransactionsBy.forEach(filter => {
+      if (filter.type !== 'direction') {
+        filter.value = '';
+      }
+    });
+    this.controlChange();
+  }
+  
 }
