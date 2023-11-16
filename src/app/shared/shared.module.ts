@@ -74,6 +74,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     DeleteDialogComponent
   ],
   providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     {provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true }},
     {provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS},
