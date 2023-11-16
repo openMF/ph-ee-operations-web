@@ -19,7 +19,7 @@ import { TransactionsService } from '../service/transactions.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
+import { outgoingPaymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
 
 /**

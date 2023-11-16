@@ -20,7 +20,7 @@ import { RecallsService } from '../service/recalls.service';
 import { PaymentHubComponent } from 'app/payment-hub/paymenthub.component';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
-import { recallStatusData as recallStatuses } from '../helper/recall.helper';
+import { outgoingRecallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';

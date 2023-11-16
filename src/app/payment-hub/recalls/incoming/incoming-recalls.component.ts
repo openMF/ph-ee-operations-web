@@ -16,7 +16,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 import { RecallsDataSource } from '../dataSource/recalls.datasource';
 import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
-import { recallStatusData as recallStatuses } from '../helper/recall.helper';
+import { incomingRecallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
 import { RecallsService } from '../service/recalls.service';

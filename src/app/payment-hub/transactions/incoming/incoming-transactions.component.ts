@@ -16,7 +16,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
 import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { paymentStatusData as paymentStatuses } from '../helper/transaction.helper';
+import { incomingPaymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';

@@ -26,22 +26,25 @@ export const transactionStatusData = [
     }
 ];
 
-export const recallStatusData = [
-    {
-        option: 'Accepted',
-        value: 'SUCCESSFUL_ACCEPTED',
-        css: 'green'
-    },
-    {
-        option: 'Received',
-        value: 'RECEIVED',
-        css: 'blue'
-    },
-    {
-        option: 'Rejected',
-        value: 'SUCCESSFUL_REJECTED',
-        css: 'red'
-    }
+export const incomingRecallStatusData = [
+    {option: 'Waiting for decision', value: 'WAITING_FOR_DECISION', css: 'blue'},
+    {option: 'Failed recall', value: 'FAILED_RECALL', css: 'red'},
+    {option: 'Exception', value: 'EXCEPTION', css: 'black'},
+    {option: 'Successful accepted', value: 'SUCCESSFUL_ACCEPTED', css: 'green'},
+    {option: 'Successful rejected', value: 'SUCCESSFUL_REJECTED', css: 'orange'},
+    {option: 'In progress rejected', value: 'IN_PROGRESS_REJECTED', css: 'yellow'},
+    {option: 'In progress accepted', value: 'IN_PROGRESS_ACCEPTED', css: 'green'},
+];
+
+export const outgoingRecallStatusData = [
+    {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},
+    {option: 'Waiting for response', value: 'WAITING_FOR_RESPONSE', css: 'yellow'},
+    {option: 'Failed recall', value: 'FAILED_RECALL', css: 'red'},
+    {option: 'Response received', value: 'RESPONSE_RECEIVED', css: 'green'},
+    {option: 'Exception', value: 'EXCEPTION', css: 'black'},
+    {option: 'Timeout', value: 'TIMEOUT', css: 'black'},
+    {option: 'Successful accepted', value: 'SUCCESSFUL_ACCEPTED', css: 'green'},
+    {option: 'Successful recejted', value: 'SUCCESSFUL_REJECTED', css: 'orange'},
 ];
 
 export const recallDirectionData = [

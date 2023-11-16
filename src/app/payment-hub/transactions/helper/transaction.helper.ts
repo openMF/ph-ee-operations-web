@@ -26,10 +26,22 @@ export const transactionStatusData = [
     }
 ];
 
-export const paymentStatusData = [
+export const incomingPaymentStatusData = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
-    {option: 'In progress', value: 'IN_PROGRESS', css: 'green'},
-    {option: 'Suspended', value: 'SUSPENDED', css: 'green'},
-    {option: 'Waiting for Fincrime decision', value: 'WAITING_FOR_FINCRIME_DECISION', css: 'green'}
+    {option: 'Transfer to disposal', value: 'TRANSFER_TO_DISPOSAL', css: 'green'},
+    {option: 'Exception', value: 'EXCEPTION', css: 'black'},
+    {option: 'Manual decision', value: 'MANUAL_DECISION', css: 'orange'},
+    {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},
+    {option: 'Unsuccessful transfer', value: 'UNSUCCESSFUL_TRANSFER', css: 'red'}
+];
+
+export const outgoingPaymentStatusData = [
+    {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
+    {option: 'Exception', value: 'EXCEPTION', css: 'black'},
+    {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},
+    {option: 'Transfer to conversion', value: 'TRANSFER_TO_CONVERSION', css: 'yellow'},
+    {option: 'Cancelled transfer', value: 'CANCELLED_TRANSFER', css: 'red'},
+    {option: 'Unsuccessful transfer', value: 'UNSUCCESSFUL_TRANSFER', css: 'red'},
+    {option: 'Investigation', value: 'INVESTIGATION', css: 'orange'}
 ];
