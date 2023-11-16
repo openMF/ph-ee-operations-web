@@ -19,6 +19,7 @@ import { transactionStatusData as transactionStatuses } from '../helper/recall.h
 import { incomingRecallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
 import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
+import { paymentSchemeData as paymentSchemes } from '../helper/recall.helper';
 import { RecallsService } from '../service/recalls.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
@@ -45,6 +46,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   recallStatus = new FormControl();
   recallDirection = new FormControl();
   paymentStatus = new FormControl();
+  paymentScheme = new FormControl();
   amountFrom = new FormControl();
   amountTo = new FormControl();
   endToEndIdentification = new FormControl();
@@ -57,6 +59,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   recallDirectionData = recallDirections;
   transactionStatusData = transactionStatuses;
   paymentStatusData = paymentStatuses;
+  paymentSchemeData = paymentSchemes;
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -103,6 +106,10 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'paymentStatus',
+      value: ''
+    },
+    {
+      type: 'paymentScheme',
       value: ''
     },
     {
@@ -259,6 +266,16 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'paymentStatus');
+        })
+      )
+      .subscribe();
+
+    this.paymentScheme.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, 'paymentScheme');
         })
       )
       .subscribe();

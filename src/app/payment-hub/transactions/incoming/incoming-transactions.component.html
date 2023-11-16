@@ -48,6 +48,17 @@
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
+    <mat-label>Payment Scheme</mat-label>
+    <mat-select [formControl]="paymentScheme">
+      <ng-container *ngFor="let filter of paymentSchemeData">
+        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+          {{ filter.option }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
     <mat-label>Currency</mat-label>
     <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
   </mat-form-field>
@@ -60,6 +71,11 @@
   <mat-form-field fxFlex="20%">
     <mat-label>Amount To</mat-label>
     <input matInput [formControl]="amountTo">
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>End to End Identification</mat-label>
+    <input matInput [formControl]="endToEndIdentification">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -118,10 +134,6 @@
     <ngx-mat-datetime-picker #acceptancePickerTo> </ngx-mat-datetime-picker>
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>End to End Identification</mat-label>
-    <input matInput [formControl]="endToEndIdentification">
-  </mat-form-field>
 </div>
 
 <!-- Autocomplete data -->

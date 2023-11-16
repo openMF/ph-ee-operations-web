@@ -45,3 +45,10 @@ export const outgoingPaymentStatusData = [
     {option: 'Unsuccessful transfer', value: 'UNSUCCESSFUL_TRANSFER', css: 'red'},
     {option: 'Investigation', value: 'INVESTIGATION', css: 'orange'}
 ];
+
+export const paymentSchemeData = [
+    {option: 'HCT_INST', value: 'HCT_INST', css: 'green'},
+    {option: 'IG2', value: 'IG2', css: 'green'},
+    {option: 'ON_US', value: 'ON_US', css: 'green'},
+    {option: 'IG2:RETURN', value: 'IG2:RETURN', css: 'green'}
+];
