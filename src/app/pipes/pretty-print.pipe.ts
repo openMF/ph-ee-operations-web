@@ -8,7 +8,11 @@ export class PrettyPrintPipe implements PipeTransform {
 
     transform(value: any) {
         if (value.charAt(0) === '{' && value.charAt(value.length - 1) === '}') {
-            return vkbeautify.json(value);
+            try {
+                return vkbeautify.json(value);
+            } catch(error) {
+                return value;
+            }
         }
 
         if (value.charAt(0) === '<' && value.charAt(value.length - 1) === '>') {
