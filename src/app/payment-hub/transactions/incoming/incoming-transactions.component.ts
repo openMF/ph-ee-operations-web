@@ -14,7 +14,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
+import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { incomingPaymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
@@ -297,7 +297,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startFrom');
+          this.applyFilter(convertMomentToDate(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -307,7 +307,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startTo');
+          this.applyFilter(convertMomentToDate(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -317,7 +317,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'acceptanceDateFrom');
+          this.applyFilter(convertMomentToDate(filterValue), 'acceptanceDateFrom');
         })
       )
       .subscribe();
@@ -327,7 +327,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'acceptanceDateTo');
+          this.applyFilter(convertMomentToDate(filterValue), 'acceptanceDateTo');
         })
       )
       .subscribe();
@@ -361,27 +361,6 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       delete this.sort.active;
     }
     this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
-  }
-
-  convertTimestampToUTCDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatLocalDate(new Date(timestamp));
-  }
-
-  formatTimestampToUTCDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatUTCDate(new Date(timestamp));
-  }
-
-  convertTimestampToDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatDate(new Date(timestamp));
   }
 
   /**
@@ -433,34 +412,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     return elements.length > 0 ? elements[0].css : undefined;
   }
 
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    date = date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
-  }
-
-  formatEndDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    date = this.formatDate(date);
-    return date.split(' ')[1];
-  }
-
-  formatDateForInput(value: string): string {
-    const date = new Date(value);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  formatDate(date: string): string{
+    return formatDateForDisplay(date);
   }
 
   /**

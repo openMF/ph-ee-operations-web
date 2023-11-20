@@ -12,9 +12,9 @@ import { merge, of } from 'rxjs';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
+import { formatDateForDisplay } from '../../../shared/date-format/date-format.helper';
 
 /** Custom Data Source */
-import { formatDate } from '../../transactions/helper/date-format.helper';
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
 import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
@@ -85,22 +85,8 @@ export class OutgoingRequestToPayComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  convertTimestampToDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatDate(new Date(timestamp));
-  }
-
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    date=date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
+  formatDate(date: string): string {
+    return formatDateForDisplay(date);
   }
 
   shortenValue(value: any) {

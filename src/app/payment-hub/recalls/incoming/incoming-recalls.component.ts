@@ -11,10 +11,10 @@ import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
+import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 
 /** Custom Data Source */
 import { RecallsDataSource } from '../dataSource/recalls.datasource';
-import { formatDate, formatLocalDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
 import { incomingRecallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
@@ -321,7 +321,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startFrom');
+          this.applyFilter(convertMomentToDate(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -331,7 +331,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(this.formatTimestampToUTCDate(filterValue), 'startTo');
+          this.applyFilter(convertMomentToDate(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -365,27 +365,6 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
       delete this.sort.active;
     }
     this.dataSource.getRecalls(this.filterRecallsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
-  }
-
-  convertTimestampToUTCDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatLocalDate(new Date(timestamp));
-  }
-
-  formatTimestampToUTCDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatUTCDate(new Date(timestamp));
-  }
-
-  convertTimestampToDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatDate(new Date(timestamp));
   }
 
   /**
@@ -437,23 +416,8 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
     return elements.length > 0 ? elements[0].css : undefined;
   }
 
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    date = date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
-  }
-
-  formatEndDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    date = this.formatDate(date);
-    return date.split(' ')[1];
+  formatDate(date: string): string {
+    return formatDateForDisplay(date);
   }
 
   /**

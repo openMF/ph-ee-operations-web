@@ -197,7 +197,7 @@
           </div>
 
           <div fxFlex="50%" fxFlex.lt-md="50%" *ngIf="datasource.transfer.completedAt!==undefined">
-            {{ formatDate(formatTimestamp(datasource.transfer.completedAt)) }}
+            {{ formatDate(datasource.transfer.completedAt) }}
           </div>
           <div fxFlex="50%" fxFlex.lt-md="50%" class="header" *ngIf="datasource.transfer.completedAt!==undefined">
             Transfer Status
@@ -274,7 +274,7 @@
 
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(formatTimestamp(transaction.timestamp)) }} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.timestamp) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="elementId">
@@ -314,7 +314,7 @@
         
           <ng-container matColumnDef="timestamp">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
-            <td mat-cell *matCellDef="let transaction"> {{ formatDate(formatTimestamp(transaction.timestamp)) }} </td>
+            <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.timestamp) }} </td>
           </ng-container>
 
           <ng-container matColumnDef="elementId">
@@ -369,7 +369,7 @@
 
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(formatTimestamp(transaction.timestamp)) }} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.timestamp) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="value">

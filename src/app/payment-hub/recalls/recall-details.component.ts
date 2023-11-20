@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { RecallsService } from './service/recalls.service';
-import { formatDate, formatLocalDate } from './helper/date-format.helper';
+import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as transactionStatuses } from './helper/recall.helper';
 
@@ -143,23 +143,8 @@ export class RecallDetailsComponent implements OnInit {
     };
   }
 
-  formatTimestamp(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatLocalDate(new Date(timestamp));
-  }
-
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-
-    date = date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
+  formatDate(date: string): string {
+    return formatDateForDisplay(date);
   }
 
   getPaymentProcessId() {

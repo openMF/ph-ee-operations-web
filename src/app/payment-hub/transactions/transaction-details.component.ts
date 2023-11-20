@@ -2,8 +2,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -13,9 +11,9 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { TransactionsService } from './service/transactions.service';
-import { formatDate, formatLocalDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
+import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
 
 /** Dialog Components */
 import { BpmnDialogComponent } from '../common/bpmn-dialog/bpmn-dialog.component'
@@ -143,25 +141,6 @@ export class TransactionDetailsComponent implements OnInit {
     };
   }
 
-  formatTimestamp(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatLocalDate(new Date(timestamp));
-  }
-
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-
-    date = date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
-  }
-
   getPaymentProcessId() {
     return this.datasource.transfer.workflowInstanceKey;
   }
@@ -192,6 +171,10 @@ export class TransactionDetailsComponent implements OnInit {
 
     const elements = this.transactionStatusData.filter((option) => option.value === status);
     return elements.length > 0 ? elements[0].css : undefined;
+  }
+
+  formatDate(date: string): string {
+    return formatDateForDisplay(date);
   }
 
   openBPMNDialog() {

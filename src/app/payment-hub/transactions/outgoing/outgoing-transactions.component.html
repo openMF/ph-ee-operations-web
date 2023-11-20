@@ -162,17 +162,17 @@
 
     <ng-container matColumnDef="startedAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time</th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.startedAt) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="completedAt">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time</th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }} </td>
+        <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.completedAt) }} </td>
     </ng-container>
 
     <ng-container matColumnDef="acceptanceDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Acceptance Date</th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.acceptanceDate)) }} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.acceptanceDate) }} </td>
   </ng-container>
 
     <ng-container matColumnDef="transactionId">

@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
-import { formatDate, formatLocalDate } from '../../transactions/helper/date-format.helper';
+import { formatDateForDisplay } from '../../../shared/date-format/date-format.helper';
 import { DfspEntry } from '../model/dfsp.model';
 import { requestToPayStatesData as statuses } from '../helper/request-to-pay.helper';
 
@@ -127,22 +127,8 @@ export class ViewRequestToPayComponent implements OnInit {
     };
   }
 
-  convertTimestampToDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatLocalDate(new Date(timestamp));
-  }
-
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    date=date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
+  formatDate(date: string): string{
+    return formatDateForDisplay(date);
   }
 
   getPaymentProcessId() {

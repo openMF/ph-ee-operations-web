@@ -26,8 +26,8 @@ import {
 /** Custom Services */
 import { RequestToPayService } from "../service/request-to-pay.service";
 import { RequestToPayDataSource } from "../dataSource /requestToPay.datasource";
+import { formatDateForDisplay } from '../../../shared/date-format/date-format.helper';
 /** Custom Data Source */
-import { formatDate } from "../../transactions/helper/date-format.helper";
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
 import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
@@ -327,42 +327,8 @@ export class IncomingRequestToPayComponent implements OnInit {
   //   this.dataSource.sort = this.sort;
   // }
 
-  convertTimestampToDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return formatDate(new Date(timestamp));
-  }
-
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-    var date2 = new Date(date);
-    const year = date2.getFullYear();
-    const month = "0" + (date2.getMonth() + 1);
-    const day = "0" + date2.getDate();
-    // Hours part from the timestamp
-    const hours = "0" + date2.getHours();
-    // Minutes part from the timestamp
-    const minutes = "0" + date2.getMinutes();
-    // Seconds part from the timestamp
-    const seconds = "0" + date2.getSeconds();
-
-    // Will display time in 2020-04-10 18:04:36 format
-    return (
-      year +
-      "-" +
-      month.substr(-2) +
-      "-" +
-      day.substr(-2) +
-      "  " +
-      hours.substr(-2) +
-      ":" +
-      minutes.substr(-2) +
-      ":" +
-      seconds.substr(-2)
-    );
+  formatDate(date: string): string {
+    return formatDateForDisplay(date);
   }
 
   shortenValue(value: any) {
