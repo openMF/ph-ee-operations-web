@@ -34,6 +34,7 @@ export class ListTasksComponent implements OnInit, AfterViewInit {
   assignee = new FormControl();
   candidateRole = new FormControl();
   previousSubmitter = new FormControl();
+  businessKey = new FormControl();
   userName: string;
   taskStates = [
     {
@@ -68,6 +69,10 @@ export class ListTasksComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'previousSubmitter',
+      value: ''
+    },
+    {
+      type: 'businessKey',
       value: ''
     },
     {
@@ -132,6 +137,16 @@ export class ListTasksComponent implements OnInit, AfterViewInit {
             distinctUntilChanged(),
             tap((filterValue) => {
               this.applyFilter(filterValue, 'previousSubmitter');
+            })
+        )
+        .subscribe();
+
+    this.businessKey.valueChanges
+        .pipe(
+            debounceTime(500),
+            distinctUntilChanged(),
+            tap((filterValue) => {
+              this.applyFilter(filterValue, 'businessKey');
             })
         )
         .subscribe();
