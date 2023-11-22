@@ -27,7 +27,7 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Technical Status</mat-label>
-    <mat-select [formControl]="status">
+    <mat-select [formControl]="filterForm.get('status')">
       <ng-container *ngFor="let filter of transactionStatusData">
         <mat-option [value]="filter.value" *ngIf="!filter.hidden">
           {{ filter.option }}
@@ -38,7 +38,7 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payment Status</mat-label>
-    <mat-select [formControl]="paymentStatus">
+    <mat-select [formControl]="filterForm.get('paymentStatus')">
       <ng-container *ngFor="let filter of paymentStatusData">
         <mat-option [value]="filter.value" *ngIf="!filter.hidden">
           {{ filter.option }}
@@ -59,25 +59,29 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
-    <input matInput>
-    <!-- <input matInput [ngxMatDatetimePicker]="requesttopayDateFromPicker" placeholder="Choose a date"
-       [min]="minDate" [max]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="requesttopayDateFromPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #requesttopayDateFromPicker [showSpinners]="true" [showSeconds]="true"
-       [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
-    </ngx-mat-datetime-picker> -->
- </mat-form-field>
+    <input
+      matInput
+      placeholder="yyyy-MM-dd hh:mm:ss"
+      [ngxMatDatetimePicker]="picker"
+      [formControl]="filterForm.get('transactionDateFrom')"
+      [min]="minDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
+  </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
-    <input matInput>
-    <!-- <input matInput [ngxMatDatetimePicker]="requesttopayDateToPicker" placeholder="Choose a date"
-       [min]="minDate" [max]="maxDate" >
-    <mat-datepicker-toggle matSuffix [for]="requesttopayDateToPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #requesttopayDateToPicker [showSpinners]="true" [showSeconds]="true"
-       [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
-    </ngx-mat-datetime-picker> -->
- </mat-form-field>
+    <input
+      matInput
+      placeholder="yyyy-MM-dd hh:mm:ss"
+      [ngxMatDatetimePicker]="pickerTo"
+      [formControl]="filterForm.get('transactionDateTo')"
+      [min]="minDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
+  </mat-form-field>
 
 </div>
 

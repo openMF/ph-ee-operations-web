@@ -69,10 +69,9 @@
       [ngxMatDatetimePicker]="picker"
       [formControl]="transactionDateFrom"
       [min]="minDate"
-      [max]="maxDate"
     />
-    <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #picker> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -83,10 +82,9 @@
       [ngxMatDatetimePicker]="pickerTo"
       [formControl]="transactionDateTo"
       [min]="minDate"
-      [max]="maxDate"
     />
-    <mat-datepicker-toggle matSuffix [for]="pickerTo"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #pickerTo> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 </div>
 

@@ -86,10 +86,9 @@
       [ngxMatDatetimePicker]="picker"
       [formControl]="filterForm.get('transactionDateFrom')"
       [min]="minDate"
-      [max]="maxDate"
     />
-    <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #picker> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -100,10 +99,9 @@
       [ngxMatDatetimePicker]="pickerTo"
       [formControl]="filterForm.get('transactionDateTo')"
       [min]="minDate"
-      [max]="maxDate"
     />
-    <mat-datepicker-toggle matSuffix [for]="pickerTo"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #pickerTo> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -114,10 +112,9 @@
       [ngxMatDatetimePicker]="acceptancePicker"
       [formControl]="filterForm.get('acceptanceDateFrom')"
       [min]="minDate"
-      [max]="maxDate"
     />
-    <mat-datepicker-toggle matSuffix [for]="acceptancePicker"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #acceptancePicker> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle matSuffix [for]="acceptancePicker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #acceptancePicker [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -128,10 +125,9 @@
       [ngxMatDatetimePicker]="acceptancePickerTo"
       [formControl]="filterForm.get('acceptanceDateTo')"
       [min]="minDate"
-      [max]="maxDate"
     />
-    <mat-datepicker-toggle matSuffix [for]="acceptancePickerTo"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #acceptancePickerTo> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle matSuffix [for]="acceptancePickerTo"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #acceptancePickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
 </div>

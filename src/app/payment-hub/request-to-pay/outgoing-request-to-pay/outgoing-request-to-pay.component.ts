@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 /** rxjs Imports */
@@ -31,7 +31,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  
+  filterForm: FormGroup;
   /* Requests to pay data. */
   requestToPayData: any;
   /* Requests to outgoing data. */
@@ -42,9 +42,6 @@ export class OutgoingRequestToPayComponent implements OnInit {
 
   /** Data source for request to pay table. */
   dataSource: MatTableDataSource<any>;
-
-  status = new FormControl();
-  paymentStatus = new FormControl();
 
   transactionStatusData = statuses;
   paymentStatusData = paymenStatuses;
@@ -58,7 +55,14 @@ export class OutgoingRequestToPayComponent implements OnInit {
 
   constructor(private requestToPayService: RequestToPayService,
     private route: ActivatedRoute,
-    public dialog: MatDialog) { 
+    public dialog: MatDialog,
+    private formBuilder: FormBuilder) {
+      this.filterForm = this.formBuilder.group({
+        status: new FormControl(),
+        paymentStatus: new FormControl(),
+        transactionDateFrom: new FormControl(),
+        transactionDateTo: new FormControl()
+      });
     this.route.data.subscribe((data: { requestsToPay: any,dfspEntries: DfspEntry[],currencies: any }) => {
       this.requestToPayData = data.requestsToPay.content;
       this.currenciesData = data.currencies;
