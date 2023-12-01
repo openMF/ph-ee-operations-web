@@ -160,6 +160,13 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
         this.currenciesData = data.currencies;
         this.dfspEntriesData = data.dfspEntries;
       });
+      this.route.queryParams.subscribe(params => {
+        const transactionId = params['transactionId'];
+        if (transactionId) {
+          this.filterForm.controls['transactionId'].setValue(transactionId);
+          this.setFilter(transactionId, 'transactionId');
+        }
+      });
   }
 
   /**
@@ -377,6 +384,11 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     const findIndex = this.filterRecallsBy.findIndex(filter => filter.type === property);
     this.filterRecallsBy[findIndex].value = filterValue;
     this.loadRecallsPage();
+  }
+
+  setFilter(filterValue: string, property: string) {
+    const findIndex = this.filterRecallsBy.findIndex(filter => filter.type === property);
+    this.filterRecallsBy[findIndex].value = filterValue;
   }
 
   /**
