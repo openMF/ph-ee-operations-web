@@ -25,3 +25,13 @@ export interface Status {
     code: string;
     label: string;
 }
+
+export interface VoucherInstruction {
+    instructionId: string;
+    groupCode: string;
+    currency: string;
+    amount: number;
+    expiry?: string | null;
+    functionalId: string;
+    narration?: string | null;
+}

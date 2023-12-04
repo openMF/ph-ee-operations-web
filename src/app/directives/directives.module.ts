@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 /** Custom Directives */
 import { HasPermissionDirective } from './has-permission/has-permission.directive';
 import { HasRoleDirective } from './has-role/has-role.directive';
+import { FileDragNDropDirective } from './file-drag-ndrop/file-drag-ndrop.directive';
 
 /**
  *  Directives Module
@@ -15,7 +16,7 @@ import { HasRoleDirective } from './has-role/has-role.directive';
   imports: [
     CommonModule
   ],
-  declarations: [HasPermissionDirective, HasRoleDirective],
+  declarations: [HasPermissionDirective, HasRoleDirective, FileDragNDropDirective],
   exports: [HasPermissionDirective, HasRoleDirective]
 })
 export class DirectivesModule { }

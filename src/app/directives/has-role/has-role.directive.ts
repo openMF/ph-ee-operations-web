@@ -1,5 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
+import { environment } from 'environments/environment';
 
 @Directive({
   selector: '[userHasRole]'
@@ -22,7 +23,11 @@ export class HasRoleDirective {
               private viewContainer: ViewContainerRef,
               private authenticationService: AuthenticationService) {
     let userDetails = this.authenticationService.userDetails;
-    this.userRoles = userDetails.realm_access.roles;
+    if (environment.auth.enabled === 'false') {
+      this.userRoles = [HasRoleDirective.ADMIN_ROLE];
+    } else {
+      this.userRoles = userDetails.realm_access.roles;
+    }
   }
 
   /**

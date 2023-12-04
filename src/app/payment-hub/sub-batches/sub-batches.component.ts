@@ -4,6 +4,7 @@ import { Dates } from 'app/core/utils/dates';
 import { Batch } from '../batches/model/batch.model';
 import { SubBatchesService } from './sub-batches.service';
 import { UntypedFormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'mifosx-sub-batches',
@@ -38,18 +39,32 @@ export class SubBatchesComponent implements OnInit {
   page: number = 0;
   size: number = 100;
 
-  constructor(private dates: Dates,
-    private subBatchesService: SubBatchesService) { }
+  batchId: string | null = null;
 
-  ngOnInit(): void {
-    this.getBatches();
+  constructor(private route: ActivatedRoute,
+    private router: Router,
+    private dates: Dates,
+    private subBatchesService: SubBatchesService) { 
+
+    this.route.params.subscribe(params => {
+      this.batchId = params['batchId'];
+    });
   }
 
-  getBatches(): void {
-    this.subBatchesService.getSubBatches(this.page, this.size, 'requestFile', 'asc')
-    .subscribe((batches: Batch) => {
-      this.batchesData = batches;
-    });
+  ngOnInit(): void {
+    this.getBatches(this.batchId);
+  }
+
+  getBatches(batchId: string): void {
+    if (batchId != null) {
+      this.subBatchesService.getSubBatches(batchId, this.page, this.size, 'requestFile', 'asc')
+      .subscribe((batches: any) => {
+        console.log(batches);
+        this.batchesData = batches;
+      });
+    } else {
+
+    }
   }
 
   convertTimestampToUTCDate(timestamp: any) {

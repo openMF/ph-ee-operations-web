@@ -25,4 +25,8 @@ export class VouchersService {
     return this.http.get(this.apiPrefix + '/vouchers', { params: httpParams });
   }
 
+  createVoucher(payload: any): Observable<any> {
+    return this.http.post(this.apiPrefix + '/vouchers', payload);
+  }
+
 }

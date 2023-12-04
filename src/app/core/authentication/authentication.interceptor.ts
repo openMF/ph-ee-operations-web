@@ -38,10 +38,15 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       const url: string = request.url;
       if ((url.indexOf('/batches') > 0) || (url.indexOf('/transactions') > 0)) {
         httpOptions.headers['Platform-TenantId'] = this.settingsService.tenantIdentifier;
+        console.log(url);
+        if (!url.endsWith('/batches')) {
+          httpOptions.headers['X-Correlation-ID'] = 'sdasdasasdasu';
+        }
         delete httpOptions.headers['X-Registering-Institution-ID'];
       }
       if ((url.indexOf('/vouchers') > 0) || (url.indexOf('/benefici') > 0)) {
         httpOptions.headers['X-Registering-Institution-ID'] = environment.backend.registeringInstituionId;
+        delete httpOptions.headers['X-Correlation-ID'];
         delete httpOptions.headers['Platform-TenantId'];
       }
     } else {

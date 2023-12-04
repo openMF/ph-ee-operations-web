@@ -82,8 +82,8 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
           <td mat-cell *matCellDef="let item"
-            [ngClass]="{'red': item.status==='FAILED','green': item.status==='COMPLETED','orange': item.status==='ACTION_NEEDED'}">
-            {{ item.status }} </td>
+            [ngClass]="statusStyle(item.status)">
+            {{ validateStatus(item.status) }} </td>
         </ng-container>
   
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

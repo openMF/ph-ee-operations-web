@@ -65,7 +65,9 @@
 
       <ng-container matColumnDef="batchReferenceNumber">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Batch Reference Number </th>
-        <td mat-cell *matCellDef="let item"> {{ item.batchId }} </td>
+        <td mat-cell *matCellDef="let item"> 
+          <mifosx-identifier identifier="{{item.batchId}}"></mifosx-identifier> 
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="startedAt">
