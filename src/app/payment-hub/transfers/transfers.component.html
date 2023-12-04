@@ -134,8 +134,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.workflowInstanceKey]"
-      class="select-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="select-row"></tr>
 
   </table>
 

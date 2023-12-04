@@ -20,6 +20,8 @@ import { ListItemComponent } from './list-item/list-item.component';
 import { TenantSelectorComponent } from './tenant-selector/tenant-selector.component';
 import { IdentifierComponent } from './identifier/identifier.component';
 import { PipesModule } from 'app/pipes/pipes.module';
+import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
+import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 /**
  * Shared Module
@@ -33,7 +35,9 @@ import { PipesModule } from 'app/pipes/pipes.module';
         MaterialModule,
         ReactiveFormsModule,
         PipesModule,
-        TranslateModule
+        TranslateModule,
+        BreadcrumbModule,
+        NgxCsvParserModule
     ],
     declarations: [
         FormfieldComponent,
@@ -60,7 +64,12 @@ import { PipesModule } from 'app/pipes/pipes.module';
         TranslateModule,
         ListItemComponent,
         TenantSelectorComponent,
-        IdentifierComponent
+        IdentifierComponent,
+        BreadcrumbModule,
+        NgxCsvParserModule
+    ],
+    providers: [
+        BreadcrumbService
     ]
 })
 export class SharedModule { }

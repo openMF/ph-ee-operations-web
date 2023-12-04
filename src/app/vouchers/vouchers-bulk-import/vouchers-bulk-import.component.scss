@@ -4,8 +4,8 @@
   border-radius: 15px;
   background-color: $mid-grey;
   border: $border-size solid $mid-grey;
-  height: 110px;
-  width: 280px;
+  text-align: center;
+  width: 90%;
   vertical-align: middle;
   margin: 15px;
   padding-top: 15px;
@@ -28,4 +28,42 @@
       color: $white;
     }
   }
+}
+
+.text-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.centered {
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.dropzone {
+    height: 200px;
+    display: table;
+    width: 100%;
+    background-color: #eee;
+    border: dotted 1px #aaa;
+}
+
+input[type="file"]{
+  display: none;
+}
+
+.textLink{
+  background-color: $primary;
+  color:#fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.textLink::before{
+  content: "\f093";
+    font-weight: 900;
+    color: #fff;
+    font-size: large;
+    margin-right: 10px;
 }

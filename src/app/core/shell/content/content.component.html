@@ -1,2 +1,10 @@
+<!-- Breadcrumb -->
+<div class="container">
+    <xng-breadcrumb class="breadcrumb" [separator]="iconTemplate"></xng-breadcrumb>
+    <ng-template #iconTemplate>
+        <mat-icon>chevron_right</mat-icon>
+    </ng-template>
+</div>
+
 <!-- Display the content for the visited route. -->
 <router-outlet></router-outlet>

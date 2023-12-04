@@ -36,14 +36,27 @@ const routes: Routes = [
         },
         {
           path: "batches",
+          data: { breadcrumb: {alias: 'Batches'} },
           component: BatchesComponent
         },
         {
           path: "sub-batches",
-          component: SubBatchesComponent,
+          data: { breadcrumb: {alias: 'SubBatches'} },
+          children: [
+            {
+              path: '',
+              component: SubBatchesComponent,
+            },
+            {
+              path: ":batchId",
+              data: { breadcrumb: {alias: 'SubBatches'} },
+              component: SubBatchesComponent
+            }
+          ]
         },
         {
           path: "transfers",
+          data: { breadcrumb: {alias: 'Transfers'} },
           component: TransfersComponent,
         },
         {
@@ -56,10 +69,7 @@ const routes: Routes = [
             {
               path: "view/:id",
               component: TransactionDetailsComponent,
-              data: {
-                title: extract("View Transaction"),
-                routeParamBreadcrumb: "id",
-              },
+              data: { breadcrumb: {alias: 'View Transaction'} },
               resolve: {
                 transaction: TransactionResolver,
                 dfspEntries: DfspResolver,

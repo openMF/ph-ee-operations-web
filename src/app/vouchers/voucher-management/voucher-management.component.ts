@@ -76,6 +76,42 @@ export class VoucherManagementComponent implements OnInit {
     return this.dates.formatUTCDate(new Date(timestamp));
   }
 
+  statusStyle(code: string): string {
+    if (code === '01') {
+      return 'grey';
+    } else if (code === '02') {
+      return 'green';
+    } else if (code === '03') {
+      return 'red';
+    } else if (code === '04') {
+      return 'blue';
+    } else if (code === '05') {
+      return 'black';
+    } else if (code === '06') {
+      return 'orange';
+    } else {
+      return '';
+    }
+  }
+
+  validateStatus(code: string): string {
+    if (code === '01') {
+      return 'INACTIVE';
+    } else if (code === '02') {
+      return 'ACTIVE';
+    } else if (code === '03') {
+      return 'CANCELED';
+    } else if (code === '04') {
+      return 'EXPIRED';
+    } else if (code === '05') {
+      return 'UTILIZED';
+    } else if (code === '06') {
+      return 'SUSPENDED';
+    } else {
+      return '';
+    }
+  }
+
   searchVouchers(): void {
 
   }

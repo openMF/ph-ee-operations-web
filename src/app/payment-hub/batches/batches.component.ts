@@ -6,6 +6,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'mifosx-batches',
@@ -45,6 +46,8 @@ export class BatchesComponent implements OnInit {
   isLoading = false;
 
   constructor(private dates: Dates,
+    private route: ActivatedRoute,
+    private router: Router,
     private batchesService: BatchesService) { }
 
   ngOnInit(): void {
@@ -85,6 +88,10 @@ export class BatchesComponent implements OnInit {
       return 'yellow';
     }
     return 'red';
+  }
+
+  gotoSubBatches(batchId: string): void {
+    this.router.navigate(['..', 'sub-batches', batchId], { relativeTo: this.route });
   }
 
   searchBatches(): void {
