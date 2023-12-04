@@ -1,7 +1,12 @@
-.green {
-    color: green;
-  }
+.green { color: green;}
   
-  .red { color:red;}
+.red { color:red;}
     
-  .orange { color:orange;}
+.orange { color:orange;}
+
+::ng-deep .mat-tooltip {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 200px;
+}
