@@ -90,3 +90,7 @@ tr.transaction-row:not(.transaction-expanded-row):active {
   overflow: hidden;
   display: flex;
 }
+
+::ng-deep .mat-grid-tile-content {
+  align-items: start !important;
+}
