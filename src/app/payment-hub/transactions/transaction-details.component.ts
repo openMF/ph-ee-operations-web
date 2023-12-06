@@ -91,6 +91,10 @@ export class TransactionDetailsComponent implements OnInit {
     return flag;
   }
 
+  countSubTasks(transaction: any): number {
+    return transaction.datasource.filteredData.length;
+  }
+
   pushPopElement(transaction: any) {
     const index = this.expandedElement.indexOf(transaction);
     if (index === -1) {
@@ -115,7 +119,7 @@ export class TransactionDetailsComponent implements OnInit {
     );
     const subscribe = example.subscribe(val => {
       this.tasks.push(val[val.length - 1]);
-      this.tasks[this.counter].datasource = new MatTableDataSource(val.slice(0, val.length - 1));
+      this.tasks[this.counter].datasource = new MatTableDataSource(val);
       this.tasks[this.counter].datasource.sortingDataAccessor = (transaction: any, property: any) => {
         return transaction[property];
       };
