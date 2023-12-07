@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 1.0.1
+
+        * [SER-2082] - Fix user edit and change password bug
+
 ## Version 1.0.0
 
         * [SER-1656] - Create users and manage access

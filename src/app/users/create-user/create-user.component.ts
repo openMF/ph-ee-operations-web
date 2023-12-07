@@ -61,7 +61,6 @@ export class CreateUserComponent implements OnInit {
    */
   createUserForm() {
     this.userForm = this.formBuilder.group({
-      'username': ['', Validators.required],
       'email': ['', [Validators.required, Validators.email]],
       'firstname': ['', [Validators.required, Validators.pattern('(^[A-z]).*')]],
       'lastname': ['', [Validators.required, Validators.pattern('(^[A-z]).*')]],
@@ -111,7 +110,7 @@ export class CreateUserComponent implements OnInit {
     let user = this.userForm.value;
     let data = {
       "email": user.email,
-      "username": user.username,
+      "username": user.email,
       "firstname": user.firstname,
       "lastname": user.lastname,
       "password": user.password,
@@ -121,6 +120,9 @@ export class CreateUserComponent implements OnInit {
       "enabled": true,
       "firstTimeLoginRemaining": false,
       "deleted": false,
+      "payeePartyIdTypesList":["*"],
+      "currenciesList":["*"],
+      "payeePartyIdsList":["*"],
       "passwordNeverExpires": true,
       "lastTimePasswordUpdated": Date.now()
     }

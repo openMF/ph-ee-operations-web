@@ -1,5 +1,5 @@
 <div class="container m-b-20" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="end" fxLayoutGap="2%">
-  <button mat-raised-button color="primary">
+  <button mat-raised-button color="primary" (click)="editAppUser()">
     <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
     Edit
   </button>
@@ -7,7 +7,7 @@
     <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp;
     Delete
   </button>
-  <button mat-raised-button color="primary">
+  <button mat-raised-button color="primary" (click)="changePassword()">
     <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp;
     Change Password
   </button>
