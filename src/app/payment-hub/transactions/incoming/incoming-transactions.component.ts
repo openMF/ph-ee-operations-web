@@ -157,6 +157,13 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         this.currenciesData = data.currencies;
         this.dfspEntriesData = data.dfspEntries;
       });
+      this.route.queryParams.subscribe(params => {
+        const transactionId = params['transactionId'];
+        if (transactionId) {
+          this.filterForm.controls['transactionId'].setValue(transactionId);
+          this.setFilter(transactionId, 'transactionId');
+        }
+      });
   }
 
   /**
@@ -374,6 +381,11 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
     this.filterTransactionsBy[findIndex].value = filterValue;
     this.loadTransactionsPage();
+  }
+
+  setFilter(filterValue: string, property: string) {
+    const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
+    this.filterTransactionsBy[findIndex].value = filterValue;
   }
 
   /**

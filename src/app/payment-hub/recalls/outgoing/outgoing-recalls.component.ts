@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
@@ -134,6 +134,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   constructor(private recallsService: RecallsService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    private router: Router,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -494,6 +495,10 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
         workflowInstanceKey: workflowInstanceKey
       },
     });
+  }
+
+  navigateToTransactionsPage(transactionId: string) {
+    this.router.navigate(['/paymenthubee/outgoingtransactions'], { queryParams: { transactionId: transactionId } });
   }
 
   resetFilters() {

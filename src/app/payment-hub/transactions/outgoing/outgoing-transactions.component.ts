@@ -157,6 +157,13 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         this.currenciesData = data.currencies;
         this.dfspEntriesData = data.dfspEntries;
       });
+      this.route.queryParams.subscribe(params => {
+        const transactionId = params['transactionId'];
+        if (transactionId) {
+          this.filterForm.controls['transactionId'].setValue(transactionId);
+          this.setFilter(transactionId, 'transactionId');
+        }
+      });
   }
 
   /**
@@ -376,6 +383,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     this.loadTransactionsPage();
   }
 
+  setFilter(filterValue: string, property: string) {
+    const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
+    this.filterTransactionsBy[findIndex].value = filterValue;
+  }
+
   /**
    * Displays office name in form control input.
    * @param {any} office Office data.
@@ -482,7 +494,6 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   navigateToRecallsPage(transactionId: string) {
-    // Use the Router service to navigate to the desired URL with the transactionId as a query parameter
     this.router.navigate(['/paymenthubee/outgoingrecalls'], { queryParams: { transactionId: transactionId } });
   }
 
