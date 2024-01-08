@@ -54,7 +54,7 @@ export class RecallDetailsComponent implements OnInit {
   /** Columns to be displayed in transaction table. */
   displayedColumns: string[] = ['timestamp', 'elementId', 'type', 'intent', 'actions'];
   displayedColumnsDetailsTable: string[] = ['timestamp', 'elementId', 'type', 'intent'];
-  displayedBusinessAttributeColumns: string[] = ['name', 'timestamp', 'value'];
+  displayedBusinessAttributeColumns: string[] = ['name', 'value'];
   /** Data source for transaction table. */
   taskList: MatTableDataSource<any>;
   businessAttributes: MatTableDataSource<any>;

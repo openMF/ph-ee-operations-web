@@ -367,11 +367,6 @@
       <td mat-cell *matCellDef="let transaction"> {{ transaction.name }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="timestamp">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.timestamp) }} </td>
-    </ng-container>
-
     <ng-container matColumnDef="value">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
       <td mat-cell *matCellDef="let transaction" style="width: 70%; height: 100%; border: none; outline: none"><textarea cdkTextareaAutosize="true" cdkAutosizeMaxRows="12" cdkAutosizeMinRows="1" style="width: 100%; height: 100%" [innerHTML]="transaction.value | prettyPrint"></textarea></td>
