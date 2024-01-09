@@ -59,6 +59,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   transactionDateTo = new FormControl();
   /** Transaction ID form control. */
   transactionId = new FormControl();
+  externalId = new FormControl();
   csvExport: [];
   csvName: string;
   lengthElement: number;
@@ -126,6 +127,10 @@ export class IncomingRequestToPayComponent implements OnInit {
     },
     {
       type: "startTo",
+      value: "",
+    },
+    {
+      type: "externalId",
       value: "",
     },
   ];
@@ -284,6 +289,16 @@ export class IncomingRequestToPayComponent implements OnInit {
           if (filterValue) {
             this.applyFilter(filterValue.format(this.dateTimeFormat), "startTo");
           }
+        })
+      )
+      .subscribe();
+
+      this.externalId.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, "externalId");
         })
       )
       .subscribe();
