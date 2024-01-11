@@ -31,11 +31,18 @@ export class AuthenticationGuard implements CanActivate {
     if (this.authenticationService.isAuthenticated()) {
       return true;
     }
-
-    log.debug('User not authenticated, redirecting to login...');
-    this.authenticationService.logout();
-    this.router.navigate(['/login'], { replaceUrl: true });
-    return false;
+    if (window.location.pathname === '/') {
+      console.log(window.location.pathname);
+      log.debug('User not authenticated, redirecting to login...');
+      this.authenticationService.logout();
+      this.router.navigate(['/login'], { replaceUrl: true });
+      return false;
+    } else {
+      console.log(window.location.pathname);
+      log.debug('User not authenticated, redirecting to other location...');
+      this.authenticationService.authorize(window.location.pathname);
+      return true;
+    }
   }
 
 }

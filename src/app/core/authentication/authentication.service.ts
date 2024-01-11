@@ -97,7 +97,7 @@ export class AuthenticationService {
     return scope.includes('ALL_FUNCTIONS') || scope.includes(permission);
   }
 
-  authorize() {
+  authorize(location: String) {
     const state = this.strRandom(40);
     const codeVerifier = this.strRandom(128);
 
@@ -105,6 +105,7 @@ export class AuthenticationService {
 
     this.storage.setItem('state', state);
     this.storage.setItem('codeVerifier', codeVerifier);
+    this.storage.setItem('location', location);
 
     const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
 

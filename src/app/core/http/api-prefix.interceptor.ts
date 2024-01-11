@@ -19,7 +19,7 @@ export class ApiPrefixInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if(request.url.indexOf('configuration.properties')==-1){
-      request = request.clone({ url: environment.serverUrl + request.url });
+      request = request.clone({ url: environment.oauth.serverUrl + request.url });
     }
     return next.handle(request);
   }
