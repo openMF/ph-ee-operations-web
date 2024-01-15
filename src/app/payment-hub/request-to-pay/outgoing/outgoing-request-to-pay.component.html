@@ -2,27 +2,27 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payer Id</mat-label>
-    <input matInput>
+    <input matInput [formControl]="filterForm.get('payerPartyId')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP Id</mat-label>
-    <input matInput >
+    <input matInput [formControl]="filterForm.get('payerDfspId')" />
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <!-- <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP name</mat-label>
-    <input matInput>
-  </mat-form-field>
+    <input matInput [formControl]="filterForm.get('payerDfspName')" [matAutocomplete]="dfspEntriesAutocomplete">
+  </mat-form-field> -->
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
-    <input matInput>
+    <input matInput [formControl]="filterForm.get('payeePartyId')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction ID</mat-label>
-    <input matInput>
+    <input matInput [formControl]="filterForm.get('transactionId')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -48,14 +48,19 @@
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
-    <mat-label>Amount</mat-label>
-    <input matInput>
+    <mat-label>Amount From</mat-label>
+    <input matInput [formControl]="filterForm.get('amountFrom')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
-    <mat-label>Currency</mat-label>
-    <input matInput>
+    <mat-label>Amount To</mat-label>
+    <input matInput [formControl]="filterForm.get('amountTo')" />
   </mat-form-field>
+
+  <!--mat-form-field fxFlex="20%">
+    <mat-label>Currency</mat-label>
+        <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
+  </mat-form-field-->
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
@@ -82,15 +87,17 @@
     <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
+</div>
 
+<div class="container p-b-10">
+  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" (click)="resetFilters()">
+    Reset filters
+  </button>
 </div>
 
 <div class="container">
-
   <div class="mat-elevation-z8">
-
     <table mat-table [dataSource]="dataSource" matSort>
-
       <ng-container matColumnDef="startedAt">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time</th>
         <td mat-cell *matCellDef="let requestToPay"> {{ formatDate(requestToPay.startedAt) }} </td>
@@ -146,8 +153,6 @@
 
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
-
+    <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
   </div>
-
 </div>

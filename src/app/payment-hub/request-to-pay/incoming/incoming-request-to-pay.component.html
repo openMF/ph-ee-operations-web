@@ -1,37 +1,33 @@
-<div
-  class="container"
-  fxLayout="row wrap"
-  fxLayoutGap="2%"
-  fxLayout.lt-md="column"
->
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
   <mat-form-field fxFlex="20%">
     <mat-label>Payer Id</mat-label>
-    <input matInput [formControl]="payerPartyId" />
+    <input matInput [formControl]="filterForm.get('payerPartyId')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP Id</mat-label>
-    <input matInput [formControl]="payerDfspId" />
+    <input matInput [formControl]="filterForm.get('payerDfspId')" />
   </mat-form-field>
 
   <!-- <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP name</mat-label>
-    <input matInput [formControl]="payerDfspName" [matAutocomplete]="dfspEntriesAutocomplete">
+    <input matInput [formControl]="filterForm.get('payerDfspName')" [matAutocomplete]="dfspEntriesAutocomplete">
   </mat-form-field> -->
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
-    <input matInput [formControl]="payeePartyId" />
+    <input matInput [formControl]="filterForm.get('payeePartyId')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction ID</mat-label>
-    <input matInput [formControl]="transactionId" />
+    <input matInput [formControl]="filterForm.get('transactionId')" />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Technical Status</mat-label>
-    <mat-select [formControl]="status">
+    <mat-select [formControl]="filterForm.get('status')">
       <ng-container *ngFor="let filter of transactionStatusData">
         <mat-option [value]="filter.value" *ngIf="!filter.hidden">
           {{ filter.option }}
@@ -42,7 +38,7 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payment Status</mat-label>
-    <mat-select [formControl]="paymentStatus">
+    <mat-select [formControl]="filterForm.get('paymentStatus')">
       <ng-container *ngFor="let filter of paymentStatusData">
         <mat-option [value]="filter.value" *ngIf="!filter.hidden">
           {{ filter.option }}
@@ -52,8 +48,13 @@
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
-    <mat-label>Amount</mat-label>
-    <input matInput [formControl]="amount" />
+    <mat-label>Amount From</mat-label>
+    <input matInput [formControl]="filterForm.get('amountFrom')" />
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Amount To</mat-label>
+    <input matInput [formControl]="filterForm.get('amountTo')" />
   </mat-form-field>
 
   <!-- <mat-form-field fxFlex="20%">
@@ -67,7 +68,7 @@
       matInput
       placeholder="yyyy-MM-dd hh:mm:ss"
       [ngxMatDatetimePicker]="picker"
-      [formControl]="transactionDateFrom"
+      [formControl]="filterForm.get('transactionDateFrom')"
       [min]="minDate"
     />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -80,12 +81,18 @@
       matInput
       placeholder="yyyy-MM-dd hh:mm:ss"
       [ngxMatDatetimePicker]="pickerTo"
-      [formControl]="transactionDateTo"
+      [formControl]="filterForm.get('transactionDateTo')"
       [min]="minDate"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
+</div>
+
+<div class="container p-b-10">
+  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" (click)="resetFilters()">
+    Reset filters
+  </button>
 </div>
 
 <div class="container">
@@ -194,20 +201,13 @@
       ></tr>
     </table>
 
-    <mat-paginator
-      [length]="lengthElement"
-      #paginator
-      [pageSizeOptions]="[10, 20, 30]"
-      showFirstLastButtons
-      [showFirstLastButtons]="true"
-    >
-    </mat-paginator>
+    <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
   </div>
-  <form
+  <!--form
     #postForm="ngForm"
     (ngSubmit)="exportCSV(postForm.value, postForm.id)"
     class="csv-form"
-  >
+>
     <div
       class="container-fluid"
       fxLayout="row wrap"
@@ -249,5 +249,5 @@
     <button mat-stroked-button type="submit" [disabled]="!postForm.valid">
       Export CSV
     </button>
-  </form>
+  </form-->
 </div>

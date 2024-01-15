@@ -14,9 +14,9 @@ import { extract } from '../core/i18n/i18n.service';
 import { IncomingTransactionsComponent } from "./transactions/incoming/incoming-transactions.component";
 import { TransactionDetailsComponent } from "./transactions/transaction-details.component";
 import { PaymentHubComponent } from "./paymenthub.component";
-import { IncomingRequestToPayComponent } from "./request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component";
-import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component";
-import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/view-request-to-pay.component";
+import { IncomingRequestToPayComponent } from "./request-to-pay/incoming/incoming-request-to-pay.component";
+import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing/outgoing-request-to-pay.component";
+import { RequestToPayDetailsComponent } from "./request-to-pay/request-to-pay-details.component";
 import { IncomingRecallsComponent } from './recalls/incoming/incoming-recalls.component';
 import { OutgoingRecallsComponent } from './recalls/outgoing/outgoing-recalls.component';
 import { RecallDetailsComponent } from './recalls/recall-details.component';
@@ -25,8 +25,7 @@ import { TransactionResolver } from './transactions/resolver/transaction.resolve
 import { RecallResolver } from './recalls/resolver/recall.resolver';
 import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-transactions.component';
 import { DfspResolver } from './transactions/resolver/dfsp.resolver';
-import { RequestToPayResolver } from './request-to-pay/common-resolvers/request-to-pay.resolver';
-import { ViewRequestToPayResolver } from './request-to-pay/common-resolvers/view-request-to-pay.resolver';
+import { RequestToPayResolver } from './request-to-pay/resolver/request-to-pay.resolver';
 import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component';
 import {ListTasksComponent} from './tasks/list/list-tasks.component';
 import {MyTasksComponent} from './tasks/my/my-tasks.component';
@@ -145,17 +144,16 @@ const routes: Routes = [
               path: '',
               component: IncomingRequestToPayComponent,
               resolve: {
-                requestsToPay: RequestToPayResolver,
                 currencies: CurrenciesResolver,
                 dfspEntries: DfspResolver
               }
             },
             {
               path: ':id',
-              component: ViewRequestToPayComponent,
+              component: RequestToPayDetailsComponent,
               data: { title: extract('View Request To Pay'), routeParamBreadcrumb: 'id' },
               resolve: {
-                requestToPay: ViewRequestToPayResolver,
+                requestToPay: RequestToPayResolver,
                 dfspEntries: DfspResolver
               }
             },
@@ -169,17 +167,16 @@ const routes: Routes = [
               path: '',
               component: OutgoingRequestToPayComponent,
               resolve: {
-                requestsToPay: RequestToPayResolver,
                 currencies: CurrenciesResolver,
                 dfspEntries: DfspResolver
               }
             },
             {
               path: ':id',
-              component: ViewRequestToPayComponent,
+              component: RequestToPayDetailsComponent,
               data: { title: extract('View Request To Pay'), routeParamBreadcrumb: 'id' },
               resolve: {
-                requestToPay: ViewRequestToPayResolver,
+                requestToPay: RequestToPayResolver,
                 dfspEntries: DfspResolver
               }
             },
@@ -250,7 +247,7 @@ const routes: Routes = [
     RecallResolver,
     DfspResolver,
     RequestToPayResolver,
-    ViewRequestToPayResolver,
+    RequestToPayResolver,
     ZeebeTaskResolver,
   ]
 })

@@ -3,35 +3,24 @@ import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { FormControl } from "@angular/forms";
+
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
-import { requestInterface } from "./incoming-request-to-pay-interface";
-import {
-  HttpClient,
-  HttpParams,
-  HttpHeaders,
-  JsonpClientBackend,
-} from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 /** rxjs Imports */
-import { merge } from "rxjs";
-import {
-  tap,
-  startWith,
-  map,
-  distinctUntilChanged,
-  debounceTime,
-} from "rxjs/operators";
+import { merge } from 'rxjs';
+import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from "../service/request-to-pay.service";
-import { RequestToPayDataSource } from "../dataSource /requestToPay.datasource";
-import { formatDateForDisplay } from '../../../shared/date-format/date-format.helper';
+//import { TransactionDetails } from '../../transacions/model/transaction-details.model';
+import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
 import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from "../model/dfsp.model";
+import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
 @Component({
   selector: "mifosx-incoming-request-to-pay",
   templateUrl: "./incoming-request-to-pay.component.html",
@@ -42,55 +31,25 @@ export class IncomingRequestToPayComponent implements OnInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  payeePartyId = new FormControl();
-  payerPartyId = new FormControl();
-  payerDfspId = new FormControl();
-  payerDfspName = new FormControl();
-  status = new FormControl();
-  paymentStatus = new FormControl();
-  amount = new FormControl();
-  currencyCode = new FormControl();
+  filterForm: FormGroup;
   filteredCurrencies: any;
   filteredDfspEntries: any;
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
   paymentStatusData = paymenStatuses;
-  /** Transaction date from form control. */
-  transactionDateFrom = new FormControl();
-  /** Transaction date to form control. */
-  transactionDateTo = new FormControl();
-  /** Transaction ID form control. */
-  transactionId = new FormControl();
   csvExport: [];
   csvName: string;
   lengthElement: number;
-  /* Requests to pay data. */
-  requestToPayData: any;
-  requestToPayDatas: any;
-  /* Requests to incoming data. */
-  requestToPayIncomingData: requestInterface[] = [];
-
   /** Columns to be displayed in request to pay table. */
-  displayedColumns: string[] = [
-    "startedAt",
-    "completedAt",
-    "transactionId",
-    "payerPartyId",
-    "payeePartyId",
-    "payerDfspId",
-    "payerDfspName",
-    "amount",
-    "currency",
-    "state",
-  ];
+  displayedColumns: string[] = ["startedAt", "completedAt", "transactionId", "payerPartyId", "payeePartyId", "payerDfspId", "payerDfspName", "amount", "currency", "state"];
   /** Data source for request to pay table. */
   dataSource: RequestToPayDataSource;
 
   /**
    * @param {HttpClient} http Http Client to send requests.
    */
-  filterTransactionsBy = [
+  filterRequestsBy = [
     {
       type: "payeePartyId",
       value: "",
@@ -108,6 +67,10 @@ export class IncomingRequestToPayComponent implements OnInit {
       value: "INCOMING",
     },
     {
+      type: "rtpDirection",
+      value: "INCOMING",
+    },
+    {
       type: "transactionId",
       value: "",
     },
@@ -116,8 +79,16 @@ export class IncomingRequestToPayComponent implements OnInit {
       value: "",
     },
     {
-      type: "amount",
-      value: "",
+      type: 'paymentStatus',
+      value: ''
+    },
+    {
+      type: 'amountFrom',
+      value: ''
+    },
+    {
+      type: 'amountTo',
+      value: ''
     },
     {
       type: "currency",
@@ -142,52 +113,52 @@ export class IncomingRequestToPayComponent implements OnInit {
     private requestToPayService: RequestToPayService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private http: HttpClient
-  ) {
-    this.route.data.subscribe(
-      (data: {
-        requestsToPay: any;
-        dfspEntries: DfspEntry[];
-        currencies: any;
-      }) => {
-        this.requestToPayData = data.requestsToPay.content;
-        this.requestToPayDatas = data.requestsToPay;
-        this.currenciesData = data.currencies;
-        this.dfspEntriesData = data.dfspEntries;
-      }
-    );
-    for (let request of this.requestToPayData) {
-      if (request.direction === "INCOMING")
-        this.requestToPayIncomingData.push(request);
-    }
-    this.lengthElement = this.requestToPayDatas.totalElements;
-    console.log(this.requestToPayDatas);
-    console.log(this.dataSource);
+    private http: HttpClient,
+    private formBuilder: FormBuilder) {
+      this.filterForm = this.formBuilder.group({
+        payeePartyId: new FormControl(),
+        payerPartyId: new FormControl(),
+        payerDfspId: new FormControl(),
+        payerDfspName: new FormControl(),
+        status: new FormControl(),
+        paymentStatus: new FormControl(),
+        amountFrom: new FormControl(),
+        amountTo: new FormControl(),
+        currencyCode: new FormControl(),
+        transactionDateFrom: new FormControl(),
+        transactionDateTo: new FormControl(),
+        transactionId: new FormControl()
+      });
+      this.route.data.subscribe((data: {
+          dfspEntries: DfspEntry[];
+          currencies: any;
+        }) => {
+          this.currenciesData = data.currencies;
+          this.dfspEntriesData = data.dfspEntries;
+        }
+      );
   }
 
   ngOnInit() {
-    // this.setRequestToPay();
-    //console.log(this.dataSource);
-    // this.dataSource.getRequestsPay(this.filterTransactionsBy , this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
     this.getRequestsPay();
   }
+
   ngAfterViewInit() {
-    this.paginator.page
-      .pipe(tap(() => this.loadTransactionsPage()))
-      .subscribe();
-    this.payeePartyId.valueChanges
+    this.controlChange();
+  }
+
+  controlChange() {
+    this.filterForm.controls['payeePartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          if (filterValue.length < 5) {
-          }
           this.applyFilter(filterValue, "payeePartyId");
         })
       )
       .subscribe();
 
-    this.payerPartyId.valueChanges
+    this.filterForm.controls['payerPartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -197,7 +168,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.payerDfspId.valueChanges
+    this.filterForm.controls['payerDfspId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -207,7 +178,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.payerDfspName.valueChanges
+    this.filterForm.controls['payerDfspName'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -216,14 +187,14 @@ export class IncomingRequestToPayComponent implements OnInit {
             (option) => option.name === filterValue.name
           );
           if (elements.length === 1) {
-            this.payerDfspId.setValue(elements[0].id);
+            this.filterForm.controls['payerDfspId'].setValue(elements[0].id);
             filterValue = elements[0].name;
           }
         })
       )
       .subscribe();
 
-    this.transactionId.valueChanges
+    this.filterForm.controls['transactionId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -235,7 +206,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.status.valueChanges
+    this.filterForm.controls['status'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -245,7 +216,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.paymentStatus.valueChanges
+    this.filterForm.controls['paymentStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -255,17 +226,27 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.amount.valueChanges
+    this.filterForm.controls['amountFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, "amount");
+          this.applyFilter(filterValue, "amountFrom");
         })
       )
       .subscribe();
 
-    this.currencyCode.valueChanges
+    this.filterForm.controls['amountTo'].valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          this.applyFilter(filterValue, "amountTo");
+        })
+      )
+      .subscribe();
+
+    this.filterForm.controls['currencyCode'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -276,56 +257,52 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.transactionDateFrom.valueChanges
+    this.filterForm.controls['transactionDateFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(filterValue, "startFrom");
+            this.applyFilter(convertMomentToDate(filterValue), "startFrom");
           }
         })
       )
       .subscribe();
 
-    this.transactionDateTo.valueChanges
+    this.filterForm.controls['transactionDateTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(filterValue, "startTo");
+            this.applyFilter(convertMomentToDate(filterValue), "startTo");
           }
         })
       )
       .subscribe();
 
-    this.loadTransactionsPage();
-    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        tap(() => this.loadRequestsPayPage())
+      )
+      .subscribe();
+
+    this.loadRequestsPayPage();
   }
+
   onSubmit() {
     this.exportCSV(this.csvExport, this.csvName);
   }
-  loadTransactionsPage() {
-    // if (!this.sort.direction) {
-    //   delete this.sort.active;
-    // }
-    this.dataSource.getRequestsPay(
-      this.filterTransactionsBy,
-      this.sort.active,
-      this.sort.direction,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
+  
+  loadRequestsPayPage() {
+    if (!this.sort.direction) {
+       delete this.sort.active;
+     }
+    this.dataSource.getRequestsPay(this.filterRequestsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize
     );
   }
-  /**
-   * Initializes the data source, paginator and sorter for request to pay table.
-   */
-  // setRequestToPay() {
-  //   this.dataSource = new MatTableDataSource(this.requestToPayIncomingData);
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  // }
 
   formatDate(date: string): string {
     return formatDateForDisplay(date);
@@ -354,11 +331,11 @@ export class IncomingRequestToPayComponent implements OnInit {
    */
   applyFilter(filterValue: string, property: string) {
     this.paginator.pageIndex = 0;
-    const findIndex = this.filterTransactionsBy.findIndex(
+    const findIndex = this.filterRequestsBy.findIndex(
       (filter) => filter.type === property
     );
-    this.filterTransactionsBy[findIndex].value = filterValue;
-    this.loadTransactionsPage();
+    this.filterRequestsBy[findIndex].value = filterValue;
+    this.loadRequestsPayPage();
   }
   /**
    * Displays office name in form control input.
@@ -419,10 +396,24 @@ export class IncomingRequestToPayComponent implements OnInit {
       alert("Please disable your Pop-up blocker and try again.");
     }
   }
+
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
-    console.log(this.dataSource);
-    console.log(this.sort);
-    this.dataSource.getRequestsPay(this.filterTransactionsBy);
+    if (this.sort && this.paginator) {
+      this.dataSource.getRequestsPay(this.filterRequestsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    } else {
+      this.dataSource.getRequestsPay(this.filterRequestsBy, '', '', 0, 10);
+    }
+  }
+
+  resetFilters() {
+    this.filterForm.reset({}, { emitEvent: false });
+    this.paginator.pageIndex = 0;
+    this.filterRequestsBy.forEach(filter => {
+      if (filter.type !== 'direction' && filter.type !== 'rtpDirection') {
+        filter.value = '';
+      }
+    });
+    this.controlChange();
   }
 }
