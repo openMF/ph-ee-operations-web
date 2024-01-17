@@ -40,7 +40,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
   transactionStatusData = statuses;
   paymentStatusData = paymenStatuses;
   /** Columns to be displayed in request to pay table. */
-  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'state'];
+  displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for request to pay table. */
   dataSource: RequestToPayDataSource;
 
@@ -73,7 +73,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
         value: "",
       },
       {
-        type: "state",
+        type: "status",
         value: "",
       },
       {
@@ -110,6 +110,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
   constructor(private requestToPayService: RequestToPayService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    private router: Router,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -207,7 +208,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, "state");
+          this.applyFilter(filterValue, "status");
         })
       )
       .subscribe();
@@ -341,6 +342,10 @@ export class OutgoingRequestToPayComponent implements OnInit {
     } else {
       this.dataSource.getRequestsPay(this.filterRequestsBy, '', '', 0, 10);
     }
+  }
+
+  navigateToTransactionsPage(transactionId: string) {
+    this.router.navigate(['/paymenthubee/outgoingtransactions'], { queryParams: { transactionId: transactionId } });
   }
 
   resetFilters() {

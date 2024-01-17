@@ -25,27 +25,19 @@
     <input matInput [formControl]="filterForm.get('transactionId')" />
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Technical Status</mat-label>
-    <mat-select [formControl]="filterForm.get('status')">
-      <ng-container *ngFor="let filter of transactionStatusData">
-        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
-          {{ filter.option }}
-        </mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
+  <mifosx-option-data-selector 
+    fxFlex="20%" 
+    [inputFormControl]="filterForm.get('status')"
+    [inputList]="transactionStatusData"
+    [inputLabel]="'Technical Status'">
+  </mifosx-option-data-selector>
 
-  <mat-form-field fxFlex="20%">
-    <mat-label>Payment Status</mat-label>
-    <mat-select [formControl]="filterForm.get('paymentStatus')">
-      <ng-container *ngFor="let filter of paymentStatusData">
-        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
-          {{ filter.option }}
-        </mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
+  <mifosx-option-data-selector 
+    fxFlex="20%" 
+    [inputFormControl]="filterForm.get('paymentStatus')"
+    [inputList]="paymentStatusData"
+    [inputLabel]="'Payment Status'">
+  </mifosx-option-data-selector>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount From</mat-label>
@@ -143,9 +135,17 @@
         <td mat-cell *matCellDef="let requestToPay"> {{ requestToPay.currency }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="state">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
-        <td mat-cell *matCellDef="let requestToPay" [ngClass]="{'red': requestToPay.state==='FAILED','green': requestToPay.state==='ACCEPTED','orange': requestToPay.state==='IN_PROGRESS'}"> {{ requestToPay.state }} </td>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+      <td mat-cell *matCellDef="let requestToPay" [ngClass]="{'red': requestToPay.status==='FAILED','green': requestToPay.status==='COMPLETED','orange': requestToPay.status==='ACTION_NEEDED'}">{{ requestToPay.status }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let requestToPay" (click)="$event.stopPropagation()">
+          <div *ngIf="requestToPay.status==='ACTION_NEEDED'"><button mat-button color="primary" (click)="openRetryResolveDialog(requestToPay.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="lg"></fa-icon></button><button mat-button class="green" (click)="openRetryResolveDialog(requestToPay.workflowInstanceKey,'resolve')" ><fa-icon icon="check" size="lg"></fa-icon></button></div>
+          <div><button mat-button color="primary" (click)="navigateToTransactionsPage(requestToPay.transactionId)" matTooltip="View Original Transaction"><fa-icon icon="external-link" size="m"></fa-icon></button></div>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
