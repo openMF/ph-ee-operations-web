@@ -1,0 +1,15 @@
+<mat-form-field fxFlex="100%">
+    <mat-label>{{inputLabel}}</mat-label>
+    <mat-select [formControl]="inputFormControl">
+      <mat-option>
+        <ngx-mat-select-search [formControl]="filterFormCtrl"
+            placeholderLabel="{{placeHolderLabel}}"
+            noEntriesFoundLabel="{{noEntriesFoundLabel}}">
+        </ngx-mat-select-search>
+      </mat-option>
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let filter of filteredOptions | async" [value]="filter.value">
+        {{ filter.option }}
+      </mat-option>
+    </mat-select>
+</mat-form-field>

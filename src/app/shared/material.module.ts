@@ -25,6 +25,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
@@ -88,7 +89,8 @@ import { NgxMatMomentModule, NGX_MAT_MOMENT_FORMATS } from '@angular-material-co
     MatTreeModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    NgxMatMomentModule
+    NgxMatMomentModule,
+    NgxMatSelectSearchModule
     ],
   providers: [
     {

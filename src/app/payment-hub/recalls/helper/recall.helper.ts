@@ -1,4 +1,6 @@
-export const transactionStatusData = [
+import { OptionData } from "app/shared/models/general.models";
+
+export const transactionStatusData: OptionData[] = [
     {
         option: 'Completed',
         value: 'COMPLETED',
@@ -18,15 +20,10 @@ export const transactionStatusData = [
         option: 'Exception',
         value: 'EXCEPTION',
         css: 'red'
-    },
-    {
-        option: '',
-        value: 'UNKNOWN',
-        hidden: true
     }
 ];
 
-export const incomingRecallStatusData = [
+export const incomingRecallStatusData: OptionData[] = [
     {option: 'Waiting for decision', value: 'WAITING_FOR_DECISION', css: 'blue'},
     {option: 'Failed recall', value: 'FAILED_RECALL', css: 'red'},
     {option: 'Exception', value: 'EXCEPTION', css: 'black'},
@@ -36,7 +33,7 @@ export const incomingRecallStatusData = [
     {option: 'In progress accepted', value: 'IN_PROGRESS_ACCEPTED', css: 'green'},
 ];
 
-export const outgoingRecallStatusData = [
+export const outgoingRecallStatusData: OptionData[] = [
     {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},
     {option: 'Waiting for response', value: 'WAITING_FOR_RESPONSE', css: 'yellow'},
     {option: 'Failed recall', value: 'FAILED_RECALL', css: 'red'},
@@ -47,7 +44,7 @@ export const outgoingRecallStatusData = [
     {option: 'Successful recejted', value: 'SUCCESSFUL_REJECTED', css: 'orange'},
 ];
 
-export const recallDirectionData = [
+export const recallDirectionData: OptionData[] = [
     {
         option: 'AFR incoming recall',
         value: 'AFR.incoming.recall',
@@ -70,7 +67,7 @@ export const recallDirectionData = [
     }
 ];
 
-export const paymentStatusData = [
+export const paymentStatusData: OptionData[] = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'In progress', value: 'IN_PROGRESS', css: 'green'},
@@ -78,7 +75,7 @@ export const paymentStatusData = [
     {option: 'Waiting for Fincrime decision', value: 'WAITING_FOR_FINCRIME_DECISION', css: 'green'}
 ];
 
-export const paymentSchemeData = [
+export const paymentSchemeData: OptionData[] = [
     {option: 'HCT_INST:RECALL', value: 'HCT_INST:RECALL', css: 'green'},
     {option: 'IG2:RECALL', value: 'IG2:RECALL', css: 'green'}
 ];

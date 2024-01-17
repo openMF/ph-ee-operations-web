@@ -1,4 +1,6 @@
-export const requestToPayStatesData = [
+import { OptionData } from "app/shared/models/general.models";
+
+export const requestToPayStatesData: OptionData[] = [
     {
         option: 'Accepted',
         value: 'ACCEPTED',
@@ -18,10 +20,5 @@ export const requestToPayStatesData = [
         option: 'Exception',
         value: 'EXCEPTION',
         css: 'red'
-    },
-    {
-        option: '',
-        value: 'UNKNOWN',
-        hidden: true
     }
 ];

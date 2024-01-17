@@ -1,4 +1,6 @@
-export const transactionStatusData = [
+import { OptionData } from "app/shared/models/general.models";
+
+export const transactionStatusData: OptionData[] = [
     {
         option: 'Completed',
         value: 'COMPLETED',
@@ -18,15 +20,10 @@ export const transactionStatusData = [
         option: 'Exception',
         value: 'EXCEPTION',
         css: 'red'
-    },
-    {
-        option: '',
-        value: 'UNKNOWN',
-        hidden: true
     }
 ];
 
-export const incomingPaymentStatusData = [
+export const incomingPaymentStatusData: OptionData[] = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'Transfer to disposal', value: 'TRANSFER_TO_DISPOSAL', css: 'green'},
@@ -36,7 +33,7 @@ export const incomingPaymentStatusData = [
     {option: 'Unsuccessful transfer', value: 'UNSUCCESSFUL_TRANSFER', css: 'red'}
 ];
 
-export const outgoingPaymentStatusData = [
+export const outgoingPaymentStatusData: OptionData[] = [
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'Exception', value: 'EXCEPTION', css: 'black'},
     {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},
@@ -46,7 +43,7 @@ export const outgoingPaymentStatusData = [
     {option: 'Investigation', value: 'INVESTIGATION', css: 'orange'}
 ];
 
-export const paymentSchemeData = [
+export const paymentSchemeData: OptionData[] = [
     {option: 'HCT_INST', value: 'HCT_INST', css: 'green'},
     {option: 'IG2', value: 'IG2', css: 'green'},
     {option: 'ON_US', value: 'ON_US', css: 'green'},
