@@ -19,6 +19,7 @@ import { NgxMatDateFormats, NgxMatDateAdapter, NGX_MAT_DATE_FORMATS } from '@ang
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { MAT_DATE_LOCALE} from '@angular/material/core';
 import { AutoFormatDateTimeDirective } from './auto-format-date-time/auto-format-date-time.directive';
+import { OptionDataSelectorComponent } from './option-data-selector/option-data-selector.component';
 
 const SIMPLE_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -55,7 +56,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     FooterComponent,
     LanguageSelectorComponent,
     ThemePickerComponent,
-    AutoFormatDateTimeDirective
+    AutoFormatDateTimeDirective,
+    OptionDataSelectorComponent
   ],
   exports: [
     FileUploadComponent,
@@ -67,7 +69,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    AutoFormatDateTimeDirective
+    AutoFormatDateTimeDirective,
+    OptionDataSelectorComponent
   ],
   entryComponents: [
     FormDialogComponent,

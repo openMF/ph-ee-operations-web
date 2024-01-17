@@ -1,4 +1,6 @@
-export const transactionStatusData = [
+import { OptionData } from "app/shared/models/general.models";
+
+export const transactionStatusData: OptionData[] = [
     {
         option: 'Accepted',
         value: 'ACCEPTED',
@@ -18,15 +20,10 @@ export const transactionStatusData = [
         option: 'Exception',
         value: 'EXCEPTION',
         css: 'red'
-    },
-    {
-        option: '',
-        value: 'UNKNOWN',
-        hidden: true
     }
 ];
 
-export const paymentStatusData = [
+export const paymentStatusData: OptionData[] = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'In progress', value: 'IN_PROGRESS', css: 'green'},
