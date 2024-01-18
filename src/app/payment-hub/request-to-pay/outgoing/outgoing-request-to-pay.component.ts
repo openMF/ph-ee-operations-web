@@ -344,6 +344,11 @@ export class OutgoingRequestToPayComponent implements OnInit {
     }
   }
 
+  filterRequestsByProperty(filterValue: string, property: string) {
+    this.filterForm.controls[property].setValue(filterValue);
+    this.applyFilter(filterValue, property);
+  }
+
   navigateToTransactionsPage(transactionId: string) {
     this.router.navigate(['/paymenthubee/outgoingtransactions'], { queryParams: { transactionId: transactionId } });
   }
