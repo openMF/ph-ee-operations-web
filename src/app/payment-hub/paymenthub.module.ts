@@ -12,9 +12,9 @@ import { IncomingTransactionsComponent } from "./transactions/incoming/incoming-
 import { OutgoingTransactionsComponent } from "./transactions/outgoing/outgoing-transactions.component";
 import { PaymentHubComponent } from "./paymenthub.component";
 import { TransactionDetailsComponent } from "./transactions/transaction-details.component";
-import { IncomingRequestToPayComponent } from "./request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component";
-import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component";
-import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/view-request-to-pay.component";
+import { IncomingRequestToPayComponent } from "./request-to-pay/incoming/incoming-request-to-pay.component";
+import { OutgoingRequestToPayComponent } from "./request-to-pay/outgoing/outgoing-request-to-pay.component";
+import { RequestToPayDetailsComponent } from "./request-to-pay/request-to-pay-details.component";
 import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
 import { IncomingRecallsComponent } from './recalls/incoming/incoming-recalls.component';
 import { OutgoingRecallsComponent } from './recalls/outgoing/outgoing-recalls.component';
@@ -59,7 +59,7 @@ import {RadiobuttonBooleanComponent} from './tasks/task-view/components/radiobut
     RetryResolveDialogComponent,
     IncomingRequestToPayComponent,
     OutgoingRequestToPayComponent,
-    ViewRequestToPayComponent,
+    RequestToPayDetailsComponent,
     IncomingRequestExportComponent,
     ListTasksComponent,
     MyTasksComponent,

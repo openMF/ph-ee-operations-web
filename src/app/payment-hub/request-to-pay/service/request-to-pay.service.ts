@@ -17,13 +17,6 @@ export class RequestToPayService {
    */
   constructor(private http: HttpClient) { }
 
-  getRequestsToPay() {
-    return this.http.get('/api/v1/transactionRequests');
-  }
-
-  getRequestToPay(requestId: string): Observable<any> {
-    return this.http.get(`/api/v1/transactionRequest/${requestId}`);
-  }
   getRequests(fields: any, page: number, count: number): Observable<RequestPays> {
     let params = '';
     fields.forEach((field: any) => {
@@ -34,6 +27,7 @@ export class RequestToPayService {
     params += 'page=' + page + '&size=' + count;
     return this.http.get('/api/v1/transactionRequests?' + params).pipe(map((requestPays: any) => requestPays as RequestPays));
   }
+  
   getRequestDetail(id: string): Observable<RequestPayDetails> {
     return this.http.get('/api/v1/transfer/' + id).pipe(map((transaction: any) => transaction as RequestPayDetails));
   }

@@ -112,7 +112,7 @@ export class RecallDetailsComponent implements OnInit {
     });
     const source = from(this.datasource.tasks);
     const example = source.pipe(
-      groupBy(transaction => transaction['type']),
+      groupBy(transaction => transaction['elementId']),
       mergeMap(group => group.pipe(toArray()))
     );
     const subscribe = example.subscribe(val => {

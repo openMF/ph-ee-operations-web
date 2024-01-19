@@ -1,16 +1,3 @@
-<div class="container m-b-20" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
-  <button *ngIf="hasRefundAccess()" mat-raised-button color="primary" (click)="openReturnDialog()">
-    Refund
-  </button>
-  <button *ngIf="hasRecallAccess()" mat-raised-button color="primary" (click)="openRecallDialog()">
-    Recall
-  </button>
-
-  <button mat-raised-button color="primary" (click)="openBPMNDialog()">
-    BPMN Diagram
-  </button>
-</div>
-
 <div class="container">
   <mat-grid-list cols="2" rowHeight="350">
     <mat-grid-tile [colspan]="1"
@@ -377,4 +364,3 @@
     <tr mat-row *matRowDef="let row; columns: displayedBusinessAttributeColumns;"></tr>
   </table>
 </div>
-

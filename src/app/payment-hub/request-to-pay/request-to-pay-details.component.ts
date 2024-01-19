@@ -12,15 +12,15 @@ import { from } from 'rxjs';
 import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
-import { RequestToPayService } from '../service/request-to-pay.service';
-import { formatDateForDisplay } from '../../../shared/date-format/date-format.helper';
-import { DfspEntry } from '../model/dfsp.model';
-import { requestToPayStatesData as statuses } from '../helper/request-to-pay.helper';
+import { RequestToPayService } from './service/request-to-pay.service';
+import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
+import { DfspEntry } from './model/dfsp.model';
+import { requestToPayStatesData as statuses } from './helper/request-to-pay.helper';
 
 @Component({
-  selector: 'mifosx-view-request-to-pay',
-  templateUrl: './view-request-to-pay.component.html',
-  styleUrls: ['./view-request-to-pay.component.scss'],
+  selector: 'mifosx-request-to-pay-details',
+  templateUrl: './request-to-pay-details.component.html',
+  styleUrls: ['./request-to-pay-details.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -29,7 +29,7 @@ import { requestToPayStatesData as statuses } from '../helper/request-to-pay.hel
     ]),
   ],
 })
-export class ViewRequestToPayComponent implements OnInit {
+export class RequestToPayDetailsComponent implements OnInit {
 
   // TODO: Update once language and date settings are setup
 
@@ -40,7 +40,7 @@ export class ViewRequestToPayComponent implements OnInit {
   /** Columns to be displayed in transaction table. */
   displayedColumns: string[] = ['timestamp', 'elementId', 'type', 'intent', 'actions'];
   displayedColumnsDetailsTable: string[] = ['timestamp', 'elementId', 'type', 'intent'];
-  displayedBusinessAttributeColumns: string[] = ['name', 'timestamp', 'value'];
+  displayedBusinessAttributeColumns: string[] = ['name', 'value'];
   /** Data source for transaction table. */
   taskList: MatTableDataSource<any>;
   businessAttributes: MatTableDataSource<any>;
@@ -96,7 +96,7 @@ export class ViewRequestToPayComponent implements OnInit {
     });
 	const source = from(this.datasource.tasks);
 	const example = source.pipe(
- 	 groupBy(transaction => transaction['type']),
+ 	 groupBy(transaction => transaction['elementId']),
   	 mergeMap(group => group.pipe(toArray()))
 	);
 	const subscribe = example.subscribe(val => {
@@ -132,7 +132,7 @@ export class ViewRequestToPayComponent implements OnInit {
   }
 
   getPaymentProcessId() {
-    return this.datasource.transactionRequest.workflowInstanceKey;
+    return this.datasource.transfer.workflowInstanceKey;
   }
 
   cleanse(unformatted: any) {

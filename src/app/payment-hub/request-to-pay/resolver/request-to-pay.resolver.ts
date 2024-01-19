@@ -12,7 +12,7 @@ import { RequestToPayService } from '../service/request-to-pay.service';
  * Request to pay data resolver.
  */
 @Injectable()
-export class ViewRequestToPayResolver implements Resolve<Object> {
+export class RequestToPayResolver implements Resolve<Object> {
 
   /**
    * @param {RequestToPayService} requestToPayService RequestToPay Service.
@@ -25,7 +25,7 @@ export class ViewRequestToPayResolver implements Resolve<Object> {
    */
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
     const requestId = route.paramMap.get('id');
-    return this.requestToPayService.getRequestToPay(requestId);
+    return this.requestToPayService.getRequestDetail(requestId);
   }
 
 }
