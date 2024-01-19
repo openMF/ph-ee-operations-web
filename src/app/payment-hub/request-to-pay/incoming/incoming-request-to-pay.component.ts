@@ -200,9 +200,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          if (filterValue.length > 5) {
-            this.applyFilter(filterValue, "transactionId");
-          }
+          this.applyFilter(filterValue, "transactionId");
         })
       )
       .subscribe();
@@ -405,6 +403,11 @@ export class IncomingRequestToPayComponent implements OnInit {
     } else {
       this.dataSource.getRequestsPay(this.filterRequestsBy, '', '', 0, 10);
     }
+  }
+
+  filterRequestsByProperty(filterValue: string, property: string) {
+    this.filterForm.controls[property].setValue(filterValue);
+    this.applyFilter(filterValue, property);
   }
 
   navigateToTransactionsPage(transactionId: string) {
