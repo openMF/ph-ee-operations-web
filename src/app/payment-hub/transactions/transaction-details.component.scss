@@ -26,8 +26,8 @@ mat-card {
   font-weight: bold;
 }
 
-.marginTop100 {
-  margin-top: 100px;
+.m-t-40 {
+  margin-top: 40px;
 }
 
 .mat-column-name {
@@ -91,6 +91,26 @@ tr.transaction-row:not(.transaction-expanded-row):active {
   display: flex;
 }
 
+.m-h-10 {
+  margin: 0 10px;
+}
+
+.container .mat-card-content .content .text-content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mat-card {
+  height: 280px;
+}
+
+::ng-deep .right-card .mat-grid-tile-content {
+  justify-content: flex-end !important;
+  align-items: start !important;
+}
+
 ::ng-deep .mat-grid-tile-content {
+  justify-content: flex-start !important;
   align-items: start !important;
 }
