@@ -65,7 +65,7 @@ jobs:
               --build-arg NPM_REGISTRY_URL=https://registry.npmjs.org/ \
               --build-arg PUPPETEER_DOWNLOAD_HOST_ARG=https://storage.googleapis.com \
               --build-arg PUPPETEER_CHROMIUM_REVISION_ARG=1011831 \
-              -t "openmf/ph-ee-operations-web:$IMAGE_TAG" .
+              -t "openmf/ph-ee-operations-web:latest" .
             if [ "$CIRCLE_BRANCH" != "master" ]; then
               PR_NUMBER=$(basename $CIRCLE_PULL_REQUEST)
               PR_TITLE=$(curl -sSL "https://api.github.com/repos/openmf/$CIRCLE_PR_REPONAME/pulls/$PR_NUMBER" | jq -r '.title')
