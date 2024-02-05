@@ -16,7 +16,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { incomingPaymentStatusData as paymentStatuses } from '../helper/transaction.helper';
+import { incomingbusinessProcessStatusData as businessProcessStatuses } from '../helper/transaction.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
@@ -42,7 +42,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
-  paymentStatusData = paymentStatuses;
+  businessProcessStatusData = businessProcessStatuses;
   paymentSchemeData = paymentSchemes;
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'acceptanceDate', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId', 'payerDfspName', 'amount', 'currency', 'status', 'actions'];
@@ -75,7 +75,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'paymentStatus',
+      type: 'businessProcessStatus',
       value: ''
     },
     {
@@ -138,7 +138,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         payerDfspId: new FormControl(),
         payerDfspName: new FormControl(),
         status: new FormControl(),
-        paymentStatus: new FormControl(),
+        businessProcessStatus: new FormControl(),
         paymentScheme: new FormControl(),
         amountFrom: new FormControl(),
         amountTo: new FormControl(),
@@ -249,12 +249,12 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['paymentStatus'].valueChanges
+    this.filterForm.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'paymentStatus');
+          this.applyFilter(filterValue, 'businessProcessStatus');
         })
       )
       .subscribe();

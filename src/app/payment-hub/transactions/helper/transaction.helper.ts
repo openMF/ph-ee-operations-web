@@ -23,7 +23,7 @@ export const transactionStatusData: OptionData[] = [
     }
 ];
 
-export const incomingPaymentStatusData: OptionData[] = [
+export const incomingbusinessProcessStatusData: OptionData[] = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'Transfer to disposal', value: 'TRANSFER_TO_DISPOSAL', css: 'green'},
@@ -33,7 +33,7 @@ export const incomingPaymentStatusData: OptionData[] = [
     {option: 'Unsuccessful transfer', value: 'UNSUCCESSFUL_TRANSFER', css: 'red'}
 ];
 
-export const outgoingPaymentStatusData: OptionData[] = [
+export const outgoingbusinessProcessStatusData: OptionData[] = [
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'Exception', value: 'EXCEPTION', css: 'black'},
     {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},

@@ -67,7 +67,7 @@ export const recallDirectionData: OptionData[] = [
     }
 ];
 
-export const paymentStatusData: OptionData[] = [
+export const businessProcessStatusData: OptionData[] = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'In progress', value: 'IN_PROGRESS', css: 'green'},

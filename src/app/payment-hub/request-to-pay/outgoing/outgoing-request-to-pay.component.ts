@@ -17,7 +17,7 @@ import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
-import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
+import { businessProcessStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from '../model/dfsp.model';
 import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
@@ -38,7 +38,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
   currenciesData: any;
   dfspEntriesData:  DfspEntry[];
   transactionStatusData = statuses;
-  paymentStatusData = paymenStatuses;
+  businessProcessStatusData = paymenStatuses;
   /** Columns to be displayed in request to pay table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for request to pay table. */
@@ -77,7 +77,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
         value: "",
       },
       {
-        type: 'paymentStatus',
+        type: 'businessProcessStatus',
         value: ''
       },
       {
@@ -118,7 +118,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
         payerDfspId: new FormControl(),
         payerDfspName: new FormControl(),
         status: new FormControl(),
-        paymentStatus: new FormControl(),
+        businessProcessStatus: new FormControl(),
         amountFrom: new FormControl(),
         amountTo: new FormControl(),
         currencyCode: new FormControl(),
@@ -213,12 +213,12 @@ export class OutgoingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.filterForm.controls['paymentStatus'].valueChanges
+    this.filterForm.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, "paymentStatus");
+          this.applyFilter(filterValue, "businessProcessStatus");
         })
       )
       .subscribe();

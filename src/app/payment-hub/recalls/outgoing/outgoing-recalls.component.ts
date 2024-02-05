@@ -20,7 +20,7 @@ import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
 import { outgoingRecallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
-import { paymentStatusData as paymentStatuses } from '../helper/recall.helper';
+import { businessProcessStatusData as businessProcessStatuses } from '../helper/recall.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/recall.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
 
@@ -46,7 +46,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   recallStatusData = recallStatuses;
   recallDirectionData = recallDirections;
   transactionStatusData = transactionStatuses;
-  paymentStatusData = paymentStatuses;
+  businessProcessStatusData = businessProcessStatuses;
   paymentSchemeData = paymentSchemes;
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'recallStatus', 'recallDirection','actions'];
@@ -87,7 +87,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'paymentStatus',
+      type: 'businessProcessStatus',
       value: ''
     },
     {
@@ -144,7 +144,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
         status: new FormControl(),
         recallStatus: new FormControl(),
         recallDirection: new FormControl(),
-        paymentStatus: new FormControl(),
+        businessProcessStatus: new FormControl(),
         paymentScheme: new FormControl(),
         amountFrom: new FormControl(),
         amountTo: new FormControl(),
@@ -273,12 +273,12 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['paymentStatus'].valueChanges
+    this.filterForm.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'paymentStatus');
+          this.applyFilter(filterValue, 'businessProcessStatus');
         })
       )
       .subscribe();
