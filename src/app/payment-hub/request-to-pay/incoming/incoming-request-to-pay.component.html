@@ -117,7 +117,7 @@
           *matCellDef="let requestToPay"
           matTooltip="{{ requestToPay.transactionId }}"
         >
-          {{ shortenValue(requestToPay.transactionId) }}
+          {{ requestToPay.transactionId }}
         </td>
       </ng-container>
 
@@ -182,6 +182,7 @@
             <fa-icon icon="gear" size="m"></fa-icon>
           </button>
           <mat-menu #actionsMenu="matMenu">
+            <button mat-menu-item [routerLink]="['view', requestToPay.workflowInstanceKey]">Transaction Details</button>
             <button mat-menu-item (click)="navigateToTransactionsPage(requestToPay.transactionId)">View Original Transaction</button>
             <button mat-menu-item (click)="filterRequestsByProperty(requestToPay.transactionId, 'transactionId')">Filter Requests</button>
           </mat-menu>
@@ -189,12 +190,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        [routerLink]="[row.workflowInstanceKey]"
-        class="select-row"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
     <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
