@@ -27,6 +27,8 @@ table{
    -moz-hyphens: auto;
    -webkit-hyphens: auto;
    hyphens: auto;
+   padding-left: 2px;
+   padding-right: 2px;
  }
 
  .mat-cell.cdk-column-completedAt {
@@ -48,4 +50,26 @@ table{
 
 .blue { 
   color: blue;
+}
+
+.mat-button {
+  min-width: 40px;
+  padding: 5px;
+}
+
+.mat-cell.cdk-column-transactionId {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px;
+  word-break: normal;
+  hyphens: none;
+  word-wrap: normal !important;
+}
+
+::ng-deep .mat-tooltip {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: unset !important;
 }

@@ -149,7 +149,7 @@ const routes: Routes = [
               }
             },
             {
-              path: ':id',
+              path: 'view/:id',
               component: RequestToPayDetailsComponent,
               data: { title: extract('View Request To Pay'), routeParamBreadcrumb: 'id' },
               resolve: {
@@ -172,7 +172,7 @@ const routes: Routes = [
               }
             },
             {
-              path: ':id',
+              path: 'view/:id',
               component: RequestToPayDetailsComponent,
               data: { title: extract('View Request To Pay'), routeParamBreadcrumb: 'id' },
               resolve: {

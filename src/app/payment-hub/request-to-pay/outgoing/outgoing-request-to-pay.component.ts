@@ -326,6 +326,12 @@ export class OutgoingRequestToPayComponent implements OnInit {
     this.filterRequestsBy[findIndex].value = filterValue;
     this.loadRequestsPayPage();
   }
+
+  setFilter(filterValue: string, property: string) {
+    const findIndex = this.filterRequestsBy.findIndex(filter => filter.type === property);
+    this.filterRequestsBy[findIndex].value = filterValue;
+  }
+
   /**
    * Displays office name in form control input.
    * @param {any} office Office data.
@@ -346,7 +352,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
 
   filterRequestsByProperty(filterValue: string, property: string) {
     this.filterForm.controls[property].setValue(filterValue);
-    this.applyFilter(filterValue, property);
+    this.setFilter(property, filterValue);
   }
 
   navigateToTransactionsPage(transactionId: string) {
