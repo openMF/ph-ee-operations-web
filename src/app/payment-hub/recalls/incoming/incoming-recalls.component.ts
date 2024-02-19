@@ -12,6 +12,7 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Services */
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { StateService } from '../../state.service';
 
 /** Custom Data Source */
 import { RecallsDataSource } from '../dataSource/recalls.datasource';
@@ -135,6 +136,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
+    private stateService: StateService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -164,6 +166,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
       this.route.queryParams.subscribe(params => {
         const transactionId = params['transactionId'];
         if (transactionId) {
+          this.stateService.clearState('incoming-recalls');
           this.filterForm.controls['transactionId'].setValue(transactionId);
           this.setFilter(transactionId, 'transactionId');
         }
@@ -174,12 +177,21 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
    * Sets filtered offices and gl accounts for autocomplete and journal entries table.
    */
   ngOnInit() {
-    this.setFilteredCurrencies();
-    this.setFilteredDfspEntries();
+    //this.setFilteredCurrencies();
+    //this.setFilteredDfspEntries();
     this.getRecalls();
   }
 
   ngAfterViewInit() {
+    const storedState = this.stateService.getState('incoming-recalls');
+    if (storedState) {
+      this.filterForm.patchValue(storedState.filterForm);
+      this.filterRecallsBy = storedState.filterBy;
+      this.sort.active = storedState.sort.active;
+      this.sort.direction = storedState.sort.direction;
+      this.paginator.pageIndex = storedState.paginator.pageIndex;
+      this.paginator.pageSize = storedState.paginator.pageSize;
+    }
     this.controlChange();
   }
 
@@ -358,8 +370,11 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadRecallsPage())
-      )
+        tap(() => {
+          this.loadRecallsPage();
+          this.stateService.setState('incoming-recalls', this.filterForm, this.filterRecallsBy, this.sort, this.paginator);
+        })
+        )
       .subscribe();
 
     this.loadRecallsPage();
@@ -471,12 +486,13 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Initializes the data source for journal entries table and loads the first page.
+   * Initializes the data source for transactions table and loads the first page.
    */
   getRecalls() {
     this.dataSource = new RecallsDataSource(this.recallsService);
-    if (this.sort && this.paginator) {
-      this.dataSource.getRecalls(this.filterRecallsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    const storedState = this.stateService.getState('incoming-recalls');
+    if (storedState) {
+      this.dataSource.getRecalls(storedState.filterBy, storedState.sort.active, storedState.sort.direction, storedState.paginator.pageIndex, storedState.paginator.pageSize);
     } else {
       this.dataSource.getRecalls(this.filterRecallsBy, '', '', 0, 10);
     }
@@ -503,6 +519,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         filter.value = '';
       }
     });
+    this.stateService.clearState('incoming-recalls');
     this.controlChange();
   }
 
