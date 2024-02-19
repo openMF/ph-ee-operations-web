@@ -11,6 +11,7 @@ import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
+import { StateService } from '../../state.service';
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
@@ -131,6 +132,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
+    private stateService: StateService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -160,6 +162,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       this.route.queryParams.subscribe(params => {
         const transactionId = params['transactionId'];
         if (transactionId) {
+          this.stateService.clearState('outgoing-transactions');
           this.filterForm.controls['transactionId'].setValue(transactionId);
           this.setFilter(transactionId, 'transactionId');
         }
@@ -170,12 +173,21 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
    * Sets filtered offices and gl accounts for autocomplete and journal entries table.
    */
   ngOnInit() {
-    this.setFilteredCurrencies();
-    this.setFilteredDfspEntries();
+    //this.setFilteredCurrencies();
+    //this.setFilteredDfspEntries();
     this.getTransactions();
   }
 
   ngAfterViewInit() {
+    const storedState = this.stateService.getState('outgoing-transactions');
+    if (storedState) {
+      this.filterForm.patchValue(storedState.filterForm);
+      this.filterTransactionsBy = storedState.filterBy;
+      this.sort.active = storedState.sort.active;
+      this.sort.direction = storedState.sort.direction;
+      this.paginator.pageIndex = storedState.paginator.pageIndex;
+      this.paginator.pageSize = storedState.paginator.pageSize;
+    }
     this.controlChange();
   }
 
@@ -354,8 +366,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadTransactionsPage())
-      )
+        tap(() => {
+          this.loadTransactionsPage();
+          this.stateService.setState('outgoing-transactions', this.filterForm, this.filterTransactionsBy, this.sort, this.paginator);
+        })
+        )
       .subscribe();
 
     this.loadTransactionsPage();
@@ -473,12 +488,13 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Initializes the data source for journal entries table and loads the first page.
+   * Initializes the data source for transactions table and loads the first page.
    */
   getTransactions() {
     this.dataSource = new TransactionsDataSource(this.transactionsService);
-    if (this.sort && this.paginator) {
-      this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    const storedState = this.stateService.getState('outgoing-transactions');
+    if (storedState) {
+      this.dataSource.getTransactions(storedState.filterBy, storedState.sort.active, storedState.sort.direction, storedState.paginator.pageIndex, storedState.paginator.pageSize);
     } else {
       this.dataSource.getTransactions(this.filterTransactionsBy, '', '', 0, 10);
     }
@@ -505,6 +521,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         filter.value = '';
       }
     });
+    this.stateService.clearState('outgoing-transactions');
     this.controlChange();
   }
 

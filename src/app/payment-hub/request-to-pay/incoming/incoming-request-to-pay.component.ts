@@ -3,30 +3,34 @@ import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+
 /** rxjs Imports */
 import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from "../service/request-to-pay.service";
+import { StateService } from '../../state.service';
+
 //import { TransactionDetails } from '../../transacions/model/transaction-details.model';
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
 import { businessProcessStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from "../model/dfsp.model";
 import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
+
 @Component({
   selector: "mifosx-incoming-request-to-pay",
   templateUrl: "./incoming-request-to-pay.component.html",
   styleUrls: ["./incoming-request-to-pay.component.scss"],
 })
-export class IncomingRequestToPayComponent implements OnInit {
+export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   /** Minimum transaction date allowed. */
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
@@ -114,6 +118,7 @@ export class IncomingRequestToPayComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
+    private stateService: StateService,
     private http: HttpClient,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
@@ -145,6 +150,15 @@ export class IncomingRequestToPayComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    const storedState = this.stateService.getState('incoming-requests');
+    if (storedState) {
+      this.filterForm.patchValue(storedState.filterForm);
+      this.filterRequestsBy = storedState.filterBy;
+      this.sort.active = storedState.sort.active;
+      this.sort.direction = storedState.sort.direction;
+      this.paginator.pageIndex = storedState.paginator.pageIndex;
+      this.paginator.pageSize = storedState.paginator.pageSize;
+    }
     this.controlChange();
   }
 
@@ -284,8 +298,11 @@ export class IncomingRequestToPayComponent implements OnInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadRequestsPayPage())
-      )
+        tap(() => {
+          this.loadRequestsPayPage();
+          this.stateService.setState('incoming-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
+        })
+        )
       .subscribe();
 
     this.loadRequestsPayPage();
@@ -402,10 +419,14 @@ export class IncomingRequestToPayComponent implements OnInit {
     }
   }
 
+  /**
+   * Initializes the data source for transactions table and loads the first page.
+   */
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
-    if (this.sort && this.paginator) {
-      this.dataSource.getRequestsPay(this.filterRequestsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    const storedState = this.stateService.getState('incoming-requests');
+    if (storedState) {
+      this.dataSource.getRequestsPay(storedState.filterBy, storedState.sort.active, storedState.sort.direction, storedState.paginator.pageIndex, storedState.paginator.pageSize);
     } else {
       this.dataSource.getRequestsPay(this.filterRequestsBy, '', '', 0, 10);
     }
@@ -428,6 +449,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         filter.value = '';
       }
     });
+    this.stateService.clearState('incoming-requests');
     this.controlChange();
   }
 }

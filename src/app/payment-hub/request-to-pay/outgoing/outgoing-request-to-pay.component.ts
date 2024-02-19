@@ -9,11 +9,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
-import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { StateService } from '../../state.service';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
@@ -21,12 +22,13 @@ import { businessProcessStatusData as paymenStatuses } from "../helper/incoming-
 
 import { DfspEntry } from '../model/dfsp.model';
 import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
+
 @Component({
   selector: 'mifosx-outgoing-request-to-pay',
   templateUrl: './outgoing-request-to-pay.component.html',
   styleUrls: ['./outgoing-request-to-pay.component.scss']
 })
-export class OutgoingRequestToPayComponent implements OnInit {
+export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
   /** Minimum transaction date allowed. */
   minDate = new Date(2000, 0, 1);
@@ -111,6 +113,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
+    private stateService: StateService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -141,6 +144,15 @@ export class OutgoingRequestToPayComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    const storedState = this.stateService.getState('outgoing-requests');
+    if (storedState) {
+      this.filterForm.patchValue(storedState.filterForm);
+      this.filterRequestsBy = storedState.filterBy;
+      this.sort.active = storedState.sort.active;
+      this.sort.direction = storedState.sort.direction;
+      this.paginator.pageIndex = storedState.paginator.pageIndex;
+      this.paginator.pageSize = storedState.paginator.pageSize;
+    }
     this.controlChange();
   }
 
@@ -282,8 +294,11 @@ export class OutgoingRequestToPayComponent implements OnInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadRequestsPayPage())
-      )
+        tap(() => {
+          this.loadRequestsPayPage();
+          this.stateService.setState('outgoing-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
+        })
+        )
       .subscribe();
 
     this.loadRequestsPayPage();
@@ -341,10 +356,14 @@ export class OutgoingRequestToPayComponent implements OnInit {
     return entry ? entry.name : undefined;
   }
 
+  /**
+   * Initializes the data source for transactions table and loads the first page.
+   */
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
-    if (this.sort && this.paginator) {
-      this.dataSource.getRequestsPay(this.filterRequestsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    const storedState = this.stateService.getState('outgoing-requests');
+    if (storedState) {
+      this.dataSource.getRequestsPay(storedState.filterBy, storedState.sort.active, storedState.sort.direction, storedState.paginator.pageIndex, storedState.paginator.pageSize);
     } else {
       this.dataSource.getRequestsPay(this.filterRequestsBy, '', '', 0, 10);
     }
@@ -367,6 +386,7 @@ export class OutgoingRequestToPayComponent implements OnInit {
         filter.value = '';
       }
     });
+    this.stateService.clearState('outgoing-requests');
     this.controlChange();
   }
 
