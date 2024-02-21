@@ -12,7 +12,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 /** Custom Services */
 import { TransactionsService } from './service/transactions.service';
 import { DfspEntry } from './model/dfsp.model';
-import { transactionStatusData as statuses } from './helper/transaction.helper';
+import { transactionStatusData as statuses, recallReasonData as recallReasons} from './helper/transaction.helper';
 import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
 
 /** Dialog Components */
@@ -23,6 +23,7 @@ import { RetryResolveDialogComponent } from '../common/retry-resolve-dialog/retr
 /** Custom Models */
 import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
+import { SelectBase } from 'app/shared/form-dialog/formfield/model/select-base';
 import { AlertService } from 'app/core/alert/alert.service';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
 
@@ -58,6 +59,7 @@ export class TransactionDetailsComponent implements OnInit {
   businessAttributes: MatTableDataSource<any>;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
+  recallReasonData = recallReasons;
   tasks: Array<any> = [];
   counter: number = 0;
   expandedElement: Array<any> = [];
@@ -239,17 +241,20 @@ export class TransactionDetailsComponent implements OnInit {
       return;
     }
     const formfields: FormfieldBase[] = [
-      new InputBase({
+      new SelectBase({
         controlName: 'comment',
         label: 'Reason',
-        type: 'text',
-        required: false
+        value: this.recallReasonData[0],
+        options: { label: 'name', value: 'code', data: this.recallReasonData },
+        required: true,
+        order: 1
       }),
       new InputBase({
         controlName: 'recallAdditionalInformation',
         label: 'Additional information',
         type: 'text',
-        required: false
+        required: false,
+        order: 2
       })
     ];
     const data = {

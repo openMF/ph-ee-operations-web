@@ -3,3 +3,8 @@ export interface OptionData {
     value: string;
     css: string;
 }
+
+export interface CodeName {
+    code: string;
+    name: string;
+  }
