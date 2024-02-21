@@ -398,6 +398,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     this.paginator.pageIndex = 0;
     const findIndex = this.filterRecallsBy.findIndex(filter => filter.type === property);
     this.filterRecallsBy[findIndex].value = filterValue;
+    this.stateService.setState('outgoing-recalls', this.filterForm, this.filterRecallsBy, this.sort, this.paginator);
     this.loadRecallsPage();
   }
 

@@ -339,6 +339,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
       (filter) => filter.type === property
     );
     this.filterRequestsBy[findIndex].value = filterValue;
+    this.stateService.setState('outgoing-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
     this.loadRequestsPayPage();
   }
 

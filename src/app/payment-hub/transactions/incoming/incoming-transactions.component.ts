@@ -395,6 +395,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     this.paginator.pageIndex = 0;
     const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
     this.filterTransactionsBy[findIndex].value = filterValue;
+    this.stateService.setState('incoming-transactions', this.filterForm, this.filterTransactionsBy, this.sort, this.paginator);
     this.loadTransactionsPage();
   }
 

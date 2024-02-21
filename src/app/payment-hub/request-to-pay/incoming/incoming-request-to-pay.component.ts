@@ -351,6 +351,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       (filter) => filter.type === property
     );
     this.filterRequestsBy[findIndex].value = filterValue;
+    this.stateService.setState('incoming-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
     this.loadRequestsPayPage();
   }
 
