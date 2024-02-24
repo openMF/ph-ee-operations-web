@@ -183,9 +183,8 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          if (filterValue.length < 5) {
-          }
-          this.applyFilter(filterValue, "payeePartyId");
+          if (filterValue.length == 0 || filterValue.length > 3)
+            this.applyFilter(filterValue, "payeePartyId");
         })
       )
       .subscribe();
@@ -195,7 +194,8 @@ export class IncomingRequestToPayComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, "payerPartyId");
+          if (filterValue.length == 0 || filterValue.length > 3)
+            this.applyFilter(filterValue, "payerPartyId");
         })
       )
       .subscribe();
@@ -293,12 +293,13 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-      this.externalId.valueChanges
+    this.externalId.valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, "externalId");
+          if (filterValue.length == 0 || filterValue.length > 3)
+            this.applyFilter(filterValue, "externalId");
         })
       )
       .subscribe();

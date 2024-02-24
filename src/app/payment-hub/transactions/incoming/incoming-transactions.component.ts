@@ -52,6 +52,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
   transactionDateTo = new FormControl();
+  externalId = new FormControl();
   /** Transaction ID form control. */
   transactionId = new FormControl();
   /** Columns to be displayed in transactions table. */
@@ -69,7 +70,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'payerDfspId',
+      type: 'clientCorrelationId',
       value: ''
     },
     {
@@ -146,7 +147,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'payeePartyId');
+          if (filterValue.length == 0 || filterValue.length > 3)
+            this.applyFilter(filterValue, 'payeePartyId');
         })
       )
       .subscribe();
@@ -156,7 +158,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'payerPartyId');
+          if (filterValue.length == 0 || filterValue.length > 3)
+            this.applyFilter(filterValue, 'payerPartyId');
         })
       )
       .subscribe();
@@ -242,6 +245,19 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue: moment.Moment) => {
           this.applyFilter(filterValue.format(this.dateTimeFormat), 'startTo');
+        })
+      )
+      .subscribe();
+
+
+      this.externalId.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((filterValue) => {
+          // check if length is reset or above 3
+          if (filterValue.length == 0 || filterValue.length > 3)
+            this.applyFilter(filterValue, "clientCorrelationId");
         })
       )
       .subscribe();
