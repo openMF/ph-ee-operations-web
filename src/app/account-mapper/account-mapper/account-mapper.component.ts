@@ -1,7 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccountMapperService } from '../services/account-mapper.service';
 import { UntypedFormControl } from '@angular/forms';
-import { TransactionsDataSource } from 'app/payment-hub/transactions/dataSource/transactions.datasource';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,7 +12,7 @@ import { Dates } from 'app/core/utils/dates';
   templateUrl: './account-mapper.component.html',
   styleUrls: ['./account-mapper.component.scss']
 })
-export class AccountMapperComponent {
+export class AccountMapperComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -28,14 +27,13 @@ export class AccountMapperComponent {
   financialAddress = new UntypedFormControl();
 
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['governmentEntity', 'financialInstitution', 'functionalId', 'financialAddress'];
+  displayedColumns: string[] = ['governmentEntity', 'financialInstitution', 'functionalId', 'financialAddress', 'paymentModality'];
   /** Data source for transactions table. */
   dataSource = new MatTableDataSource();
 
-  totalRows: number = 0;
-  currentPage: number = 0;
-
-  pageSize = 50;
+  totalRows = 0;
+  currentPage = 0;
+  pageSize = 10;
   isLoading = false;
 
   accountsData: AccountData;
@@ -52,6 +50,8 @@ export class AccountMapperComponent {
     this.accountMapperService.getAccounts(this.currentPage, this.pageSize, 'requestFile', 'asc')
     .subscribe((accounts: AccountData) => {
       this.dataSource = new MatTableDataSource(accounts.content);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
       this.totalRows = accounts.totalElements;
       this.isLoading = false;
     }, (error: any) => {
@@ -67,9 +67,24 @@ export class AccountMapperComponent {
   }
 
   pageChanged(event: PageEvent) {
-    this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
     this.getAccounts();
+  }
+
+  paymentModalityDescription(value: string): string {
+    if (value === '0' || value === '00') {
+      return '(00) Bank Account';
+    } else if (value === '1' || value === '01') {
+      return '(01) Mobile Money';
+    } else if (value === '2' || value === '02') {
+      return '(02) Voucher';
+    } else if (value === '3' || value === '03') {
+      return '(03) Digital Wallet';
+    } else if (value === '4' || value === '04') {
+      return '(04) Proxy';
+    }
+    return value;
   }
 
   searchAccounts(): void {

@@ -27,18 +27,17 @@ export class LanguageSelectorComponent implements OnInit {
    * @param {TranslateService} translateService Translate Service.
    */
   constructor(private translateService: TranslateService,
-    private settingsService: SettingsService) {
-    this.languageSelector.patchValue(this.currentLanguage);
-  }
+    private settingsService: SettingsService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.languageSelector = new UntypedFormControl(this.currentLanguage);
+  }
 
   /**
    * Sets a new language to be used by the application.
    * @param {string} language New language.
    */
   setLanguage() {
-    console.log(this.languageSelector.value);
     this.translateService.use(this.languageSelector.value);
     this.settingsService.setLanguage({ name: '', code: this.languageSelector.value.substring(0, 2) });
   }
@@ -48,7 +47,7 @@ export class LanguageSelectorComponent implements OnInit {
    * @returns {string} Current language.
    */
   get currentLanguage(): string {
-    return this.translateService.currentLang;
+    return this.translateService.currentLang || this.settingsService.language.code;
   }
 
   /**

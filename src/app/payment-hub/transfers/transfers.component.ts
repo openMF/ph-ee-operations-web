@@ -6,6 +6,8 @@ import { TransfersService } from './transfers.service';
 import { Transfer, TransferData } from './model/transfer.model';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { ViewTransferDetailsComponent } from './view-transfer-details/view-transfer-details.component';
 
 @Component({
   selector: 'mifosx-transfers',
@@ -48,13 +50,14 @@ export class TransfersComponent implements OnInit {
   /** Data source for transactions table. */
   dataSource = new MatTableDataSource();
 
-  totalRows: number = 0;
-  currentPage: number = 0;
+  totalRows = 0;
+  currentPage = 0;
 
   pageSize = 50;
   isLoading = false;
 
   constructor(private dates: Dates,
+    private dialog: MatDialog,
     private transfersService: TransfersService) { }
 
   ngOnInit(): void {
@@ -63,9 +66,16 @@ export class TransfersComponent implements OnInit {
 
   getBatches(): void {
     this.isLoading = true;
-    this.transfersService.getTransfers(this.currentPage, this.pageSize, 'requestFile', 'asc')
+    this.transfersService.getTransfers(this.currentPage, this.pageSize)
     .subscribe((transfers: TransferData) => {
+      const content: Transfer[] = [];
+      transfers.content.forEach((t: Transfer) => {
+        t.amount = t.amount * 1;
+
+      });
       this.dataSource = new MatTableDataSource(transfers.content);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
       this.totalRows = transfers.totalElements;
       this.isLoading = false;
     }, (error: any) => {
@@ -95,8 +105,11 @@ export class TransfersComponent implements OnInit {
     return 'red';
   }
 
-  searchTransactions(): void {
-    
-  }
+  searchTransactions(): void { }
 
+  viewTransfer(transfer: Transfer): void {
+    this.dialog.open(ViewTransferDetailsComponent, {
+      data: { transfer: transfer }
+    });
+  }
 }

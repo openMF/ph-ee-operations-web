@@ -32,7 +32,6 @@ import { SharedModule } from '../shared/shared.module';
 import { ShellComponent } from './shell/shell.component';
 import { SidenavComponent } from './shell/sidenav/sidenav.component';
 import { ToolbarComponent } from './shell/toolbar/toolbar.component';
-import { BreadcrumbComponent } from './shell/breadcrumb/breadcrumb.component';
 import { ContentComponent } from './shell/content/content.component';
 
 /**
@@ -51,7 +50,6 @@ import { ContentComponent } from './shell/content/content.component';
     ShellComponent,
     SidenavComponent,
     ToolbarComponent,
-    BreadcrumbComponent,
     ContentComponent
   ],
   exports: [

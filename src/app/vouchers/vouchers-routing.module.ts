@@ -1,18 +1,17 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { Route } from "app/core/route/route.service";
-import { VouchersComponent } from "./vouchers/vouchers.component";
-import { extract } from "app/core/i18n/i18n.service";
-import { VoucherManagementComponent } from "./voucher-management/voucher-management.component";
-import { VouchersBulkImportComponent } from "./vouchers-bulk-import/vouchers-bulk-import.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { Route } from 'app/core/route/route.service';
+import { VouchersComponent } from './vouchers/vouchers.component';
+import { VoucherManagementComponent } from './voucher-management/voucher-management.component';
+import { VouchersBulkImportComponent } from './vouchers-bulk-import/vouchers-bulk-import.component';
 
 
 const routes: Routes = [
     Route.withShell([
         {
-            path: "vouchers",
+            path: 'vouchers',
             component: VouchersComponent,
-            data: { title: extract("Voucher Management"), breadcrumb: "Voucher Management" },
+            data: { title: 'Voucher Management', breadcrumb: 'Voucher Management' },
             children: [
                 {
                     path: '',

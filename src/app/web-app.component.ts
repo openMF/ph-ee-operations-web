@@ -22,6 +22,7 @@ import { AlertService } from './core/alert/alert.service';
 /** Custom Models */
 import { Alert } from './core/alert/alert.model';
 import { SettingsService } from './settings/settings.service';
+import { I18nService } from './core/i18n/i18n.service';
 
 /** Initialize Logger */
 const log = new Logger('PHEE');
@@ -35,6 +36,8 @@ const log = new Logger('PHEE');
   styleUrls: ['./web-app.component.scss']
 })
 export class WebAppComponent implements OnInit {
+
+  i18nService: I18nService;
 
   /**
    * @param {Router} router Router for navigation.
@@ -75,6 +78,8 @@ export class WebAppComponent implements OnInit {
     }
     log.debug('init');
 
+    this.i18nService = new I18nService(this.translateService);
+
     // Setup translations
     this.translateService.addLangs(environment.supportedLanguages.split(','));
     log.debug(environment.defaultLanguage);
@@ -95,10 +100,13 @@ export class WebAppComponent implements OnInit {
         mergeMap(route => route.data)
       )
       .subscribe(event => {
-        const title = event['title'];
-        if (title) {
-          this.titleService.setTitle(`${this.translateService.instant(title)} | Payment Hub`);
+        let title = event['title'];
+        if (!title) {
+          title = 'APP_NAME';
         }
+        this.i18nService.translate(title).subscribe((titleTranslated: any) => {
+          this.titleService.setTitle(titleTranslated);
+        });
       });
 
     // Setup theme
@@ -127,7 +135,6 @@ export class WebAppComponent implements OnInit {
     // this.settingsService.setServers(environment.serverUrls.split(','));
     // Set the Tenant Identifier(s) list from the env var
     this.settingsService.setTenantIdentifier(environment.tenant || 'phdefault');
-  
   }
 
 }

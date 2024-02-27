@@ -1,4 +1,4 @@
-import { Pageable, Sort } from "app/shared/models/data.model";
+import { Pageable, Sort } from 'app/shared/models/data.model';
 
 export interface VoucherData {
     content:          Voucher[];
@@ -27,7 +27,7 @@ export interface Status {
 }
 
 export interface VoucherInstruction {
-    instructionId: string;
+    instructionID: string;
     groupCode: string;
     currency: string;
     amount: number;

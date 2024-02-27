@@ -16,26 +16,26 @@ export class HomeComponent {
 
   sections: Section[];
 
-  constructor() { 
+  constructor() {
     this.sections = [
       {
-        label: 'Payment Hub', 
+        label: 'Payment Hub',
         routeTo: ['paymenthub'],
         roleName: 'operations',
         icon: 'money-bill-alt',
         active: false
-      }, 
+      },
       {
-        label: 'Vouchers', 
-        routeTo: ['vouchers'], 
-        roleName: 'vouchers', 
-        icon: 'ticket', 
+        label: 'Vouchers',
+        routeTo: ['vouchers'],
+        roleName: 'vouchers',
+        icon: 'ticket',
         active: false
-      }, 
+      },
       {
-        label: 'Account Management', 
-        routeTo: ['account-mapper'], 
-        roleName: 'account-mapper', 
+        label: 'Account Management',
+        routeTo: ['account-mapper'],
+        roleName: 'account-mapper',
         icon: 'users',
         active: false
       }

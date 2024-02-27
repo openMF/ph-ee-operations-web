@@ -1,4 +1,4 @@
-import { Pageable, Sort } from "app/shared/models/data.model";
+import { Pageable, Sort } from 'app/shared/models/data.model';
 
 export interface TransferData {
     content:          Transfer[];
@@ -19,25 +19,25 @@ export interface Transfer {
     workflowInstanceKey: number;
     transactionId:       string;
     startedAt:           number;
-    completedAt:         null;
+    completedAt:         number;
     status:              string;
-    statusDetail:        null;
-    payeeDfspId:         null;
-    payeePartyId:        null;
-    payeePartyIdType:    null;
-    payeeFee:            null;
-    payeeFeeCurrency:    null;
-    payeeQuoteCode:      null;
-    payerDfspId:         null;
-    payerPartyId:        null;
-    payerPartyIdType:    null;
-    payerFee:            null;
-    payerFeeCurrency:    null;
-    payerQuoteCode:      null;
-    amount:              null;
-    currency:            null;
+    statusDetail:        string;
+    payeeDfspId:         string;
+    payeePartyId:        string;
+    payeePartyIdType:    string;
+    payeeFee:            number;
+    payeeFeeCurrency:    string;
+    payeeQuoteCode:      string;
+    payerDfspId:         string;
+    payerPartyId:        string;
+    payerPartyIdType:    string;
+    payerFee:            number;
+    payerFeeCurrency:    string;
+    payerQuoteCode:      string;
+    amount:              number;
+    currency:            string;
     direction:           string;
-    errorInformation:    null;
-    batchId:             null;
+    errorInformation:    string;
+    batchId:             string;
     clientCorrelationId: string;
 }

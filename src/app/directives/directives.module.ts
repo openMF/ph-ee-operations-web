@@ -17,6 +17,6 @@ import { FileDragNDropDirective } from './file-drag-ndrop/file-drag-ndrop.direct
     CommonModule
   ],
   declarations: [HasPermissionDirective, HasRoleDirective, FileDragNDropDirective],
-  exports: [HasPermissionDirective, HasRoleDirective]
+  exports: [HasPermissionDirective, HasRoleDirective, FileDragNDropDirective]
 })
 export class DirectivesModule { }

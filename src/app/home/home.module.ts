@@ -20,7 +20,7 @@ import { DirectivesModule } from 'app/directives/directives.module';
   imports: [
     SharedModule,
     HomeRoutingModule,
-    TranslateModule.forRoot(),
+    TranslateModule,
     DirectivesModule
   ],
   declarations: [

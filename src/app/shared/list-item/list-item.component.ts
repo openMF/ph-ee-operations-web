@@ -13,7 +13,7 @@ export class ListItemComponent {
   @Input() classFormat: string;
   @Input() classFormatTitle: string;
   @Input() icon: string | null;
-  @Output() sectionChange = new EventEmitter<Section>(); 
+  @Output() sectionChange = new EventEmitter<Section>();
 
   constructor(private router: Router) {
   }

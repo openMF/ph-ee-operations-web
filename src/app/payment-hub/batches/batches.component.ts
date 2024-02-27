@@ -39,8 +39,8 @@ export class BatchesComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   batchesData: Batch;
-  totalRows: number = 0;
-  currentPage: number = 0;
+  totalRows = 0;
+  currentPage = 0;
 
   pageSize = 50;
   isLoading = false;
@@ -94,8 +94,6 @@ export class BatchesComponent implements OnInit {
     this.router.navigate(['..', 'sub-batches', batchId], { relativeTo: this.route });
   }
 
-  searchBatches(): void {
-    
-  }
+  searchBatches(): void { }
 
 }

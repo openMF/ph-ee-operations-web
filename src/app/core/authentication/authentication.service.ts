@@ -119,7 +119,7 @@ export class AuthenticationService {
     this.username = loginContext.username;
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
-    //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
+    // httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
     if (environment.oauth.enabled) {
       if (this.isOauthKeyCloak()) {
         return this.oauthKeycloakService.token(loginContext).pipe(
@@ -133,7 +133,7 @@ export class AuthenticationService {
       } else {
 
         httpParams = httpParams.set('grant_type', 'password');
-        if (environment.oauth.basicAuth === "true") {
+        if (environment.oauth.basicAuth === 'true') {
           this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
         }
         return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
@@ -162,7 +162,7 @@ export class AuthenticationService {
    * Sets the oauth2 token refresh time.
    * @param {OAuth2Token} tokenResponse OAuth2 Token details.
    */
-  private getUserDetails(loginContext: LoginContext,tokenResponse: OAuth2Token) {
+  private getUserDetails(loginContext: LoginContext, tokenResponse: OAuth2Token) {
     if (this.isOauthKeyCloak()) {
       this.oauthKeycloakService.introspect(tokenResponse).subscribe((userDetails: Introspect) => {
         // console.log(userDetails);
@@ -171,7 +171,7 @@ export class AuthenticationService {
 
       });
     } else {
-      console.log("Not Implemented " + environment.oauth.type);
+      console.log('Not Implemented ' + environment.oauth.type);
     }
   }
 

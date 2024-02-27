@@ -10,16 +10,15 @@ export class FilterSelectorComponent implements OnInit {
 
   sections: Section[];
 
-  constructor() { 
-
-  }
+  constructor() { }
 
   ngOnInit(): void {
     this.sections = [
-      {label: 'Main Batches', routeTo: ['paymenthub', 'batches'], active: true}, 
-      {label: 'Sub Batches', routeTo: ['paymenthub', 'sub-batches'], active: false}, 
+      {label: 'Main Batches', routeTo: ['paymenthub', 'batches'], active: true},
+      {label: 'Create Batch', routeTo: ['paymenthub', 'bulk-import'], active: false},
+      {label: 'Sub Batches', routeTo: ['paymenthub', 'sub-batches'], active: false},
       {label: 'Transfers', routeTo: ['paymenthub', 'transfers'], active: false}
-    ];      
+    ];
   }
 
   setActive(s: Section): void {

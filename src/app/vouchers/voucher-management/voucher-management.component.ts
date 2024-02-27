@@ -33,13 +33,13 @@ export class VoucherManagementComponent implements OnInit {
   status = new UntypedFormControl();
 
   /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['serialNumber', 'createdAt', 'governmentEntity', 'functionalId', 'status'];
+  displayedColumns: string[] = ['serialNumber', 'createdDate', 'registeringInstitutionId', 'functionalId', 'status'];
   /** Data source for transactions table. */
   dataSource = new MatTableDataSource();
 
   vouchersData: VoucherData;
-  totalRows: number = 0;
-  currentPage: number = 0;
+  totalRows = 0;
+  currentPage = 0;
 
   pageSize = 50;
   isLoading = false;

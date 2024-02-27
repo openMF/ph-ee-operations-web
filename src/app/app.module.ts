@@ -30,7 +30,7 @@ import { PaymentHubModule } from './payment-hub/paymenthub.module';
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
 
-import { DatePipe } from '@angular/common';
+import { DatePipe, LocationStrategy } from '@angular/common';
 import { VouchersModule } from './vouchers/vouchers.module';
 import { AccountMapperModule } from './account-mapper/account-mapper.module';
 import { KeycloakAngularModule } from 'keycloak-angular';
@@ -48,8 +48,10 @@ import { KeycloakAngularModule } from 'keycloak-angular';
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient]
+        useFactory: (http: HttpClient, locationStrategy: LocationStrategy) => {
+          return new TranslateHttpLoader(http, `${ window.location.protocol }//${ window.location.host }${locationStrategy.getBaseHref()}assets/translations/`, '.json');
+        },
+        deps: [HttpClient, LocationStrategy]
       }
     }),
     KeycloakAngularModule,

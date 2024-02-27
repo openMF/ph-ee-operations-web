@@ -19,9 +19,9 @@ export interface BatchData {
     failed: number;
     completed: number;
     totalAmount: number | null;
-    ongoingAmount: null,
-    failedAmount: null,
-    completedAmount: null,
+    ongoingAmount: null;
+    failedAmount: null;
+    completedAmount: null;
     result_file: string;
     resultGeneratedAt: string;
     note: string;
@@ -35,4 +35,20 @@ export interface BatchData {
     correlationId: string;
     approvedAmount: string | null;
     approvedCount: string | null;
+}
+
+export interface BatchInstruction {
+    requestId: string;
+    creditParty: BatchParty[];
+    debitParty: BatchParty[];
+    paymentMode: string;
+    currency: string;
+    amount: number;
+    // subType: string | null;
+    descriptionText: string | null;
+}
+
+export interface BatchParty {
+    key: string;
+    value: string;
 }

@@ -17,7 +17,7 @@ export class SidenavComponent implements OnInit {
 
   /** True if sidenav is in collapsed state. */
   @Input() sidenavCollapsed: boolean;
-  @Output() sideNavControl: EventEmitter<boolean> = new EventEmitter
+  @Output() sideNavControl: EventEmitter<boolean> = new EventEmitter;
   /** Username of authenticated user. */
   username: string;
 

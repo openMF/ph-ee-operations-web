@@ -34,7 +34,7 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 export class ToolbarComponent implements OnInit {
 
   credentials: any;
-  
+
   /** Subscription to breakpoint observer for handset. */
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(

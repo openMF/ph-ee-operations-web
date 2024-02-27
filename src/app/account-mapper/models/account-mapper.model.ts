@@ -1,4 +1,4 @@
-import { Pageable, Sort } from "app/shared/models/data.model";
+import { Pageable, Sort } from 'app/shared/models/data.model';
 
 export interface AccountData {
     content:          Account[];

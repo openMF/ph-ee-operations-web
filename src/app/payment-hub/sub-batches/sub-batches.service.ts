@@ -16,7 +16,7 @@ export class SubBatchesService {
    * @returns {Observable<any>} Users data
    */
   getSubBatches(batchId: string, page: number, size: number, orderBy: string, sortOrder: string): Observable<any> {
-    let httpParams = new HttpParams()
+    const httpParams = new HttpParams()
     .set('page', page)
     .set('size', size)
     .set('sortOrder', sortOrder)

@@ -15,12 +15,12 @@ export class OauthKeycloakService {
   token(loginContext: LoginContext): Observable<any> {
 
     const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',    
-    })
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
     };
-  
-    const payload = new URLSearchParams()
+
+    const payload = new URLSearchParams();
     payload.set('grant_type', 'password');
     payload.set('client_id', environment.oauth.clientId);
     if (environment.oauth.clientSecret !== '') {
@@ -28,7 +28,7 @@ export class OauthKeycloakService {
     }
     payload.set('username', loginContext.username);
     payload.set('password', loginContext.password);
-  
+
     const url: string = this.url() + '/token';
     return this.http.post(url, payload.toString(), httpOptions);
   }
@@ -36,19 +36,19 @@ export class OauthKeycloakService {
   refreshToken(token: OAuth2Token): Observable<any> {
 
     const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',    
-    })
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
     };
-  
-    const payload = new URLSearchParams()
+
+    const payload = new URLSearchParams();
     payload.set('grant_type', 'refresh_token');
     payload.set('client_id', environment.oauth.clientId);
     if (environment.oauth.clientSecret !== '') {
       payload.set('client_secret', environment.oauth.clientSecret);
     }
     payload.set('refresh_token', token.refresh_token);
-  
+
     const url: string = this.url() + '/token';
     return this.http.post(url, payload.toString(), httpOptions);
   }
@@ -56,18 +56,18 @@ export class OauthKeycloakService {
   introspect(token: OAuth2Token): Observable<any> {
 
     const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',    
-    })
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
     };
-  
-    const payload = new URLSearchParams()
+
+    const payload = new URLSearchParams();
     payload.set('client_id', environment.oauth.clientId);
     if (environment.oauth.clientSecret !== '') {
       payload.set('client_secret', environment.oauth.clientSecret);
     }
     payload.set('token', token.access_token);
-  
+
     const url: string = this.url() + '/token/introspect';
     return this.http.post(url, payload.toString(), httpOptions);
   }
@@ -75,18 +75,18 @@ export class OauthKeycloakService {
   logout(token: OAuth2Token): Observable<any> {
 
     const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',    
-    })
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
     };
-  
-    const payload = new URLSearchParams()
+
+    const payload = new URLSearchParams();
     payload.set('client_id', environment.oauth.clientId);
     if (environment.oauth.clientSecret !== '') {
       payload.set('client_secret', environment.oauth.clientSecret);
     }
     payload.set('refresh_token', token.refresh_token);
-  
+
     const url: string = this.url() + '/logout';
     return this.http.post(url, payload.toString(), httpOptions);
   }

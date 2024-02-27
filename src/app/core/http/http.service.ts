@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 /** Custom Interceptors */
 import { ErrorHandlerInterceptor } from './error-handler.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
-// import { ApiPrefixInterceptor } from './api-prefix.interceptor';
 
 /**
  * HttpClient is declared in a re-exported module, so we have to extend the original module to make it work properly.

@@ -4,7 +4,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <h3 class="m-r-10">Filters</h3>
+          <h3 class="m-r-10">{{"labels.inputs.Filters" | translate}}</h3>
           <fa-icon icon="filter" size="xl"></fa-icon>
         </mat-panel-title>
 
@@ -12,7 +12,7 @@
       <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
 
         <mat-form-field fxFlex="30%" (click)="transactionDateFromPicker.open()">
-          <mat-label>From Date</mat-label>
+          <mat-label>{{"labels.inputs.From Date" | translate}}</mat-label>
           <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker"
             [formControl]="transactionDateFrom">
           <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
@@ -20,7 +20,7 @@
         </mat-form-field>
 
         <mat-form-field fxFlex="25%" (click)="transactionDateToPicker.open()">
-          <mat-label>To Date</mat-label>
+          <mat-label>{{"labels.inputs.To Date" | translate}}</mat-label>
           <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker"
             [formControl]="transactionDateTo">
           <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
@@ -29,29 +29,29 @@
 
         <div fxFlex="20%" class="push-end m-t-15">
           <button mat-raised-button color="primary" (click)="searchSubBatches()">
-            <fa-icon icon="search" class="m-r-10"></fa-icon> Search
+            <fa-icon icon="search" class="m-r-10"></fa-icon> {{"labels.buttons.Search" | translate}}
           </button>
         </div>
       </div>
 
       <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
         <mat-form-field fxFlex="20%">
-          <mat-label>Source Ministry</mat-label>
+          <mat-label>{{"labels.inputs.Source Ministry" | translate}}</mat-label>
           <input matInput [formControl]="sourceMinistry">
         </mat-form-field>
 
         <mat-form-field fxFlex="20%">
-          <mat-label>Batch Reference Number</mat-label>
+          <mat-label>{{"labels.inputs.Batch Reference Number" | translate}}</mat-label>
           <input matInput [formControl]="batchReferenceNumber">
         </mat-form-field>
 
         <mat-form-field fxFlex="20%">
-          <mat-label>Bulk Amount</mat-label>
-          <input matInput [formControl]="bulkAmount">
+          <mat-label>{{"labels.inputs.Bulk Amount" | translate}}</mat-label>
+          <input type="number" matInput [formControl]="bulkAmount">
         </mat-form-field>
       
         <mat-form-field fxFlex="20%">
-          <mat-label>Payer FSP</mat-label>
+          <mat-label>{{"labels.inputs.Payer FSP" | translate}}</mat-label>
           <input matInput [formControl]="payerFSP">
         </mat-form-field>
 
@@ -64,42 +64,42 @@
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="batchReferenceNumber">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Batch Reference Number </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Batch Reference Number" | translate}} </th>
         <td mat-cell *matCellDef="let item"> 
           <mifosx-identifier identifier="{{item.batchId}}"></mifosx-identifier> 
         </td>
       </ng-container>
 
       <ng-container matColumnDef="startedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Start Time" | translate}} </th>
         <td mat-cell *matCellDef="let item"> {{ formatDate(convertTimestampToUTCDate(item.startedAt)) }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="completedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Completed Time" | translate}} </th>
         <td mat-cell *matCellDef="let item"> {{ formatDate(convertTimestampToUTCDate(item.completedAt)) }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="sourceMinistry">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Ministry </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Source Ministry" | translate}} </th>
         <td mat-cell *matCellDef="let item" matTooltip={{item.transactionId}}> {{
           shortenValue(item.transactionId) }} </td>
       </ng-container>
 
       <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Bulk Amount </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Bulk Amount" | translate}} </th>
         <td mat-cell *matCellDef="let item"> {{ item.amount | number }} </td>
       </ng-container>
 
       <ng-container matColumnDef="payerFSP">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer FSP </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Payer FSP" | translate}} </th>
         <td mat-cell *matCellDef="let item"> {{ item.payerFSP }} </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Status" | translate}} </th>
         <td mat-cell *matCellDef="let item"
           [ngClass]="{'red': item.status==='FAILED','green': item.status==='COMPLETED','orange': item.status==='ACTION_NEEDED'}">
           {{ item.status }} </td>

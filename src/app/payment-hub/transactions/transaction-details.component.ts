@@ -14,7 +14,7 @@ import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
 
 /** Dialog Components */
-import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
+import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component';
 import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
 import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
 
@@ -59,7 +59,7 @@ export class TransactionDetailsComponent implements OnInit {
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
   tasks: Array<any> = [];
-  counter: number = 0;
+  counter = 0;
   expandedElement: Array<any> = [];
   /**
    * @param {TransactionsService} transactionsService Transactions Service.
