@@ -47,12 +47,12 @@ export const outgoingRecallStatusData: OptionData[] = [
 export const recallDirectionData: OptionData[] = [
     {
         option: 'AFR incoming recall',
-        value: 'AFR.incoming.recall',
+        value: 'HCT_INST.incoming.recall',
         css: 'black'
     },
     {
         option: 'AFR outgoing recall',
-        value: 'AFR.outgoing.recall',
+        value: 'HCT_INST.outgoing.recall',
         css: 'black'
     },
     {
