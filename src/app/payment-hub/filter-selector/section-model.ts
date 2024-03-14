@@ -4,4 +4,5 @@ export interface Section {
     roleName?: string;
     icon?: string;
     active: boolean;
+    disabled: boolean;
 }

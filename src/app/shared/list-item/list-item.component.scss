@@ -19,6 +19,26 @@
   }
 }
 
+.option-disabled {
+  background-color: $mid-grey;
+  border-radius: 15px;
+  border: $border-size solid $mid-grey;
+  height: 110px;
+  width: 260px;
+  vertical-align: middle;
+  margin: 15px;
+  padding-top: 15px;
+
+  .title {
+    padding-left: 15px;
+    font-size: 1.2rem;
+
+    fa-icon {
+      color: $primary;
+    }
+  }
+}
+
 .active {
   background-color: $primary;
   .title {

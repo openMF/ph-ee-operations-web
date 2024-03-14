@@ -23,21 +23,24 @@ export class HomeComponent {
         routeTo: ['paymenthub'],
         roleName: 'operations',
         icon: 'money-bill-alt',
-        active: false
+        active: false,
+        disabled: false
       },
       {
         label: 'Vouchers',
         routeTo: ['vouchers'],
         roleName: 'vouchers',
         icon: 'ticket',
-        active: false
+        active: false,
+        disabled: false
       },
       {
         label: 'Account Management',
         routeTo: ['account-mapper'],
         roleName: 'account-mapper',
         icon: 'users',
-        active: false
+        active: false,
+        disabled: false
       }
     ];
   }

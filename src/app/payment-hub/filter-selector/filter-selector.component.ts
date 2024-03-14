@@ -17,10 +17,10 @@ export class FilterSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.sections = [
-      {label: 'Main Batches', routeTo: ['paymenthub', 'batches'], active: true},
-      {label: 'Create Batch', routeTo: ['paymenthub', 'bulk-import'], active: false},
-      {label: 'Sub Batches', routeTo: ['paymenthub', 'sub-batches'], active: false},
-      {label: 'Transfers', routeTo: ['paymenthub', 'transfers'], active: false}
+      {label: 'Main Batches', routeTo: ['paymenthub', 'batches'], active: true, disabled: false},
+      {label: 'Create Batch', routeTo: ['paymenthub', 'bulk-import'], active: false, disabled: false},
+      {label: 'Sub Batches', routeTo: ['paymenthub', 'sub-batches'], active: false, disabled: true},
+      {label: 'Transfers', routeTo: ['paymenthub', 'transfers'], active: false, disabled: false}
     ];
 
     this.router.events.pipe(

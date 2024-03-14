@@ -41,3 +41,55 @@ export interface Transfer {
     batchId:             string;
     clientCorrelationId: string;
 }
+
+export interface SubBatchDetail {
+    subBatchId:               string;
+    batchId:                  string;
+    requestId:                null;
+    total:                    null;
+    ongoing:                  null;
+    successful:               null;
+    failed:                   null;
+    totalAmount:              null;
+    pendingAmount:            null;
+    successfulAmount:         null;
+    failedAmount:             null;
+    file:                     null;
+    notes:                    null;
+    createdAt:                null;
+    status:                   null;
+    modes:                    null;
+    purpose:                  null;
+    failedPercentage:         null;
+    successPercentage:        null;
+    payerFsp:                 null;
+    approvedAmount:           null;
+    approvedTransactionCount: null;
+    payeeFspSet:              null;
+    instructionList:          InstructionList[];
+    budgetAccount:            null;
+    generatedBy:              null;
+    generatedAt:              Date;
+    totalInstructionCount:    number;
+}
+
+export interface InstructionList {
+    instructionId:     string;
+    payerFsp:          null | string;
+    payeeFunctionalId: PayeeFunctionalID;
+    amount:            number;
+    status:            Status;
+    reason:            null;
+    startedAt:         number;
+    completedAt:       number;
+    subBatchId:        null;
+}
+
+export enum PayeeFunctionalID {
+    Accountnumber = "accountnumber",
+}
+
+export enum Status {
+    Completed = "COMPLETED",
+    InProgress = "IN_PROGRESS",
+}
