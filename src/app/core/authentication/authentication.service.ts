@@ -165,13 +165,10 @@ export class AuthenticationService {
   private getUserDetails(loginContext: LoginContext, tokenResponse: OAuth2Token) {
     if (this.isOauthKeyCloak()) {
       this.oauthKeycloakService.introspect(tokenResponse).subscribe((userDetails: Introspect) => {
-        // console.log(userDetails);
         this.storage.setItem(this.oAuthUserDetailsStorageKey, JSON.stringify(userDetails));
         this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
 
       });
-    } else {
-      console.log('Not Implemented ' + environment.oauth.type);
     }
   }
 
@@ -256,9 +253,7 @@ export class AuthenticationService {
       if (this.isOauthKeyCloak()) {
         const oauthToken: OAuth2Token = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey));
         if (oauthToken) {
-          this.oauthKeycloakService.logout(oauthToken).subscribe((response: any) => {
-            console.log(response);
-          });
+          this.oauthKeycloakService.logout(oauthToken).subscribe((response: any) => { });
         }
       }
     }

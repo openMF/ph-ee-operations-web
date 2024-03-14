@@ -40,11 +40,11 @@ export interface BatchData {
 export interface BatchInstruction {
     requestId: string;
     creditParty: BatchParty[];
-    debitParty: BatchParty[];
+    debitParty?: BatchParty[] | null;
     paymentMode: string;
     currency: string;
     amount: number;
-    // subType: string | null;
+    subType?: string | null;
     descriptionText: string | null;
 }
 

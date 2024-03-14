@@ -29,14 +29,16 @@ export class BatchesService {
     return this.http.get(this.apiPrefix + '/batches', { params: httpParams });
   }
 
-  createBatch(correlationID: string, institutionId: string, programId: string, signature: string, payload: any): Observable<any> {
+  createBatch(correlationID: string, institutionId: string, purpose: string, programId: string, signature: string, payload: any): Observable<any> {
     const httpParams = new HttpParams()
     .set('type', 'raw');
     const headers = new HttpHeaders()
+    .append('Purpose', purpose)
+    .append('type', 'raw')
     .append('X-CorrelationID', correlationID)
     .append('Platform-TenantId', this.settingsService.tenantIdentifier)
     .append('X-Signature', signature)
-    .append('X-CallbackURL', environment.backend.voucherCallbackUrl)
+    .append('X-Callback-URL', environment.backend.voucherCallbackUrl)
     .append('X-Registering-Institution-Id', institutionId)
     .append('X-Program-Id', programId);
     return this.http.post(this.bulkConnectorOps + '/batchtransactions', payload, { params: httpParams, headers: headers });

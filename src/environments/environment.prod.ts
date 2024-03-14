@@ -12,7 +12,7 @@ export let environment = {
   version: env.phee.version,
   backend: {
     operations: window['env']['serverApiUrlOps'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
-    signatureBatchKey: window['env']['signatureBatchKey'] || '',
+    signatureApiUrl: window['env']['signatureApiUrl'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
     bulkConnectorOps: window['env']['bulkConnectorOps'] || 'https://bulk-connector-demo.sandbox.fynarfin.io',
     vouchers: window['env']['serverApiUrlVou'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
     voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',

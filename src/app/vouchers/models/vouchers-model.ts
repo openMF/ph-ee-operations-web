@@ -32,6 +32,6 @@ export interface VoucherInstruction {
     currency: string;
     amount: number;
     expiry?: string | null;
-    functionalId: string;
+    payeeFunctionalID: string;
     narration?: string | null;
 }

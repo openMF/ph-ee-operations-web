@@ -15,13 +15,15 @@ export class SubBatchesService {
   /**
    * @returns {Observable<any>} Users data
    */
-  getSubBatches(batchId: string, page: number, size: number, orderBy: string, sortOrder: string): Observable<any> {
+  getSubBatches(batchId: string, page: number, size: number): Observable<any> {
     const httpParams = new HttpParams()
     .set('page', page)
-    .set('size', size)
-    .set('sortOrder', sortOrder)
-    .set('orderBy', orderBy);
+    .set('size', size);
 
+    return this.http.get(this.apiPrefix + '/batch/detail?batchId=' + batchId);
+  }
+
+  getBatchDetail(batchId: string): Observable<any> {
     return this.http.get(this.apiPrefix + '/batches/' + batchId);
   }
 }

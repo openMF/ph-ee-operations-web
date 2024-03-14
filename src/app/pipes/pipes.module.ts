@@ -5,13 +5,14 @@ import { FindPipe } from './find.pipe';
 import { DateFormatPipe } from './date-format.pipe';
 import { ExternalIdentifierPipe } from './external-identifier.pipe';
 import { FormatNumberPipe } from './format-number.pipe';
+import { DatetimeFormatPipe } from './datetime-format.pipe';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe],
-  providers: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DecimalPipe],
-  exports: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe]
+  declarations: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DatetimeFormatPipe],
+  providers: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DecimalPipe, DatetimeFormatPipe],
+  exports: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DatetimeFormatPipe]
 })
 export class PipesModule { }

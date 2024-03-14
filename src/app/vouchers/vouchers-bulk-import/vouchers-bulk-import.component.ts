@@ -75,7 +75,7 @@ export class VouchersBulkImportComponent implements OnInit {
             currency: item['Currency'],
             amount: item['Amount'],
             expiry: item['Expiry'],
-            functionalId: item['Payee Functional Id'],
+            payeeFunctionalID: item['Payee Functional Id'],
             narration: item['Narration'] || null
           });
         });
