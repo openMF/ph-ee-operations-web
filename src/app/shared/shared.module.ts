@@ -22,6 +22,8 @@ import { IdentifierComponent } from './identifier/identifier.component';
 import { PipesModule } from 'app/pipes/pipes.module';
 import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { DragDropFileComponent } from './drag-drop-file/drag-drop-file.component';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 /**
  * Shared Module
@@ -37,7 +39,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
         PipesModule,
         TranslateModule,
         BreadcrumbModule,
-        NgxCsvParserModule
+        NgxCsvParserModule,
+        NgxFileDropModule
     ],
     declarations: [
         FormfieldComponent,
@@ -49,7 +52,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
         ThemePickerComponent,
         ListItemComponent,
         TenantSelectorComponent,
-        IdentifierComponent
+        IdentifierComponent,
+        DragDropFileComponent
     ],
     exports: [
         FileUploadComponent,
@@ -66,7 +70,9 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
         TenantSelectorComponent,
         IdentifierComponent,
         BreadcrumbModule,
-        NgxCsvParserModule
+        NgxCsvParserModule,
+        NgxFileDropModule,
+        DragDropFileComponent
     ],
     providers: [
         BreadcrumbService

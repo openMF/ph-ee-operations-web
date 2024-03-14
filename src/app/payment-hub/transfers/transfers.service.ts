@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -15,14 +15,14 @@ export class TransfersService {
    */
   constructor(private http: HttpClient) { }
 
-  getTransfers(page: number, size: number, orderBy: string, sortOrder: string): Observable<any> {
-    let httpParams = new HttpParams()
+  getTransfers(page: number, size: number): Observable<any> {
+    const httpParams = new HttpParams()
     .set('page', page)
-    .set('size', size)
-    .set('sortOrder', sortOrder)
-    .set('orderBy', orderBy);
+    .set('size', size);
+    const headers = new HttpHeaders()
+    .set('Platform-TenantId', environment.tenant);
 
-    return this.http.get(this.apiPrefix + '/transfers', { params: httpParams });
+    return this.http.get(this.apiPrefix + '/transfers', { params: httpParams, headers: headers });
   }
 
 }

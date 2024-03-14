@@ -10,15 +10,13 @@ export class VouchersSectionFilterComponent implements OnInit {
 
   sections: Section[];
 
-  constructor() { 
-
-  }
+  constructor() { }
 
   ngOnInit(): void {
     this.sections = [
-      {label: 'Vouchers', routeTo: ['vouchers', 'voucher-management'], active: true}, 
-      {label: 'Create Vouchers', routeTo: ['vouchers', 'bulk-import'], active: false}, 
-    ];      
+      { label: 'Vouchers', routeTo: ['vouchers', 'voucher-management'], active: true },
+      { label: 'Create Vouchers', routeTo: ['vouchers', 'bulk-import'], active: false },
+    ];
   }
 
   setActive(s: Section): void {

@@ -1,33 +1,31 @@
 /** TODO: Separate routing into feature modules for cleaner accounting module. */
 
 /** Angular Imports */
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 /** Routing Imports */
-import { Route } from "../core/route/route.service";
-
-/** Translation Imports */
-import { extract } from "../core/i18n/i18n.service";
+import { Route } from '../core/route/route.service';
 
 /** Custom Components */
-import { TransactionDetailsComponent } from "./transactions/transaction-details.component";
-import { PaymentHubComponent } from "./paymenthub.component";
+import { TransactionDetailsComponent } from './transactions/transaction-details.component';
+import { PaymentHubComponent } from './paymenthub.component';
 
-import { CurrenciesResolver } from "./transactions/resolver/currencies.resolver";
-import { TransactionResolver } from "./transactions/resolver/transaction.resolver";
-import { DfspResolver } from "./transactions/resolver/dfsp.resolver";
-import { BatchesComponent } from "./batches/batches.component";
-import { SubBatchesComponent } from "./sub-batches/sub-batches.component";
-import { TransfersComponent } from "./transfers/transfers.component";
+import { CurrenciesResolver } from './transactions/resolver/currencies.resolver';
+import { TransactionResolver } from './transactions/resolver/transaction.resolver';
+import { DfspResolver } from './transactions/resolver/dfsp.resolver';
+import { BatchesComponent } from './batches/batches.component';
+import { SubBatchesComponent } from './sub-batches/sub-batches.component';
+import { TransfersComponent } from './transfers/transfers.component';
+import { BatchesBulkImportComponent } from './batches-bulk-import/batches-bulk-import.component';
 
 /** Payment HUB Routes */
 const routes: Routes = [
   Route.withShell([
     {
-      path: "paymenthub",
+      path: 'paymenthub',
       component: PaymentHubComponent,
-      data: { title: extract("Payment Hub EE"), breadcrumb: "Payment Hub EE" },
+      data: { title: 'Payment Hub EE', breadcrumb: 'Payment Hub EE' },
       children: [
         {
           path: '',
@@ -35,12 +33,17 @@ const routes: Routes = [
           pathMatch: 'full'
         },
         {
-          path: "batches",
+          path: 'batches',
           data: { breadcrumb: {alias: 'Batches'} },
           component: BatchesComponent
         },
         {
-          path: "sub-batches",
+          path: 'bulk-import',
+          data: { breadcrumb: {alias: 'Batch Bulk Import'} },
+          component: BatchesBulkImportComponent,
+        },
+        {
+          path: 'sub-batches',
           data: { breadcrumb: {alias: 'SubBatches'} },
           children: [
             {
@@ -48,26 +51,26 @@ const routes: Routes = [
               component: SubBatchesComponent,
             },
             {
-              path: ":batchId",
+              path: ':batchId',
               data: { breadcrumb: {alias: 'SubBatches'} },
               component: SubBatchesComponent
             }
           ]
         },
         {
-          path: "transfers",
+          path: 'transfers',
           data: { breadcrumb: {alias: 'Transfers'} },
           component: TransfersComponent,
         },
         {
-          path: "transactions",
+          path: 'transactions',
           children: [
             {
-              path: "",
+              path: '',
               component: TransfersComponent,
             },
             {
-              path: "view/:id",
+              path: 'view/:id',
               component: TransactionDetailsComponent,
               data: { breadcrumb: {alias: 'View Transaction'} },
               resolve: {

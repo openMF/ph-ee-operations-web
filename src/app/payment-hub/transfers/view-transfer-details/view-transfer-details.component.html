@@ -1,0 +1,91 @@
+<h1 mat-dialog-title>{{ 'labels.heading.View Transfer' | translate }}</h1>
+
+<div mat-dialog-content>
+
+    <table>
+
+        <tr>
+            <th>{{ 'labels.inputs.ID' | translate }}</th>
+            <td>{{ transfer.id }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Transaction ID' | translate }}</th>
+            <td><mifosx-identifier identifier="{{transfer.transactionId}}" completed="true"></mifosx-identifier>
+            </td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Batch ID' | translate }}</th>
+            <td><mifosx-identifier identifier="{{transfer.batchId}}" completed="true"></mifosx-identifier></td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Client Correlation ID' | translate }}</th>
+            <td><mifosx-identifier identifier="{{transfer.clientCorrelationId}}" completed="true"></mifosx-identifier></td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Amount' | translate }}</th>
+            <td class="r-amount">{{ transfer.amount | formatNumber }} {{ transfer.currency }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Direction' | translate }}</th>
+            <td>{{ transfer.direction }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Payee Dfsp' | translate }}</th>
+            <td>{{ transfer.payeeDfspId }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Payee Fee' | translate }}</th>
+            <td class="r-amount">{{ transfer.payeeFee | formatNumber }} {{transfer.payeeFeeCurrency }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Payee Party' | translate }}</th>
+            <td>{{transfer.payeePartyIdType}} : {{ transfer.payeePartyId }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Payer Dfsp' | translate }}</th>
+            <td>{{ transfer.payerDfspId }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Payee Fee' | translate }}</th>
+            <td class="r-amount">{{ transfer.payeeFee | formatNumber }} {{transfer.payeeFeeCurrency }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Payer Party' | translate }}</th>
+            <td>{{transfer.payerPartyIdType}} : {{ transfer.payerPartyId }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Status' | translate }}</th>
+            <td
+                [ngClass]="{'red': transfer.status==='FAILED','green': transfer.status==='COMPLETED','orange': transfer.status==='ACTION_NEEDED'}">
+                {{ transfer.status }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Start Time' | translate }}</th>
+            <td>{{ convertTimestampToUTCDate(transfer.startedAt) }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ 'labels.inputs.Completed Time' | translate }}</th>
+            <td>{{ convertTimestampToUTCDate(transfer.completedAt) }}</td>
+        </tr>
+    </table>
+
+</div>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'labels.buttons.Close' | translate }}</button>
+</mat-dialog-actions>

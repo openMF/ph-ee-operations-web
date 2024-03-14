@@ -1,6 +1,6 @@
 <div (click)="goToRoute()" class="option {{classFormat}}" [ngClass]="isActive()">
     <h4 matLine class="title" [ngClass]="classFormatTitle">
         <fa-icon *ngIf="section.icon" [icon]="section.icon" size="xl" class="m-r-10"></fa-icon>
-        {{ section.label }}
+        {{ 'labels.menus.' + section.label | translate }}
     </h4>
 </div>

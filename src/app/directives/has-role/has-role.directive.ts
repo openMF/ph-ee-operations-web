@@ -7,8 +7,8 @@ import { environment } from 'environments/environment';
 })
 export class HasRoleDirective {
 
-  public static ADMIN_ROLE = "admin";
-  public static OPERATOR_ROLE = "operator";
+  public static ADMIN_ROLE = 'admin';
+  public static OPERATOR_ROLE = 'operator';
 
   /** User Roles */
   private userRoles: any[];
@@ -22,7 +22,7 @@ export class HasRoleDirective {
   constructor(private templateRef: TemplateRef<any>,
               private viewContainer: ViewContainerRef,
               private authenticationService: AuthenticationService) {
-    let userDetails = this.authenticationService.userDetails;
+    const userDetails = this.authenticationService.userDetails;
     if (environment.auth.enabled === 'false') {
       this.userRoles = [HasRoleDirective.ADMIN_ROLE];
     } else {

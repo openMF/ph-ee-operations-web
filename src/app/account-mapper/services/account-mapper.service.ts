@@ -16,7 +16,7 @@ export class AccountMapperService {
    * @returns {Observable<any>} Users data
    */
   getAccounts(page: number, size: number, orderBy: string, sortOrder: string): Observable<any> {
-    let httpParams = new HttpParams()
+    const httpParams = new HttpParams()
     .set('page', page)
     .set('size', size)
     .set('sortOrder', sortOrder)

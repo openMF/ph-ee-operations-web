@@ -36,16 +36,15 @@ export class SubBatchesComponent implements OnInit {
 
   batchesData: Batch;
 
-  page: number = 0;
-  size: number = 100;
+  page = 0;
+  size = 100;
 
   batchId: string | null = null;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private dates: Dates,
-    private subBatchesService: SubBatchesService) { 
-
+    private subBatchesService: SubBatchesService) {
     this.route.params.subscribe(params => {
       this.batchId = params['batchId'];
     });

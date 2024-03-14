@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 /** Routing Imports */
 import { Routes, RouterModule } from '@angular/router';
 import { Route } from '../core/route/route.service';
-import { extract } from '../core/i18n/i18n.service';
 
 /** Component Imports */
 import { SystemComponent } from './system.component';
@@ -22,7 +21,7 @@ const routes: Routes = [
   Route.withShell([
     {
       path: 'system',
-      data: { title: extract('System'), breadcrumb: 'System' },
+      data: { title: 'System', breadcrumb: 'System' },
       children: [
         {
           path: '',
@@ -30,7 +29,7 @@ const routes: Routes = [
         },
         {
           path: 'roles-and-permissions',
-          data: { title:  extract('Roles and Permissions'), breadcrumb: 'Roles and Permissions' },
+          data: { title:  'Roles and Permissions', breadcrumb: 'Roles and Permissions' },
           children: [
             {
               path: '',
@@ -42,13 +41,13 @@ const routes: Routes = [
             {
               path: 'add',
               component: AddRoleComponent,
-              data: { title: extract('Add Role'), breadcrumb: 'Add' }
+              data: { title: 'Add Role', breadcrumb: 'Add' }
             }
           ]
         },
         {
           path: 'audit-trails',
-          data: { title: extract('Audit Trails'), breadcrumb: 'Audit Trails' },
+          data: { title: 'Audit Trails', breadcrumb: 'Audit Trails' },
           children: [
             {
               path: '',
@@ -60,7 +59,7 @@ const routes: Routes = [
             {
              path: ':id',
              component: ViewAuditComponent,
-             data: { title: extract('View Audit'), routeParamBreadcrumb: 'id' },
+             data: { title: 'View Audit', routeParamBreadcrumb: 'id' },
              resolve: {
                auditTrail: AuditTrailResolver
              }

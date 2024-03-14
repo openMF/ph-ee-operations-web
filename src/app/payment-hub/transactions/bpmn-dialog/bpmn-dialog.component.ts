@@ -12,8 +12,8 @@ export class BpmnDialogComponent implements OnInit {
   datasource: any;
 
   constructor(public dialogRef: MatDialogRef<BpmnDialogComponent>,
-  @Inject(MAT_DIALOG_DATA) public data: any) { 
-  	this.datasource = data.datasource;
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.datasource = data.datasource;
   }
 
   ngOnInit() {

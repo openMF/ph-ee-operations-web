@@ -1,0 +1,9 @@
+<div class="center">
+    <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" 
+    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+          <span class="m-r-10">{{"labels.texts.Drag and Drop the CSV input file, or" | translate}}</span>
+          <button type="button" color="primary" mat-raised-button (click)="openFileSelector()">{{"labels.buttons.Browse Files" | translate}}</button>
+        </ng-template>
+    </ngx-file-drop>
+</div>

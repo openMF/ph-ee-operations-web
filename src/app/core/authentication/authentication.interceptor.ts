@@ -3,21 +3,20 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { SettingsService } from 'app/settings/settings.service';
 
+import * as uuid from 'uuid';
+
 /** Http request options headers. */
 const httpOptions = {
-  headers: {    
-  }
+  headers: { }
 };
 
 /** Authorization header. */
 const authorizationHeader = 'Authorization';
-/** Two factor access token header. */
-const twoFactorAccessTokenHeader = 'Fineract-Platform-TFA-Token';
 
 /**
  * Http Request interceptor to set the request headers.
@@ -38,14 +37,14 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       const url: string = request.url;
       if ((url.indexOf('/batches') > 0) || (url.indexOf('/transactions') > 0)) {
         httpOptions.headers['Platform-TenantId'] = this.settingsService.tenantIdentifier;
-        console.log(url);
         if (!url.endsWith('/batches')) {
-          httpOptions.headers['X-Correlation-ID'] = 'sdasdasasdasu';
+          httpOptions.headers['X-Correlation-ID'] = uuid.v4();
         }
-        delete httpOptions.headers['X-Registering-Institution-ID'];
+        delete httpOptions.headers['x-registering-institution-id'];
+        delete httpOptions.headers['X-CallbackURL'];
       }
       if ((url.indexOf('/vouchers') > 0) || (url.indexOf('/benefici') > 0)) {
-        httpOptions.headers['X-Registering-Institution-ID'] = environment.backend.registeringInstituionId;
+        httpOptions.headers['x-registering-institution-id'] = environment.backend.registeringInstituionId;
         delete httpOptions.headers['X-Correlation-ID'];
         delete httpOptions.headers['Platform-TenantId'];
       }
