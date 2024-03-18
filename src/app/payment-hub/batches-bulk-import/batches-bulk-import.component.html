@@ -16,11 +16,15 @@
       <form [formGroup]="createBatchForm" class="m-b-15">
 
         <div fxLayout="row" fxLayoutAlign="start">
-          <mat-form-field fxFlex="48%">
+          <mat-form-field fxFlex="33%">
             <mat-label>{{"labels.inputs.Institution Id" | translate}}</mat-label>
             <input matInput required formControlName="institutionId">
           </mat-form-field>
-          <mat-form-field fxFlex="48%">
+          <mat-form-field fxFlex="33%">
+            <mat-label>{{"labels.inputs.Purpose" | translate}}</mat-label>
+            <input matInput required formControlName="purpose">
+          </mat-form-field>
+          <mat-form-field fxFlex="33%">
             <mat-label>{{"labels.inputs.Program Id" | translate}}</mat-label>
             <input matInput required formControlName="programId">
           </mat-form-field>
@@ -46,12 +50,12 @@
   
         <ng-container matColumnDef="DebitParty">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Debit Party" | translate}} </th>
-          <td mat-cell *matCellDef="let batch"> {{ batch.debitParty[0].key }} {{ batch.debitParty[0].value }}</td>
+          <td mat-cell *matCellDef="let batch"> <span *ngIf="batch.debitParty">{{ batch.debitParty[0].key }} {{ batch.debitParty[0].value }}</span></td>
         </ng-container>
   
         <ng-container matColumnDef="subType">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.SubType" | translate}} </th>
-            <td mat-cell *matCellDef="let batch">  </td>
+            <td mat-cell *matCellDef="let batch"> <span *ngIf="batch.subType">{{ batch.subType }}</span> </td>
         </ng-container>
   
         <ng-container matColumnDef="paymentMode">
@@ -91,4 +95,4 @@
         </button>
       </div>
     </div>
-  </div>
+</div>

@@ -60,7 +60,7 @@ const routes: Routes = [
         {
           path: 'transfers',
           data: { breadcrumb: {alias: 'Transfers'} },
-          component: TransfersComponent,
+          component: TransfersComponent
         },
         {
           path: 'transactions',

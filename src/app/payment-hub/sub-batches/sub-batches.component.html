@@ -60,37 +60,37 @@
   </mat-accordion>
 
   <mat-card class="container">
+    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="batchReferenceNumber">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Batch Reference Number" | translate}} </th>
         <td mat-cell *matCellDef="let item"> 
-          <mifosx-identifier identifier="{{item.batchId}}"></mifosx-identifier> 
+          <mifosx-identifier identifier="{{item.subBatchId}}"></mifosx-identifier> 
         </td>
       </ng-container>
 
       <ng-container matColumnDef="startedAt">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Start Time" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ formatDate(convertTimestampToUTCDate(item.startedAt)) }}
+        <td mat-cell *matCellDef="let item"> {{ item.startedAt | datetimeFormat }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="completedAt">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Completed Time" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ formatDate(convertTimestampToUTCDate(item.completedAt)) }}
+        <td mat-cell *matCellDef="let item"> {{ item.completedAt | datetimeFormat }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="sourceMinistry">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Source Ministry" | translate}} </th>
-        <td mat-cell *matCellDef="let item" matTooltip={{item.transactionId}}> {{
-          shortenValue(item.transactionId) }} </td>
+        <td mat-cell *matCellDef="let item" matTooltip={{item.transactionId}}> </td>
       </ng-container>
 
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Bulk Amount" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ item.amount | number }} </td>
+        <td mat-cell *matCellDef="let item"> {{ item.totalAmount | number }} </td>
       </ng-container>
 
       <ng-container matColumnDef="payerFSP">
@@ -106,12 +106,12 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="select-row"></tr>
+      <tr mat-row *matRowDef="let item; columns: displayedColumns;" (click)="gotoSubBatchesDetails(item.subBatchId)" class="select-row"></tr>
 
     </table>
 
-    <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]"
-      showFirstLastButtons='false'></mat-paginator>
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[50, 100, 200]" [length]="totalRows" (page)="pageChanged($event)"
+      showFirstLastButtons></mat-paginator>
 
   </mat-card>
 

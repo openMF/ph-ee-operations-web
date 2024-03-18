@@ -76,7 +76,7 @@
   
         <ng-container matColumnDef="functionalId">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Functional ID" | translate}} </th>
-          <td mat-cell *matCellDef="let item">  </td>
+          <td mat-cell *matCellDef="let item"> {{ item.payeeFunctionalID }} </td>
         </ng-container>
   
         <ng-container matColumnDef="status">

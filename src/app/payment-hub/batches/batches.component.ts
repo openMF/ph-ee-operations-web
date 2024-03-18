@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SubBatchesService } from '../sub-batches/sub-batches.service';
 
 @Component({
   selector: 'mifosx-batches',
@@ -88,6 +89,16 @@ export class BatchesComponent implements OnInit {
       return 'yellow';
     }
     return 'red';
+  }
+
+  statusLabel(item: BatchData): string {
+    if (item.completed) {
+      return 'COMPLETED';
+    }
+    if (item.ongoing) {
+      return 'ONGOING';
+    }
+    return 'FAILED';
   }
 
   gotoSubBatches(batchId: string): void {

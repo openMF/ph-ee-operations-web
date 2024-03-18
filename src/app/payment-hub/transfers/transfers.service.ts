@@ -25,4 +25,8 @@ export class TransfersService {
     return this.http.get(this.apiPrefix + '/transfers', { params: httpParams, headers: headers });
   }
 
+  getSubBatchSumaryDetail(batchId: string, subBatchId: string): Observable<any> {
+    return this.http.get(this.apiPrefix + '/batches/' + batchId + '/subBatches/' + subBatchId);
+  }
+
 }

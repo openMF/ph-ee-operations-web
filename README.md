@@ -68,8 +68,17 @@ The environment variables to be set are:
 `PH_OPS_BACKEND_SERVER_URL`
 Setting for the Payment Hub server url to Operations backend services
 
+`PH_OPS_BULK_CONNECTOR_URL`
+Setting for the Payment Hub server url to Bulk Import Batch creation backend services
+
+`PH_OPS_BATCH_KEY`
+Setting for the Private Key used to sign the Bulk Import Batch creation
+
 `PH_VOU_BACKEND_SERVER_URL`
 Setting for the Payment Hub server url to Vouchers backend services
+
+`PH_VOU_CALLBACK_URL`
+Setting for the callback url to Vouchers creation process
 
 `PH_ACT_BACKEND_SERVER_URL`
 Setting for the Payment Hub server url to Account Management backend services

@@ -2,7 +2,7 @@
 <div class="container">
     <xng-breadcrumb class="breadcrumb" [separator]="iconTemplate">
         <ng-container *xngBreadcrumbItem="let breadcrumb">
-            <ng-container>{{ "labels.breadcrumbs." + breadcrumb | translate }}</ng-container>
+            <ng-container>{{ validateLabel(breadcrumb) | translate }}</ng-container>
         </ng-container>
     </xng-breadcrumb>
     <ng-template #iconTemplate>

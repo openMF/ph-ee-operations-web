@@ -11,8 +11,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { environment } from 'environments/environment';
 
 import { sha3_256 } from 'js-sha3';
-import * as Forge from 'node-forge';
 import * as uuid from 'uuid';
+import { SignatureService } from '../services/signature.service';
 
 @Component({
   selector: 'mifosx-batches-bulk-import',
@@ -32,15 +32,19 @@ export class BatchesBulkImportComponent implements OnInit {
   pageSize = 10;
   isLoading = false;
 
+  totalAmount = 0;
+
   constructor(private alertService: AlertService,
     private csvParse: NgxCsvParser,
     private formBuilder: UntypedFormBuilder,
     private batchesService: BatchesService,
-    private settingsService: SettingsService) { }
+    private settingsService: SettingsService,
+    private signatureService: SignatureService) { }
 
   ngOnInit(): void {
     this.createBatchForm = this.formBuilder.group({
       'institutionId': [environment.backend.registeringInstituionId, Validators.required],
+      'purpose': ['', Validators.required],
       'programId': ['', Validators.required]
     });
   }
@@ -71,10 +75,10 @@ export class BatchesBulkImportComponent implements OnInit {
             paymentMode: item['Payment Mode'],
             currency: item['Currency'],
             amount: item['Amount'],
+            subType: item['SubType'],
             descriptionText: item['Description'] || null
           });
         });
-        // subType: item['SubType'] || null,
         this.files.push(file);
         this.totalRows = this.batchInstructions.length;
 
@@ -82,7 +86,6 @@ export class BatchesBulkImportComponent implements OnInit {
         this.isLoading = false;
       });
     this.alertService.alert({ type: 'Voucher File Upload', message: 'Successfully parsed!' });
-
   }
 
   downloadTemplate(): void {
@@ -95,20 +98,24 @@ export class BatchesBulkImportComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
 
-  sendData(): void {
+  async sendData() {
     const institutionId: string = this.createBatchForm.value.institutionId;
+    const purpose: string = this.createBatchForm.value.purpose;
     const programId: string = this.createBatchForm.value.programId;
     const correlationID: string = uuid.v4();
 
-    const payload = `${correlationID}:${this.settingsService.tenantIdentifier}:${JSON.stringify(this.batchInstructions)}`;
+    const body: any = this.batchInstructions;
+    const payload = `${correlationID}:${this.settingsService.tenantIdentifier}:${JSON.stringify(body)}`;
     const hashSHA3_256: any = sha3_256(payload);
-    console.log(environment.backend.signatureBatchKey.replace(/\\n/g, '\n'));
-    const rsa = Forge.pki.publicKeyFromPem(environment.backend.signatureBatchKey.replace(/\\n/g, '\n'));
-    const signature: string = window.btoa(rsa.encrypt(hashSHA3_256));
-    console.log(signature); 
-
-    this.batchesService.createBatch(correlationID, institutionId, programId, signature, payload).subscribe((response: any) => {
-      console.log(response);
+    this.signatureService.createSignature({hash: hashSHA3_256}).subscribe((signResponse: any) => {
+      const signature = signResponse.signature;
+      this.batchesService.createBatch(correlationID, institutionId, purpose, programId, signature, body)
+        .subscribe((batchResponse: any) => {
+          console.log(batchResponse);
+          const msg = '\n Request Id: ';
+          this.alertService.alert({ type: 'Batch File Upload', message: msg });
+          this.clearData();
+      });
     });
   }
 
@@ -117,6 +124,7 @@ export class BatchesBulkImportComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.batchInstructions);
     this.totalRows = 0;
     this.files = [];
+    this.createBatchForm.patchValue({'purpose': ''});
     this.createBatchForm.patchValue({'programId': ''});
     this.createBatchForm.markAsUntouched();
   }

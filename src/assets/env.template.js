@@ -3,8 +3,8 @@
   
     // BackEnd Environment variables
     window["env"]["serverApiUrlOps"] = '$PH_OPS_BACKEND_SERVER_URL';
-    window["env"]["signatureBatchKey"] = '$PH_OPS_BATCH_KEY';
     window["env"]["bulkConnectorOps"] = '$PH_OPS_BULK_CONNECTOR_URL';
+    window['env']['signatureApiUrl'] = '$PH_OPS_SIGNATURE_URL';
 
     window["env"]["serverApiUrlVou"] = '$PH_VOU_BACKEND_SERVER_URL';
     window["env"]["callbackUrlVou"] = '$PH_VOU_CALLBACK_URL';

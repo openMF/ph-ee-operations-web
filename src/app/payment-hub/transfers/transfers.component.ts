@@ -8,6 +8,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ViewTransferDetailsComponent } from './view-transfer-details/view-transfer-details.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'mifosx-transfers',
@@ -56,31 +57,49 @@ export class TransfersComponent implements OnInit {
   pageSize = 50;
   isLoading = false;
 
-  constructor(private dates: Dates,
+  batchId: string;
+  subBatchId: string;
+
+  constructor(private route: ActivatedRoute,
+    private dates: Dates,
     private dialog: MatDialog,
     private transfersService: TransfersService) { }
 
   ngOnInit(): void {
+    this.route.queryParams
+      .subscribe((params: any) => {
+        this.batchId = params.b ? params.b : null;
+        this.subBatchId = params.s ? params.s : null;
+      });
     this.getBatches();
   }
 
   getBatches(): void {
     this.isLoading = true;
-    this.transfersService.getTransfers(this.currentPage, this.pageSize)
-    .subscribe((transfers: TransferData) => {
-      const content: Transfer[] = [];
-      transfers.content.forEach((t: Transfer) => {
-        t.amount = t.amount * 1;
+    if (this.subBatchId === '') {
+      this.transfersService.getTransfers(this.currentPage, this.pageSize)
+      .subscribe((transfers: TransferData) => {
+        const content: Transfer[] = [];
+        transfers.content.forEach((t: Transfer) => {
+          t.amount = t.amount * 1;
 
+        });
+        this.dataSource = new MatTableDataSource(transfers.content);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.totalRows = transfers.totalElements;
+        this.isLoading = false;
+      }, (error: any) => {
+        this.isLoading = false;
       });
-      this.dataSource = new MatTableDataSource(transfers.content);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.totalRows = transfers.totalElements;
-      this.isLoading = false;
-    }, (error: any) => {
-      this.isLoading = false;
-    });
+    } else {
+      this.transfersService.getSubBatchSumaryDetail(this.batchId, this.subBatchId)
+      .subscribe((transfers: any) => {
+        this.isLoading = false;
+      }, (error: any) => {
+        this.isLoading = false;
+      });
+    }
   }
 
   convertTimestampToUTCDate(timestamp: any) {

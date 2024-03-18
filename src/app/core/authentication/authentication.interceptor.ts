@@ -33,6 +33,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    * Intercepts a Http request and sets the request headers.
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    delete httpOptions.headers['X-Correlation-ID'];
     if (this.settingsService.tenantIdentifier) {
       const url: string = request.url;
       if ((url.indexOf('/batches') > 0) || (url.indexOf('/transactions') > 0)) {

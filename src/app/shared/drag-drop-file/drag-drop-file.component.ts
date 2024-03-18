@@ -22,22 +22,17 @@ export class DragDropFileComponent {
         fileEntry.file((file: File) => {
 
           // Here you can access the real file
-          // console.log(droppedFile.relativePath, file);
           this.onFileChange.emit(file);
         });
       } else {
         // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
       }
     }
   }
 
-  public fileOver(event: any) {
-    // console.log(event);
-  }
+  public fileOver(event: any) { }
 
-  public fileLeave(event: any) {
-    // console.log(event);
-  }
+  public fileLeave(event: any) { }
+
 }

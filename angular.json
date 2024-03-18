@@ -45,7 +45,9 @@
               "jwt-decode",
               "js-sha256",
               "base64-js",
-              "clone-deep"
+              "clone-deep",
+              "uuid",
+              "js-sha3"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
