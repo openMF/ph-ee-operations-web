@@ -60,6 +60,7 @@ export class SubBatchesComponent implements OnInit {
     private subBatchesService: SubBatchesService) {
     this.route.params.subscribe(params => {
       this.batchId = params['batchId'];
+      console.log(this.batchId);
     });
   }
 

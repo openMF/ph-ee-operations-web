@@ -3,7 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Dates } from 'app/core/utils/dates';
 import { TransfersService } from './transfers.service';
-import { Transfer, TransferData } from './model/transfer.model';
+import { SubBatchDetail, Transfer, TransferData } from './model/transfer.model';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
@@ -76,7 +76,7 @@ export class TransfersComponent implements OnInit {
 
   getBatches(): void {
     this.isLoading = true;
-    if (this.subBatchId === '') {
+    if (this.subBatchId === null) {
       this.transfersService.getTransfers(this.currentPage, this.pageSize)
       .subscribe((transfers: TransferData) => {
         const content: Transfer[] = [];
@@ -94,7 +94,11 @@ export class TransfersComponent implements OnInit {
       });
     } else {
       this.transfersService.getSubBatchSumaryDetail(this.batchId, this.subBatchId)
-      .subscribe((transfers: any) => {
+      .subscribe((subBatchData: SubBatchDetail) => {
+        this.dataSource = new MatTableDataSource(subBatchData.instructionList);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.totalRows = subBatchData.totalInstructionCount;
         this.isLoading = false;
       }, (error: any) => {
         this.isLoading = false;
