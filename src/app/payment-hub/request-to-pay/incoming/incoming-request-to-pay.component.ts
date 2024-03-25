@@ -9,21 +9,22 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
-import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from "../service/request-to-pay.service";
-import { StateService } from '../../state.service';
+import { StateService } from '../../common/state.service';
+import { CommonService } from "app/payment-hub/common/common.service";
 
 //import { TransactionDetails } from '../../transacions/model/transaction-details.model';
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
-import { businessProcessStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from "../model/dfsp.model";
 import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
+import { OptionData } from "app/shared/models/general.models";
 
 @Component({
   selector: "mifosx-incoming-request-to-pay",
@@ -41,7 +42,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
-  businessProcessStatusData = paymenStatuses;
+  businessProcessStatusData: OptionData[];
   csvExport: [];
   csvName: string;
   lengthElement: number;
@@ -119,6 +120,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private router: Router,
     private stateService: StateService,
+    private commonService: CommonService,
     private http: HttpClient,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
@@ -147,6 +149,18 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getRequestsPay();
+    this.setBusinessProcessStatusData();
+  }
+
+  setBusinessProcessStatusData(): void {
+    this.commonService.getBusinessProcessStatusData('INCOMING', 'REQUEST_TO_PAY')
+      .subscribe(response => {
+        this.businessProcessStatusData = response.map(option => ({
+          option: option,
+          value: option,
+          css: ''
+        }))
+      });
   }
 
   ngAfterViewInit() {

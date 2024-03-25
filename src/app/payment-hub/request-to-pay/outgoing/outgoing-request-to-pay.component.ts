@@ -14,14 +14,15 @@ import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
-import { StateService } from '../../state.service';
+import { StateService } from '../../common/state.service';
+import { CommonService } from 'app/payment-hub/common/common.service';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
-import { businessProcessStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from '../model/dfsp.model';
 import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
+import { OptionData } from 'app/shared/models/general.models';
 
 @Component({
   selector: 'mifosx-outgoing-request-to-pay',
@@ -40,7 +41,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData:  DfspEntry[];
   transactionStatusData = statuses;
-  businessProcessStatusData = paymenStatuses;
+  businessProcessStatusData: OptionData[];
   /** Columns to be displayed in request to pay table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payerDfspId','payerDfspName', 'amount', 'currency', 'status', 'actions'];
   /** Data source for request to pay table. */
@@ -114,6 +115,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private router: Router,
     private stateService: StateService,
+    private commonService: CommonService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -141,6 +143,18 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getRequestsPay();
+    this.setBusinessProcessStatusData();
+  }
+
+  setBusinessProcessStatusData(): void {
+    this.commonService.getBusinessProcessStatusData('OUTGOING', 'REQUEST_TO_PAY')
+      .subscribe(response => {
+        this.businessProcessStatusData = response.map(option => ({
+          option: option,
+          value: option,
+          css: ''
+        }))
+      });
   }
 
   ngAfterViewInit() {

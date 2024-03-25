@@ -12,7 +12,8 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 
 /** Custom Services */
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
-import { StateService } from '../../state.service';
+import { StateService } from '../../common/state.service';
+import { CommonService } from 'app/payment-hub/common/common.service';
 
 /** Custom Data Source */
 import { RecallsDataSource } from '../dataSource/recalls.datasource';
@@ -21,9 +22,9 @@ import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as transactionStatuses } from '../helper/recall.helper';
 import { outgoingRecallStatusData as recallStatuses } from '../helper/recall.helper';
 import { recallDirectionData as recallDirections } from '../helper/recall.helper';
-import { businessProcessStatusData as businessProcessStatuses } from '../helper/recall.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/recall.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
+import { OptionData } from 'app/shared/models/general.models';
 
 /**
  * Outgoing Recalls component.
@@ -47,7 +48,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   recallStatusData = recallStatuses;
   recallDirectionData = recallDirections;
   transactionStatusData = transactionStatuses;
-  businessProcessStatusData = businessProcessStatuses;
+  businessProcessStatusData: OptionData[];
   paymentSchemeData = paymentSchemes;
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'recallStatus', 'recallDirection','actions'];
@@ -137,6 +138,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private router: Router,
     private stateService: StateService,
+    private commonService: CommonService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -179,6 +181,18 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     //this.setFilteredCurrencies();
     //this.setFilteredDfspEntries();
     this.getRecalls();
+    this.setBusinessProcessStatusData();
+  }
+
+  setBusinessProcessStatusData(): void {
+    this.commonService.getBusinessProcessStatusData('OUTGOING', 'RECALL')
+      .subscribe(response => {
+        this.businessProcessStatusData = response.map(option => ({
+          option: option,
+          value: option,
+          css: ''
+        }))
+      });
   }
 
   ngAfterViewInit() {
