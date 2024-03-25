@@ -11,7 +11,6 @@ import { Transactions } from '../model/transaction.model';
 import { TransactionDetails } from '../model/transaction-details.model';
 import { Currency } from '../model/currency.model';
 import { DfspEntry } from '../model/dfsp.model';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 /**
  * Payment Hub - Transactions.
@@ -87,4 +86,5 @@ export class TransactionsService {
       .get('/assets/mock/payment-hub/currencies.mock.json')
       .pipe(map((currencies: any) => currencies as Currency[]));
   }
+  
 }

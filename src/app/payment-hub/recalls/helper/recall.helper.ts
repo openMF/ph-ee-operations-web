@@ -67,14 +67,6 @@ export const recallDirectionData: OptionData[] = [
     }
 ];
 
-export const businessProcessStatusData: OptionData[] = [
-    {option: 'Received', value: 'RECEIVED', css: 'green'},
-    {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
-    {option: 'In progress', value: 'IN_PROGRESS', css: 'green'},
-    {option: 'Suspended', value: 'SUSPENDED', css: 'green'},
-    {option: 'Waiting for Fincrime decision', value: 'WAITING_FOR_FINCRIME_DECISION', css: 'green'}
-];
-
 export const paymentSchemeData: OptionData[] = [
     {option: 'HCT_INST:RECALL', value: 'HCT_INST:RECALL', css: 'green'},
     {option: 'IG2:RECALL', value: 'IG2:RECALL', css: 'green'}

@@ -11,7 +11,8 @@ import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
-import { StateService } from '../../state.service';
+import { StateService } from '../../common/state.service';
+import { CommonService } from 'app/payment-hub/common/common.service';
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
@@ -19,9 +20,9 @@ import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { outgoingbusinessProcessStatusData as businessProcessStatuses } from '../helper/transaction.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
+import { OptionData } from 'app/shared/models/general.models';
 
 /**
  * Transactions component.
@@ -43,7 +44,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
-  businessProcessStatusData = businessProcessStatuses;
+  businessProcessStatusData: OptionData[];
   paymentSchemeData = paymentSchemes;
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'acceptanceDate', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'actions'];
@@ -133,6 +134,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private router: Router,
     private stateService: StateService,
+    private commonService: CommonService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -176,6 +178,18 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     //this.setFilteredCurrencies();
     //this.setFilteredDfspEntries();
     this.getTransactions();
+    this.setBusinessProcessStatusData();
+  }
+
+  setBusinessProcessStatusData(): void {
+    this.commonService.getBusinessProcessStatusData('OUTGOING', 'TRANSFER')
+      .subscribe(response => {
+        this.businessProcessStatusData = response.map(option => ({
+          option: option,
+          value: option,
+          css: ''
+        }))
+      });
   }
 
   ngAfterViewInit() {
