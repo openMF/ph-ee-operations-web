@@ -1,4 +1,4 @@
-import { OptionData } from "app/shared/models/general.models";
+import { CodeName, OptionData } from "app/shared/models/general.models";
 
 export const transactionStatusData: OptionData[] = [
     {
@@ -23,7 +23,7 @@ export const transactionStatusData: OptionData[] = [
     }
 ];
 
-export const incomingPaymentStatusData: OptionData[] = [
+export const incomingbusinessProcessStatusData: OptionData[] = [
     {option: 'Received', value: 'RECEIVED', css: 'green'},
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'Transfer to disposal', value: 'TRANSFER_TO_DISPOSAL', css: 'green'},
@@ -33,7 +33,7 @@ export const incomingPaymentStatusData: OptionData[] = [
     {option: 'Unsuccessful transfer', value: 'UNSUCCESSFUL_TRANSFER', css: 'red'}
 ];
 
-export const outgoingPaymentStatusData: OptionData[] = [
+export const outgoingbusinessProcessStatusData: OptionData[] = [
     {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
     {option: 'Exception', value: 'EXCEPTION', css: 'black'},
     {option: 'In progress', value: 'IN_PROGRESS', css: 'blue'},
@@ -48,4 +48,13 @@ export const paymentSchemeData: OptionData[] = [
     {option: 'IG2', value: 'IG2', css: 'green'},
     {option: 'ON_US', value: 'ON_US', css: 'green'},
     {option: 'IG2:RETURN', value: 'IG2:RETURN', css: 'green'}
+];
+
+export const recallReasonData: CodeName[] = [ 
+    {code: 'DUPL', name: 'DUPL'},
+    {code: 'CUST', name: 'CUST'},
+    {code: 'FRAD', name: 'FRAD'},
+    {code: 'TECH', name: 'TECH'},
+    {code: 'AM09', name: 'AM09'},
+    {code: 'AC03', name: 'AC03'}
 ];

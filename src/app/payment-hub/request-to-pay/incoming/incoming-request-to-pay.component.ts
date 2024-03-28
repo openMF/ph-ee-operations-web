@@ -3,30 +3,35 @@ import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+
 /** rxjs Imports */
 import { merge } from 'rxjs';
-import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from "../service/request-to-pay.service";
+import { StateService } from '../../common/state.service';
+import { CommonService } from "app/payment-hub/common/common.service";
+
 //import { TransactionDetails } from '../../transacions/model/transaction-details.model';
 import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
-import { paymentStatusData as paymenStatuses } from "../helper/incoming-request.helper";
 
 import { DfspEntry } from "../model/dfsp.model";
 import { RequestToPayDataSource } from "../dataSource/requestToPay.datasource";
+import { OptionData } from "app/shared/models/general.models";
+
 @Component({
   selector: "mifosx-incoming-request-to-pay",
   templateUrl: "./incoming-request-to-pay.component.html",
   styleUrls: ["./incoming-request-to-pay.component.scss"],
 })
-export class IncomingRequestToPayComponent implements OnInit {
+export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   /** Minimum transaction date allowed. */
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
@@ -37,7 +42,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
-  paymentStatusData = paymenStatuses;
+  businessProcessStatusData: OptionData[];
   csvExport: [];
   csvName: string;
   lengthElement: number;
@@ -79,7 +84,7 @@ export class IncomingRequestToPayComponent implements OnInit {
       value: "",
     },
     {
-      type: 'paymentStatus',
+      type: 'businessProcessStatus',
       value: ''
     },
     {
@@ -114,6 +119,8 @@ export class IncomingRequestToPayComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
+    private stateService: StateService,
+    private commonService: CommonService,
     private http: HttpClient,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
@@ -122,7 +129,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         payerDfspId: new FormControl(),
         payerDfspName: new FormControl(),
         status: new FormControl(),
-        paymentStatus: new FormControl(),
+        businessProcessStatus: new FormControl(),
         amountFrom: new FormControl(),
         amountTo: new FormControl(),
         currencyCode: new FormControl(),
@@ -142,9 +149,30 @@ export class IncomingRequestToPayComponent implements OnInit {
 
   ngOnInit() {
     this.getRequestsPay();
+    this.setBusinessProcessStatusData();
+  }
+
+  setBusinessProcessStatusData(): void {
+    this.commonService.getBusinessProcessStatusData('INCOMING', 'REQUEST_TO_PAY')
+      .subscribe(response => {
+        this.businessProcessStatusData = response.map(option => ({
+          option: option,
+          value: option,
+          css: ''
+        }))
+      });
   }
 
   ngAfterViewInit() {
+    const storedState = this.stateService.getState('incoming-requests');
+    if (storedState) {
+      this.filterForm.patchValue(storedState.filterForm);
+      this.filterRequestsBy = storedState.filterBy;
+      this.sort.active = storedState.sort.active;
+      this.sort.direction = storedState.sort.direction;
+      this.paginator.pageIndex = storedState.paginator.pageIndex;
+      this.paginator.pageSize = storedState.paginator.pageSize;
+    }
     this.controlChange();
   }
 
@@ -215,12 +243,12 @@ export class IncomingRequestToPayComponent implements OnInit {
       )
       .subscribe();
 
-    this.filterForm.controls['paymentStatus'].valueChanges
+    this.filterForm.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, "paymentStatus");
+          this.applyFilter(filterValue, "businessProcessStatus");
         })
       )
       .subscribe();
@@ -284,8 +312,11 @@ export class IncomingRequestToPayComponent implements OnInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadRequestsPayPage())
-      )
+        tap(() => {
+          this.loadRequestsPayPage();
+          this.stateService.setState('incoming-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
+        })
+        )
       .subscribe();
 
     this.loadRequestsPayPage();
@@ -334,8 +365,15 @@ export class IncomingRequestToPayComponent implements OnInit {
       (filter) => filter.type === property
     );
     this.filterRequestsBy[findIndex].value = filterValue;
+    this.stateService.setState('incoming-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
     this.loadRequestsPayPage();
   }
+
+  setFilter(filterValue: string, property: string) {
+    const findIndex = this.filterRequestsBy.findIndex(filter => filter.type === property);
+    this.filterRequestsBy[findIndex].value = filterValue;
+  }
+
   /**
    * Displays office name in form control input.
    * @param {any} office Office data.
@@ -396,10 +434,14 @@ export class IncomingRequestToPayComponent implements OnInit {
     }
   }
 
+  /**
+   * Initializes the data source for transactions table and loads the first page.
+   */
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
-    if (this.sort && this.paginator) {
-      this.dataSource.getRequestsPay(this.filterRequestsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    const storedState = this.stateService.getState('incoming-requests');
+    if (storedState) {
+      this.dataSource.getRequestsPay(storedState.filterBy, storedState.sort.active, storedState.sort.direction, storedState.paginator.pageIndex, storedState.paginator.pageSize);
     } else {
       this.dataSource.getRequestsPay(this.filterRequestsBy, '', '', 0, 10);
     }
@@ -407,7 +449,7 @@ export class IncomingRequestToPayComponent implements OnInit {
 
   filterRequestsByProperty(filterValue: string, property: string) {
     this.filterForm.controls[property].setValue(filterValue);
-    this.applyFilter(filterValue, property);
+    this.setFilter(property, filterValue);
   }
 
   navigateToTransactionsPage(transactionId: string) {
@@ -422,6 +464,7 @@ export class IncomingRequestToPayComponent implements OnInit {
         filter.value = '';
       }
     });
+    this.stateService.clearState('incoming-requests');
     this.controlChange();
   }
 }

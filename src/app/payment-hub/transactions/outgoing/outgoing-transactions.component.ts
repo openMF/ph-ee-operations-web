@@ -11,6 +11,8 @@ import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
+import { StateService } from '../../common/state.service';
+import { CommonService } from 'app/payment-hub/common/common.service';
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
@@ -18,9 +20,9 @@ import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { outgoingPaymentStatusData as paymentStatuses } from '../helper/transaction.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
 import { RetryResolveDialogComponent } from '../../common/retry-resolve-dialog/retry-resolve-dialog.component';
+import { OptionData } from 'app/shared/models/general.models';
 
 /**
  * Transactions component.
@@ -42,7 +44,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
-  paymentStatusData = paymentStatuses;
+  businessProcessStatusData: OptionData[];
   paymentSchemeData = paymentSchemes;
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = ['startedAt', 'completedAt', 'acceptanceDate', 'transactionId', 'payerPartyId', 'payeePartyId', 'payeeDfspId', 'payeeDfspName', 'amount', 'currency', 'status', 'actions'];
@@ -75,7 +77,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       value: ''
     },
     {
-      type: 'paymentStatus',
+      type: 'businessProcessStatus',
       value: ''
     },
     {
@@ -131,6 +133,8 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
+    private stateService: StateService,
+    private commonService: CommonService,
     private formBuilder: FormBuilder) {
       this.filterForm = this.formBuilder.group({
         payeePartyId: new FormControl(),
@@ -138,7 +142,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         payeeDfspId: new FormControl(),
         payeeDfspName: new FormControl(),
         status: new FormControl(),
-        paymentStatus: new FormControl(),
+        businessProcessStatus: new FormControl(),
         paymentScheme: new FormControl(),
         amountFrom: new FormControl(),
         amountTo: new FormControl(),
@@ -160,6 +164,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       this.route.queryParams.subscribe(params => {
         const transactionId = params['transactionId'];
         if (transactionId) {
+          this.stateService.clearState('outgoing-transactions');
           this.filterForm.controls['transactionId'].setValue(transactionId);
           this.setFilter(transactionId, 'transactionId');
         }
@@ -170,12 +175,33 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
    * Sets filtered offices and gl accounts for autocomplete and journal entries table.
    */
   ngOnInit() {
-    this.setFilteredCurrencies();
-    this.setFilteredDfspEntries();
+    //this.setFilteredCurrencies();
+    //this.setFilteredDfspEntries();
     this.getTransactions();
+    this.setBusinessProcessStatusData();
+  }
+
+  setBusinessProcessStatusData(): void {
+    this.commonService.getBusinessProcessStatusData('OUTGOING', 'TRANSFER')
+      .subscribe(response => {
+        this.businessProcessStatusData = response.map(option => ({
+          option: option,
+          value: option,
+          css: ''
+        }))
+      });
   }
 
   ngAfterViewInit() {
+    const storedState = this.stateService.getState('outgoing-transactions');
+    if (storedState) {
+      this.filterForm.patchValue(storedState.filterForm);
+      this.filterTransactionsBy = storedState.filterBy;
+      this.sort.active = storedState.sort.active;
+      this.sort.direction = storedState.sort.direction;
+      this.paginator.pageIndex = storedState.paginator.pageIndex;
+      this.paginator.pageSize = storedState.paginator.pageSize;
+    }
     this.controlChange();
   }
 
@@ -249,12 +275,12 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['paymentStatus'].valueChanges
+    this.filterForm.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(filterValue, 'paymentStatus');
+          this.applyFilter(filterValue, 'businessProcessStatus');
         })
       )
       .subscribe();
@@ -354,8 +380,11 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadTransactionsPage())
-      )
+        tap(() => {
+          this.loadTransactionsPage();
+          this.stateService.setState('outgoing-transactions', this.filterForm, this.filterTransactionsBy, this.sort, this.paginator);
+        })
+        )
       .subscribe();
 
     this.loadTransactionsPage();
@@ -380,6 +409,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
     this.paginator.pageIndex = 0;
     const findIndex = this.filterTransactionsBy.findIndex(filter => filter.type === property);
     this.filterTransactionsBy[findIndex].value = filterValue;
+    this.stateService.setState('outgoing-transactions', this.filterForm, this.filterTransactionsBy, this.sort, this.paginator);
     this.loadTransactionsPage();
   }
 
@@ -473,12 +503,13 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Initializes the data source for journal entries table and loads the first page.
+   * Initializes the data source for transactions table and loads the first page.
    */
   getTransactions() {
     this.dataSource = new TransactionsDataSource(this.transactionsService);
-    if (this.sort && this.paginator) {
-      this.dataSource.getTransactions(this.filterTransactionsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    const storedState = this.stateService.getState('outgoing-transactions');
+    if (storedState) {
+      this.dataSource.getTransactions(storedState.filterBy, storedState.sort.active, storedState.sort.direction, storedState.paginator.pageIndex, storedState.paginator.pageSize);
     } else {
       this.dataSource.getTransactions(this.filterTransactionsBy, '', '', 0, 10);
     }
@@ -505,6 +536,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         filter.value = '';
       }
     });
+    this.stateService.clearState('outgoing-transactions');
     this.controlChange();
   }
 

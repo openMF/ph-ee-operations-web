@@ -47,12 +47,12 @@ export const outgoingRecallStatusData: OptionData[] = [
 export const recallDirectionData: OptionData[] = [
     {
         option: 'AFR incoming recall',
-        value: 'AFR.incoming.recall',
+        value: 'HCT_INST.incoming.recall',
         css: 'black'
     },
     {
         option: 'AFR outgoing recall',
-        value: 'AFR.outgoing.recall',
+        value: 'HCT_INST.outgoing.recall',
         css: 'black'
     },
     {
@@ -65,14 +65,6 @@ export const recallDirectionData: OptionData[] = [
         value: 'IG2.outgoing.recall',
         css: 'black'
     }
-];
-
-export const paymentStatusData: OptionData[] = [
-    {option: 'Received', value: 'RECEIVED', css: 'green'},
-    {option: 'Successful transfer', value: 'SUCCESSFUL_TRANSFER', css: 'green'},
-    {option: 'In progress', value: 'IN_PROGRESS', css: 'green'},
-    {option: 'Suspended', value: 'SUSPENDED', css: 'green'},
-    {option: 'Waiting for Fincrime decision', value: 'WAITING_FOR_FINCRIME_DECISION', css: 'green'}
 ];
 
 export const paymentSchemeData: OptionData[] = [
