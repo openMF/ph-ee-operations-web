@@ -13,7 +13,7 @@ import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
-import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 import { CommonService } from 'app/payment-hub/common/common.service';
 
@@ -327,7 +327,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
   }
 
   formatDate(date: string): string {
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   shortenValue(value: any) {

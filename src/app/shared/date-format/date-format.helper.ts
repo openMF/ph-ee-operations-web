@@ -12,13 +12,21 @@ export function formatDateForDisplay(date: string): string {
     return date;
 }
 
-export function convertMomentToDate(moment: Moment): string {
-    const year = moment.year();
-    const month = (moment.month() + 1).toString().padStart(2, '0');
-    const day = moment.date().toString().padStart(2, '0');
-    const hours = moment.hours().toString().padStart(2, '0');
-    const minutes = moment.minutes().toString().padStart(2, '0');
-    const seconds = moment.seconds().toString().padStart(2, '0');
+export function convertUtcToLocal(utcDateString: string): string {
+  if (utcDateString) {
+    const [datePart, timePart] = utcDateString.split('T');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hour, minute, second] = timePart.replace('Z', ' ').split(':').map(Number);
+    const utcDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+    const localDate = new Date(utcDate.getTime() - (utcDate.getTimezoneOffset() * 60000));
+    const formattedDate = localDate.toISOString().slice(0, 19).replace('T', ' ').replace('Z', ' ');
+    return formattedDate;
+  }
+}
 
-    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+export function convertMomentToDate(moment: Moment): string {
+    if (moment) {
+      const isoDate = moment.toISOString().slice(0, 19);
+      return `${isoDate}Z`;
+    }
 }

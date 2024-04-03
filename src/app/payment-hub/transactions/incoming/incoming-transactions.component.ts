@@ -16,7 +16,7 @@ import { CommonService } from '../../common/common.service';
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
 import { paymentSchemeData as paymentSchemes } from '../helper/transaction.helper';
 import { TransactionsService } from '../service/transactions.service';
@@ -456,7 +456,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   formatDate(date: string): string{
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   /**

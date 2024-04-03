@@ -11,7 +11,7 @@ import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
-import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 import { CommonService } from 'app/payment-hub/common/common.service';
 
@@ -460,7 +460,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
   }
 
   formatDate(date: string): string {
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   /**

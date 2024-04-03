@@ -17,7 +17,7 @@ import { StateService } from '../../common/state.service';
 import { CommonService } from "app/payment-hub/common/common.service";
 
 //import { TransactionDetails } from '../../transacions/model/transaction-details.model';
-import { formatDateForDisplay, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
@@ -335,7 +335,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   }
 
   formatDate(date: string): string {
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   shortenValue(value: any) {
