@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 import { TransactionsService } from './service/transactions.service';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses, recallReasonData as recallReasons} from './helper/transaction.helper';
-import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
+import { convertUtcToLocal } from '../../shared/date-format/date-format.helper';
 
 /** Dialog Components */
 import { BpmnDialogComponent } from '../common/bpmn-dialog/bpmn-dialog.component'
@@ -180,7 +180,7 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   openBPMNDialog() {
