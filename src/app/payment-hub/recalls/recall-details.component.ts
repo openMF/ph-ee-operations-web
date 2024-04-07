@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { RecallsService } from './service/recalls.service';
-import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
+import { convertUtcToLocal } from '../../shared/date-format/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as transactionStatuses } from './helper/recall.helper';
 
@@ -144,7 +144,7 @@ export class RecallDetailsComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   getPaymentProcessId() {

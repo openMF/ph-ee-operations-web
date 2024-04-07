@@ -13,7 +13,7 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from './service/request-to-pay.service';
-import { formatDateForDisplay } from '../../shared/date-format/date-format.helper';
+import { convertUtcToLocal } from '../../shared/date-format/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { requestToPayStatesData as statuses } from './helper/request-to-pay.helper';
 
@@ -128,7 +128,7 @@ export class RequestToPayDetailsComponent implements OnInit {
   }
 
   formatDate(date: string): string{
-    return formatDateForDisplay(date);
+    return convertUtcToLocal(date);
   }
 
   getPaymentProcessId() {
