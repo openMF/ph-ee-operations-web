@@ -97,7 +97,7 @@ export class AuthenticationService {
     return scope.includes('ALL_FUNCTIONS') || scope.includes(permission);
   }
 
-  authorize() {
+  authorize(location: String) {
     const state = this.strRandom(40);
     const codeVerifier = this.strRandom(128);
 
@@ -105,6 +105,7 @@ export class AuthenticationService {
 
     this.storage.setItem('state', state);
     this.storage.setItem('codeVerifier', codeVerifier);
+    this.storage.setItem('location', location);
 
     const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
 
@@ -197,14 +198,16 @@ export class AuthenticationService {
 
     this.storage.removeItem('codeVerifier')
     this.storage.removeItem('state')
-    this.storage = sessionStorage;
 
     return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth2/token`, payload)
         .pipe(
           map((tokenResponse: OAuth2Token) => {
-            // TODO: fix UserDetails API
             const decoded = jwt_decode(tokenResponse.access_token)
             this.tenantId = decoded['tenant'];
+            this.rememberMe = decoded['rememberMe'];
+            if (!this.rememberMe) {
+              this.storage = sessionStorage;
+            } 
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
             this.onLoginSuccess({ username: decoded['sub'], accessToken: tokenResponse.access_token, authenticated: true, tenantId: this.tenantId } as any);
             this.refreshTokenOnExpiry(tokenResponse.expires_in);

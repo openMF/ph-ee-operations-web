@@ -12,12 +12,18 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CallbackComponent implements OnInit {
 
+  private storage: any;
+
   constructor(private router: Router, private route: ActivatedRoute, private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
     if (!this.authenticationService.isAuthenticated()) {
+      this.storage = localStorage;
       this.authenticationService.token(this.route.snapshot.queryParamMap.get('code'))
-      .subscribe({complete: () => {this.router.navigate(['/home'], { replaceUrl: true })}});
+      .subscribe({complete: () => {
+        this.router.navigate([this.storage.getItem('location')], { replaceUrl: true });
+        this.storage.removeItem('location');
+    }});
     }
     
   }

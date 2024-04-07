@@ -48,7 +48,7 @@ export class LoginFormComponent implements OnInit {
   login() {
     this.loading = true;
     this.loginForm.disable();
-    this.authenticationService.authorize();
+    this.authenticationService.authorize('/home');
     this.authenticationService.login(this.loginForm.value)
       .pipe(finalize(() => {
         this.loginForm.reset();

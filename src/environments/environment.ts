@@ -10,12 +10,9 @@ export let environment = {
   name: "dev",
   production: false,
   version: env.npm_package_version + "-dev",
-  serverUrl: "https://localhost:5000",
   oauth: {
     enabled: "true", // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    serverUrl: "https://localhost:5000",
-    basicAuth: "true",
-    basicAuthToken: 'Y2xpZW50Og==',
+    serverUrl: "http://localhost:5000",
     oauthClientSecret: 'secret',
     oauthLoginUrl: 'http://localhost:5000/oauth2/authorize',
     oauthTokenUrl: 'http://localhost:5000/oauth2/token',
@@ -23,5 +20,5 @@ export let environment = {
   },
   defaultLanguage: "en-US",
   supportedLanguages: ["en-US", "fr-FR"],
-  externalConfigurationFile: "configuration.properties"
+  externalConfigurationFile: ""
 };
