@@ -58,7 +58,6 @@ export class RequestToPayDetailsComponent implements OnInit {
     this.route.data.subscribe((data: { requestToPay: any }) => {
       this.requestToPayData = data.requestToPay;
     });
-    console.log(this.requestToPayData) 
     this.route.data.subscribe((data: {
       dfspEntries: DfspEntry[]
     }) => {

@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,6 +13,9 @@ import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/op
 /** Custom Services */
 import { StateService } from '../../common/state.service';
 import { CommonService } from '../../common/common.service';
+
+/** Shared Services */
+import { MatPaginatorGotoComponent } from 'app/shared/mat-paginator-goto/mat-paginator-goto.component';
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
@@ -119,7 +122,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   ];
 
   /** Paginator for transactions table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginatorGotoComponent) paginator: MatPaginatorGotoComponent;
   /** Sorter for transactions table. */
   @ViewChild(MatSort) sort: MatSort;
 
@@ -179,6 +182,13 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     //this.setFilteredDfspEntries();
     this.getTransactions();
     this.setBusinessProcessStatusData();
+    this.dataSource.loading$.subscribe(loading => {
+      if (loading) {
+        this.filterForm.disable({emitEvent:false});
+      } else {
+        this.filterForm.enable({emitEvent:false});
+      }
+    });
   }
 
   setBusinessProcessStatusData(): void {
@@ -197,8 +207,9 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     if (storedState) {
       this.filterForm.patchValue(storedState.filterForm);
       this.filterTransactionsBy = storedState.filterBy;
-      this.sort.active = storedState.sort.active;
-      this.sort.direction = storedState.sort.direction;
+      if (storedState.sort.active) {
+        this.sort.sort(({ id: storedState.sort.active, start: storedState.sort.direction}) as MatSortable);
+      }
       this.paginator.pageIndex = storedState.paginator.pageIndex;
       this.paginator.pageSize = storedState.paginator.pageSize;
     }
@@ -250,7 +261,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
           if (elements.length === 1) {
             this.filterForm.controls['payerDfspId'].setValue(elements[0].id);
             filterValue = elements[0].name;
-          }
+          } 
         })
       )
       .subscribe();
@@ -376,7 +387,10 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         )
         .subscribe();
 
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+      this.paginator.goTo = 1;
+    });
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(

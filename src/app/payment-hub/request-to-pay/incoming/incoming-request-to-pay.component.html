@@ -87,7 +87,7 @@
   </button>
 </div>
 
-<div class="container">
+<div class="table-wrapper container">
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="startedAt">
@@ -188,7 +188,11 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
-    <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
+    <div *ngIf="dataSource?.loading$ | async" class="spinner-wrapper">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-paginator-goto [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator-goto>
   </div>
   <!--form
     #postForm="ngForm"

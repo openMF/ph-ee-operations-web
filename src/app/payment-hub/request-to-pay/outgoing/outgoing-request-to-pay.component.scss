@@ -1,40 +1,48 @@
-table {
-    width: 100%;
-  
-    .select-row:hover {
-      cursor: pointer;
-    }
-  }
-
 .mat-paginator-range-label {
   display: hidden;
 }
+ 
+.table-wrapper {
+  margin: auto;
+  position: relative;
+  table {
+    width: 100%;
+  }
+}
 
-table{
+.spinner-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
- }
- 
- .mat-cell {
-   word-wrap: break-word !important;
-   white-space: unset !important;
+  height: 100%;
+  background-color: rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-   overflow-wrap: break-word;
-   word-wrap: break-word;
- 
-   word-break: break-word;
- 
-   -ms-hyphens: auto;
-   -moz-hyphens: auto;
-   -webkit-hyphens: auto;
-   hyphens: auto;
-   padding-left: 2px;
-   padding-right: 2px;
- }
+.mat-cell {
+  word-wrap: break-word !important;
+  white-space: unset !important;
 
- .mat-cell.cdk-column-completedAt {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.mat-cell.cdk-column-completedAt {
   flex: 0 0 110px !important;
   width: 110px !important;
- }
+}
 
 .green {
   color: green;

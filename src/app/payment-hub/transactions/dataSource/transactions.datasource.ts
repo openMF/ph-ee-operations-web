@@ -9,6 +9,7 @@ import { TransactionsService } from '../service/transactions.service';
 import { Transaction, Transactions } from '../model/transaction.model';
 import { FilteredTransactions } from '../helper/filtered-transactions';
 import { FilteredRecord } from '../model/filtered-record.model';
+import { finalize } from 'rxjs/operators';
 
 /**
  * Journal entries custom data source to implement server side filtering, pagination and sorting.
@@ -19,8 +20,10 @@ export class TransactionsDataSource implements DataSource<Transaction> {
     private transactionsSubject = new BehaviorSubject<Transaction[]>([]);
     /** Records subject to represent total number of filtered journal entry records. */
     private recordsSubject = new BehaviorSubject<number>(0);
+    private loadingSubject = new BehaviorSubject<boolean>(false);
     /** Records observable which can be subscribed to get the value of total number of filtered journal entry records. */
     public records$ = this.recordsSubject.asObservable();
+    public loading$ = this.loadingSubject.asObservable();
 
     /**
      * @param {TransactionsService} transactionsService Transactions Service
@@ -36,12 +39,14 @@ export class TransactionsDataSource implements DataSource<Transaction> {
      * @param {number} limit Number of entries within the page.
      */
     getTransactions(filterBy: any, orderBy: string = '', sortOrder: string = '', pageIndex: number = 0, limit: number = 10) {
-        this.transactionsSubject.next([]);
+        this.loadingSubject.next(true);
+        //this.transactionsSubject.next([]);
 
         const page = pageIndex;
         const count = limit;
 
         this.transactionsService.getTransactions(filterBy, page, count, orderBy, sortOrder)
+            .pipe(finalize(() => this.loadingSubject.next(false)))
             .subscribe((transactions: Transactions) => {
                 const filteredTransactions: FilteredRecord<Transaction> = new FilteredTransactions(transactions);
                 this.recordsSubject.next(filteredTransactions.totalFilteredRecords);
@@ -62,6 +67,7 @@ export class TransactionsDataSource implements DataSource<Transaction> {
     disconnect(collectionViewer: CollectionViewer): void {
         this.transactionsSubject.complete();
         this.recordsSubject.complete();
+        this.loadingSubject.complete();
     }
 
 }

@@ -20,6 +20,7 @@ import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OP
 import { MAT_DATE_LOCALE} from '@angular/material/core';
 import { AutoFormatDateTimeDirective } from './auto-format-date-time/auto-format-date-time.directive';
 import { OptionDataSelectorComponent } from './option-data-selector/option-data-selector.component';
+import { MatPaginatorGotoComponent } from './mat-paginator-goto/mat-paginator-goto.component';
 
 const SIMPLE_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -46,7 +47,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     CommonModule,
     IconsModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     FormfieldComponent,
@@ -57,7 +59,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     LanguageSelectorComponent,
     ThemePickerComponent,
     AutoFormatDateTimeDirective,
-    OptionDataSelectorComponent
+    OptionDataSelectorComponent,
+    MatPaginatorGotoComponent
   ],
   exports: [
     FileUploadComponent,
@@ -70,7 +73,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     FormsModule,
     ReactiveFormsModule,
     AutoFormatDateTimeDirective,
-    OptionDataSelectorComponent
+    OptionDataSelectorComponent,
+    MatPaginatorGotoComponent
   ],
   entryComponents: [
     FormDialogComponent,
