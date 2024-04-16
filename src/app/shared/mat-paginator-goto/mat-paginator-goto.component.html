@@ -4,7 +4,7 @@
 	<div class="go-to-container">
 		<div class="go-to-label">Go To: </div>
 		<mat-form-field>
-            <input matInput type="number" oninput="this.value=this.value.slice(0,this.maxLength)" [(ngModel)]="goTo" (input)="goToChangeWithDebounce()" min="1" maxlength="5" />
+            <input matInput type="number" oninput="this.value=this.value.slice(0,this.maxLength)" [(ngModel)]="goTo" (input)="goToChangeWithDebounce()" min="1" maxlength="5" [disabled]="disabled"/>
 		</mat-form-field>
         <div class="go-to-label">Max: {{maxPageNumber}}</div>
 	</div>
