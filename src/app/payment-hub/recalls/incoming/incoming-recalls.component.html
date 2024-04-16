@@ -122,7 +122,7 @@
 </mat-autocomplete>
 
 <div class="container p-b-10">
-  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" (click)="resetFilters()">
+  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" (click)="resetFilters()" [disabled]="(dataSource?.loading$ | async)">
     Reset filters
   </button>
 </div>

@@ -473,6 +473,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   resetFilters() {
     this.filterForm.reset({}, { emitEvent: false });
     this.paginator.pageIndex = 0;
+    this.paginator.goTo = 1;
     this.filterRequestsBy.forEach(filter => {
       if (filter.type !== 'direction' && filter.type !== 'rtpDirection') {
         filter.value = '';
