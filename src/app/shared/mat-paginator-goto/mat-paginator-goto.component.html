@@ -1,5 +1,5 @@
 <div class="paginator-go-to">
-	<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="showFirstLastButtons" (page)="paginationChange($event)">
+	<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="showFirstLastButtons" [disabled]="disabled" (page)="paginationChange($event)">
 	</mat-paginator>
 	<div class="go-to-container">
 		<div class="go-to-label">Go To: </div>
