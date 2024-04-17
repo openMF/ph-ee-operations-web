@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginatorGotoComponent } from 'app/shared/mat-paginator-goto/mat-paginator-goto.component';
 import { MatSort } from '@angular/material/sort';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class StateService {
     return this.states[componentName] || undefined;
   }
 
-  setState(componentName: string, filterForm: FormGroup, filterBy: any, sort: MatSort, paginator: MatPaginator) {
+  setState(componentName: string, filterForm: FormGroup, filterBy: any, sort: MatSort, paginator: MatPaginatorGotoComponent) {
     const stateToStore = {
       filterForm: filterForm.value,
       filterBy: filterBy,

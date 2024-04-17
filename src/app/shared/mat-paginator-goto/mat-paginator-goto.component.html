@@ -1,0 +1,11 @@
+<div class="paginator-go-to">
+	<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="showFirstLastButtons" [disabled]="disabled" (page)="paginationChange($event)">
+	</mat-paginator>
+	<div class="go-to-container">
+		<div class="go-to-label">Go To: </div>
+		<mat-form-field>
+            <input matInput type="number" oninput="this.value=this.value.slice(0,this.maxLength)" [(ngModel)]="goTo" (input)="goToChangeWithDebounce()" min="1" maxlength="5" [disabled]="disabled"/>
+		</mat-form-field>
+        <div class="go-to-label">Max: {{maxPageNumber}}</div>
+	</div>
+</div>

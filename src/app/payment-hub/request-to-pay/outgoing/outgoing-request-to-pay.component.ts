@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,6 +16,9 @@ import { RequestToPayService } from '../service/request-to-pay.service';
 import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 import { CommonService } from 'app/payment-hub/common/common.service';
+
+/** Shared Services */
+import { MatPaginatorGotoComponent } from 'app/shared/mat-paginator-goto/mat-paginator-goto.component';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
@@ -106,7 +109,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
     ];
 
   /** Paginator for requesttopay table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginatorGotoComponent) paginator: MatPaginatorGotoComponent;
   /** Sorter for requesttopay table. */
   @ViewChild(MatSort) sort: MatSort;
 
@@ -144,6 +147,13 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getRequestsPay();
     this.setBusinessProcessStatusData();
+    this.dataSource.loading$.subscribe(loading => {
+      if (loading) {
+        this.filterForm.disable({emitEvent:false});
+      } else {
+        this.filterForm.enable({emitEvent:false});
+      }
+    });
   }
 
   setBusinessProcessStatusData(): void {
@@ -162,8 +172,9 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
     if (storedState) {
       this.filterForm.patchValue(storedState.filterForm);
       this.filterRequestsBy = storedState.filterBy;
-      this.sort.active = storedState.sort.active;
-      this.sort.direction = storedState.sort.direction;
+      if (storedState.sort.active) {
+        this.sort.sort(({ id: storedState.sort.active, start: storedState.sort.direction}) as MatSortable);
+      }
       this.paginator.pageIndex = storedState.paginator.pageIndex;
       this.paginator.pageSize = storedState.paginator.pageSize;
     }
@@ -304,7 +315,10 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+      this.paginator.goTo = 1;
+    });
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -386,7 +400,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
   filterRequestsByProperty(filterValue: string, property: string) {
     this.filterForm.controls[property].setValue(filterValue);
-    this.setFilter(property, filterValue);
+    this.setFilter(filterValue, property);
   }
 
   navigateToTransactionsPage(transactionId: string) {
@@ -396,6 +410,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
   resetFilters() {
     this.filterForm.reset({}, { emitEvent: false });
     this.paginator.pageIndex = 0;
+    this.paginator.goTo = 1;
     this.filterRequestsBy.forEach(filter => {
       if (filter.type !== 'direction' && filter.type !== 'rtpDirection') {
         filter.value = '';

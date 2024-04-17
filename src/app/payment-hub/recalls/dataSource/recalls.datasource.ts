@@ -9,6 +9,7 @@ import { RecallsService } from '../service/recalls.service';
 import { Recall, Recalls } from '../model/recall.model';
 import { FilteredRecalls } from '../helper/filtered-recalls';
 import { FilteredRecord } from '../model/filtered-record.model';
+import { finalize } from 'rxjs/operators';
 
 /**
  * Journal entries custom data source to implement server side filtering, pagination and sorting.
@@ -19,8 +20,10 @@ export class RecallsDataSource implements DataSource<Recall> {
     private recallsSubject = new BehaviorSubject<Recall[]>([]);
     /** Records subject to represent total number of filtered journal entry records. */
     private recordsSubject = new BehaviorSubject<number>(0);
+    private loadingSubject = new BehaviorSubject<boolean>(false);
     /** Records observable which can be subscribed to get the value of total number of filtered journal entry records. */
     public records$ = this.recordsSubject.asObservable();
+    public loading$ = this.loadingSubject.asObservable();
 
     /**
      * @param {RecallsService} recallsService Recalls Service
@@ -36,12 +39,14 @@ export class RecallsDataSource implements DataSource<Recall> {
      * @param {number} limit Number of entries within the page.
      */
     getRecalls(filterBy: any, orderBy: string = '', sortOrder: string = '', pageIndex: number = 0, limit: number = 10) {
-        this.recallsSubject.next([]);
+        this.loadingSubject.next(true);
+        //this.recallsSubject.next([]);
 
         const page = pageIndex;
         const count = limit;
 
         this.recallsService.getRecalls(filterBy, page, count, orderBy, sortOrder)
+            .pipe(finalize(() => this.loadingSubject.next(false)))
             .subscribe((recalls: Recalls) => {
                 const filteredRecalls: FilteredRecord<Recall> = new FilteredRecalls(recalls);
                 this.recordsSubject.next(filteredRecalls.totalFilteredRecords);
@@ -62,6 +67,7 @@ export class RecallsDataSource implements DataSource<Recall> {
     disconnect(collectionViewer: CollectionViewer): void {
         this.recallsSubject.complete();
         this.recordsSubject.complete();
+        this.loadingSubject.complete();
     }
 
 }

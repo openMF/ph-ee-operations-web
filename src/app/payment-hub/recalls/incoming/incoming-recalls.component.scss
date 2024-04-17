@@ -1,40 +1,48 @@
-table {
-    width: 100%;
-  
-    .select-row:hover {
-      cursor: pointer;
-    }
-  }
-
 .mat-paginator-range-label {
   display: hidden;
 }
 
-table{
+.table-wrapper {
+  margin: auto;
+  position: relative;
+  table {
+    width: 100%;
+  }
+}
+
+.spinner-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
- }
+  height: 100%;
+  background-color: rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
  
- .mat-cell {
-   word-wrap: break-word !important;
-   white-space: unset !important;
+.mat-cell {
+  word-wrap: break-word !important;
+  white-space: unset !important;
 
-   overflow-wrap: break-word;
-   word-wrap: break-word;
- 
-   word-break: break-word;
- 
-   -ms-hyphens: auto;
-   -moz-hyphens: auto;
-   -webkit-hyphens: auto;
-   hyphens: auto;
-   padding-left: 2px;
-   padding-right: 2px;
- }
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 
- .mat-cell.cdk-column-completedAt {
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.mat-cell.cdk-column-completedAt {
   flex: 0 0 110px !important;
   width: 110px !important;
- }
+}
 
 .green {
   color: green;
