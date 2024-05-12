@@ -1,7 +1,6 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { MatPaginator } from "@angular/material/paginator";
 import { MatSort, MatSortable } from "@angular/material/sort";
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
@@ -39,7 +38,8 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  filterForm: FormGroup;
+  filterFormGroup: FormGroup;
+  focusedElement: string;
   filteredCurrencies: any;
   filteredDfspEntries: any;
   currenciesData: any;
@@ -116,6 +116,8 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginatorGotoComponent) paginator: MatPaginatorGotoComponent;
   /** Sorter for requesttopay table. */
   @ViewChild(MatSort) sort: MatSort;
+  /** ElementRef of the filterForm. */
+  @ViewChild('filterForm') filterForm: ElementRef;
 
   constructor(
     private requestToPayService: RequestToPayService,
@@ -126,7 +128,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     private commonService: CommonService,
     private http: HttpClient,
     private formBuilder: FormBuilder) {
-      this.filterForm = this.formBuilder.group({
+      this.filterFormGroup = this.formBuilder.group({
         payeePartyId: new FormControl(),
         payerPartyId: new FormControl(),
         payerDfspId: new FormControl(),
@@ -155,11 +157,32 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     this.setBusinessProcessStatusData();
     this.dataSource.loading$.subscribe(loading => {
       if (loading) {
-        this.filterForm.disable({emitEvent:false});
+        this.focusedElement = this.getFocusedInputFilterName();
+        this.filterFormGroup.disable({emitEvent:false});
       } else {
-        this.filterForm.enable({emitEvent:false});
+        this.filterFormGroup.enable({emitEvent:false});
+        this.setFocus(this.focusedElement);
       }
     });
+  }
+
+  setFocus(inputFilterName: string): void {
+    if (inputFilterName) {
+      const element = this.filterForm.nativeElement[inputFilterName];
+      if (element) {
+        element.focus();
+        this.focusedElement = null;
+      }
+    }
+  }
+
+  getFocusedInputFilterName(): string | null {
+    const currentFocusedElement = document.activeElement as HTMLElement;
+    if (currentFocusedElement && currentFocusedElement.tagName === 'INPUT' && currentFocusedElement.closest('form') === this.filterForm.nativeElement) {
+      return currentFocusedElement.getAttribute('name');
+    } else {
+      return null;
+    }
   }
 
   setBusinessProcessStatusData(): void {
@@ -176,7 +199,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const storedState = this.stateService.getState('incoming-requests');
     if (storedState) {
-      this.filterForm.patchValue(storedState.filterForm);
+      this.filterFormGroup.patchValue(storedState.filterForm);
       this.filterRequestsBy = storedState.filterBy;
       if (storedState.sort.active) {
         this.sort.sort(({ id: storedState.sort.active, start: storedState.sort.direction}) as MatSortable);
@@ -188,7 +211,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   }
 
   controlChange() {
-    this.filterForm.controls['payeePartyId'].valueChanges
+    this.filterFormGroup.controls['payeePartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -198,7 +221,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['payerPartyId'].valueChanges
+    this.filterFormGroup.controls['payerPartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -208,7 +231,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['payerDfspId'].valueChanges
+    this.filterFormGroup.controls['payerDfspId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -218,7 +241,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['payerDfspName'].valueChanges
+    this.filterFormGroup.controls['payerDfspName'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -227,14 +250,14 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
             (option) => option.name === filterValue.name
           );
           if (elements.length === 1) {
-            this.filterForm.controls['payerDfspId'].setValue(elements[0].id);
+            this.filterFormGroup.controls['payerDfspId'].setValue(elements[0].id);
             filterValue = elements[0].name;
           }
         })
       )
       .subscribe();
 
-    this.filterForm.controls['transactionId'].valueChanges
+    this.filterFormGroup.controls['transactionId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -244,7 +267,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['status'].valueChanges
+    this.filterFormGroup.controls['status'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -254,7 +277,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['businessProcessStatus'].valueChanges
+    this.filterFormGroup.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -264,7 +287,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['amountFrom'].valueChanges
+    this.filterFormGroup.controls['amountFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -274,7 +297,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['amountTo'].valueChanges
+    this.filterFormGroup.controls['amountTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -284,7 +307,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['currencyCode'].valueChanges
+    this.filterFormGroup.controls['currencyCode'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -295,7 +318,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['transactionDateFrom'].valueChanges
+    this.filterFormGroup.controls['transactionDateFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -307,7 +330,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['transactionDateTo'].valueChanges
+    this.filterFormGroup.controls['transactionDateTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -328,7 +351,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       .pipe(
         tap(() => {
           this.loadRequestsPayPage();
-          this.stateService.setState('incoming-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
+          this.stateService.setState('incoming-requests', this.filterFormGroup, this.filterRequestsBy, this.sort, this.paginator);
         })
         )
       .subscribe();
@@ -379,7 +402,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
       (filter) => filter.type === property
     );
     this.filterRequestsBy[findIndex].value = filterValue;
-    this.stateService.setState('incoming-requests', this.filterForm, this.filterRequestsBy, this.sort, this.paginator);
+    this.stateService.setState('incoming-requests', this.filterFormGroup, this.filterRequestsBy, this.sort, this.paginator);
     this.loadRequestsPayPage();
   }
 
@@ -462,7 +485,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   }
 
   filterRequestsByProperty(filterValue: string, property: string) {
-    this.filterForm.controls[property].setValue(filterValue);
+    this.filterFormGroup.controls[property].setValue(filterValue);
     this.setFilter(filterValue, property);
   }
 
@@ -471,7 +494,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
   }
 
   resetFilters() {
-    this.filterForm.reset({}, { emitEvent: false });
+    this.filterFormGroup.reset({}, { emitEvent: false });
     this.paginator.pageIndex = 0;
     this.paginator.goTo = 1;
     this.filterRequestsBy.forEach(filter => {

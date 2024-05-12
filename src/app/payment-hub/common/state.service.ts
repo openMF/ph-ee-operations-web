@@ -13,9 +13,9 @@ export class StateService {
     return this.states[componentName] || undefined;
   }
 
-  setState(componentName: string, filterForm: FormGroup, filterBy: any, sort: MatSort, paginator: MatPaginatorGotoComponent) {
+  setState(componentName: string, filterFormGroup: FormGroup, filterBy: any, sort: MatSort, paginator: MatPaginatorGotoComponent) {
     const stateToStore = {
-      filterForm: filterForm.value,
+      filterForm: filterFormGroup.value,
       filterBy: filterBy,
       sort: sort,
       paginator: paginator

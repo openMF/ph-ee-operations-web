@@ -1,7 +1,6 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,7 +42,8 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  filterForm: FormGroup;
+  filterFormGroup: FormGroup;
+  focusedElement: string;
   filteredCurrencies: any;
   filteredDfspEntries: any;
   currenciesData: any;
@@ -129,6 +129,8 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginatorGotoComponent) paginator: MatPaginatorGotoComponent;
   /** Sorter for transactions table. */
   @ViewChild(MatSort) sort: MatSort;
+  /** ElementRef of the filterForm. */
+  @ViewChild('filterForm') filterForm: ElementRef;
 
   /**
    * Retrieves the offices and gl accounts data from `resolve`.
@@ -143,7 +145,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     private stateService: StateService,
     private commonService: CommonService,
     private formBuilder: FormBuilder) {
-      this.filterForm = this.formBuilder.group({
+      this.filterFormGroup = this.formBuilder.group({
         payeePartyId: new FormControl(),
         payerPartyId: new FormControl(),
         payeeDfspId: new FormControl(),
@@ -171,7 +173,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       this.route.queryParams.subscribe(params => {
         const transactionId = params['transactionId'];
         if (transactionId) {
-          this.filterForm.controls['transactionId'].setValue(transactionId);
+          this.filterFormGroup.controls['transactionId'].setValue(transactionId);
           this.setFilter(transactionId, 'transactionId');
         }
       });
@@ -187,11 +189,32 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     this.setBusinessProcessStatusData();
     this.dataSource.loading$.subscribe(loading => {
       if (loading) {
-        this.filterForm.disable({emitEvent:false});
+        this.focusedElement = this.getFocusedInputFilterName();
+        this.filterFormGroup.disable({emitEvent:false});
       } else {
-        this.filterForm.enable({emitEvent:false});
+        this.filterFormGroup.enable({emitEvent:false});
+        this.setFocus(this.focusedElement);
       }
     });
+  }
+
+  setFocus(inputFilterName: string): void {
+    if (inputFilterName) {
+      const element = this.filterForm.nativeElement[inputFilterName];
+      if (element) {
+        element.focus();
+        this.focusedElement = null;
+      }
+    }
+  }
+
+  getFocusedInputFilterName(): string | null {
+    const currentFocusedElement = document.activeElement as HTMLElement;
+    if (currentFocusedElement && currentFocusedElement.tagName === 'INPUT' && currentFocusedElement.closest('form') === this.filterForm.nativeElement) {
+      return currentFocusedElement.getAttribute('name');
+    } else {
+      return null;
+    }
   }
 
   setBusinessProcessStatusData(): void {
@@ -208,7 +231,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const storedState = this.stateService.getState('outgoing-recalls');
     if (storedState) {
-      this.filterForm.patchValue(storedState.filterForm);
+      this.filterFormGroup.patchValue(storedState.filterForm);
       this.filterRecallsBy = storedState.filterBy;
       if (storedState.sort.active) {
         this.sort.sort(({ id: storedState.sort.active, start: storedState.sort.direction}) as MatSortable);
@@ -225,7 +248,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
    * sort change and page change.
    */
   controlChange() {
-    this.filterForm.controls['payeePartyId'].valueChanges
+    this.filterFormGroup.controls['payeePartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -235,7 +258,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['payerPartyId'].valueChanges
+    this.filterFormGroup.controls['payerPartyId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -245,7 +268,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['payeeDfspId'].valueChanges
+    this.filterFormGroup.controls['payeeDfspId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -255,21 +278,21 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['payeeDfspName'].valueChanges
+    this.filterFormGroup.controls['payeeDfspName'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue) => {
           const elements = this.dfspEntriesData.filter((option) => option.name === filterValue.name);
           if (elements.length === 1) {
-            this.filterForm.controls['payeeDfspId'].setValue(elements[0].id);
+            this.filterFormGroup.controls['payeeDfspId'].setValue(elements[0].id);
             filterValue = elements[0].name;
           }
         })
       )
       .subscribe();
 
-    this.filterForm.controls['transactionId'].valueChanges
+    this.filterFormGroup.controls['transactionId'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -279,7 +302,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['status'].valueChanges
+    this.filterFormGroup.controls['status'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -289,7 +312,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['recallStatus'].valueChanges
+    this.filterFormGroup.controls['recallStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -299,7 +322,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['recallDirection'].valueChanges
+    this.filterFormGroup.controls['recallDirection'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -309,7 +332,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['businessProcessStatus'].valueChanges
+    this.filterFormGroup.controls['businessProcessStatus'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -319,7 +342,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['paymentScheme'].valueChanges
+    this.filterFormGroup.controls['paymentScheme'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -329,7 +352,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['amountFrom'].valueChanges
+    this.filterFormGroup.controls['amountFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -339,7 +362,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['amountTo'].valueChanges
+    this.filterFormGroup.controls['amountTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -349,7 +372,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['currencyCode'].valueChanges
+    this.filterFormGroup.controls['currencyCode'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -360,7 +383,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['transactionDateFrom'].valueChanges
+    this.filterFormGroup.controls['transactionDateFrom'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -370,7 +393,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['transactionDateTo'].valueChanges
+    this.filterFormGroup.controls['transactionDateTo'].valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -380,7 +403,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
 
-    this.filterForm.controls['endToEndIdentification'].valueChanges
+    this.filterFormGroup.controls['endToEndIdentification'].valueChanges
         .pipe(
             debounceTime(500),
             distinctUntilChanged(),
@@ -399,7 +422,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
       .pipe(
         tap(() => {
           this.loadRecallsPage();
-          this.stateService.setState('outgoing-recalls', this.filterForm, this.filterRecallsBy, this.sort, this.paginator);
+          this.stateService.setState('outgoing-recalls', this.filterFormGroup, this.filterRecallsBy, this.sort, this.paginator);
         })
         )
       .subscribe();
@@ -426,7 +449,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
     this.paginator.pageIndex = 0;
     const findIndex = this.filterRecallsBy.findIndex(filter => filter.type === property);
     this.filterRecallsBy[findIndex].value = filterValue;
-    this.stateService.setState('outgoing-recalls', this.filterForm, this.filterRecallsBy, this.sort, this.paginator);
+    this.stateService.setState('outgoing-recalls', this.filterFormGroup, this.filterRecallsBy, this.sort, this.paginator);
     this.loadRecallsPage();
   }
 
@@ -486,7 +509,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
    * Sets filtered gl accounts for autocomplete.
    */
   setFilteredCurrencies() {
-    this.filteredCurrencies = this.filterForm.controls['currencyCode'].valueChanges
+    this.filteredCurrencies = this.filterFormGroup.controls['currencyCode'].valueChanges
       .pipe(
         startWith(''),
         map((currency: any) => typeof currency === 'string' ? currency : currency.Currency + ' (' + currency.AlphabeticCode + ')'),
@@ -498,7 +521,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
    * Sets filtered gl accounts for autocomplete.
    */
   setFilteredDfspEntries() {
-    this.filteredDfspEntries = this.filterForm.controls['payeeDfspName'].valueChanges
+    this.filteredDfspEntries = this.filterFormGroup.controls['payeeDfspName'].valueChanges
       .pipe(
         startWith(''),
         map((entry: any) => typeof entry === 'string' ? entry : entry.name + ' (' + entry.id + ')'),
@@ -546,7 +569,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
   }
 
   resetFilters() {
-    this.filterForm.reset({}, { emitEvent: false });
+    this.filterFormGroup.reset({}, { emitEvent: false });
     this.paginator.pageIndex = 0;
     this.paginator.goTo = 1;
     this.filterRecallsBy.forEach(filter => {

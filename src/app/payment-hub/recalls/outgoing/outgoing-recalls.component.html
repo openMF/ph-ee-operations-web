@@ -1,83 +1,82 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-
+<form #filterForm class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
   <mat-form-field fxFlex="20%">
     <mat-label>Payer Id</mat-label>
-    <input matInput [formControl]="filterForm.get('payerPartyId')" >
+    <input matInput name="payerPartyId" [formControl]="filterFormGroup.get('payerPartyId')" >
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
-    <input matInput [formControl]="filterForm.get('payeePartyId')" >
+    <input matInput name="payeePartyId" [formControl]="filterFormGroup.get('payeePartyId')" >
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee DFSP Id</mat-label>
-    <input matInput [formControl]="filterForm.get('payeeDfspId')" >
+    <input matInput name="payeeDfspId" [formControl]="filterFormGroup.get('payeeDfspId')" >
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee DFSP name</mat-label>
-    <input matInput [formControl]="filterForm.get('payeeDfspName')" [matAutocomplete]="dfspEntriesAutocomplete">
+    <input matInput name="payeeDfspName" [formControl]="filterFormGroup.get('payeeDfspName')" [matAutocomplete]="dfspEntriesAutocomplete">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction ID</mat-label>
-    <input matInput [formControl]="filterForm.get('transactionId')">
+    <input matInput name="transactionId" [formControl]="filterFormGroup.get('transactionId')">
   </mat-form-field>
 
   <mifosx-option-data-selector 
     fxFlex="20%" 
-    [inputFormControl]="filterForm.get('status')"
+    [inputFormControl]="filterFormGroup.get('status')"
     [inputList]="transactionStatusData"
     [inputLabel]="'Technical Status'">
   </mifosx-option-data-selector>
 
   <mifosx-option-data-selector 
     fxFlex="20%" 
-    [inputFormControl]="filterForm.get('recallStatus')"
+    [inputFormControl]="filterFormGroup.get('recallStatus')"
     [inputList]="recallStatusData"
     [inputLabel]="'Recall Status'">
   </mifosx-option-data-selector>
 
   <mifosx-option-data-selector 
     fxFlex="20%" 
-    [inputFormControl]="filterForm.get('recallDirection')"
+    [inputFormControl]="filterFormGroup.get('recallDirection')"
     [inputList]="recallDirectionData"
     [inputLabel]="'Recall Direction'">
   </mifosx-option-data-selector>
 
   <mifosx-option-data-selector 
     fxFlex="20%" 
-    [inputFormControl]="filterForm.get('businessProcessStatus')"
+    [inputFormControl]="filterFormGroup.get('businessProcessStatus')"
     [inputList]="businessProcessStatusData"
     [inputLabel]="'Business Process Status'">
   </mifosx-option-data-selector>
 
   <mifosx-option-data-selector 
     fxFlex="20%" 
-    [inputFormControl]="filterForm.get('paymentScheme')"
+    [inputFormControl]="filterFormGroup.get('paymentScheme')"
     [inputList]="paymentSchemeData"
     [inputLabel]="'Payment Scheme'">
   </mifosx-option-data-selector>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Currency</mat-label>
-    <input matInput [formControl]="filterForm.get('currencyCode')" [matAutocomplete]="currenciesAutocomplete">
+    <input matInput name="currencyCode" [formControl]="filterFormGroup.get('currencyCode')" [matAutocomplete]="currenciesAutocomplete">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>End to End Identification</mat-label>
-    <input matInput [formControl]="filterForm.get('endToEndIdentification')">
+    <input matInput name="endToEndIdentification" [formControl]="filterFormGroup.get('endToEndIdentification')">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount From</mat-label>
-    <input matInput [formControl]="filterForm.get('amountFrom')">
+    <input matInput name="amountFrom" type="number" [formControl]="filterFormGroup.get('amountFrom')">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount To</mat-label>
-    <input matInput [formControl]="filterForm.get('amountTo')">
+    <input matInput name="amountTo" type="number" [formControl]="filterFormGroup.get('amountTo')">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -86,7 +85,7 @@
       matInput
       placeholder="yyyy-MM-dd hh:mm:ss"
       [ngxMatDatetimePicker]="picker"
-      [formControl]="filterForm.get('transactionDateFrom')"
+      [formControl]="filterFormGroup.get('transactionDateFrom')"
       [min]="minDate"
     />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -99,14 +98,13 @@
       matInput
       placeholder="yyyy-MM-dd hh:mm:ss"
       [ngxMatDatetimePicker]="pickerTo"
-      [formControl]="filterForm.get('transactionDateTo')"
+      [formControl]="filterFormGroup.get('transactionDateTo')"
       [min]="minDate"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
-
-</div>
+</form>
 
 
 <!-- Autocomplete data -->
