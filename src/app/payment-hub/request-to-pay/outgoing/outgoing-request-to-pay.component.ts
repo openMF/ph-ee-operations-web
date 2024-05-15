@@ -206,7 +206,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
   controlChange() {
     this.filterFormGroup.controls['payeePartyId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "payeePartyId");
@@ -216,7 +216,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['payerPartyId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "payerPartyId");
@@ -226,7 +226,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['payerDfspId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "payerDfspId");
@@ -236,7 +236,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['payerDfspName'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           const elements = this.dfspEntriesData.filter(
@@ -252,7 +252,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['transactionId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue.length > 5) {
@@ -264,7 +264,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['status'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "status");
@@ -274,7 +274,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['businessProcessStatus'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "businessProcessStatus");
@@ -284,7 +284,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['amountFrom'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "amountFrom");
@@ -294,7 +294,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['amountTo'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, "amountTo");
@@ -304,7 +304,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['currencyCode'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           filterValue = filterValue.AlphabeticCode;
@@ -315,7 +315,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['transactionDateFrom'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
@@ -327,7 +327,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['transactionDateTo'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {

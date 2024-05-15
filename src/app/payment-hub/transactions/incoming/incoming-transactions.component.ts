@@ -247,7 +247,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   controlChange() {
     this.filterFormGroup.controls['payeePartyId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'payeePartyId');
@@ -257,7 +257,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['payerPartyId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'payerPartyId');
@@ -267,7 +267,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['payerDfspId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'payerDfspId');
@@ -277,7 +277,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['payerDfspName'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           const elements = this.dfspEntriesData.filter((option) => option.name === filterValue.name);
@@ -291,7 +291,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['transactionId'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'transactionId');
@@ -301,7 +301,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['status'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'status');
@@ -311,7 +311,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['businessProcessStatus'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'businessProcessStatus');
@@ -321,7 +321,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['paymentScheme'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'paymentScheme');
@@ -331,7 +331,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['amountFrom'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'amountFrom');
@@ -341,7 +341,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['amountTo'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(filterValue, 'amountTo');
@@ -351,7 +351,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['currencyCode'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           filterValue = filterValue.AlphabeticCode;
@@ -362,7 +362,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['transactionDateFrom'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(convertMomentToDate(filterValue), 'startFrom');
@@ -372,7 +372,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['transactionDateTo'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(convertMomentToDate(filterValue), 'startTo');
@@ -382,7 +382,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['acceptanceDateFrom'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(convertMomentToDate(filterValue), 'acceptanceDateFrom');
@@ -392,7 +392,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['acceptanceDateTo'].valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
           this.applyFilter(convertMomentToDate(filterValue), 'acceptanceDateTo');
@@ -402,7 +402,7 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
 
     this.filterFormGroup.controls['endToEndIdentification'].valueChanges
         .pipe(
-            debounceTime(500),
+            debounceTime(1000),
             distinctUntilChanged(),
             tap((filterValue) => {
               this.applyFilter(filterValue, 'endToEndIdentification');
