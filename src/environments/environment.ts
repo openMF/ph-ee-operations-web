@@ -11,12 +11,12 @@ export let environment = {
   production: false,
   version: env.phee.version + '-dev',
   backend: {
-    operations: window['env']['serverApiUrlOps'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
-    signatureApiUrl: window['env']['signatureApiUrl'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    operations: window['env']['serverApiUrlOps'] || 'https://ops-bk.sandbox.fynarfin.io',
+    signatureApiUrl: window['env']['signatureApiUrl'] || 'https://ops-bk.sandbox.fynarfin.io',
     bulkConnectorOps: window['env']['bulkConnectorOps'] || 'https://bulk-connector-demo.sandbox.fynarfin.io',
-    vouchers: window['env']['serverApiUrlVou'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    vouchers: window['env']['serverApiUrlVou'] || 'https://ops-bk.sandbox.fynarfin.io',
     voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',
-    account: window['env']['serverApiUrlAct'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    account: window['env']['serverApiUrlAct'] || 'https://ops-bk.sandbox.fynarfin.io',
     registeringInstituionId: window['env']['registeringInstitutionId'] || 'default',
   },
   oauth: {
