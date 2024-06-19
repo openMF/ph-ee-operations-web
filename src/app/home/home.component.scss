@@ -1,8 +1,12 @@
 .container {
-  max-width: 37rem;
+  width: 80%;
+}
 
-  .title {
-    font-size: 1.25rem;
-    font-weight: 500;
+.payment-hub-ee-wrap {
+  flex-wrap: wrap;
+  width: 100%;
+
+  mifosx-filter-selector {
+    width: 100%;
   }
 }

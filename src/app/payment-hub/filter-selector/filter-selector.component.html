@@ -1,0 +1,8 @@
+<div fxLayout="row" fxLayout.lt-md="column" class="payment-hub-ee-wrap">
+  <mifosx-list-item *ngFor="let section of sections;" [section]="section"
+  [classFormatTitle]="'center'"
+  (sectionChange)="setActive($event)"
+  >
+  </mifosx-list-item>
+
+</div>

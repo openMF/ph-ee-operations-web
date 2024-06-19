@@ -1,0 +1,109 @@
+version: 2.1
+executors:
+  docker-executor:
+    docker:
+      - image: circleci/openjdk:17-buster-node-browsers-legacy
+
+jobs:
+  build_and_push_tag_image:
+    executor: docker-executor
+    environment:
+      JVM_OPTS: -Xmx512m
+      TERM: dumb  
+      GITHUB_TOKEN: ${GITHUB_TOKEN}  # Add the GitHub token as an environment variable
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.24
+      - run:
+          name: Build and Push Docker tag Image
+          command: |
+            # Set environment variables
+            IMAGE_TAG=$CIRCLE_TAG
+
+            # Check if the Docker image with the same tag already exists in Docker Hub
+            if curl -s -f -u "$DOCKERHUB_USERNAME":"$DOCKERHUB_PASSWORD" "https://hub.docker.com/v2/repositories/openmf/ph-ee-operations-web/tags/$IMAGE_TAG" > /dev/null; then
+              echo "Skipping the build and push as the tag $IMAGE_TAG already exists in Docker Hub."
+              exit 0
+            fi
+
+            # Build and tag the Docker image
+            docker build \
+              --build-arg BUILDER_IMAGE=node:20-alpine \
+              --build-arg NGINX_IMAGE=nginx:1.19.3 \
+              --build-arg NPM_REGISTRY_URL=https://registry.npmjs.org/ \
+              --build-arg PUPPETEER_DOWNLOAD_HOST_ARG=https://storage.googleapis.com \
+              --build-arg PUPPETEER_CHROMIUM_REVISION_ARG=1011831 \
+              -t "openmf/ph-ee-operations-web:$IMAGE_TAG" .
+
+            # Push the Docker image to Docker Hub
+            docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
+            docker push "openmf/ph-ee-operations-web:$IMAGE_TAG"
+
+          # when: always  # The job will be executed even if there's no match for the tag filter
+  
+  build_and_push_latest_image:
+    executor: docker-executor
+    environment:
+      JVM_OPTS: -Xmx512m
+      TERM: dumb
+
+    steps:
+      - checkout
+      # Install Docker to build and push the image
+      - setup_remote_docker:
+          version: 20.10.24
+
+      # Build the Docker image
+      - run:
+          name: Build Docker image
+          command: |
+            docker build \
+              --build-arg BUILDER_IMAGE=node:20-alpine \
+              --build-arg NGINX_IMAGE=nginx:1.19.3 \
+              --build-arg NPM_REGISTRY_URL=https://registry.npmjs.org/ \
+              --build-arg PUPPETEER_DOWNLOAD_HOST_ARG=https://storage.googleapis.com \
+              --build-arg PUPPETEER_CHROMIUM_REVISION_ARG=1011831 \
+              -t "openmf/ph-ee-operations-web:latest" .
+            if [ "$CIRCLE_BRANCH" != "master" ]; then
+              PR_NUMBER=$(basename $CIRCLE_PULL_REQUEST)
+              PR_TITLE=$(curl -sSL "https://api.github.com/repos/openmf/$CIRCLE_PR_REPONAME/pulls/$PR_NUMBER" | jq -r '.title')
+              JIRA_STORY=$(echo $PR_TITLE | cut -d "[" -f2 | cut -d "]" -f1 | tr '[A-Z]' '[a-z]')
+              if [ -z "$JIRA_STORY" ]; then echo "Invalid PR title" && exit 1; else echo "Ticket NO: $JIRA_STORY"; fi
+              docker image tag openmf/$CIRCLE_PR_REPONAME:latest openmf/$CIRCLE_PR_REPONAME:$JIRA_STORY
+            fi
+
+      # Log in to DockerHub using environment variables
+      - run:
+          name: Login to DockerHub
+          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+
+      # Push the Docker image to DockerHub
+      - run:
+          name: Push Docker image to DockerHub
+          command: |
+            if [ "$CIRCLE_BRANCH" = "master" ]; then
+            docker push openmf/ph-ee-operations-web:latest
+            fi
+            if [ "$CIRCLE_BRANCH" != "master" ]; then
+            PR_NUMBER=$(basename $CIRCLE_PULL_REQUEST)
+            PR_TITLE=$(curl -sSL "https://api.github.com/repos/openmf/$CIRCLE_PR_REPONAME/pulls/$PR_NUMBER" | jq -r '.title')
+            JIRA_STORY=$(echo $PR_TITLE | cut -d "[" -f2 | cut -d "]" -f1 | tr '[A-Z]' '[a-z]')
+            docker push openmf/$CIRCLE_PR_REPONAME:${JIRA_STORY}
+            fi
+
+workflows:
+  version: 2
+  build-and-push:
+    jobs:
+      - build_and_push_tag_image:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/  # Match tags in the format v1.2.3
+          context:
+              - DOCKER
+      - build_and_push_latest_image:
+          context:
+              - DOCKER
+             

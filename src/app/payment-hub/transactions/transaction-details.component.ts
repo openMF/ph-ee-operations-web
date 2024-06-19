@@ -1,10 +1,6 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 /** rxjs Imports */
@@ -13,12 +9,12 @@ import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
 import { TransactionsService } from './service/transactions.service';
-import { formatDate, formatUTCDate } from './helper/date-format.helper';
+import { formatUTCDate } from './helper/date-format.helper';
 import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
 
 /** Dialog Components */
-import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
+import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component';
 import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
 import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
 
@@ -27,6 +23,8 @@ import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { AlertService } from 'app/core/alert/alert.service';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 /**
  * View transaction component.
@@ -61,19 +59,17 @@ export class TransactionDetailsComponent implements OnInit {
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
   tasks: Array<any> = [];
-  counter: number = 0;
+  counter = 0;
   expandedElement: Array<any> = [];
   /**
    * @param {TransactionsService} transactionsService Transactions Service.
    * @param {ActivatedRoute} route Activated Route.
-   * @param {Router} router Router for navigation.
    * @param {MatDialog} dialog Dialog reference.
    */
   constructor(private transactionsService: TransactionsService,
     private alertService: AlertService,
     private authService: AuthenticationService,
     private route: ActivatedRoute,
-    private router: Router,
     public dialog: MatDialog) {
     this.route.data.subscribe((data: {
       dfspEntries: DfspEntry[]
@@ -148,18 +144,6 @@ export class TransactionDetailsComponent implements OnInit {
       return undefined;
     }
     return formatUTCDate(new Date(timestamp));
-  }
-
-  formatDate(date: string) {
-    if (!date) {
-      return undefined;
-    }
-
-    date = date.toString();
-    date = date.replace('+0000', '');
-    date = date.replace('T', ' ');
-    date = date.replace('.000', '');
-    return date;
   }
 
   getPaymentProcessId() {

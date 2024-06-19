@@ -1,9 +1,9 @@
 /** Angular Imports */
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
@@ -15,11 +15,10 @@ import { environment } from '../../../environments/environment';
 /** Custom Models */
 import { LoginContext } from './login-context.model';
 import { Credentials } from './credentials.model';
-import { OAuth2Token } from './o-auth2-token.model';
-import { AppConfig } from 'app/app.config';
+import { Introspect, OAuth2Token } from './o-auth2-token.model';
 
 import jwt_decode from 'jwt-decode';
-import { Router } from '@angular/router';
+import { OauthKeycloakService } from './keycloak/oauth-keycloak.service';
 
 /**
  * Authentication workflow.
@@ -41,14 +40,16 @@ export class AuthenticationService {
 
   private credentials: Credentials;
   /** Key to store credentials in storage. */
-  private credentialsStorageKey = 'mifosXCredentials';
+  private credentialsStorageKey = 'pheeCredentials';
   /** Key to store oauth token details in storage. */
-  private oAuthTokenDetailsStorageKey = 'mifosXOAuthTokenDetails';
+  private oAuthTokenDetailsStorageKey = 'pheeOAuthTokenDetails';
+  /** Key to store user roles details in storage. */
+  private oAuthUserDetailsStorageKey = 'pheeOAuthUserDetails';
 
   private refreshAccessToken = false;
   private loggedIn = false;
   private authorizationToken: String;
-  private tenantId: String;
+  private tenantId: String = environment.tenant;
   private username: String;
   private accessTokenExpirationTime = 1;
 
@@ -59,13 +60,11 @@ export class AuthenticationService {
    * @param {AlertService} alertService Alert Service.
    */
   constructor(private http: HttpClient,
-    private alertService: AlertService, private config: AppConfig, private router: Router) {
+    private alertService: AlertService,
+    private oauthKeycloakService: OauthKeycloakService) {
     this.storage = sessionStorage;
 
-    config.load().then(value => {
-      this.init();
-    });
-
+    this.init();
   }
 
   init() {
@@ -79,10 +78,20 @@ export class AuthenticationService {
         this.storage = localStorage;
       }
 
-      const oAuthRefreshToken = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
-      if (oAuthRefreshToken) {
-        this.refreshAccessToken = true;
-        this.authorizationToken = `Bearer ${oAuthRefreshToken}`;
+      if (environment.oauth.enabled) {
+        const oauthToken: OAuth2Token = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey));
+        const oAuthRefreshToken = oauthToken.refresh_token;
+        if (oAuthRefreshToken) {
+          this.oauthKeycloakService.introspect(oauthToken).subscribe((response: any) => {
+            if (!response.active) {
+              this.loggedIn = false;
+              this.setCredentials();
+            } else {
+              this.refreshAccessToken = true;
+              this.authorizationToken = `Bearer ${oAuthRefreshToken}`;
+            }
+          });
+        }
       } else {
         this.authorizationToken = `Basic ${savedCredentials.base64EncodedAuthenticationKey}`;
       }
@@ -110,22 +119,32 @@ export class AuthenticationService {
     this.username = loginContext.username;
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
-    //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
-    if (environment.oauth.enabled === 'true') {
-
-      httpParams = httpParams.set('grant_type', 'password');
-      if (environment.oauth.basicAuth === "true") {
-        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-      }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
-        .pipe(
+    // httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
+    if (environment.oauth.enabled) {
+      if (this.isOauthKeyCloak()) {
+        return this.oauthKeycloakService.token(loginContext).pipe(
           map((tokenResponse: OAuth2Token) => {
-            // TODO: fix UserDetails API
             this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
-            this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
+            this.getUserDetails(loginContext, tokenResponse);
             return of(true);
           })
         );
+
+      } else {
+
+        httpParams = httpParams.set('grant_type', 'password');
+        if (environment.oauth.basicAuth === 'true') {
+          this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
+        }
+        return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+          .pipe(
+            map((tokenResponse: OAuth2Token) => {
+              this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+              this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
+              return of(true);
+            })
+          );
+      }
     } else {
       return this.http.post('/authentication', {}, { params: httpParams })
         .pipe(
@@ -143,16 +162,14 @@ export class AuthenticationService {
    * Sets the oauth2 token refresh time.
    * @param {OAuth2Token} tokenResponse OAuth2 Token details.
    */
-  private getUserDetails(tokenResponse: OAuth2Token) {
-    const httpParams = new HttpParams().set('access_token', tokenResponse.access_token);
-    this.refreshTokenOnExpiry(tokenResponse.expires_in);
-    this.http.get('/userdetails', { params: httpParams })
-      .subscribe((credentials: Credentials) => {
-        this.onLoginSuccess(credentials);
-        if (!credentials.shouldRenewPassword) {
-          this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
-        }
+  private getUserDetails(loginContext: LoginContext, tokenResponse: OAuth2Token) {
+    if (this.isOauthKeyCloak()) {
+      this.oauthKeycloakService.introspect(tokenResponse).subscribe((userDetails: Introspect) => {
+        this.storage.setItem(this.oAuthUserDetailsStorageKey, JSON.stringify(userDetails));
+        this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
+
       });
+    }
   }
 
   /**
@@ -173,19 +190,19 @@ export class AuthenticationService {
    */
   public refreshOAuthAccessToken() {
     const oAuth = this.getStoreageItem(this.oAuthTokenDetailsStorageKey);
-      const oAuthData = JSON.parse(oAuth);
+    const oAuthData = JSON.parse(oAuth);
 
-      const oAuthRefreshToken = oAuthData.refresh_token;
-      this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
-      let httpParams = new HttpParams();
-      httpParams = httpParams.set('grant_type', 'refresh_token');
-      httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    
-      if (environment.oauth.basicAuth === 'true') {
-        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-      }
+    const oAuthRefreshToken = oAuthData.refresh_token;
+    this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('grant_type', 'refresh_token');
+    httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+    if (environment.oauth.basicAuth === 'true') {
+      this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
+    }
+
+    return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
         this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
@@ -196,7 +213,7 @@ export class AuthenticationService {
         this.storage.setItem(this.credentialsStorageKey, JSON.stringify(credentials));
         return of(true);
       }));
-    
+
   }
 
   /**
@@ -209,7 +226,7 @@ export class AuthenticationService {
    */
   private onLoginSuccess(credentials: Credentials) {
     this.loggedIn = true;
-    if (environment.oauth.enabled === 'true') {
+    if (environment.oauth.enabled) {
       this.authorizationToken = `Bearer ${credentials.accessToken}`;
     } else {
       this.authorizationToken = `Basic ${credentials.base64EncodedAuthenticationKey}`;
@@ -232,6 +249,15 @@ export class AuthenticationService {
    */
   logout(): Observable<boolean> {
     this.loggedIn = false;
+    if (environment.oauth.enabled) {
+      if (this.isOauthKeyCloak()) {
+        const oauthToken: OAuth2Token = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey));
+        if (oauthToken) {
+          this.oauthKeycloakService.logout(oauthToken).subscribe((response: any) => { });
+        }
+      }
+    }
+
     this.setCredentials();
     return of(true);
   }
@@ -241,9 +267,7 @@ export class AuthenticationService {
    * @returns {boolean} True if the user is authenticated.
    */
   isAuthenticated(): boolean {
-    return !!(JSON.parse(
-      sessionStorage.getItem(this.credentialsStorageKey) || this.getStoreageItem(this.credentialsStorageKey)
-    ));
+    return this.loggedIn;
   }
 
   /**
@@ -252,6 +276,10 @@ export class AuthenticationService {
    */
   getCredentials(): Credentials | null {
     return JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
+  }
+
+  get userDetails(): Introspect | null {
+    return JSON.parse(this.getStoreageItem(this.oAuthUserDetailsStorageKey));
   }
 
   /**
@@ -270,6 +298,7 @@ export class AuthenticationService {
     } else {
       this.storage.removeItem(this.credentialsStorageKey);
       this.storage.removeItem(this.oAuthTokenDetailsStorageKey);
+      this.storage.removeItem(this.oAuthUserDetailsStorageKey);
       this.loggedIn = false;
     }
   }
@@ -313,6 +342,10 @@ export class AuthenticationService {
 
   getUsername() {
     return this.username;
+  }
+
+  isOauthKeyCloak(): boolean {
+    return (environment.oauth.type === 'keycloak');
   }
 
 }

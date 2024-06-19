@@ -1,6 +1,5 @@
 /** Angular Imports */
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
 
 /** Custom Modules */
 import { SharedModule } from '../shared/shared.module';
@@ -14,39 +13,39 @@ import { PaymentHubComponent } from './paymenthub.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
 import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
 import { RetryResolveDialogComponent } from './transactions/retry-resolve-dialog/retry-resolve-dialog.component';
-import { IncomingRequestToPayComponent } from './request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component';
-import { OutgoingRequestToPayComponent } from './request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component';
-import { ViewRequestToPayComponent } from './request-to-pay/view-request-to-pay/view-request-to-pay.component';
-import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component';
-
+import { FilterSelectorComponent } from './filter-selector/filter-selector.component';
+import { BatchesComponent } from './batches/batches.component';
+import { SubBatchesComponent } from './sub-batches/sub-batches.component';
+import { DirectivesModule } from 'app/directives/directives.module';
+import { TransfersComponent } from './transfers/transfers.component';
+import { BatchesBulkImportComponent } from './batches-bulk-import/batches-bulk-import.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { ViewTransferDetailsComponent } from './transfers/view-transfer-details/view-transfer-details.component';
 /**
  * Payment HUB Module
  *
  * All components related to payment hub functions should be declared here.
  */
 @NgModule({
-  imports: [
-    MatDialogModule,
-    SharedModule,
-    PaymentHubRoutingModule,
-    PipesModule
-  ],
-  declarations: [
-    IncomingTransactionsComponent,
-    OutgoingTransactionsComponent,
-    TransactionDetailsComponent,
-    PaymentHubComponent,
-    BpmnDialogComponent,
-    RetryResolveDialogComponent,
-    IncomingRequestToPayComponent,
-    OutgoingRequestToPayComponent,
-    ViewRequestToPayComponent,
-    IncomingRequestExportComponent
-  ],
-  entryComponents: [
-    PaymentHubComponent,
-    BpmnDialogComponent,
-    RetryResolveDialogComponent
-  ]
+    imports: [
+        SharedModule,
+        PaymentHubRoutingModule,
+        PipesModule,
+        DirectivesModule
+    ],
+    declarations: [
+        IncomingTransactionsComponent,
+        OutgoingTransactionsComponent,
+        TransactionDetailsComponent,
+        PaymentHubComponent,
+        BpmnDialogComponent,
+        RetryResolveDialogComponent,
+        FilterSelectorComponent,
+        BatchesComponent,
+        SubBatchesComponent,
+        TransfersComponent,
+        BatchesBulkImportComponent,
+        ViewTransferDetailsComponent,
+    ]
 })
-export class PaymentHubModule { }
+export class PaymentHubModule {}

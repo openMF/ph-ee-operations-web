@@ -1,0 +1,87 @@
+@import 'theme/theme';
+
+.option {
+  border-radius: 15px;
+  border: $border-size solid $mid-grey;
+  height: 110px;
+  width: 260px;
+  vertical-align: middle;
+  margin: 15px;
+  padding-top: 15px;
+
+  .title {
+    padding-left: 15px;
+    font-size: 1.2rem;
+
+    fa-icon {
+      color: $primary;
+    }
+  }
+}
+
+.option-disabled {
+  background-color: $mid-grey;
+  border-radius: 15px;
+  border: $border-size solid $mid-grey;
+  height: 110px;
+  width: 260px;
+  vertical-align: middle;
+  margin: 15px;
+  padding-top: 15px;
+
+  .title {
+    padding-left: 15px;
+    font-size: 1.2rem;
+
+    fa-icon {
+      color: $primary;
+    }
+  }
+}
+
+.active {
+  background-color: $primary;
+  .title {
+    color: $white;
+    fa-icon {
+      color: $white;
+    }
+  }
+}
+
+.option:hover {
+  background-color: $primary;
+  .title {
+    color: $white;
+    fa-icon {
+      color: $white;
+    }
+  }
+}
+
+.large {
+  border-radius: 15px;
+  border: $border-size solid $mid-grey;
+  height: 100px;
+  width: 200px;
+  vertical-align: middle;
+}
+
+.mat-list-base .mat-list-item {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-list-base .mat-list-item {
+  font-size: 1.75rem;
+}
+
+.mat-list-base .mat-focus-indicator {
+  font-size: 1.85rem;
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar,
+.mat-list-base .mat-list-option.mat-list-item-with-avatar {
+  border: 0.15rem solid;
+  height: 150px;
+  vertical-align: middle;
+}

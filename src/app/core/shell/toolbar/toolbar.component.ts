@@ -33,6 +33,8 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 })
 export class ToolbarComponent implements OnInit {
 
+  credentials: any;
+
   /** Subscription to breakpoint observer for handset. */
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -67,11 +69,28 @@ export class ToolbarComponent implements OnInit {
         this.toggleSidenavCollapse(false);
       }
     });
+
+    if (this.authenticationService.isOauthKeyCloak()) {
+      this.credentials = this.authenticationService.userDetails;
+    } else {
+      this.credentials = this.authenticationService.getCredentials();
+    }
   }
 
-  displayUser() {
-    const credentials = this.authenticationService.getCredentials();
-    return credentials ? credentials.username + ' - ' + credentials.tenantId : '';
+  displayUser(): string {
+    if (this.authenticationService.isOauthKeyCloak()) {
+      return this.credentials ? this.credentials.given_name : '';
+    } else {
+      return this.credentials ? this.credentials.username + '@' + this.credentials.tenantId : '';
+    }
+  }
+
+  displayEmail(): string {
+    if (this.authenticationService.isOauthKeyCloak()) {
+      return this.credentials ? this.credentials.email : '';
+    } else {
+      return this.credentials ? this.credentials.username + '@' + this.credentials.tenantId : '';
+    }
   }
 
   /**

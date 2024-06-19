@@ -1,27 +1,21 @@
 /** Angular Imports */
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 /** Tanslation Imports */
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 /** Chart Imports */
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-
-/** Environment Configuration */
-import { environment } from 'environments/environment';
 
 /** Main Component */
 import { WebAppComponent } from './web-app.component';
 
 /** Not Found Component */
 import { NotFoundComponent } from './not-found/not-found.component';
-
-/** Load config dynamically */
-import { AppConfig } from './app.config';
 
 /** Custom Modules */
 import { CoreModule } from './core/core.module';
@@ -36,10 +30,10 @@ import { PaymentHubModule } from './payment-hub/paymenthub.module';
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
 
-
-export function initConfig(config: AppConfig) {
-  return () => config.load();
-}
+import { DatePipe, LocationStrategy } from '@angular/common';
+import { VouchersModule } from './vouchers/vouchers.module';
+import { AccountMapperModule } from './account-mapper/account-mapper.module';
+import { KeycloakAngularModule } from 'keycloak-angular';
 
 /**
  * App Module
@@ -51,8 +45,16 @@ export function initConfig(config: AppConfig) {
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (http: HttpClient, locationStrategy: LocationStrategy) => {
+          return new TranslateHttpLoader(http, `${ window.location.protocol }//${ window.location.host }${locationStrategy.getBaseHref()}assets/translations/`, '.json');
+        },
+        deps: [HttpClient, LocationStrategy]
+      }
+    }),
+    KeycloakAngularModule,
     NgxChartsModule,
     CoreModule,
     HomeModule,
@@ -61,16 +63,18 @@ export function initConfig(config: AppConfig) {
     SystemModule,
     UsersModule,
     PaymentHubModule,
+    VouchersModule,
+    AccountMapperModule,
     AppRoutingModule,
   ],
   declarations: [WebAppComponent, NotFoundComponent],
-  providers: [AppConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initConfig,
-      deps: [AppConfig],
-      multi: true
-    }],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [WebAppComponent]
 })
 export class AppModule { }
+
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, `/assets/translations/`, '.json');
+}

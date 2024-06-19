@@ -1,0 +1,12 @@
+<div (click)="goToRoute()" class="option {{classFormat}}" [ngClass]="isActive()" *ngIf="!section.disabled">
+    <h4 matLine class="title" [ngClass]="classFormatTitle">
+        <fa-icon *ngIf="section.icon" [icon]="section.icon" size="xl" class="m-r-10"></fa-icon>
+        {{ 'labels.menus.' + section.label | translate }}
+    </h4>
+</div>
+<div class="option-disabled {{classFormat}}" [ngClass]="isActive()" *ngIf="section.disabled">
+    <h4 matLine class="title" [ngClass]="classFormatTitle">
+        <fa-icon *ngIf="section.icon" [icon]="section.icon" size="xl" class="m-r-10"></fa-icon>
+        {{ 'labels.menus.' + section.label | translate }}
+    </h4>
+</div>

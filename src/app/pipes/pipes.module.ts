@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { StatusLookupPipe } from './status-lookup.pipe';
 import { FindPipe } from './find.pipe';
-import { PrettyPrintPipe } from './pretty-print.pipe';
+import { DateFormatPipe } from './date-format.pipe';
+import { ExternalIdentifierPipe } from './external-identifier.pipe';
+import { FormatNumberPipe } from './format-number.pipe';
+import { DatetimeFormatPipe } from './datetime-format.pipe';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [StatusLookupPipe, FindPipe, PrettyPrintPipe],
-  providers: [StatusLookupPipe, FindPipe, PrettyPrintPipe],
-  exports: [StatusLookupPipe, FindPipe, PrettyPrintPipe]
+  declarations: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DatetimeFormatPipe],
+  providers: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DecimalPipe, DatetimeFormatPipe],
+  exports: [StatusLookupPipe, FindPipe, DateFormatPipe, ExternalIdentifierPipe, FormatNumberPipe, DatetimeFormatPipe]
 })
 export class PipesModule { }

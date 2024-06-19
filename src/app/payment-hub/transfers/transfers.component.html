@@ -1,0 +1,195 @@
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+  <mat-accordion class="filter-options">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3 class="m-r-10">{{"labels.inputs.Filters" | translate }}</h3>
+          <fa-icon icon="filter" size="xl"></fa-icon>
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+        <mat-form-field fxFlex="25%" (click)="transactionDateFromPicker.open()">
+          <mat-label>{{"labels.inputs.From Date" | translate }}</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker"
+            [formControl]="transactionDateFrom">
+          <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #transactionDateFromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="25%" (click)="transactionDateToPicker.open()">
+          <mat-label>{{"labels.inputs.To Date" | translate }}</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker"
+            [formControl]="transactionDateTo">
+          <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
+          <mat-datepicker #transactionDateToPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="25%">
+          <mat-label>{{"labels.inputs.Transaction Type" | translate }}</mat-label>
+          <input matInput [formControl]="transactionType">
+        </mat-form-field>
+
+      </div>
+
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Source Ministry" | translate }}</mat-label>
+          <input matInput [formControl]="payerPartyId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Source Financial Institution" | translate }}</mat-label>
+          <input matInput [formControl]="payerDfspId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Source Account Number" | translate }}</mat-label>
+          <input matInput [formControl]="payerDfspName">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Amount" | translate }}</mat-label>
+          <input type="number" matInput [formControl]="amount">
+        </mat-form-field>
+      </div>
+
+      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Destination Account Number" | translate }}</mat-label>
+          <input type="number" matInput [formControl]="transactionId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Destination Financial Institution" | translate }}</mat-label>
+          <input matInput [formControl]="transactionId">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="20%">
+          <mat-label>{{"labels.inputs.Transaction Reference Number" | translate }}</mat-label>
+          <input matInput [formControl]="transactionId">
+        </mat-form-field>
+
+        <div fxFlex="20%" class="push-end m-t-15">
+          <button mat-raised-button color="primary" (click)="searchTransactions()">
+            <fa-icon icon="search" class="m-r-10"></fa-icon> {{"labels.buttons.Search" | translate }}
+          </button>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</div>
+
+<div class="mat-elevation-z8 container">
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+  <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading && (subBatchId === null)">
+
+    <ng-container matColumnDef="batchReferenceNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Batch Reference Number" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction" matTooltip="{{transaction.transactionId}}"> 
+        <mifosx-identifier identifier="{{transaction.transactionId}}"></mifosx-identifier> 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Start Time" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ convertTimestampToUTCDate(transaction.startedAt) | datetimeFormat }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="completedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Completed Time" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ convertTimestampToUTCDate(transaction.completedAt) | datetimeFormat }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceMinistry">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Source Ministry" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction">
+        <mifosx-identifier identifier="{{transaction.clientCorrelationId}}"></mifosx-identifier>  
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bulkAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Bulk Amount" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.amount | formatNumber }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="payerFspId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Payer FSP" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.payerDfspId }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Status" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"
+        [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">
+        {{ transaction.status }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="select-row" (click)="viewTransfer(row)" ></tr>
+
+  </table>
+
+
+  <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading && (subBatchId !== null)">
+
+    <ng-container matColumnDef="batchReferenceNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Batch Reference Number" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction" matTooltip="{{transaction.instructionId}}"> 
+        <mifosx-identifier identifier="{{transaction.instructionId}}"></mifosx-identifier> 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Start Time" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.startedAt | datetimeFormat }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="completedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Completed Time" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.completedAt | datetimeFormat }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceMinistry">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Source Ministry" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction">
+        <mifosx-identifier identifier="{{transaction.clientCorrelationId}}"></mifosx-identifier>  
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bulkAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Bulk Amount" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.amount | formatNumber }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="payerFspId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Payer FSP" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.payerFsp }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Status" | translate }} </th>
+      <td mat-cell *matCellDef="let transaction"
+        [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">
+        {{ transaction.status }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="select-row" (click)="viewTransfer(row)" ></tr>
+
+  </table>
+
+  <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[50, 100, 200]" [length]="totalRows" (page)="pageChanged($event)"
+  showFirstLastButtons></mat-paginator>
+
+</div>

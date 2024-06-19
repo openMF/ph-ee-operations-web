@@ -14,11 +14,10 @@ import { ProgressBarService } from './progress-bar/progress-bar.service';
 import { I18nService } from './i18n/i18n.service';
 
 /** Custom Guards */
-import { AuthenticationGuard } from './authentication/authentication.guard';
+import { AuthenticationGuard } from './authentication/guard/authentication.guard';
 
 /** Custom Interceptors */
 import { ProgressInterceptor } from './progress-bar/progress.interceptor';
-import { ApiPrefixInterceptor } from './http/api-prefix.interceptor';
 import { ErrorHandlerInterceptor } from './http/error-handler.interceptor';
 import { CacheInterceptor } from './http/cache.interceptor';
 import { AuthenticationInterceptor } from './authentication/authentication.interceptor';
@@ -33,7 +32,6 @@ import { SharedModule } from '../shared/shared.module';
 import { ShellComponent } from './shell/shell.component';
 import { SidenavComponent } from './shell/sidenav/sidenav.component';
 import { ToolbarComponent } from './shell/toolbar/toolbar.component';
-import { BreadcrumbComponent } from './shell/breadcrumb/breadcrumb.component';
 import { ContentComponent } from './shell/content/content.component';
 
 /**
@@ -52,7 +50,6 @@ import { ContentComponent } from './shell/content/content.component';
     ShellComponent,
     SidenavComponent,
     ToolbarComponent,
-    BreadcrumbComponent,
     ContentComponent
   ],
   exports: [
@@ -69,7 +66,6 @@ import { ContentComponent } from './shell/content/content.component';
     },
     I18nService,
     HttpCacheService,
-    ApiPrefixInterceptor,
     ErrorHandlerInterceptor,
     CacheInterceptor,
     {

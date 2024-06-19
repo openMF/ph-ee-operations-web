@@ -1,9 +1,10 @@
 /** Angular Imports */
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 /** Custom Services */
-import { I18nService } from '../../core/i18n/i18n.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SettingsService } from 'app/settings/settings.service';
 
 /**
  * Language selector component.
@@ -19,25 +20,26 @@ import { I18nService } from '../../core/i18n/i18n.service';
 export class LanguageSelectorComponent implements OnInit {
 
   /** Language selector form control. */
-  languageSelector = new FormControl();
+  languageSelector = new UntypedFormControl();
 
   /**
    * Sets the language of the application in the selector on initial setup.
-   * @param {I18nService} i18nService Internationalization Service.
+   * @param {TranslateService} translateService Translate Service.
    */
-  constructor(private i18nService: I18nService) {
-    this.languageSelector.setValue(this.currentLanguage);
-  }
+  constructor(private translateService: TranslateService,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
+    this.languageSelector = new UntypedFormControl(this.currentLanguage);
   }
 
   /**
    * Sets a new language to be used by the application.
    * @param {string} language New language.
    */
-  setLanguage(language: string) {
-    this.i18nService.language = language;
+  setLanguage() {
+    this.translateService.use(this.languageSelector.value);
+    this.settingsService.setLanguage({ name: '', code: this.languageSelector.value.substring(0, 2) });
   }
 
   /**
@@ -45,7 +47,7 @@ export class LanguageSelectorComponent implements OnInit {
    * @returns {string} Current language.
    */
   get currentLanguage(): string {
-    return this.i18nService.language;
+    return this.translateService.currentLang || this.settingsService.language.code;
   }
 
   /**
@@ -53,7 +55,7 @@ export class LanguageSelectorComponent implements OnInit {
    * @return {string[]} Supported languages.
    */
   get languages(): string[] {
-    return this.i18nService.supportedLanguages;
+    return this.translateService.getLangs();
   }
 
 }

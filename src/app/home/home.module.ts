@@ -8,6 +8,8 @@ import { HomeRoutingModule } from './home-routing.module';
 /** Custom Components */
 import { HomeComponent } from './home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { DirectivesModule } from 'app/directives/directives.module';
 
 /**
  * Home Component
@@ -17,7 +19,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 @NgModule({
   imports: [
     SharedModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    TranslateModule,
+    DirectivesModule
   ],
   declarations: [
     HomeComponent,

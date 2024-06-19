@@ -1,0 +1,100 @@
+<div class="main-container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+    <mat-accordion class="filter-options">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h3 class="m-r-10">{{"labels.inputs.Filters" | translate}}</h3>
+            <fa-icon icon="filter" size="xl"></fa-icon>
+          </mat-panel-title>
+  
+        </mat-expansion-panel-header>
+        <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+          <mat-form-field fxFlex="30%" (click)="transactionDateFromPicker.open()">
+            <mat-label>{{"labels.inputs.Date Voucher Created" | translate}}</mat-label>
+            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker"
+              [formControl]="transactionDateFrom">
+            <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #transactionDateFromPicker></mat-datepicker>
+          </mat-form-field>
+  
+          <div fxFlex="55%" class="push-end m-t-15">
+            <button mat-raised-button color="primary" (click)="searchVouchers()">
+              <fa-icon icon="search" class="m-r-10"></fa-icon> {{"labels.buttons.Search" | translate}}
+            </button>
+          </div>
+        </div>
+
+        <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Serial Number" | translate}}</mat-label>
+            <input matInput [formControl]="serialNumber">
+          </mat-form-field>
+
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Government Entity" | translate}}</mat-label>
+            <input matInput [formControl]="governmentEntity">
+          </mat-form-field>
+    
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Functional ID" | translate}}</mat-label>
+            <input matInput [formControl]="functionalId">
+          </mat-form-field>
+        
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Status" | translate}}</mat-label>
+            <input matInput [formControl]="status">
+          </mat-form-field>  
+        </div>
+    
+      </mat-expansion-panel>
+    </mat-accordion>
+  
+    <mat-card class="container">
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+      <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading">
+  
+        <ng-container matColumnDef="serialNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Serial Number" | translate}} </th>
+          <td mat-cell *matCellDef="let item"> 
+            <mifosx-identifier identifier="{{item.serialNumber}}"></mifosx-identifier> 
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Date Voucher" | translate}} </th>
+          <td mat-cell *matCellDef="let item"> {{ convertTimestampToUTCDate(item.createdDate) | dateFormat }}
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="registeringInstitutionId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Government Entity" | translate}} </th>
+          <td mat-cell *matCellDef="let item"> {{ item.registeringInstitutionId }} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="functionalId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Functional ID" | translate}} </th>
+          <td mat-cell *matCellDef="let item"> {{ item.payeeFunctionalID }} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Status" | translate}} </th>
+          <td mat-cell *matCellDef="let item"
+            [ngClass]="statusStyle(item.status)">
+            {{ validateStatus(item.status) }} </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+          class="select-row"></tr>
+  
+      </table>
+
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[50, 100, 200]" [length]="totalRows" (page)="pageChanged($event)"
+        showFirstLastButtons></mat-paginator>
+  
+    </mat-card>
+  
+</div>

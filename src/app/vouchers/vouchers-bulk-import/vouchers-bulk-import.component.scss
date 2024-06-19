@@ -1,0 +1,92 @@
+@import 'theme/theme';
+
+.dropzone {
+  padding: 2rem;
+  text-align: center;
+  border: dashed 1px #979797;
+  position: relative;
+  margin: 0 auto;
+  height: 200px;
+  display: table;
+
+  width: 100%;
+  height: 200px;
+  background-color: #eee;
+
+  input {
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  label {
+    color: black;
+    width: 183px;
+    height: 44px;
+    border-radius: 21.5px;
+    background-color: transparent;
+    padding: 8px 16px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #38424c;
+  }
+}
+
+.option {
+  height: inherit;
+  border-radius: 15px;
+  background-color: $mid-grey;
+  border: $border-size solid $mid-grey;
+  text-align: center;
+  width: 90%;
+  vertical-align: middle;
+  margin: 15px;
+  padding-top: 15px;
+
+  .title {
+    padding-left: 15px;
+    font-size: 1.2rem;
+
+    fa-icon {
+      color: $primary;
+    }
+  }
+}
+
+.text-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.centered {
+  font-size: 1.3em;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.textLink {
+  background-color: $primary;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.textLink::before {
+  content: "\f093";
+  font-weight: 900;
+  color: #fff;
+  font-size: large;
+  margin-right: 10px;
+}

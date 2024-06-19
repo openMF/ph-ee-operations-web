@@ -1,13 +1,24 @@
 <form fxLayout="column" [formGroup]="loginForm" (ngSubmit)="login()" id="login-form">
 
+  <mat-form-field fxFlexAlign="center" class="login-input" *ngIf="tenantIdIsList()">
+    <span matPrefix>
+      <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
+    </span>
+    <mat-label>{{'labels.inputs.Tenant' | translate}}</mat-label>
+    <input matInput type="text" formControlName="tenant">
+    <mat-error *ngIf="loginForm.controls.tenant.hasError('required')">
+      {{'labels.texts.Tenant is' | translate}} <strong>{{'labels.texts.required' | translate}}</strong>
+    </mat-error>
+  </mat-form-field>
+
   <mat-form-field fxFlexAlign="center" class="login-input">
     <span matPrefix>
       <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
     </span>
-    <mat-label>Username</mat-label>
+    <mat-label>{{'labels.inputs.Username' | translate}}</mat-label>
     <input matInput type="text" autocomplete="off" formControlName="username">
     <mat-error *ngIf="loginForm.controls.username.hasError('required')">
-      Username is <strong>required</strong>
+      {{'labels.texts.Username is' | translate}} <strong>{{'labels.texts.required' | translate}}</strong>
     </mat-error>
   </mat-form-field>
 
@@ -15,7 +26,7 @@
     <span matPrefix>
       <fa-icon icon="lock" size="lg"></fa-icon>&nbsp;&nbsp;
     </span>
-    <mat-label>Password</mat-label>
+    <mat-label>{{'labels.inputs.Password' | translate}}</mat-label>
     <input matInput type="{{ passwordInputType }}" formControlName="password">
     <button mat-button *ngIf="loginForm.controls.password.value && !loading" matSuffix mat-icon-button
       (mousedown)="passwordInputType = 'text'" (mouseup)="passwordInputType = 'password'">
@@ -23,30 +34,19 @@
       <fa-icon *ngIf="passwordInputType === 'text'" icon="eye-slash"></fa-icon>
     </button>
     <mat-error *ngIf="loginForm.controls.password.hasError('required')">
-      Password is <strong>required</strong>
+      {{'labels.texts.Password is' | translate}} <strong>{{'labels.texts.required' | translate}}</strong>
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlexAlign="center" class="login-input">
-    <span matPrefix>
-      <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
-    </span>
-    <mat-label>Tenant</mat-label>
-    <input matInput type="text" autocomplete="off" formControlName="tenant">
-    <mat-error *ngIf="loginForm.controls.tenant.hasError('required')">
-      Tenant is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-
-  <mat-checkbox fxFlexAlign="center" formControlName="remember" class="m-t-10">Remember me</mat-checkbox>
+  <mat-checkbox fxFlexAlign="center" formControlName="remember" class="m-t-10">{{'labels.texts.Remember me' | translate}}</mat-checkbox>
 
   <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" [disabled]="!loginForm.valid">
-    Login
+    {{'labels.buttons.Login' | translate}}
     <mat-spinner [diameter]="20" *ngIf="loading"></mat-spinner>
   </button>
 
   <button type="button" mat-button fxFlexAlign="center" class="login-button" (click)="forgotPassword()" [disabled]="loading">
-    Forgot Password?
+    {{'labels.buttons.Forgot Password?' | translate}}
   </button>
 
 </form>

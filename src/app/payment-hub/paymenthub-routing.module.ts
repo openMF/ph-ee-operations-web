@@ -7,143 +7,82 @@ import { Routes, RouterModule } from '@angular/router';
 /** Routing Imports */
 import { Route } from '../core/route/route.service';
 
-/** Translation Imports */
-import { extract } from '../core/i18n/i18n.service';
-
 /** Custom Components */
-import { IncomingTransactionsComponent } from './transactions/incoming/incoming-transactions.component';
 import { TransactionDetailsComponent } from './transactions/transaction-details.component';
 import { PaymentHubComponent } from './paymenthub.component';
-import { IncomingRequestToPayComponent } from './request-to-pay/incoming-request-to-pay/incoming-request-to-pay.component';
-import { OutgoingRequestToPayComponent } from './request-to-pay/outgoing-request-to-pay/outgoing-request-to-pay.component';
-import { ViewRequestToPayComponent } from './request-to-pay/view-request-to-pay/view-request-to-pay.component';
 
 import { CurrenciesResolver } from './transactions/resolver/currencies.resolver';
 import { TransactionResolver } from './transactions/resolver/transaction.resolver';
-import { OutgoingTransactionsComponent } from './transactions/outgoing/outgoing-transactions.component';
 import { DfspResolver } from './transactions/resolver/dfsp.resolver';
-import { RequestToPayResolver } from './request-to-pay/common-resolvers/request-to-pay.resolver';
-import { ViewRequestToPayResolver } from './request-to-pay/common-resolvers/view-request-to-pay.resolver';
-import { IncomingRequestExportComponent } from './request-to-pay/incoming-request-export/incoming-request-export.component'
+import { BatchesComponent } from './batches/batches.component';
+import { SubBatchesComponent } from './sub-batches/sub-batches.component';
+import { TransfersComponent } from './transfers/transfers.component';
+import { BatchesBulkImportComponent } from './batches-bulk-import/batches-bulk-import.component';
 
 /** Payment HUB Routes */
 const routes: Routes = [
   Route.withShell([
     {
-      path: 'paymenthubee',
-      data: { title: extract('Payment Hub EE'), breadcrumb: 'Payment Hub EE' },
+      path: 'paymenthub',
+      component: PaymentHubComponent,
+      data: { title: 'Payment Hub EE', breadcrumb: 'Payment Hub EE' },
       children: [
         {
           path: '',
-          component: PaymentHubComponent
+          redirectTo: 'batches',
+          pathMatch: 'full'
         },
         {
-          path: 'incomingtransactions',
-          data: { title: extract('Search Incoming Transactions'), breadcrumb: 'Incoming Transactions' },
+          path: 'batches',
+          data: { breadcrumb: {alias: 'Batches'} },
+          component: BatchesComponent
+        },
+        {
+          path: 'bulk-import',
+          data: { breadcrumb: {alias: 'Batch Bulk Import'} },
+          component: BatchesBulkImportComponent,
+        },
+        {
+          path: 'sub-batches',
+          data: { breadcrumb: {alias: 'SubBatches'} },
           children: [
             {
               path: '',
-              component: IncomingTransactionsComponent,
-              resolve: {
-                currencies: CurrenciesResolver,
-                dfspEntries: DfspResolver
-              }
+              component: SubBatchesComponent,
+            },
+            {
+              path: ':batchId',
+              data: { breadcrumb: {alias: 'SubBatches'} },
+              component: SubBatchesComponent
+            }
+          ]
+        },
+        {
+          path: 'transfers',
+          data: { breadcrumb: {alias: 'Transfers'} },
+          component: TransfersComponent
+        },
+        {
+          path: 'transactions',
+          children: [
+            {
+              path: '',
+              component: TransfersComponent,
             },
             {
               path: 'view/:id',
               component: TransactionDetailsComponent,
-              data: { title: extract('View Transaction'), routeParamBreadcrumb: 'id' },
+              data: { breadcrumb: {alias: 'View Transaction'} },
               resolve: {
                 transaction: TransactionResolver,
-                dfspEntries: DfspResolver
-              }
-            }
-          ]
-        },
-        {
-          path: 'outgoingtransactions',
-          data: { title: extract('Search Outgoing Transactions'), breadcrumb: 'Outgoing Transactions' },
-          children: [
-            {
-              path: '',
-              component: OutgoingTransactionsComponent,
-              resolve: {
-                currencies: CurrenciesResolver,
-                dfspEntries: DfspResolver
-              }
+                dfspEntries: DfspResolver,
+              },
             },
-            {
-              path: 'view/:id',
-              component: TransactionDetailsComponent,
-              data: { title: extract('View Transaction'), routeParamBreadcrumb: 'id' },
-              resolve: {
-                transaction: TransactionResolver,
-                dfspEntries: DfspResolver
-              }
-            }
-          ]
-        },
-        {
-          path: 'incomingrequesttopay',
-          data: { title: extract('Search Incoming Request To Pay'), breadcrumb: 'Incoming Request To Pay' },
-          children: [
-            {
-              path: '',
-              component: IncomingRequestToPayComponent,
-              resolve: {
-                requestsToPay: RequestToPayResolver,
-                currencies: CurrenciesResolver,
-                dfspEntries: DfspResolver
-              }
-            },
-            {
-              path: ':id',
-              component: ViewRequestToPayComponent,
-              data: { title: extract('View Request To Pay'), routeParamBreadcrumb: 'id' },
-              resolve: {
-                requestToPay: ViewRequestToPayResolver,
-                dfspEntries: DfspResolver
-              }
-            },
-          ]
-        },
-        {
-          path: 'outgoingrequesttopay',
-          data: { title: extract('Search Outgoing Request To Pay'), breadcrumb: 'Outgoing Request To Pay' },
-          children: [
-            {
-              path: '',
-              component: OutgoingRequestToPayComponent,
-              resolve: {
-                requestsToPay: RequestToPayResolver,
-                currencies: CurrenciesResolver,
-                dfspEntries: DfspResolver
-              }
-            },
-            {
-              path: ':id',
-              component: ViewRequestToPayComponent,
-              data: { title: extract('View Request To Pay'), routeParamBreadcrumb: 'id' },
-              resolve: {
-                requestToPay: ViewRequestToPayResolver,
-                dfspEntries: DfspResolver
-              }
-            },
-          ]
-        },
-        {
-          path: 'incomingrequesttopayexport',
-          data: { title: extract(''), breadcrumb: 'Export Incoming Request to Pay' },
-          children: [
-            {
-              path: '',
-              component: IncomingRequestExportComponent,
-            }
-          ]
+          ],
         }
-      ]
+      ],
     },
-  ])
+  ]),
 ];
 
 /**
@@ -158,8 +97,6 @@ const routes: Routes = [
     CurrenciesResolver,
     TransactionResolver,
     DfspResolver,
-    RequestToPayResolver,
-    ViewRequestToPayResolver
-  ]
+  ],
 })
-export class PaymentHubRoutingModule { }
+export class PaymentHubRoutingModule {}

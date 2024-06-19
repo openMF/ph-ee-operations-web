@@ -1,5 +1,5 @@
 /** Angular Imports */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 /** Custom Services */
@@ -17,6 +17,7 @@ export class SidenavComponent implements OnInit {
 
   /** True if sidenav is in collapsed state. */
   @Input() sidenavCollapsed: boolean;
+  @Output() sideNavControl: EventEmitter<boolean> = new EventEmitter;
   /** Username of authenticated user. */
   username: string;
 
@@ -25,14 +26,18 @@ export class SidenavComponent implements OnInit {
    * @param {AuthenticationService} authenticationService Authentication Service.
    */
   constructor(private router: Router,
-              private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService) { }
 
   /**
    * Sets the username of the authenticated user.
    */
   ngOnInit() {
     const credentials = this.authenticationService.getCredentials();
-    this.username = credentials.username;
+    if (credentials) {
+      this.username = credentials.username;
+    } else {
+      this.username = 'User';
+    }
   }
 
   /**
@@ -41,6 +46,10 @@ export class SidenavComponent implements OnInit {
   logout() {
     this.authenticationService.logout()
       .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
+  }
+
+  sideNavCollapsed(value: boolean): void {
+    this.sideNavControl.emit(value);
   }
 
 }

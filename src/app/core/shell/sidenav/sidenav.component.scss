@@ -1,9 +1,32 @@
+@import "theme/theme";
+
+.sidenav {
+  margin-left: 30px;
+  background-color: $primary;
+  color: $white;
+  min-height: 100vh;
+  height: 100vh;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.mat-fab {
+  background-color: $white;
+  color: $dark-grey;
+}
+
 .sidebar-full,
 .sidebar-compact {
   .navigation-panel {
     width: 100%;
     height: 100%;
-    padding-top: 20%;
+    margin-top: 20px;
+
+    .sidenav-collapse {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
   }
 
   img {
@@ -17,7 +40,10 @@
     text-align: center;
     max-width: 15rem;
     z-index: 9999;
-    color: #444;
+    width: 100%;
+    margin: auto;
+    color: $white;
+    margin-bottom: 60px;
 
     .app-logo {
       width: auto;
@@ -28,7 +54,7 @@
     .app-logo-text {
       width: auto;
       height: auto;
-      font-size: 2rem;
+      font-size: 1.3rem;
       font-weight: normal;
     }
   }
@@ -119,8 +145,11 @@
       margin: 0;
       padding: 0;
       list-style: none;
+      color: $white;
 
       .mat-list-item {
+        color: inherit;
+
         .mat-list-icon {
           height: 30px;
           font-size: 22px;
@@ -166,6 +195,7 @@
     }
   }
 }
+
 .sidebar-full {
   .navigation-panel {
     padding-top: 5%;

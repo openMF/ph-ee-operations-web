@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  phee-web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_ENVIRONMENT_OPTIONS=--configuration production
+        - BUILDER_IMAGE=node:20-alpine
+        - NGINX_IMAGE=nginx:1.19.3
+        - NPM_REGISTRY_URL=https://registry.npmjs.org/
+        - PUPPETEER_DOWNLOAD_HOST_ARG=https://storage.googleapis.com
+        - PUPPETEER_CHROMIUM_REVISION_ARG=1011831
+    ports:
+      - '4200:80'
+    environment:
+      - PH_OPS_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
+      - PH_VOU_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
+      - PH_ACT_BACKEND_SERVER_URL=https://paymenthub.qa.oneacrefund.org/opsapp/api/v1
+      - PH_PLATFORM_TENANT_ID=phdefault
+      - PH_PLATFORM_TENANT_IDS=phdefault
+      - PH_REGISTERING_INSTITUTION_ID=SocialInstitution
+      - PH_AUTH_ENABLED=false
+      - PH_OAUTH_ENABLED=false
+      - PH_OAUTH_TYPE=keycloak
+      - PH_OAUTH_SERVER_URL=https://paymenthub.qa.oneacrefund.org/auth
+      - PH_OAUTH_REALM=paymenthub
+      - PH_OAUTH_CLIENT_ID=opsapp
+      - PH_OAUTH_CLIENT_SECRET=Y2xpZW50Og==
+      - PH_OAUTH_BASIC_AUTH=true
+      - PH_OAUTH_BASIC_AUTH_TOKEN=Y2xpZW50Og==
+      - PH_DEFAULT_LANGUAGE=en
+      - PH_SUPPORTED_LANGUAGES=en,fr,es

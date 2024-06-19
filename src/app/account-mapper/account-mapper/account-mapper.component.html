@@ -1,0 +1,84 @@
+<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+    <mat-accordion class="filter-options">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h3 class="m-r-10">{{"labels.inputs.Filters" | translate}}</h3>
+            <fa-icon icon="filter" size="xl"></fa-icon>
+          </mat-panel-title>
+  
+        </mat-expansion-panel-header>
+        <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Financial Institution" | translate}}</mat-label>
+            <input matInput [formControl]="financialInstitution">
+          </mat-form-field>
+    
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Functional ID" | translate}}</mat-label>
+            <input matInput [formControl]="functionalId">
+          </mat-form-field>
+        
+          <mat-form-field fxFlex="20%">
+            <mat-label>{{"labels.inputs.Financial Address" | translate}}</mat-label>
+            <input matInput [formControl]="financialAddress">
+          </mat-form-field>
+
+          <div fxFlex="20%" class="push-end m-t-15">
+            <button mat-raised-button color="primary" (click)="searchAccounts()">
+              <fa-icon icon="search" class="m-r-10"></fa-icon> {{"labels.buttons.Search" | translate}}
+            </button>
+          </div>
+ 
+        </div>
+    
+      </mat-expansion-panel>
+    </mat-accordion>
+  
+    <mat-card class="container">
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+      <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading">
+
+        <ng-container matColumnDef="governmentEntity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Government Entity" | translate}} </th>
+            <td mat-cell *matCellDef="let item"> {{item.registeringInstitutionId }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="financialInstitution">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Financial Institution" | translate}} </th>
+            <td mat-cell *matCellDef="let item" >{{ item.bankingInstitutionCode }} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="functionalId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Functional ID" | translate}} </th>
+          <td mat-cell *matCellDef="let item"> {{ item.payeeIdentity }} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="financialAddress">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Financial Address" | translate}} </th>
+            <td mat-cell *matCellDef="let item"> 
+              <mifosx-identifier identifier="{{item.financialAddress}}"></mifosx-identifier>  
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="paymentModality">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Payment Modality" | translate}} </th>
+            <td mat-cell *matCellDef="let item"> {{paymentModalityDescription(item.paymentModality)}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+          class="select-row"></tr>
+  
+      </table>
+  
+      <mat-paginator #paginator [pageSize]="pageSize" [pageIndex]="currentPage" (page)="pageChanged($event)"
+        [pageSizeOptions]="[50, 100, 200]" [length]="totalRows" showFirstLastButtons>
+      </mat-paginator>
+    
+    </mat-card>
+
+</div>

@@ -1,12 +1,13 @@
 /** Angular Imports */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 /** rxjs Imports */
 import { finalize } from 'rxjs/operators';
 
 /** Custom Services */
 import { AuthenticationService } from '../../core/authentication/authentication.service';
+import { environment } from 'environments/environment';
 
 /**
  * Login form component.
@@ -19,17 +20,20 @@ import { AuthenticationService } from '../../core/authentication/authentication.
 export class LoginFormComponent implements OnInit {
 
   /** Login form group. */
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   /** Password input field type. */
   passwordInputType: string;
   /** True if loading. */
   loading = false;
 
+  tenantIdDefault: string = environment.tenant;
+  tenantIdsDefault: string[] = environment.tenants.split(',');
+
   /**
    * @param {FormBuilder} formBuilder Form Builder.
    * @param {AuthenticationService} authenticationService Authentication Service.
    */
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService) { }
 
   /**
@@ -50,7 +54,10 @@ export class LoginFormComponent implements OnInit {
     this.loginForm.disable();
     this.authenticationService.login(this.loginForm.value)
       .pipe(finalize(() => {
-        this.loginForm.reset();
+        this.loginForm.patchValue({
+          'username': '',
+          'password': ''
+        });
         this.loginForm.markAsPristine();
         // Angular Material Bug: Validation errors won't get removed on reset.
         this.loginForm.enable();
@@ -72,9 +79,13 @@ export class LoginFormComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       'username': ['', Validators.required],
       'password': ['', Validators.required],
-      'tenant': ['', Validators.required],
+      'tenant': [this.tenantIdDefault, Validators.required],
       'remember': false
     });
+  }
+
+  tenantIdIsList(): boolean {
+    return (this.tenantIdsDefault.length > 1);
   }
 
 }

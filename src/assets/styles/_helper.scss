@@ -1,3 +1,4 @@
+@import "content";
 @import "colours";
 @import "loader";
 @import "width-height";
@@ -1723,4 +1724,12 @@ textarea.noresize {
   .status-transfer-hold {
     color: $status-transfer-hold;
   }
+}
+
+.center {
+  text-align: center;
+}
+
+.amount {
+  text-align: right;
 }

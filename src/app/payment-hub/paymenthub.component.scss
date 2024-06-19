@@ -1,7 +1,15 @@
-.green {
-    color: green;
+.container {
+  width: 90%;
+}
+
+.payment-hub-ee-wrap {
+  flex-wrap: wrap;
+  width: 100%;
+
+  mifosx-batches,
+  mifosx-sub-batches,
+  mifosx-filter-selector {
+    width: 100%;
   }
   
-  .red { color:red;}
-    
-  .orange { color:orange;}
+}
