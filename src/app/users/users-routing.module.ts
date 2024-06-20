@@ -11,6 +11,7 @@ import { extract } from '../core/i18n/i18n.service';
 /** Custom Components */
 import { UsersComponent } from './users.component';
 import { CreateUserComponent } from './create-user/create-user.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 import { ViewUserComponent } from './view-user/view-user.component';
 
 /** Custom Resolvers */
@@ -50,6 +51,15 @@ const routes: Routes = [
             {
               path: '',
               component: ViewUserComponent
+            },
+            {
+              path: 'edit',
+              component: EditUserComponent,
+              data: { title: 'Edit User', breadcrumb: 'Edit', routeResolveBreadcrumb: false },
+              resolve: {
+                user: UserResolver,
+                usersTemplate: UsersTemplateResolver
+              }
             }
           ]
         }

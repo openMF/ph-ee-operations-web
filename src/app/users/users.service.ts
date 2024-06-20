@@ -42,6 +42,15 @@ export class UsersService {
 
   /**
    * @param {string} userId user ID of user.
+   * @param {any} user user to be updated.
+   * @returns {Observable<any>} User.
+   */
+  editUser(userId: string, user: any): Observable<any> {
+    return this.http.put(`/api/v1/users/${userId}`, user);
+  }
+
+  /**
+   * @param {string} userId user ID of user.
    * @returns {Observable<any>} User.
    */
   getUser(userId: string): Observable<any> {

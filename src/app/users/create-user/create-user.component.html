@@ -51,13 +51,13 @@
 
           <div fxFlex="48%" class="password-never-expires-wrapper">
             <mat-checkbox labelPosition="before" formControlName="passwordNeverExpires" >
-              Override password expiry policy
+              Password never expires
             </mat-checkbox>
           </div>
 
           <div fxFlex="48%" class="send-password-to-email-wrapper">
             <mat-checkbox labelPosition="before" formControlName="sendPasswordToEmail">
-              Auto generate password
+              Send password to email address
             </mat-checkbox>
           </div>
 
@@ -92,15 +92,6 @@
             <mat-error *ngIf="userForm.controls.officeId.hasError('required')">
               Office is <strong>required</strong>
             </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Staff</mat-label>
-            <mat-select formControlName="staffId">
-              <mat-option *ngFor="let staff of staffData" [value]="staff.id">
-                {{ staff.displayName }}
-              </mat-option>
-            </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="48%">
