@@ -12,7 +12,7 @@ export class Dates {
   constructor(private datePipe: DatePipe) {}
 
   public getDate(timestamp: any): string {
-    return this.datePipe.transform(timestamp, 'YYYY-MM-DD');
+    return this.datePipe.transform(timestamp, 'YYYY-MM-dd');
   }
 
   public formatDate(timestamp: any, dateFormat: string): string {
