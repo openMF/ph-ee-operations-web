@@ -48,18 +48,23 @@ export class RequestToPayService {
   exportCSV(filterBy: any, filterName: string) {
     let body = new HttpParams();
     body = body.set("command", "export");
+    let fileFilters = ''
     let startFrom = this.dateUtils.formatDate(filterBy.startdate, 'yyyy-MM-dd HH:mm:ss')
     let startTo = this.dateUtils.formatDate(filterBy.enddate, 'yyyy-MM-dd HH:mm:ss')
     let state = filterBy.status;
     if (startFrom) {
       body = body.set("startFrom", startFrom);
-    }
-    if (state) {
-      body = body.set("state", filterBy.status);
+      fileFilters += `_FROM_${this.dateUtils.getDate(filterBy.startdate)}`
     }
     if (startTo) {
       body = body.set("startTo", startTo);
+      fileFilters += `_TO_${this.dateUtils.getDate(filterBy.enddate)}`
     }
+    if (state) {
+      body = body.set("state", filterBy.status);
+      fileFilters += `_FOR_STATUS_${filterBy.status}`
+    }
+   
     console.log(body);
     const exportURl = "/api/v1/transactionRequests?" + body;
 
@@ -86,14 +91,16 @@ export class RequestToPayService {
       )
       .subscribe((val: Blob) => {
         console.log("POST call successful value returned in body", val);
-        this.downLoadFile(val);
+        this.downLoadFile(val, `TRANSACTION_REQUESTS${fileFilters}_AS_AT_${this.dateUtils.formatDate(new Date(), 'yyyy-MM-dd_HH:mm:ss')}.csv`);
       });
   }
-  downLoadFile(data: Blob) {
+  downLoadFile(data: Blob, fileTitle: string) {
     let url = window.URL.createObjectURL(data);
-    let pwa = window.open(url);
-    if (!pwa || pwa.closed || typeof pwa.closed == "undefined") {
-      alert("Please disable your Pop-up blocker and try again.");
-    }
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = fileTitle;
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }
