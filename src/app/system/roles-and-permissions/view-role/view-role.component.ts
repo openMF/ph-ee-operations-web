@@ -141,6 +141,13 @@ export class ViewRoleComponent implements OnInit {
    * @param string String
    */
   formatName(string: any) {
+    if (string === 'transaction' || string === 'recall') {
+      string = string + 's';
+    }
+    if (string === 'request_to_pay') {
+      const temp = string.split('_');
+      string = temp[0] + ' ' + temp[1].charAt(0).toUpperCase() + temp[1].slice(1) + ' ' +  temp[2].charAt(0).toUpperCase() + temp[2].slice(1);
+    }
     if (string.indexOf('portfolio_') > -1) {
       string = string.replace('portfolio_', '');
     }

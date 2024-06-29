@@ -2,9 +2,9 @@
 
   <mat-card>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayout="row wrap">
 
-      <div fxFlex="33.3%">
+      <div *mifosxHasPermission="'READ_TRANSACTION'" fxFlex="33.3%">
 
         <mat-nav-list>
 
@@ -23,24 +23,9 @@
             <h4 matLine>Search Outgoing Transactions</h4>
             <p matLine>Advanced search option for outgoing transactions</p>
           </mat-list-item>
-
-          <mat-list-item [routerLink]="['incomingrequesttopayexport']">
-            <mat-icon matListIcon>
-              <fa-icon icon="download" size="sm"></fa-icon>
-            </mat-icon>
-            <h4 matLine>Export Incoming Request to Pay</h4>
-          </mat-list-item>
-
-          <mat-list-item [routerLink]="['outgoingrequesttopayexport']">
-            <mat-icon matListIcon>
-              <fa-icon icon="download" size="sm"></fa-icon>
-            </mat-icon>
-            <h4 matLine>Export Outgoing Request to Pay</h4>
-          </mat-list-item>
         </mat-nav-list>
-
       </div>
-      <div fxFlex="33.3%">
+      <div *mifosxHasPermission="'READ_REQUESTTOPAY'" fxFlex="33.3%">
         <mat-nav-list>
 
           <mat-list-item [routerLink]="['incomingrequesttopay']">
@@ -62,7 +47,7 @@
         </mat-nav-list>
 
       </div>
-      <div fxFlex="33.3%">
+      <div *mifosxHasPermission="'READ_RECALL'" fxFlex="33.3%">
         <mat-nav-list>
 
           <mat-list-item [routerLink]="['incomingrecalls']">
@@ -79,6 +64,24 @@
             </mat-icon>
             <h4 matLine>Search Outgoing Recalls</h4>
             <p matLine>Advanced search option for outgoing recalls</p>
+          </mat-list-item>
+        </mat-nav-list>
+
+      </div>
+      <div *mifosxHasPermission="'READ_REQUESTTOPAY'" fxFlex="33.3%">
+        <mat-nav-list>
+          <mat-list-item [routerLink]="['incomingrequesttopayexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Incoming Request to Pay</h4>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="['outgoingrequesttopayexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Outgoing Request to Pay</h4>
           </mat-list-item>
         </mat-nav-list>
 
