@@ -237,9 +237,9 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   openRecallDialog() {
-    if (!this.hasRecallAccess()) {
+    /*if (!this.hasRecallAccess()) {
       return;
-    }
+    }*/
     const formfields: FormfieldBase[] = [
       new SelectBase({
         controlName: 'comment',
@@ -270,7 +270,7 @@ export class TransactionDetailsComponent implements OnInit {
               type: 'Recall Success',
               message: `Recall request was successfully initiated!`
             }),
-            err => this.alertService.alert({type: 'Recall Error', message: `Recall request was failed`})
+            err => this.alertService.alert({type: 'Recall Error', message: `Recall request was failed: ${err.error.defaultUserMessage}`})
         );
       }
     });

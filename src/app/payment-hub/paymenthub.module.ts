@@ -34,6 +34,7 @@ import {SelectComponent} from './tasks/task-view/components/select/select.compon
 import {ListTaskViewComponent} from './tasks/list/view/list-task-view.component';
 import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
 import {RadiobuttonBooleanComponent} from './tasks/task-view/components/radiobuttonboolean/radiobuttonboolean.component';
+import { DirectivesModule } from 'app/directives/directives.module';
 
 /**
  * Payment HUB Module
@@ -45,7 +46,8 @@ import {RadiobuttonBooleanComponent} from './tasks/task-view/components/radiobut
     MatDialogModule,
     SharedModule,
     PaymentHubRoutingModule,
-    PipesModule
+    PipesModule,
+    DirectivesModule
   ],
   declarations: [
     IncomingTransactionsComponent,

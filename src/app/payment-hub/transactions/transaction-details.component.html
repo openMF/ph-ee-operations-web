@@ -2,7 +2,7 @@
   <button class="m-h-10" *ngIf="hasRefundAccess()" mat-raised-button color="primary" (click)="openReturnDialog()">
     Refund
   </button>
-  <button class="m-h-10" *ngIf="hasRecallAccess()" mat-raised-button color="primary" (click)="openRecallDialog()">
+  <button class="m-h-10" *mifosxHasPermission="'RECALL_TRANSACTION'" mat-raised-button color="primary" (click)="openRecallDialog()">
     Recall
   </button>
 

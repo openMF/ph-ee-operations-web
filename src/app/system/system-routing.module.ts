@@ -11,11 +11,14 @@ import { RolesAndPermissionsComponent } from './roles-and-permissions/roles-and-
 import { AddRoleComponent } from './roles-and-permissions/add-role/add-role.component';
 import { AuditTrailsComponent } from './audit-trails/audit-trails.component';
 import { ViewAuditComponent } from './audit-trails/view-audit/view-audit.component';
+import { ViewRoleComponent } from './roles-and-permissions/view-role/view-role.component';
+import { EditRoleComponent } from './roles-and-permissions/edit-role/edit-role.component';
 
 /** Custom Resolvers */
 import { RolesAndPermissionsResolver } from './roles-and-permissions/roles-and-permissions.resolver';
 import { AuditTrailSearchTemplateResolver } from './audit-trails/audit-trail-search-template.resolver';
 import { AuditTrailResolver } from './audit-trails/view-audit/audit-trail.resolver';
+import { ViewRoleResolver } from './roles-and-permissions/view-role/view-role.resolver';
 
 
 const routes: Routes = [
@@ -43,6 +46,28 @@ const routes: Routes = [
               path: 'add',
               component: AddRoleComponent,
               data: { title: extract('Add Role'), breadcrumb: 'Add' }
+            },
+            {
+              path: ':id',
+              data: { title: 'View Role', routeParamBreadcrumb: 'id' },
+              runGuardsAndResolvers: 'always',
+              children: [
+                {
+                  path: '',
+                  component: ViewRoleComponent,
+                  resolve: {
+                    roledetails: ViewRoleResolver,
+                  }
+                },
+                {
+                  path: 'edit',
+                  component: EditRoleComponent,
+                  data: { title: 'Edit Role', breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                  resolve: {
+                    role: ViewRoleResolver,
+                  }
+                }
+              ]
             }
           ]
         },
@@ -78,7 +103,8 @@ const routes: Routes = [
   providers: [
     RolesAndPermissionsResolver,
     AuditTrailSearchTemplateResolver,
-    AuditTrailResolver
+    AuditTrailResolver,
+    ViewRoleResolver
   ]
 })
 export class SystemRoutingModule { }

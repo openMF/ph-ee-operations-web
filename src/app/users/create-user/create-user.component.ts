@@ -52,7 +52,7 @@ export class CreateUserComponent implements OnInit {
    */
   ngOnInit() {
     this.createUserForm();
-    this.setStaffData();
+    //this.setStaffData();
     this.setConditionalControls();
   }
 
@@ -68,7 +68,6 @@ export class CreateUserComponent implements OnInit {
       'sendPasswordToEmail': [true],
       'passwordNeverExpires': [false],
       'officeId': ['', Validators.required],
-      'staffId': [''],
       'roles': ['', Validators.required]
     }, { validator: confirmPasswordValidator });
   }

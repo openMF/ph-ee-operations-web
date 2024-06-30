@@ -7,6 +7,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormfieldComponent } from './form-dialog/formfield/formfield.component';
 import { FormDialogComponent } from './form-dialog/form-dialog.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { DisableDialogComponent } from './disable-dialog/disable-dialog.component';
+import { EnableDialogComponent } from './enable-dialog/enable-dialog.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { FooterComponent } from './footer/footer.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
@@ -54,6 +56,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     FormfieldComponent,
     FormDialogComponent,
     DeleteDialogComponent,
+    DisableDialogComponent,
+    EnableDialogComponent,
     FileUploadComponent,
     FooterComponent,
     LanguageSelectorComponent,

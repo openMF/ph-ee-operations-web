@@ -11,6 +11,8 @@ import { RolesAndPermissionsComponent } from './roles-and-permissions/roles-and-
 import { AddRoleComponent } from './roles-and-permissions/add-role/add-role.component';
 import { AuditTrailsComponent } from './audit-trails/audit-trails.component';
 import { ViewAuditComponent } from './audit-trails/view-audit/view-audit.component';
+import { ViewRoleComponent } from './roles-and-permissions/view-role/view-role.component';
+import { EditRoleComponent } from './roles-and-permissions/edit-role/edit-role.component';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import { ViewAuditComponent } from './audit-trails/view-audit/view-audit.compone
     RolesAndPermissionsComponent,
     AddRoleComponent,
     AuditTrailsComponent,
-    ViewAuditComponent
+    ViewAuditComponent,
+    ViewRoleComponent,
+    EditRoleComponent,
   ],
   entryComponents: [
   ]
