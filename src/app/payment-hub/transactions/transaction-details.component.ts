@@ -26,6 +26,7 @@ import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { SelectBase } from 'app/shared/form-dialog/formfield/model/select-base';
 import { AlertService } from 'app/core/alert/alert.service';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
+import { InformationDialogComponent } from 'app/shared/information-dialog/information-dialog.component';
 
 /**
  * View transaction component.
@@ -57,6 +58,7 @@ export class TransactionDetailsComponent implements OnInit {
   /** Data source for transaction table. */
   taskList: MatTableDataSource<any>;
   businessAttributes: MatTableDataSource<any>;
+  paymentScheme: string;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
   recallReasonData = recallReasons;
@@ -113,6 +115,7 @@ export class TransactionDetailsComponent implements OnInit {
     this.route.data.subscribe((data: { transaction: any }) => {
       this.datasource = data.transaction;
       this.setTransactionBusinessAttributes();
+      this.filterRecallReasonData();
     });
     const source = from(this.datasource.tasks);
     const example = source.pipe(
@@ -145,6 +148,10 @@ export class TransactionDetailsComponent implements OnInit {
     this.businessAttributes.sortingDataAccessor = (transaction: any, property: any) => {
       return transaction[property];
     };
+    const paymentSchemeAttribute = this.datasource.variables.find(
+      (attribute: any) => attribute.name === 'paymentScheme'
+    );
+    this.paymentScheme = paymentSchemeAttribute ? paymentSchemeAttribute.value : null;
   }
 
   getPaymentProcessId() {
@@ -236,10 +243,21 @@ export class TransactionDetailsComponent implements OnInit {
     });
   }
 
+  openDialog() {
+    if ('ON_US' === this.paymentScheme) {
+      this.dialog.open(InformationDialogComponent, {
+        data: {
+          title: 'Information',
+          content: 'Recall is not available for OnUs transactions. (Payment Hub cannot handle OnUs recall yet)',
+          buttonText: 'OK'
+        },
+      });
+    } else {
+      this.openRecallDialog();
+    }
+  }
+
   openRecallDialog() {
-    /*if (!this.hasRecallAccess()) {
-      return;
-    }*/
     const formfields: FormfieldBase[] = [
       new SelectBase({
         controlName: 'comment',
@@ -274,5 +292,15 @@ export class TransactionDetailsComponent implements OnInit {
         );
       }
     });
+  }
+
+  filterRecallReasonData() {
+    if (this.paymentScheme) {
+      this.recallReasonData = recallReasons.filter(reason =>
+        reason.filter.includes(this.paymentScheme)
+      );
+    } else {
+      this.recallReasonData = recallReasons;
+    }
   }
 }

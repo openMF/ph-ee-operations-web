@@ -51,10 +51,10 @@ export const paymentSchemeData: OptionData[] = [
 ];
 
 export const recallReasonData: CodeName[] = [ 
-    {code: 'DUPL', name: 'DUPL'},
-    {code: 'CUST', name: 'CUST'},
-    {code: 'FRAD', name: 'FRAD'},
-    {code: 'TECH', name: 'TECH'},
-    {code: 'AM09', name: 'AM09'},
-    {code: 'AC03', name: 'AC03'}
+    {code: 'DUPL', name: 'DUPL', filter:['HCT_INST', 'IG2', 'IG2:RETURN']},
+    {code: 'CUST', name: 'CUST', filter:['HCT_INST']},
+    {code: 'FRAD', name: 'FRAD', filter:['HCT_INST', 'IG2', 'IG2:RETURN']},
+    {code: 'TECH', name: 'TECH', filter:['HCT_INST', 'IG2', 'IG2:RETURN']},
+    {code: 'AM09', name: 'AM09', filter:['HCT_INST']},
+    {code: 'AC03', name: 'AC03', filter:['HCT_INST']}
 ];

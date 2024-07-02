@@ -7,4 +7,5 @@ export interface OptionData {
 export interface CodeName {
     code: string;
     name: string;
+    filter: string[];
   }
