@@ -1,0 +1,103 @@
+<form #filterForm class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+  <mat-form-field fxFlex="20%">
+    <mat-label>Transaction Date From</mat-label>
+    <input
+      matInput
+      placeholder="yyyy-MM-dd hh:mm:ss"
+      [ngxMatDatetimePicker]="picker"
+      [formControl]="filterFormGroup.get('transactionDateFrom')"
+      [min]="minDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Transaction Date To</mat-label>
+    <input
+      matInput
+      placeholder="yyyy-MM-dd hh:mm:ss"
+      [ngxMatDatetimePicker]="pickerTo"
+      [formControl]="filterFormGroup.get('transactionDateTo')"
+      [min]="minDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>Session Number</mat-label>
+    <input matInput name="sessionNumber" [formControl]="filterFormGroup.get('sessionNumber')">
+  </mat-form-field>
+
+  <mifosx-option-data-selector 
+    fxFlex="20%" 
+    [inputFormControl]="filterFormGroup.get('status')"
+    [inputList]="ig2FileStatusData"
+    [inputLabel]="'Status'">
+  </mifosx-option-data-selector>
+</form>
+
+<div class="container p-b-10">
+  <button mat-raised-button color="primary" fxFlexAlign="center" class="login-button" (click)="resetFilters()" [disabled]="(dataSource?.loading$ | async)">
+    Reset filters
+  </button>
+</div>
+
+<div class="table-wrapper container">
+  <div class="mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="startedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time</th>
+        <td mat-cell *matCellDef="let ig2File"> {{ formatDate(ig2File.startedAt) }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="completedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time</th>
+          <td mat-cell *matCellDef="let ig2File"> {{ formatDate(ig2File.completedAt) }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="transactionDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Date</th>
+        <td mat-cell *matCellDef="let ig2File"> {{ formatDate(ig2File.completedAt) }} </td>
+    </ng-container>
+
+      <ng-container matColumnDef="sessionNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Session Number </th>
+        <td mat-cell *matCellDef="let ig2File"> {{ ig2File.sessionNumber }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="listOfBics">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> List of BICs </th>
+        <td mat-cell *matCellDef="let ig2File"> {{ ig2File.listOfBics }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+      <td mat-cell *matCellDef="let ig2File" [ngClass]="{'red': ig2File.status==='FAILED','green': ig2File.status==='COMPLETED','orange': ig2File.status==='ACTION_NEEDED'}">{{ ig2File.status }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let ig2File" (click)="$event.stopPropagation()">
+          <div *ngIf="ig2File.status==='ACTION_NEEDED'"><button mat-button color="primary" (click)="openRetryResolveDialog(ig2File.filedId,'retry')"><fa-icon icon="redo" size="lg"></fa-icon></button><button mat-button class="green" (click)="openRetryResolveDialog(ig2File.fileId,'resolve')" ><fa-icon icon="check" size="lg"></fa-icon></button></div>
+          <div>
+            <button mat-button [routerLink]="['view', ig2File.fileId]" matTooltip="Ig2 File Details"><fa-icon icon="list" size="m"></fa-icon></button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <div *ngIf="dataSource?.loading$ | async" class="spinner-wrapper">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-paginator-goto [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" [disabled]="(dataSource?.loading$ | async)" showFirstLastButtons></mat-paginator-goto>
+
+  </div>

@@ -68,6 +68,28 @@
         </mat-nav-list>
 
       </div>
+      <div fxFlex="33.3%">
+        <mat-nav-list>
+
+          <mat-list-item [routerLink]="['incomingig2files']">
+            <mat-icon matListIcon>
+              <fa-icon icon="search" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Search Incoming Ig2 Files</h4>
+            <p matLine>Advanced search option for incoming ig2 files</p>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="['outgoingig2files']">
+            <mat-icon matListIcon>
+              <fa-icon icon="search" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Search Outgoing Ig2 Files</h4>
+            <p matLine>Advanced search option for outgoing ig2 files</p>
+          </mat-list-item>
+
+        </mat-nav-list>
+
+      </div>
       <div *mifosxHasPermission="'READ_REQUESTTOPAY'" fxFlex="33.3%">
         <mat-nav-list>
           <mat-list-item [routerLink]="['incomingrequesttopayexport']">

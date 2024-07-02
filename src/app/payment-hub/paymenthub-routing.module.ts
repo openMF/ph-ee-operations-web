@@ -32,6 +32,9 @@ import {MyTasksComponent} from './tasks/my/my-tasks.component';
 import {ListTaskViewComponent} from './tasks/list/view/list-task-view.component';
 import {ZeebeTaskResolver} from './tasks/zeebe-task.resolver';
 import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
+import { IncomingIg2FilesComponent } from './ig2-files/incoming/incoming-ig2-files.component';
+import { OutgoingIg2FilesComponent } from './ig2-files/outgoing/outgoing-ig2-files.component';
+import { Ig2FileDetailsComponent } from './ig2-files/ig2-file-details.component';
 
 /** Payment HUB Routes */
 const routes: Routes = [
@@ -133,6 +136,36 @@ const routes: Routes = [
                 recall: RecallResolver,
                 dfspEntries: DfspResolver
               }
+            }
+          ]
+        },
+        {
+          path: 'incomingig2files',
+          data: { title: extract('Search Incoming Ig2 Files'), breadcrumb: 'Incoming Ig2 Files' },
+          children: [
+            {
+              path: '',
+              component: IncomingIg2FilesComponent
+            },
+            {
+              path: 'view/:id',
+              component: Ig2FileDetailsComponent,
+              data: { title: extract('View Ig2 File'), routeParamBreadcrumb: 'id' }
+            }
+          ]
+        },
+        {
+          path: 'outgoingig2files',
+          data: { title: extract('Search Outgoing Ig2 Files'), breadcrumb: 'Outgoing Ig2 Files' },
+          children: [
+            {
+              path: '',
+              component: OutgoingIg2FilesComponent
+            },
+            {
+              path: 'view/:id',
+              component: Ig2FileDetailsComponent,
+              data: { title: extract('View Ig2 File'), routeParamBreadcrumb: 'id' }
             }
           ]
         },

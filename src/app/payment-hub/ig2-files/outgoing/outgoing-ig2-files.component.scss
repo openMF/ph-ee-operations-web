@@ -1,0 +1,96 @@
+.mat-paginator-range-label {
+  display: hidden;
+}
+
+.table-wrapper {
+  margin: auto;
+  position: relative;
+  table {
+    width: 100%;
+  }
+}
+
+.spinner-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.mat-cell {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.mat-cell.cdk-column-completedAt {
+  flex: 0 0 110px !important;
+  width: 110px !important;
+ }.green {
+  color: green;
+}
+
+.green {
+  color: green;
+}
+
+.red { 
+  color:red;
+}
+
+.orange { 
+  color:orange;
+}
+
+.blue { 
+  color: blue;
+}
+
+.mat-button {
+  min-width: 40px;
+  padding: 5px;
+}
+
+.mat-cell.cdk-column-transactionId {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px;
+  word-break: normal;
+  hyphens: none;
+  word-wrap: normal !important;
+}
+
+::ng-deep .mat-tooltip {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: unset !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
