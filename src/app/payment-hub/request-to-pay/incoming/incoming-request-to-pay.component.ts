@@ -19,7 +19,7 @@ import { CommonService } from "app/payment-hub/common/common.service";
 import { MatPaginatorGotoComponent } from 'app/shared/mat-paginator-goto/mat-paginator-goto.component';
 
 //import { TransactionDetails } from '../../transacions/model/transaction-details.model';
-import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
@@ -324,7 +324,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(convertMomentToDate(filterValue), "startFrom");
+            this.applyFilter(convertMomentToDateTime(filterValue), "startFrom");
           }
         })
       )
@@ -336,7 +336,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(convertMomentToDate(filterValue), "startTo");
+            this.applyFilter(convertMomentToDateTime(filterValue), "startTo");
           }
         })
       )

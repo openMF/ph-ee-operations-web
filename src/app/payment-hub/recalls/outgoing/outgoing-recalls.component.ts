@@ -10,7 +10,7 @@ import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
-import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 import { CommonService } from 'app/payment-hub/common/common.service';
 
@@ -388,7 +388,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDate(filterValue), 'startFrom');
+          this.applyFilter(convertMomentToDateTime(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -398,7 +398,7 @@ export class OutgoingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDate(filterValue), 'startTo');
+          this.applyFilter(convertMomentToDateTime(filterValue), 'startTo');
         })
       )
       .subscribe();

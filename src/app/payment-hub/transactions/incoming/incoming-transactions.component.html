@@ -91,30 +91,30 @@
     <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <mat-form-field customDateFormat fxFlex="20%">
     <mat-label>Acceptance Date From</mat-label>
     <input
       matInput
-      placeholder="yyyy-MM-dd hh:mm:ss"
+      placeholder="yyyy-MM-dd"
       [ngxMatDatetimePicker]="acceptancePicker"
       [formControl]="filterFormGroup.get('acceptanceDateFrom')"
       [min]="minDate"      
     />
     <mat-datepicker-toggle matSuffix [for]="acceptancePicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #acceptancePicker [showSeconds]="true"></ngx-mat-datetime-picker>
+    <ngx-mat-datetime-picker #acceptancePicker [showSeconds]="false" [hideTime]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <mat-form-field customDateFormat fxFlex="20%">
     <mat-label>Acceptance Date To</mat-label>
     <input
       matInput
-      placeholder="yyyy-MM-dd hh:mm:ss"
+      placeholder="yyyy-MM-dd"
       [ngxMatDatetimePicker]="acceptancePickerTo"
       [formControl]="filterFormGroup.get('acceptanceDateTo')"
       [min]="minDate"      
     />
     <mat-datepicker-toggle matSuffix [for]="acceptancePickerTo"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #acceptancePickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
+    <ngx-mat-datetime-picker #acceptancePickerTo [showSeconds]="false" [hideTime]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 <!--/div-->
 </form>
@@ -157,7 +157,7 @@
 
       <ng-container matColumnDef="acceptanceDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Acceptance Date</th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.acceptanceDate) }} </td>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.acceptanceDate }} </td>
       </ng-container>
 
       <ng-container matColumnDef="transactionId">

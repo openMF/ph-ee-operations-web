@@ -24,9 +24,15 @@ export function convertUtcToLocal(utcDateString: string): string {
   }
 }
 
-export function convertMomentToDate(moment: Moment): string {
+export function convertMomentToDateTime(moment: Moment): string {
     if (moment) {
       const isoDate = moment.toISOString().slice(0, 19);
       return `${isoDate}Z`;
     }
+}
+
+export function convertMomentToDate(moment: Moment): string {
+  if (moment) {
+    return moment.format('YYYY-MM-DD');
+  }
 }

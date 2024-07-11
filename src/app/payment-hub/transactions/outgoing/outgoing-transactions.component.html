@@ -155,7 +155,7 @@
 
       <ng-container matColumnDef="acceptanceDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Acceptance Date</th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.acceptanceDate) }} </td>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.acceptanceDate }} </td>
       </ng-container>
 
       <ng-container matColumnDef="transactionId">

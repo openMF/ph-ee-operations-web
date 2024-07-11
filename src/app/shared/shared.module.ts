@@ -23,6 +23,7 @@ import { MAT_DATE_LOCALE} from '@angular/material/core';
 import { AutoFormatDateTimeDirective } from './auto-format-date-time/auto-format-date-time.directive';
 import { OptionDataSelectorComponent } from './option-data-selector/option-data-selector.component';
 import { MatPaginatorGotoComponent } from './mat-paginator-goto/mat-paginator-goto.component';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
 
 const SIMPLE_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -64,7 +65,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     ThemePickerComponent,
     AutoFormatDateTimeDirective,
     OptionDataSelectorComponent,
-    MatPaginatorGotoComponent
+    MatPaginatorGotoComponent,
+    ChangePasswordDialogComponent
   ],
   exports: [
     FileUploadComponent,

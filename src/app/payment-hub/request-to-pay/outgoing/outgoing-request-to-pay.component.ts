@@ -11,7 +11,7 @@ import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
 import { RequestToPayService } from '../service/request-to-pay.service';
-import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 import { CommonService } from 'app/payment-hub/common/common.service';
 
@@ -319,7 +319,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(convertMomentToDate(filterValue), "startFrom");
+            this.applyFilter(convertMomentToDateTime(filterValue), "startFrom");
           }
         })
       )
@@ -331,7 +331,7 @@ export class OutgoingRequestToPayComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(convertMomentToDate(filterValue), "startTo");
+            this.applyFilter(convertMomentToDateTime(filterValue), "startTo");
           }
         })
       )

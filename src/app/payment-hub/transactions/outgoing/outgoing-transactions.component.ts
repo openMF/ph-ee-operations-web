@@ -18,7 +18,7 @@ import { MatPaginatorGotoComponent } from 'app/shared/mat-paginator-goto/mat-pag
 
 /** Custom Data Source */
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
-import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDate, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
 import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
@@ -365,7 +365,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDate(filterValue), 'startFrom');
+          this.applyFilter(convertMomentToDateTime(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -375,7 +375,7 @@ export class OutgoingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDate(filterValue), 'startTo');
+          this.applyFilter(convertMomentToDateTime(filterValue), 'startTo');
         })
       )
       .subscribe();
