@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { from } from 'rxjs';
@@ -74,7 +75,8 @@ export class TransactionDetailsComponent implements OnInit {
     private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private clipboard: Clipboard) {
     this.route.data.subscribe((data: {
       dfspEntries: DfspEntry[]
     }) => {
@@ -275,4 +277,12 @@ export class TransactionDetailsComponent implements OnInit {
       }
     });
   }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
+  }
+
 }

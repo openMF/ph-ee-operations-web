@@ -40,12 +40,12 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount From</mat-label>
-    <input matInput name="amountFrom" type="number" [formControl]="filterFormGroup.get('amountFrom')" />
+    <input matInput currencyMask name="amountFrom" type="text" [formControl]="filterFormGroup.get('amountFrom')" (copy)="onCopy($event)">
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount To</mat-label>
-    <input matInput name="amountTo" type="number" [formControl]="filterFormGroup.get('amountTo')" />
+    <input matInput currencyMask name="amountTo" type="text" [formControl]="filterFormGroup.get('amountTo')" (copy)="onCopy($event)">
   </mat-form-field>
 
   <!--mat-form-field fxFlex="20%">
@@ -126,7 +126,7 @@
 
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-        <td mat-cell *matCellDef="let requestToPay"> {{ requestToPay.amount }} </td>
+        <td mat-cell *matCellDef="let requestToPay"> {{ requestToPay.amount | currencySeparator }} </td>
       </ng-container>
 
       <ng-container matColumnDef="currency">

@@ -5,6 +5,7 @@ import { MatSort, MatSortable } from "@angular/material/sort";
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
@@ -127,7 +128,8 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     private stateService: StateService,
     private commonService: CommonService,
     private http: HttpClient,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private clipboard: Clipboard) {
       this.filterFormGroup = this.formBuilder.group({
         payeePartyId: new FormControl(),
         payerPartyId: new FormControl(),
@@ -505,4 +507,12 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     this.stateService.clearState('incoming-requests');
     this.controlChange();
   }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
+  }
+  
 }

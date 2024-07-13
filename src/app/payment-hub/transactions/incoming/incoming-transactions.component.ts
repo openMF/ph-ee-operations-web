@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
@@ -140,7 +141,8 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private stateService: StateService,
     private commonService: CommonService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private clipboard: Clipboard) {
       this.filterFormGroup = this.formBuilder.group({
         payeePartyId: new FormControl(),
         payerPartyId: new FormControl(),
@@ -570,6 +572,13 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
     });
     this.stateService.clearState('incoming-transactions');
     this.controlChange();
+  }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
   }
   
 }
