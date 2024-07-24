@@ -231,7 +231,7 @@
         </div>
 
         <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.transfer.payerFee!==undefined">
-          {{ datasource.transfer.payerFee }} {{ datasource.transfer.payerFeeCurrency }}
+          {{ datasource.transfer.payerFee | currencySeparator }} {{ datasource.transfer.payerFeeCurrency }}
         </div>
 
         <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.transfer.payeeQuoteCode!==undefined">
@@ -247,7 +247,7 @@
         </div>
 
         <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.transfer.payeeFee!==undefined">
-          {{ datasource.transfer.payeeFee }} {{ datasource.transfer.payeeFeeCurrency }}
+          {{ datasource.transfer.payeeFee | currencySeparator }} {{ datasource.transfer.payeeFeeCurrency }}
         </div>
       </div>
 
@@ -370,7 +370,7 @@
       <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
         <td mat-cell *matCellDef="let transaction" style="width: 70%; height: 100%; border: none; outline: none">
-          <ng-container *ngIf="transaction.name === 'amount'; else prettyPrintTemplate">
+          <ng-container *ngIf="transaction.name === 'amount' || transaction.name === 'availableBalance' || transaction.name === 'transactionFeeAmount'; else prettyPrintTemplate">
             <textarea cdkTextareaAutosize="true" cdkAutosizeMaxRows="12" cdkAutosizeMinRows="1" style="width: 100%; height: 100%" readonly [innerHTML]="transaction.value | currencySeparator" (copy)="onCopy($event)"></textarea>
           </ng-container>
           <ng-template #prettyPrintTemplate>
