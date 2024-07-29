@@ -2,10 +2,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { from } from 'rxjs';
@@ -54,7 +53,8 @@ export class RequestToPayDetailsComponent implements OnInit {
   constructor(private requestToPayService: RequestToPayService,
   	private route: ActivatedRoute,
   	private router: Router,
-    public dialog: MatDialog) { 
+    public dialog: MatDialog,
+    private clipboard: Clipboard) { 
     this.route.data.subscribe((data: { requestToPay: any }) => {
       this.requestToPayData = data.requestToPay;
     });
@@ -156,6 +156,13 @@ export class RequestToPayDetailsComponent implements OnInit {
 
     const elements = this.transactionStatusData.filter((option) => option.value === status);
     return elements.length > 0 ? elements[0].css : undefined;
+  }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
   }
 
 }

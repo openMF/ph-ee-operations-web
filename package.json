@@ -51,6 +51,7 @@
     "crypto-js": "^4.1.1",
     "jwt-decode": "^2.2.0",
     "lodash": "4.17.13",
+    "ngx-currency": "^3.0.0",
     "ngx-mat-select-search": "^3.3.3",
     "rxjs": "6.6.7",
     "sass": "^1.47.0",

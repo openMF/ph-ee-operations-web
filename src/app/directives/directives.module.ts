@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 /** Custom Directives */
 import { HasPermissionDirective } from './has-permission/has-permission.directive';
+import { CustomDateFormat } from './custom-date-format/custom-date-format.directive';
 
 /**
  *  Directives Module
@@ -16,9 +17,11 @@ import { HasPermissionDirective } from './has-permission/has-permission.directiv
   ],
   declarations: [
     HasPermissionDirective,
+    CustomDateFormat
   ],
   exports: [
     HasPermissionDirective,
+    CustomDateFormat
   ]
 })
 export class DirectivesModule { }

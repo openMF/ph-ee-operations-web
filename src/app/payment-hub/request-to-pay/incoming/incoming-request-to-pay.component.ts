@@ -5,6 +5,7 @@ import { MatSort, MatSortable } from "@angular/material/sort";
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
@@ -19,7 +20,7 @@ import { CommonService } from "app/payment-hub/common/common.service";
 import { MatPaginatorGotoComponent } from 'app/shared/mat-paginator-goto/mat-paginator-goto.component';
 
 //import { TransactionDetails } from '../../transacions/model/transaction-details.model';
-import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
 
 /** Custom Data Source */
 import { transactionStatusData as statuses } from "../helper/incoming-request.helper";
@@ -127,7 +128,8 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     private stateService: StateService,
     private commonService: CommonService,
     private http: HttpClient,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private clipboard: Clipboard) {
       this.filterFormGroup = this.formBuilder.group({
         payeePartyId: new FormControl(),
         payerPartyId: new FormControl(),
@@ -324,7 +326,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(convertMomentToDate(filterValue), "startFrom");
+            this.applyFilter(convertMomentToDateTime(filterValue), "startFrom");
           }
         })
       )
@@ -336,7 +338,7 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           if (filterValue) {
-            this.applyFilter(convertMomentToDate(filterValue), "startTo");
+            this.applyFilter(convertMomentToDateTime(filterValue), "startTo");
           }
         })
       )
@@ -505,4 +507,12 @@ export class IncomingRequestToPayComponent implements OnInit, AfterViewInit {
     this.stateService.clearState('incoming-requests');
     this.controlChange();
   }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
+  }
+  
 }

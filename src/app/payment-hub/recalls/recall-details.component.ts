@@ -2,10 +2,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { from } from 'rxjs';
@@ -19,12 +18,9 @@ import { transactionStatusData as transactionStatuses } from './helper/recall.he
 
 /** Dialog Components */
 import { BpmnDialogComponent } from '../common/bpmn-dialog/bpmn-dialog.component'
-import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
 import { RetryResolveDialogComponent } from '../common/retry-resolve-dialog/retry-resolve-dialog.component';
 
 /** Custom Models */
-import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
-import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { AlertService } from 'app/core/alert/alert.service';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
 
@@ -74,7 +70,8 @@ export class RecallDetailsComponent implements OnInit {
     private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private clipboard: Clipboard) {
     this.route.data.subscribe((data: {
       dfspEntries: DfspEntry[]
     }) => {
@@ -202,6 +199,13 @@ export class RecallDetailsComponent implements OnInit {
 
   hasRecallAccess() {
     return this.datasource.transfer.direction === 'OUTGOING' && this.authService.hasAccess('RECALL');
+  }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
   }
 
   //TODO: @vector details-ből mit lehet csinálni a recall-al

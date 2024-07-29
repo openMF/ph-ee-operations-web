@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 /** Custom Components */
 import { FormfieldComponent } from './form-dialog/formfield/formfield.component';
@@ -23,6 +24,8 @@ import { MAT_DATE_LOCALE} from '@angular/material/core';
 import { AutoFormatDateTimeDirective } from './auto-format-date-time/auto-format-date-time.directive';
 import { OptionDataSelectorComponent } from './option-data-selector/option-data-selector.component';
 import { MatPaginatorGotoComponent } from './mat-paginator-goto/mat-paginator-goto.component';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 
 const SIMPLE_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -38,6 +41,21 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   }
 };
 
+export const customCurrencyMaskConfig : any = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: " ",
+  nullable: true,
+  min: null,
+  max: null,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
+
 /**
  * Shared Module
  *
@@ -50,7 +68,9 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     IconsModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    ClipboardModule
   ],
   declarations: [
     FormfieldComponent,
@@ -64,7 +84,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     ThemePickerComponent,
     AutoFormatDateTimeDirective,
     OptionDataSelectorComponent,
-    MatPaginatorGotoComponent
+    MatPaginatorGotoComponent,
+    ChangePasswordDialogComponent
   ],
   exports: [
     FileUploadComponent,
@@ -78,7 +99,9 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     ReactiveFormsModule,
     AutoFormatDateTimeDirective,
     OptionDataSelectorComponent,
-    MatPaginatorGotoComponent
+    MatPaginatorGotoComponent,
+    NgxCurrencyModule,
+    ClipboardModule
   ],
   entryComponents: [
     FormDialogComponent,

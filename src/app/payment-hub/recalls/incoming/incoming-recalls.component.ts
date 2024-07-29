@@ -4,13 +4,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
 import { tap, startWith, map, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
-import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 import { CommonService } from 'app/payment-hub/common/common.service';
 
@@ -144,7 +145,8 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private stateService: StateService,
     private commonService: CommonService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private clipboard: Clipboard) {
       this.filterFormGroup = this.formBuilder.group({
         payeePartyId: new FormControl(),
         payerPartyId: new FormControl(),
@@ -389,7 +391,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDate(filterValue), 'startFrom');
+          this.applyFilter(convertMomentToDateTime(filterValue), 'startFrom');
         })
       )
       .subscribe();
@@ -399,7 +401,7 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDate(filterValue), 'startTo');
+          this.applyFilter(convertMomentToDateTime(filterValue), 'startTo');
         })
       )
       .subscribe();
@@ -574,6 +576,13 @@ export class IncomingRecallsComponent implements OnInit, AfterViewInit {
     });
     this.stateService.clearState('incoming-recalls');
     this.controlChange();
+  }
+
+  onCopy(event: ClipboardEvent) {
+    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+    const text = inputElement.value.replace(/\s+/g, '');
+    this.clipboard.copy(text);
   }
 
 }

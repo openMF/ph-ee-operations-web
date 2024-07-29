@@ -77,6 +77,12 @@
   word-wrap: normal !important;
 }
 
+.mat-cell.cdk-column-amount {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 ::ng-deep .mat-tooltip {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
