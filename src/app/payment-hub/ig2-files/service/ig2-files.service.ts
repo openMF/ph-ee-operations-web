@@ -41,7 +41,7 @@ export class Ig2FilesService {
     if (sortOrder) {
       params += '&sortedOrder=' + sortOrder;
     }
-    const recallsObservable = this.http.get('/api/v1/ig2files?' + params).pipe(map((recalls: any) => recalls as Ig2Files));
+    const recallsObservable = this.http.get('/api/v1/fileTransports?' + params).pipe(map((recalls: any) => recalls as Ig2Files));
     return recallsObservable;
   }
 
@@ -50,6 +50,6 @@ export class Ig2FilesService {
    *
    */
   getIg2FileDetail(id: string): Observable<Ig2FileDetails> {
-    return this.http.get('/api/v1/ig2file/' + id).pipe(map((recall: any) => recall as Ig2FileDetails));
+    return this.http.get('/api/v1/fileTransports/' + id).pipe(map((recall: any) => recall as Ig2FileDetails));
   }
 }

@@ -7,6 +7,11 @@ export const ig2FileStatusData: OptionData[] = [
         css: 'green'
     },
     {
+        option: 'Exception',
+        value: 'EXCEPTION',
+        css: 'red'
+    },
+    {
         option: 'Failed',
         value: 'FAILED',
         css: 'red'
@@ -17,8 +22,8 @@ export const ig2FileStatusData: OptionData[] = [
         css: 'orange'
     },
     {
-        option: 'Exception',
-        value: 'EXCEPTION',
-        css: 'red'
+        option: 'Unknown',
+        value: 'UNKNOWN',
+        css: 'black'
     }
 ];
