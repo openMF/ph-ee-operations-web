@@ -1,33 +1,33 @@
 <form #filterForm class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-  <mat-form-field fxFlex="20%">
+  <mat-form-field customDateFormat fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
     <input
       matInput
-      placeholder="yyyy-MM-dd hh:mm:ss"
+      placeholder="yyyy-MM-dd"
       [ngxMatDatetimePicker]="picker"
       [formControl]="filterFormGroup.get('transactionDateFrom')"
       [min]="minDate"
     />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
+    <ngx-mat-datetime-picker #picker [showSeconds]="false" [hideTime]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <mat-form-field customDateFormat fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
     <input
       matInput
-      placeholder="yyyy-MM-dd hh:mm:ss"
+      placeholder="yyyy-MM-dd"
       [ngxMatDatetimePicker]="pickerTo"
       [formControl]="filterFormGroup.get('transactionDateTo')"
       [min]="minDate"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"></ngx-mat-datetime-picker>
+    <ngx-mat-datetime-picker #pickerTo [showSeconds]="false" [hideTime]="true"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Session Number</mat-label>
-    <input matInput name="sessionNumber" [formControl]="filterFormGroup.get('sessionNumber')">
+    <input matInput name="sessionNumber" type="number" [formControl]="filterFormGroup.get('sessionNumber')">
   </mat-form-field>
 
   <mifosx-option-data-selector 
@@ -61,7 +61,7 @@
 
       <ng-container matColumnDef="transactionDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Date</th>
-        <td mat-cell *matCellDef="let ig2File"> {{ formatDate(ig2File.transactionDate) }} </td>
+        <td mat-cell *matCellDef="let ig2File"> {{ ig2File.transactionDate }} </td>
     </ng-container>
 
       <ng-container matColumnDef="sessionNumber">
@@ -84,7 +84,7 @@
         <td mat-cell *matCellDef="let ig2File" (click)="$event.stopPropagation()">
           <div *ngIf="ig2File.status==='ACTION_NEEDED'"><button mat-button color="primary" (click)="openRetryResolveDialog(ig2File.filedId,'retry')"><fa-icon icon="redo" size="lg"></fa-icon></button><button mat-button class="green" (click)="openRetryResolveDialog(ig2File.fileId,'resolve')" ><fa-icon icon="check" size="lg"></fa-icon></button></div>
           <div>
-            <button mat-button [routerLink]="['view', ig2File.fileId]" matTooltip="Ig2 File Details"><fa-icon icon="list" size="m"></fa-icon></button>
+            <button mat-button [routerLink]="['view', ig2File.workflowInstanceKey]" matTooltip="Ig2 File Details"><fa-icon icon="list" size="m"></fa-icon></button>
           </div>
         </td>
       </ng-container>

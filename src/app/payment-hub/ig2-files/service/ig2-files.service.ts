@@ -50,6 +50,6 @@ export class Ig2FilesService {
    *
    */
   getIg2FileDetail(id: string): Observable<Ig2FileDetails> {
-    return this.http.get('/api/v1/fileTransports/' + id).pipe(map((recall: any) => recall as Ig2FileDetails));
+    return this.http.get('/api/v1/fileTransport/' + id).pipe(map((recall: any) => recall as Ig2FileDetails));
   }
 }

@@ -35,6 +35,7 @@ import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
 import { IncomingIg2FilesComponent } from './ig2-files/incoming/incoming-ig2-files.component';
 import { OutgoingIg2FilesComponent } from './ig2-files/outgoing/outgoing-ig2-files.component';
 import { Ig2FileDetailsComponent } from './ig2-files/ig2-file-details.component';
+import { Ig2FilesResolver } from './ig2-files/resolver/ig2-files.resolver';
 
 /** Payment HUB Routes */
 const routes: Routes = [
@@ -150,7 +151,10 @@ const routes: Routes = [
             {
               path: 'view/:id',
               component: Ig2FileDetailsComponent,
-              data: { title: extract('View Ig2 File'), routeParamBreadcrumb: 'id' }
+              data: { title: extract('View Ig2 File'), routeParamBreadcrumb: 'id' },
+              resolve: {
+                ig2File: Ig2FilesResolver
+              }
             }
           ]
         },
@@ -165,7 +169,10 @@ const routes: Routes = [
             {
               path: 'view/:id',
               component: Ig2FileDetailsComponent,
-              data: { title: extract('View Ig2 File'), routeParamBreadcrumb: 'id' }
+              data: { title: extract('View Ig2 File'), routeParamBreadcrumb: 'id' },
+              resolve: {
+                ig2File: Ig2FilesResolver
+              }
             }
           ]
         },
@@ -278,6 +285,7 @@ const routes: Routes = [
     CurrenciesResolver,
     TransactionResolver,
     RecallResolver,
+    Ig2FilesResolver,
     DfspResolver,
     RequestToPayResolver,
     RequestToPayResolver,

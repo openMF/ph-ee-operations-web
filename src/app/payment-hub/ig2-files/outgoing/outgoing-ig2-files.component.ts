@@ -10,7 +10,7 @@ import { merge } from 'rxjs';
 import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 /** Custom Services */
-import { convertUtcToLocal, convertMomentToDateTime } from '../../../shared/date-format/date-format.helper';
+import { convertUtcToLocal, convertMomentToDate } from '../../../shared/date-format/date-format.helper';
 import { StateService } from '../../common/state.service';
 
 /** Shared Services */
@@ -161,7 +161,7 @@ export class OutgoingIg2FilesComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDateTime(filterValue), 'transactionDateFrom');
+          this.applyFilter(convertMomentToDate(filterValue), 'transactionDateFrom');
         })
       )
       .subscribe();
@@ -171,7 +171,7 @@ export class OutgoingIg2FilesComponent implements OnInit, AfterViewInit {
         debounceTime(1000),
         distinctUntilChanged(),
         tap((filterValue) => {
-          this.applyFilter(convertMomentToDateTime(filterValue), 'transactionDateTo');
+          this.applyFilter(convertMomentToDate(filterValue), 'transactionDateTo');
         })
       )
       .subscribe();

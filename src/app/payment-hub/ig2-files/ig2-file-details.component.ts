@@ -137,11 +137,11 @@ export class Ig2FileDetailsComponent implements OnInit {
   }
 
   getPaymentProcessId() {
-    return this.datasource.transfer.workflowInstanceKey;
+    return this.datasource.fileTransport.workflowInstanceKey;
   }
 
   getTransferId() {
-    return this.datasource.transfer.transactionId;
+    return this.datasource.fileTransport.transactionId;
   }
 
   cleanse(unformatted: any) {
