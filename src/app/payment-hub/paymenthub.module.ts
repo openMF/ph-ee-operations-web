@@ -35,6 +35,9 @@ import {ListTaskViewComponent} from './tasks/list/view/list-task-view.component'
 import {MyTaskViewComponent} from './tasks/my/view/my-task-view.component';
 import {RadiobuttonBooleanComponent} from './tasks/task-view/components/radiobuttonboolean/radiobuttonboolean.component';
 import { DirectivesModule } from 'app/directives/directives.module';
+import { IncomingIg2FilesComponent } from './ig2-files/incoming/incoming-ig2-files.component';
+import { OutgoingIg2FilesComponent } from './ig2-files/outgoing/outgoing-ig2-files.component';
+import { Ig2FileDetailsComponent } from './ig2-files/ig2-file-details.component';
 
 /**
  * Payment HUB Module
@@ -56,6 +59,9 @@ import { DirectivesModule } from 'app/directives/directives.module';
     IncomingRecallsComponent,
     OutgoingRecallsComponent,
     RecallDetailsComponent,
+    IncomingIg2FilesComponent,
+    OutgoingIg2FilesComponent,
+    Ig2FileDetailsComponent,
     PaymentHubComponent,
     BpmnDialogComponent,
     RetryResolveDialogComponent,

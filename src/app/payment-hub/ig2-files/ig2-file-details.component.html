@@ -1,0 +1,196 @@
+<div class="container m-b-20" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
+  <button mat-raised-button color="primary" (click)="openBPMNDialog()">
+    BPMN Diagram
+  </button>
+</div>
+
+<div class="container">
+  <mat-grid-list cols="2" rowHeight="380">
+    <mat-grid-tile [colspan]="1"
+    [rowspan]="1">
+    <mat-card class="mat-elevation-z8 container" *ngIf="datasource.fileTransport">
+      <mat-card-title>File Transport</mat-card-title>
+      <mat-card-content>
+
+        <div fxLayout="row wrap" class="content">
+
+          <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.fileTransport.startedAt!==undefined">
+            Started At
+          </div>
+
+          <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.fileTransport.startedAt!==undefined">
+            {{ formatDate(datasource.fileTransport.startedAt) }}
+          </div>
+
+          <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.fileTransport.completedAt!==undefined">
+            Completed At
+          </div>
+
+          <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.fileTransport.completedAt!==undefined">
+            {{ formatDate(datasource.fileTransport.completedAt) }}
+          </div>
+
+          <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.fileTransport.status!==undefined">
+            Status
+          </div>
+
+          <div fxFlex="60%" fxFlex.lt-md="60%" 
+            class="text-content" 
+            *ngIf="datasource.fileTransport.status!==undefined" 
+            [ngClass]="{'red': datasource.fileTransport.status==='FAILED','green': datasource.fileTransport.status==='COMPLETED','orange': datasource.fileTransport.status==='ACTION_NEEDED'}">
+            {{ datasource.fileTransport.status }}
+          </div>
+
+          <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.fileTransport.statusMessage!==undefined">
+            Status Message
+          </div>
+
+          <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.fileTransport.statusMessage!==undefined">
+            {{ datasource.fileTransport.statusMessage }}
+          </div>
+
+          <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.fileTransport.transactionDate!==undefined">
+            Transaction Date
+          </div>
+
+          <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.fileTransport.transactionDate!==undefined">
+            {{ datasource.fileTransport.transactionDate }}
+          </div>
+
+          <div fxFlex="40%" fxFlex.lt-md="40%" class="header text-content" *ngIf="datasource.fileTransport.transportType!==undefined">
+            Transport Type
+          </div>
+
+          <div fxFlex="60%" fxFlex.lt-md="60%" class="text-content" *ngIf="datasource.fileTransport.transportType!==undefined">
+            {{ datasource.fileTransport.transportType }}
+          </div>
+
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>
+
+<div class="container">
+  <div class="mat-elevation-z8 m-h-10">
+    <table mat-table [dataSource]="businessAttributes" matSort>
+      <ng-container matColumnDef="payment-business-attributes">
+        <th mat-header-cell *matHeaderCellDef colspan="3"> Transaction Business Attributes </th>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
+        <td mat-cell *matCellDef="let transaction" style="width: 70%; height: 100%; border: none; outline: none"><textarea cdkTextareaAutosize="true" cdkAutosizeMaxRows="12" cdkAutosizeMinRows="1" style="width: 100%; height: 100%" readonly [innerHTML]="transaction.value | prettyPrint"></textarea></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['payment-business-attributes']"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedBusinessAttributeColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedBusinessAttributeColumns;"></tr>
+    </table>
+  </div>
+</div>
+
+<div class="container m-t-40">
+  <div class="mat-elevation-z8 m-h-10">
+    <table mat-table [dataSource]="taskList" multiTemplateDataRows matSort>
+      <ng-container matColumnDef="payment-task-list">
+        <th mat-header-cell *matHeaderCellDef colspan="5"> Transaction Task List </th>
+      </ng-container>
+
+      <ng-container matColumnDef="payment-process-id">
+        <th mat-header-cell *matHeaderCellDef > Payment Process Id </th>
+      </ng-container>
+
+      <ng-container matColumnDef="payment-process-id-value">
+        <th mat-header-cell *matHeaderCellDef colspan="4"> {{ getPaymentProcessId() }} </th>
+      </ng-container>
+
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
+        <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.timestamp) }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="elementId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Id </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.elementId }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Type</th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.type }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="intent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let transaction" [ngClass]="{'orange': transaction.intent==='CREATED','blue': transaction.intent==='ACTIVATED','green': transaction.intent==='COMPLETED'}"> {{ transaction.intent }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let transaction">
+        <button mat-button color="grey">
+              <span *ngIf="!checkExpanded(transaction)">
+                <fa-icon icon="angle-down"></fa-icon>&nbsp;&nbsp;
+              </span>
+              <span *ngIf="checkExpanded(transaction)">
+                <fa-icon icon="angle-up"></fa-icon>&nbsp;&nbsp;
+              </span>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let transaction" [attr.colspan]="displayedColumns.length">
+          <div class="transaction-detail"
+              [@detailExpand]="checkExpanded(transaction) ? 'expanded' : 'collapsed'">
+          <table mat-table [dataSource]="transaction.datasource" matSort> 
+          
+            <ng-container matColumnDef="timestamp">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Time</th>
+              <td mat-cell *matCellDef="let transaction"> {{ formatDate(transaction.timestamp) }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="elementId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Id </th>
+              <td mat-cell *matCellDef="let transaction"> {{ transaction.elementId }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Task Type</th>
+              <td mat-cell *matCellDef="let transaction"> {{ transaction.type }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="intent">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let transaction" [ngClass]="{'orange': transaction.intent==='CREATED','blue': transaction.intent==='ACTIVATED','green': transaction.intent==='COMPLETED'}"> {{ transaction.intent }} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsDetailsTable"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsDetailsTable;"></tr>
+
+          </table>
+
+          </div>
+      </td>
+    </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['payment-task-list']"></tr>
+      <tr mat-header-row *matHeaderRowDef="['payment-process-id', 'payment-process-id-value']"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let transaction; columns: displayedColumns;"
+        class="transaction-row"
+        [class.transaction-expanded-row]="checkExpanded(transaction)"
+        (click)="pushPopElement(transaction)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="transaction-detail-row"></tr>
+
+    </table>
+  </div>
+</div>
