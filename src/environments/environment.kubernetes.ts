@@ -7,21 +7,35 @@
 import env from './.env';
 
 export let environment = {
-  name: 'kubernetes',
-  production: false,
-  version: env.npm_package_version,
-  serverUrl: '',
-  oauth: {
-    enabled: 'true', // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    serverUrl: 'https://paymenthub.qa.oneacrefund.org/opsapp',
-    basicAuth: 'true',
-    basicAuthToken: 'Y2xpZW50Og=='
+  name: 'kubernetes',  
+  production: true,
+  version: env.phee.version,
+  backend: {
+    operations: window['env']['serverApiUrlOps'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    signatureApiUrl: window['env']['signatureApiUrl'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    bulkConnectorOps: window['env']['bulkConnectorOps'] || 'https://bulk-connector-demo.sandbox.fynarfin.io',
+    vouchers: window['env']['serverApiUrlVou'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',
+    account: window['env']['serverApiUrlAct'] || 'https://paymenthub.qa.oneacrefund.org/opsapp/api/v1',
+    registeringInstituionId: window['env']['registeringInstitutionId'] || 'default',
   },
-  defaultLanguage: 'en-US',
-  supportedLanguages: ['en-US', 'fr-FR'],
-  externalConfigurationFile: 'configuration.properties', // When provided, the external configuration file content will override this environment settings based on naming conventions
+  oauth: {
+    // For connecting to Mifos X using OAuth2 Authentication change the value to true
+    enabled: window['env']['oauthEnabled'] || false,
+    type: window['env']['oauthType'] || 'keycloak',
+    serverUrl: window['env']['oauthServerUrl'] || 'https://paymenthub.qa.oneacrefund.org/opsapp',
+    realm: window['env']['oauthRealm'] || 'paymenthub',
+    clientId: window['env']['oauthClientId'] || 'opsapp',
+    clientSecret: window['env']['oauthClientSecret'] || '',
+    basicAuth: window['env']['oauthBasicAuth'] || true,
+    basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
+  },
   auth: {
-    enabled: false,
-    tenant: 'phdefault'
-  }
+    enabled: window['env']['authEnabled'] || false,
+  },
+  tenant: window['env']['platformTenantId'] || 'phdefault',
+  tenants: window['env']['platformTenantIds'] || 'phdefault',
+  defaultLanguage: window['env']['defaultLanguage'] || 'en',
+  supportedLanguages: window['env']['supportedLanguages'] || ['en', 'fr']
+
 };
