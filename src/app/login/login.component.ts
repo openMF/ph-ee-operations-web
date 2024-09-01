@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       } else if (alertType === 'Authentication Success') {
         this.resetPassword = false;
         this.twoFactorAuthenticationRequired = false;
-        this.router.navigate(['/'], { replaceUrl: true });
+        this.router.navigate(['/dashboard'], { replaceUrl: true });
       }
     });
   }

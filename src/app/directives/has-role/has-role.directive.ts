@@ -7,8 +7,9 @@ import { environment } from 'environments/environment';
 })
 export class HasRoleDirective {
 
-  public static ADMIN_ROLE = 'admin';
-  public static OPERATOR_ROLE = 'operator';
+  public static ADMIN_MAKER = 'Admin Maker';
+  public static ADMIN_CHECKER = 'Admin Checker';
+  public static NORMAL_USER = 'Normal User';
 
   /** User Roles */
   private userRoles: any[];
@@ -24,9 +25,9 @@ export class HasRoleDirective {
               private authenticationService: AuthenticationService) {
     const userDetails = this.authenticationService.userDetails;
     if (environment.auth.enabled === 'false') {
-      this.userRoles = [HasRoleDirective.ADMIN_ROLE];
+      this.userRoles = [HasRoleDirective.NORMAL_USER];
     } else {
-      this.userRoles = userDetails.realm_access.roles;
+      this.userRoles = userDetails.resource_access.opsapp.roles;
     }
   }
 
@@ -34,41 +35,24 @@ export class HasRoleDirective {
    * Evaluates the condition to show template.
    */
   @Input()
-  set userHasRole(role: any) {
-    if (typeof role !== 'string') {
-      throw new Error('hasRole value must be a string');
+  set userHasRole(roles: string[]) {
+    if (!Array.isArray(roles)) {
+      throw new Error('userHasRole value must be an array');
     }
     /** Clear the template beforehand to prevent overlap OnChanges. */
     this.viewContainer.clear();
     /** Shows Template if user has role */
-    if (this.hasRole(role)) {
+    if (this.hasRole(roles)) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     }
   }
 
   /**
    * Checks if user is permitted.
-   * @param {string} role Role
-   * @returns {true}
-   * -`ALL_FUNCTIONS`: user is a Super user.
-   * -`ALL_FUNCTIONS_READ`: user has all read roles and passed role is 'read' type.
-   * - User has special role to access that feature.
-   * @returns {false}
-   * - Passed role doesn't fall under either of above given role grants.
-   * - No value was passed to the has role directive.
+   * @param {string[]} roles Roles  
+   * @returns {boolean} True if user has role
    */
-  private hasRole(role: string) {
-    role = role.trim();
-    if (this.userRoles.includes(HasRoleDirective.ADMIN_ROLE)) {
-      return true;
-    } else if (role !== '') {
-        if (this.userRoles.includes(role)) {
-          return true;
-        } else {
-          return false;
-        }
-    } else {
-      return false;
-    }
+  private hasRole(roles: string[]): boolean {
+    return roles.some(role => this.userRoles.includes(role));
   }
 }

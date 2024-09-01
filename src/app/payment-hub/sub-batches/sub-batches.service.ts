@@ -24,6 +24,7 @@ export class SubBatchesService {
   }
 
   getBatchDetail(batchId: string): Observable<any> {
-    return this.http.get(this.apiPrefix + '/batches/' + batchId);
+    // return this.http.get(this.apiPrefix + '/batches/' + batchId);
+    return this.http.get('../../assets/mock/payment-hub/sub-batches.mock.json');
   }
 }

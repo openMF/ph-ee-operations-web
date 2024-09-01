@@ -1,31 +1,43 @@
 @import 'theme/theme';
 
 .main-container {
-  box-shadow: 1px 1px 50px #000;
   height: 100vh;
-  min-height: 94%;
-  min-width: 94%;
-  margin: auto;
-  flex: none;
+}
+
+mifosx-login-form {
+  width: 50%;
 }
 
 .login-container {
-  overflow: auto;
   margin: auto;
-
-  .img-container {
-    max-width: 18rem;
-  }
-}
-
-.right-container {
   background-color: $primary;
-  border-radius: 15px;
-  margin: 20px;
-}
-
-.title {
-  margin: auto;
-  font-size: xx-large;
   color: $white;
+  padding: 2rem;
+  width: 60%;
+  height: fit-content;
+  border-radius: 2rem;
+
+  .login-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .app-brand {
+    width: fit-content;
+    margin: 3rem auto;
+    color: $white;
+    gap: 0.5rem;
+    z-index: 9999;
+
+    .app-logo {
+      width: auto;
+      height: 100%;
+      font-size: 2rem;
+    }
+
+    .app-logo-text {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+  }
 }

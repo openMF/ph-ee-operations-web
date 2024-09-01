@@ -1,24 +1,14 @@
 .container {
-    width: 80%;
+  width: 90%;
+}
+
+.account-wrap {
+  flex-wrap: wrap;
+  width: 100%;
+
+  mifosx-voucher-management,
+  mifosx-vouchers-bulk-import,
+  mifosx-filter-selector {
+    width: 100%;
   }
-  
-  .account-mapper-wrap {
-    flex-wrap: wrap;
-    width: 100%;
-  
-    mifosx-batches,
-    mifosx-sub-batches,
-    mifosx-filter-selector {
-      width: 100%;
-    }
-    
-}
-
-.filter-options {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.push-end {
-    text-align: end;
 }

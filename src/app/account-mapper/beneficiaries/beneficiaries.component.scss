@@ -1,0 +1,66 @@
+@import "theme/theme";
+
+.container {
+  width: 100%;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.account-mapper-wrap {
+  flex-wrap: wrap;
+  width: 100%;
+
+  mifosx-batches,
+  mifosx-sub-batches,
+  mifosx-filter-selector {
+    width: 100%;
+  }
+}
+
+.equal-width {
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 0 !important;
+}
+
+.filter-options {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.filter-header {
+  padding: 0.3rem;
+}
+
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+  background-color: inherit !important;
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header {
+  height: fit-content;
+}
+
+.active-filter-button {
+  background-color: $green;
+  color: $white;
+}
+
+.push-end {
+  text-align: end;
+}
+
+.filter-button {
+  background-color: $light-grey;
+}
+
+.search-button {
+  width: 12rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  background-color: $green;
+  padding: 0.5rem 0;
+  box-shadow: none;
+  color: $white;
+}

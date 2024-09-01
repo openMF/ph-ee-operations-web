@@ -15,6 +15,11 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 })
 export class SidenavComponent implements OnInit {
 
+  //User Management Expansion
+  isUserManagementExpanded:boolean = false;
+  //User Management Active Button
+  activeButton:string='';
+
   /** True if sidenav is in collapsed state. */
   @Input() sidenavCollapsed: boolean;
   @Output() sideNavControl: EventEmitter<boolean> = new EventEmitter;
@@ -50,6 +55,13 @@ export class SidenavComponent implements OnInit {
 
   sideNavCollapsed(value: boolean): void {
     this.sideNavControl.emit(value);
+  }
+  toggleUserManagement(event: Event) {
+    event.stopPropagation(); 
+    this.isUserManagementExpanded = !this.isUserManagementExpanded;
+  }
+  setActiveButton(buttonName: string) {
+    this.activeButton = buttonName;
   }
 
 }

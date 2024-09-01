@@ -3,6 +3,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { DatePipe, LocationStrategy } from '@angular/common';
 
 /** Tanslation Imports */
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -25,15 +26,16 @@ import { SettingsModule } from './settings/settings.module';
 import { SystemModule } from './system/system.module';
 import { UsersModule } from './users/users.module';
 import { PaymentHubModule } from './payment-hub/paymenthub.module';
+import { VouchersModule } from './vouchers/vouchers.module';
+import { AccountMapperModule } from './account-mapper/account-mapper.module';
+import { KeycloakAngularModule } from 'keycloak-angular';
+import { VisualizationsModule } from './visualizations/visualizations.module';
+import { ConfigurationModule } from './configuration/configuration.module';
 
 
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
 
-import { DatePipe, LocationStrategy } from '@angular/common';
-import { VouchersModule } from './vouchers/vouchers.module';
-import { AccountMapperModule } from './account-mapper/account-mapper.module';
-import { KeycloakAngularModule } from 'keycloak-angular';
 
 /**
  * App Module
@@ -65,7 +67,9 @@ import { KeycloakAngularModule } from 'keycloak-angular';
     PaymentHubModule,
     VouchersModule,
     AccountMapperModule,
-    AppRoutingModule,
+    VisualizationsModule,
+    ConfigurationModule,
+    AppRoutingModule
   ],
   declarations: [WebAppComponent, NotFoundComponent],
   providers: [

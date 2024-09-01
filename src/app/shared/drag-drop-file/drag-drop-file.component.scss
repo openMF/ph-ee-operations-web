@@ -1,0 +1,11 @@
+@import 'theme/theme';
+.upload {
+  cursor: pointer;
+  width: 80%;
+}
+::ng-deep .ngx-file-drop__drop-zone {
+  border: 1px dashed $primary !important;
+  border-radius: 0.8rem !important;
+  background-color: #eff5ff;
+  text-align: center;
+}

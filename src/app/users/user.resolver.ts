@@ -6,7 +6,8 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 /** Custom Services */
-import { UsersService } from './users.service';
+import { UsersService } from './services/users.service';
+import { KeycloakAdminService } from './services/users-keycloak.service';
 
 /**
  * User data resolver.
@@ -17,7 +18,7 @@ export class UserResolver  {
   /**
    * @param {UsersService} usersService Users service.
    */
-  constructor(private usersService: UsersService) {}
+  constructor(private keycloakAdminService: KeycloakAdminService) {}
 
   /**
    * Returns the user data.
@@ -25,6 +26,5 @@ export class UserResolver  {
    */
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
     const userId = route.paramMap.get('id');
-    return this.usersService.getUser(userId);
-  }
+    return this.keycloakAdminService.getUserById(userId);  }
 }

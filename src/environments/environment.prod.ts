@@ -18,6 +18,7 @@ export let environment = {
     voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',
     account: window['env']['serverApiUrlAct'] || 'http://ops.local/opsapp/api/v1',
     registeringInstituionId: window['env']['registeringInstitutionId'] || 'default',
+    g2pPaymentConfigApi: window['env']['g2pProgramConfigApi'] || 'http://localhost:8084',
   },
   oauth: {
     // For connecting to Mifos X using OAuth2 Authentication change the value to true
@@ -26,9 +27,22 @@ export let environment = {
     serverUrl: window['env']['oauthServerUrl'] || 'http://keycloak.sandbox.fynarfin.io/auth',
     realm: window['env']['oauthRealm'] || 'paymenthub',
     clientId: window['env']['oauthClientId'] || 'opsapp',
+    clientUUID: window['env']['oauthClientUUID'] || '',
     clientSecret: window['env']['oauthClientSecret'] || '',
     basicAuth: window['env']['oauthBasicAuth'] || true,
     basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
+  },
+  jbpm:{
+    jbpmApiUrl: window['env']['jbpmApiUrl'] || '',
+    containerId: window['env']['jbpmContainerId'] || '',
+    credentials: {
+      adminMaker: window['env']['jbpmCredentialsAdminMaker'] || '',
+      adminChecker: window['env']['jbpmCredentialsAdminChecker'] || '',
+      both: window['env']['jbpmCredentialsBoth'] || ''
+    }
+  },
+  grafana: {
+    url: window['env']['grafanaUrl'] || '',
   },
   auth: {
     enabled: window['env']['authEnabled'] || false,

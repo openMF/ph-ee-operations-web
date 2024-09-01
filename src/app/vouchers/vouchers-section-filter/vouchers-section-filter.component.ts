@@ -14,8 +14,8 @@ export class VouchersSectionFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.sections = [
-      { label: 'Vouchers', routeTo: ['vouchers', 'voucher-management'], active: true, disabled: false },
-      { label: 'Create Vouchers', routeTo: ['vouchers', 'bulk-import'], active: false, disabled: false },
+      { label: 'Vouchers', routeTo: ['dashboard','vouchers', 'voucher-management'], active: true, disabled: false },
+      { label: 'Create Vouchers', routeTo: ['dashboard','vouchers', 'bulk-import'], active: false, disabled: false },
     ];
   }
 
