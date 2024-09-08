@@ -1,50 +1,77 @@
 <mat-toolbar fxLayout="row" color="primary" id="mifosx-toolbar">
-
-  <button mat-icon-button *ngIf="!sidenavCollapsed" (click)="toggleSidenav()" matTooltip="Toggle Hide/Open">
+  <button
+    mat-icon-button
+    *ngIf="!sidenavCollapsed"
+    (click)="toggleSidenav()"
+    matTooltip="Toggle Hide/Open"
+  >
     <fa-icon icon="bars" size="lg"></fa-icon>
   </button>
 
-  <button mat-icon-button *ngIf="sidenav.opened" (click)="toggleSidenavCollapse()" matTooltip="Toggle Collapse" fxHide.lt-md="true">
+  <button
+    mat-icon-button
+    *ngIf="sidenav.opened"
+    (click)="toggleSidenavCollapse()"
+    matTooltip="Toggle Collapse"
+    fxHide.lt-md="true"
+  >
     <fa-icon *ngIf="!sidenavCollapsed" icon="chevron-left"></fa-icon>
     <fa-icon *ngIf="sidenavCollapsed" icon="chevron-right"></fa-icon>
   </button>
 
   <nav mat-tab-nav-bar backgroundColor="primary" class="ml-1">
-
-    <span fxHide.lt-lg="true">
-
+    <span>
       <a mat-tab-link class="tab-link" [routerLink]="['/paymenthubee']">
         <fa-icon class="mr-05" icon="money-bill-alt" size="lg"></fa-icon>
         Payment Hub EE
       </a>
-      
-      <a *ngIf="authorities.includes('ALL_FUNCTIONS')" mat-tab-link class="tab-link" [matMenuTriggerFor]="adminMenu" #adminMenuTrigger="matMenuTrigger">
+
+      <a
+        *ngIf="authorities.includes('ALL_FUNCTIONS')"
+        mat-tab-link
+        class="tab-link"
+        [matMenuTriggerFor]="adminMenu"
+        #adminMenuTrigger="matMenuTrigger"
+      >
         <fa-icon class="mr-05" icon="shield-alt" size="lg"></fa-icon>
         Admin
       </a>
     </span>
-
   </nav>
 
-  <span fxFlex="auto" class="username">{{displayUser()}}</span>
+  <span fxFlex="auto" class="username">{{ displayUser() }}</span>
 
   <!--
     TODO: Search
     Separate into its own component in shared module for reuse.
     Implement functionality.
   -->
-  <div *ngIf="searchVisible" class="search-bar" fxFlex="auto" fxHide.lt-sm="true" [@fadeInOut]>
+  <div
+    *ngIf="searchVisible"
+    class="search-bar"
+    fxFlex="auto"
+    fxHide.lt-sm="true"
+    [@fadeInOut]
+  >
     <mat-form-field class="search">
       <mat-label>Search</mat-label>
-      <input matInput type="text">
+      <input matInput type="text" />
     </mat-form-field>
   </div>
 
-  <button mat-icon-button class="ml-1" (click)="toggleSearchVisibility()" fxHide.lt-sm="true">
+  <button
+    mat-icon-button
+    class="ml-1"
+    (click)="toggleSearchVisibility()"
+    fxHide.lt-sm="true"
+  >
     <fa-icon icon="search" size="lg"></fa-icon>
   </button>
 
-  <mifosx-language-selector class="ml-1 language" fxHide.lt-md></mifosx-language-selector>
+  <mifosx-language-selector
+    class="ml-1 language"
+    fxHide.lt-md
+  ></mifosx-language-selector>
 
   <mifosx-theme-picker fxHide.lt-md></mifosx-theme-picker>
 
@@ -57,10 +84,13 @@
     <fa-icon icon="bell" size="lg"></fa-icon>
   </button>
 
-  <button mat-icon-button class="ml-1 img-button" [matMenuTriggerFor]="applicationMenu">
-    <img src="assets/images/user_placeholder.png">
+  <button
+    mat-icon-button
+    class="ml-1 img-button"
+    [matMenuTriggerFor]="applicationMenu"
+  >
+    <img src="assets/images/user_placeholder.png" />
   </button>
-
 </mat-toolbar>
 
 <mat-menu #adminMenu="matMenu" [overlapTrigger]="false">
@@ -78,7 +108,7 @@
   </button>
   <button mat-menu-item (click)="logout()">
     <mat-icon>
-        <fa-icon icon="sign-out-alt" size="sm"></fa-icon>
+      <fa-icon icon="sign-out-alt" size="sm"></fa-icon>
     </mat-icon>
     <span>Sign Out</span>
   </button>
