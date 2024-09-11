@@ -1,19 +1,21 @@
-<!-- The viewport is divided into two parts having max-width 70% and 30% -->
-<div fxLayout="row" class="main-container">
+<div fxLayout="column" class="main-container">
 
-  <div fxLayout="column" fxFlex.gt-md="1 0 50%">
-    <!-- Language Selector to the extreme right -->
+  <div fxLayout="column" class="login-container">
     <div fxLayout="row-reverse" fxFlex="1 0 auto">
-      <mifosx-language-selector class="p-r-10 p-t-10"></mifosx-language-selector>
+      <mifosx-language-selector class="custom-language p-r-10 p-t-10"></mifosx-language-selector>
     </div>
 
     <!-- Logo with Organization Name -->
-    <div fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
-      <img src="assets/images/mifos-logo-flat.png" alt="Mifos X Logo" class="img-container" />
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="app-brand" fxFlex="3 0 auto">
+      <mat-icon fxLayout="row" fxLayoutAlign="space-between center" class="app-logo" matListIcon>
+        <fa-icon icon="square-parking" size="xl"></fa-icon>
+      </mat-icon>
+      <span class="app-logo-text">{{ 'APP_NAME' | translate }}</span>
     </div>
 
-    <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
-      <p>{{ 'APP_NAME' | translate }}</p>
+    <div fxLayout="column"  fxLayoutAlign="start center ">
+      <div class="login-title">{{"labels.heading.Backoffice Login" | translate}}</div>
+      <p>{{"labels.texts.Enter your login details below" | translate}}</p>
     </div>
 
     <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
@@ -23,8 +25,5 @@
 
     <!-- Footer -->
     <mifosx-footer></mifosx-footer>
-  </div>
-  <div fxLayout="column" fxFlex.gt-md="1 0 50%" class="right-container">
-    <p class="title">{{ 'APP_NAME' | translate }}</p>
   </div>
 </div>

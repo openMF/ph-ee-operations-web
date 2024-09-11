@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 /** Custom Services */
-import { UsersService } from './users.service';
+import { UsersService } from './services/users.service';
 
 /**
  * Users template data resolver.

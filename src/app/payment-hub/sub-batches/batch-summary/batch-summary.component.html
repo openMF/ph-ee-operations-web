@@ -1,0 +1,32 @@
+<div class="container">
+    <h1 mat-dialog-title class="primary">{{ 'labels.heading.Batch Summary' | translate }}</h1>
+    <fa-icon icon ="circle-xmark" size="xl" class="close" (click)="this.dialogRef.close()" ></fa-icon>
+    <div mat-dialog-content>
+    
+        <table>
+    
+            <tr>
+                <th class="left">{{ 'labels.inputs.Source Ministry' | translate }}</th>
+                <td>{{ batch.sourceMinistry }}</td>
+            </tr>
+    
+            <tr>
+                <th class="left" >{{ 'labels.inputs.Program' | translate }}</th>
+                <td>{{ batch.program }}</td>
+            </tr>
+            <tr>
+                <th class="left" >{{ 'labels.inputs.Number of Instructions' | translate }}</th>
+                <td>{{ batch.totalInstructionCount }}</td>
+            </tr>
+            <tr>
+                <th class="left" >{{ 'labels.inputs.Total Amount' | translate }}</th>
+                <td>{{ batch.totalAmount }}</td>
+            </tr>
+            <tr>
+                <th class="left" >{{ 'labels.inputs.Payer FSP' | translate }}</th>
+                <td>{{ batch.payerFsp }}</td>
+            </tr>
+        </table>
+    
+    </div>
+</div>

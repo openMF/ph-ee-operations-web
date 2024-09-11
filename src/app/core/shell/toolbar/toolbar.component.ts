@@ -93,6 +93,30 @@ export class ToolbarComponent implements OnInit {
     }
   }
 
+  displayUserType(): string {
+    if (this.authenticationService.isOauthKeyCloak()) {
+      return this.credentials ? this.credentials.userType : '';
+    } else {
+      return this.credentials ? this.credentials.userType : '';
+    }
+  }
+
+  displayInstituteName(): string {
+    if (this.authenticationService.isOauthKeyCloak()) {
+      return this.credentials ? this.credentials.govtName || this.credentials.fspName : ''; 
+    } else {
+      return this.credentials ? this.credentials.govtName || this.credentials.fspName : '';
+    }
+  };
+
+  displayInstitueId(): string {
+    if (this.authenticationService.isOauthKeyCloak()) {
+      return this.credentials ? this.credentials.govtId || this.credentials.fspId : '';
+    } else {
+      return this.credentials ? this.credentials.govtId || this.credentials.fspId : '';
+    }
+  }
+
   /**
    * Toggles the current state of sidenav.
    */

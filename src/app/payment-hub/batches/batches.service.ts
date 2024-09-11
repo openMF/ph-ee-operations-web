@@ -26,7 +26,10 @@ export class BatchesService {
     .set('sortOrder', sortOrder)
     .set('orderBy', orderBy);
 
-    return this.http.get(this.apiPrefix + '/batches', { params: httpParams });
+    // return this.http.get(this.apiPrefix + '/batches', { params: httpParams });
+
+    //mock data for batches
+    return this.http.get('../../assets/mock/payment-hub/batches.mock.json');
   }
 
   createBatch(correlationID: string, institutionId: string, purpose: string, programId: string, signature: string, payload: any): Observable<any> {

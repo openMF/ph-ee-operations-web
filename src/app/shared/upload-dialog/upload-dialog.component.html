@@ -1,0 +1,10 @@
+<div class="upload-dialog">
+  <h2 class="title">Choose File</h2>
+  <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="2%" fxLayout.lt-md="column" *ngIf="!isFileAdded()" class="m-t-10 m-b-15">
+    <fa-icon icon="circle-xmark" size="xl" class="close" (click)="this.dialogRef.close()"></fa-icon>
+    <button type="button" class="primary" mat-raised-button (click)="downloadTemplate()"><fa-icon icon="download" class="m-r-10"></fa-icon>{{ 'labels.buttons.Download Template' | translate }}</button>
+  </div>
+  <div *ngIf="!isFileAdded()">
+    <mifosx-drag-drop-file (onFileChange)="onFileChange($event)"></mifosx-drag-drop-file>
+  </div>
+</div>

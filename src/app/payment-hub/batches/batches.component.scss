@@ -1,3 +1,5 @@
+@import 'theme/theme';
+
 table {
     width: 100%;
   
@@ -6,9 +8,23 @@ table {
     }
 }
 
-.filter-options {
-    width: 100%;
-    margin-bottom: 20px;
+.container {
+  width: 100%;
+  gap: 1rem;  
+}
+
+.filter-header{
+  padding: 0.5rem ;
+}
+
+.custom-button {
+  width: 12rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  background-color: $green;
+  padding: 0.5rem 0;
+  box-shadow: none;
+  color: $white;
 }
 
 .push-end {
@@ -17,4 +33,29 @@ table {
 
 .status {
     text-align: center;
+}
+
+.equal-width {
+    width: 100%;
+    box-sizing: border-box;
+    margin-right: 0 !important;
+  }
+
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+  background-color: inherit !important;
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header {
+  height: fit-content;
+}
+
+.active-filter-button {
+  background-color: $green;
+  color: $white;
+}
+
+.filter-button {
+  background-color: $light-grey;
 }

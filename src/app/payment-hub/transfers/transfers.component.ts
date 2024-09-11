@@ -1,138 +1,210 @@
+/** Angular Imports */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Dates } from 'app/core/utils/dates';
-import { TransfersService } from './transfers.service';
-import { SubBatchDetail, Transfer, TransferData } from './model/transfer.model';
 import { UntypedFormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+
+/** Custom Models and Utils */
+import { Dates } from 'app/core/utils/dates';
+import { SubBatchDetail, Transfer, TransferData } from './model/transfer.model';
+
+/** Custom Services */
+import { TransfersService } from './transfers.service';
+
+/** Custom Components */
 import { ViewTransferDetailsComponent } from './view-transfer-details/view-transfer-details.component';
-import { ActivatedRoute } from '@angular/router';
+import { SubBatchSummaryComponent } from './sub-batch-summary/sub-batch-summary.component';
 
 @Component({
   selector: 'mifosx-transfers',
   templateUrl: './transfers.component.html',
-  styleUrls: ['./transfers.component.scss']
+  styleUrls: ['./transfers.component.scss'],
 })
 export class TransfersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort) set matSort(sort: MatSort) {
+    this.dataSource.sort = sort;
+    this.setSortingAccessor();
+  }
+  @ViewChild('panel') panel: MatExpansionPanel;
 
-  /** Minimum transaction date allowed. */
-  minDate = new Date(2000, 0, 1);
-  /** Maximum transaction date allowed. */
-  maxDate = new Date();
-
-  payeePartyId = new UntypedFormControl();
-  payerPartyId = new UntypedFormControl();
-  payerDfspId = new UntypedFormControl();
-  payerDfspName = new UntypedFormControl();
-
+  /** Amount form control */
   amount = new UntypedFormControl();
-  /** Transaction date from form control. */
-  transactionDateFrom = new UntypedFormControl(new Date(new Date().setMonth(new Date().getMonth() - 1)));
-  /** Transaction date to form control. */
-  transactionDateTo = new UntypedFormControl(new Date());
-  /** Source Ministry form control. */
-  sourceMinistry = new UntypedFormControl();
-  /** Batch Reference Number form control. */
-  batchReferenceNumber = new UntypedFormControl();
-  /** Bulk Amount form control. */
-  bulkAmount = new UntypedFormControl();
-
-  /** Transaction Type form control. */
-  transactionType = new UntypedFormControl();
-  /** Transaction ID form control. */
+  /** Date form control */
+  date = new UntypedFormControl();
+  /** Transaction ID form control */
   transactionId = new UntypedFormControl();
-  /** Columns to be displayed in transactions table. */
-  displayedColumns: string[] = ['batchReferenceNumber', 'startedAt', 'completedAt', 'sourceMinistry', 'bulkAmount', 'payerFspId', 'status'];
-  /** Data source for transactions table. */
-  dataSource = new MatTableDataSource();
+  /** Transaction Status form control */
+  transactionStatus = new UntypedFormControl();
+  /** Functional ID form control */
+  functionalId = new UntypedFormControl();
+
+  /** Transactions Status */
+  transactionStatuses = ['Completed', 'Rejected', 'Partially Authorized'];
+
+  /** Selected filters state */
+  selectedFilters = {
+    amount: false,
+    date: false,
+    transactionId: false,
+    transactionStatus: false,
+    functionalId: false,
+  };
+
+  /** Table Columns */
+  displayedColumns: string[] = ['transactionReferenceNumber', 'date', 'bulkAmount', 'functionalId', 'status'];
+  /** Data source for transactions table */
+  dataSource = new MatTableDataSource<Transfer>();
 
   totalRows = 0;
   currentPage = 0;
-
   pageSize = 50;
   isLoading = false;
 
   batchId: string;
   subBatchId: string;
+  transferData: any;
+  subBatchData: SubBatchDetail;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private dates: Dates,
     private dialog: MatDialog,
-    private transfersService: TransfersService) { }
+    private transfersService: TransfersService
+  ) { }
 
   ngOnInit(): void {
-    this.route.queryParams
-      .subscribe((params: any) => {
-        this.batchId = params.b ? params.b : null;
-        this.subBatchId = params.s ? params.s : null;
-      });
-    this.getBatches();
+    this.route.params.subscribe((params) => {
+      this.batchId = params.batchId;
+      this.subBatchId = params.subBatchId;
+    });
+    this.getTransfers();
   }
 
-  getBatches(): void {
+  /** Load transfers or sub-batch details based on subBatchId */
+  getTransfers(): void {
     this.isLoading = true;
-    if (this.subBatchId === null) {
-      this.transfersService.getTransfers(this.currentPage, this.pageSize)
-      .subscribe((transfers: TransferData) => {
-        const content: Transfer[] = [];
-        transfers.content.forEach((t: Transfer) => {
-          t.amount = t.amount * 1;
-
-        });
-        this.dataSource = new MatTableDataSource(transfers.content);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.totalRows = transfers.totalElements;
-        this.isLoading = false;
-      }, (error: any) => {
-        this.isLoading = false;
-      });
+    if (!this.subBatchId) {
+      this.transfersService.getTransfers(this.currentPage, this.pageSize).subscribe(
+        (data: TransferData) => this.handleTransfersResponse(data),
+        () => (this.isLoading = false)
+      );
     } else {
-      this.transfersService.getSubBatchSumaryDetail(this.batchId, this.subBatchId)
-      .subscribe((subBatchData: SubBatchDetail) => {
-        this.dataSource = new MatTableDataSource(subBatchData.instructionList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.totalRows = subBatchData.totalInstructionCount;
-        this.isLoading = false;
-      }, (error: any) => {
-        this.isLoading = false;
-      });
+      this.transfersService.getSubBatchSumaryDetail(this.batchId, this.subBatchId).subscribe(
+        (data: SubBatchDetail) => this.handleSubBatchResponse(data),
+        () => (this.isLoading = false)
+      );
     }
   }
 
-  convertTimestampToUTCDate(timestamp: any) {
-    if (!timestamp) {
-      return undefined;
-    }
-    return this.dates.formatUTCDate(new Date(timestamp));
+  /** Handle transfers response */
+  private handleTransfersResponse(data: TransferData): void {
+    this.transferData = data.content;
+    this.updateDataSource(this.transferData);
+    this.totalRows = data.totalElements;
+    this.isLoading = false;
   }
 
-  pageChanged(event: PageEvent) {
+  /** Handle sub-batch response */
+  private handleSubBatchResponse(data: SubBatchDetail): void {
+    this.subBatchData = { ...data, instructionList: null };
+    this.transferData = data.instructionList;
+    this.updateDataSource(this.transferData);
+    this.totalRows = data.totalInstructionCount;
+    this.isLoading = false;
+  }
+
+  /** Set sorting accessor for table columns */
+  private setSortingAccessor(): void {
+    this.dataSource.sortingDataAccessor = (item: any, property: string) => {
+      switch (property) {
+        case 'date': return new Date(item.date);
+        case 'bulkAmount': return item.amount;
+        case 'status': return item.status;
+        case 'functionalId': return item.functionalId;
+        case 'transactionReferenceNumber': return item.transactionId;
+        default: return item[property];
+      }
+    };
+  }
+
+  /** Format date to UTC */
+  convertTimestampToUTCDate(timestamp: any): string | undefined {
+    return timestamp ? this.dates.formatUTCDate(new Date(timestamp)) : undefined;
+  }
+
+  /** Update pagination */
+  pageChanged(event: PageEvent): void {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.getBatches();
+    this.getTransfers();
   }
 
-  status(item: Transfer): string {
-    if (item.status === 'COMPLETED') {
-      return 'green';
-    } else if (item.status === 'ON_GOING') {
-      return 'yellow';
-    }
-    return 'red';
+  /** Search and filter transactions */
+  searchTransactions(): void {
+    const filterData = this.filterTransferData();
+    this.updateDataSource(filterData);
+    this.updateSelectedFilters();
+    this.panel.close();
   }
 
-  searchTransactions(): void { }
+  /** Filter transfer data based on form controls */
+  private filterTransferData(): Transfer[] {
+    const stripTime = (date: Date): Date => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const date = this.date.value ? stripTime(new Date(this.date.value)) : null;
 
-  viewTransfer(transfer: Transfer): void {
-    this.dialog.open(ViewTransferDetailsComponent, {
-      data: { transfer: transfer }
+    return this.transferData.filter((item: any) => {
+      const datadate = stripTime(new Date(item.date));
+      const matchesDate = !date || datadate.getTime() === date.getTime();
+      const matchesTransactionId = !this.transactionId.value || (item.transactionId || item.instructionId).toLowerCase().includes(this.transactionId.value.toLowerCase());
+      const matchesStatus = !this.transactionStatus.value || item.status.toLowerCase().includes(this.transactionStatus.value.toLowerCase());
+      const matchesFunctionalId = !this.functionalId.value || item.functionalId.toLowerCase().includes(this.functionalId.value.toLowerCase());
+      const matchesAmount = !this.amount.value || item.amount === this.amount.value;
+
+      return matchesDate && matchesTransactionId && matchesStatus && matchesFunctionalId && matchesAmount;
     });
+  }
+
+  /** Update the data source */
+  private updateDataSource(data: Transfer[]): void {
+    this.dataSource.data = data;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  /** Update the selected filters state */
+  private updateSelectedFilters(): void {
+    this.selectedFilters.transactionId = !!this.transactionId.value;
+    this.selectedFilters.transactionStatus = !!this.transactionStatus.value;
+    this.selectedFilters.amount = !!this.amount.value;
+    this.selectedFilters.functionalId = !!this.functionalId.value;
+    this.selectedFilters.date = !!this.date.value;
+  }
+
+  /** Clear a filter */
+  removeFilter(filterType: string, event?: MouseEvent): void {
+    event?.stopPropagation();
+    (this as any)[filterType].reset();
+    this.searchTransactions();
+  }
+
+  /** View transfer details */
+  viewTransfer(transfer: Transfer): void {
+    this.dialog.open(ViewTransferDetailsComponent, { data: { transfer } });
+  }
+
+  /** Toggle the filter panel */
+  togglePanel(event?: MouseEvent): void {
+    event?.stopPropagation();
+    this.panel.toggle();
+  }
+
+  /** View sub-batch summary */
+  viewSummary(): void {
+    this.dialog.open(SubBatchSummaryComponent, { data: { subBatch: this.subBatchData } });
   }
 }

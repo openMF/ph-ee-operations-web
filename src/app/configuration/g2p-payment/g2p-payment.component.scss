@@ -1,0 +1,83 @@
+@import "theme/theme";
+
+.container {
+  width: 100%;
+  gap: 1rem;
+}
+
+td , th {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+}
+
+.filter-header {
+  padding: 0.3rem;
+}
+
+.search-button {
+  width: 12rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  background-color: $green;
+  padding: 0.5rem 0;
+  box-shadow: none;
+  color: $white;
+}
+
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+  background-color: inherit !important;
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header {
+  height: fit-content;
+}
+
+.active-filter-button {
+  background-color: $green;
+  color: $white;
+}
+
+.filter-button {
+  background-color: $light-grey;
+}
+
+.push-end {
+  text-align: end;
+}
+
+.grey {
+  color: grey;
+}
+
+.black {
+  color: black;
+}
+
+.blue {
+  color: blue;
+}
+
+.green {
+  color: green;
+}
+
+.orange {
+  color: orange;
+}
+
+.ticket{
+  color: $primary;
+}
+
+.red {
+  color: red;
+}
+
+.equal-width {
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 0 !important;
+}

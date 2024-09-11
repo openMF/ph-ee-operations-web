@@ -1,0 +1,87 @@
+<div class="container">
+    <mat-card>
+        <form [formGroup]="programForm" (ngSubmit)="submit()">
+            <mat-card-content>
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="content">
+                    <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+                        <mat-label>Request ID *</mat-label>
+                        <mat-form-field class="custom-view-user">
+                            <input matInput formControlName="requestId" placeholder="Enter Request ID" required  />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+                        <mat-label>Source BBID *</mat-label>
+                        <mat-form-field class="custom-view-user">
+                            <mat-select formControlName="sourceBBID" placeholder="Select Source BBID" required>
+                                <mat-option *ngFor="let dfsp of dfsps" [value]="dfsp.fspId">
+                                    {{ dfsp.name }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="programForm.controls.sourceBBID.hasError('required')">
+                                Source BBID is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+                        <mat-label>Payee Identity *</mat-label>
+                        <mat-form-field class="custom-view-user">
+                            <input matInput formControlName="payeeIdentity" placeholder="Enter Payee Identity"
+                                required />
+                            <mat-error *ngIf="programForm.controls.payeeIdentity.hasError('required')">
+                                Payee Identity is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+                        <mat-label>Payment Modality *</mat-label>
+                        <mat-form-field class="custom-view-user">
+                            <mat-select formControlName="paymentModality" placeholder="Select Status" required>
+                                <mat-option value="00">Bank Account</mat-option>
+                                <mat-option value="01">Mobile Money</mat-option>
+                                <mat-option value="02">Voucher</mat-option>
+                                <mat-option value="03">Digital Wallet</mat-option>
+                                <mat-option value="04">Proxy</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="programForm.controls.paymentModality.hasError('required')">
+                                Payment Modality is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+                        <mat-label>Financial Address *</mat-label>
+                        <mat-form-field class="custom-view-user">
+                            <input matInput formControlName="financialAddress" placeholder="Enter Financial Address"
+                                required />
+                            <mat-error *ngIf="programForm.controls.financialAddress.hasError('required')">
+                                Financial Address is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+                        <mat-label>Banking Institute Code *</mat-label>
+                        <mat-form-field class="custom-view-user">
+                            <mat-select formControlName="bankingInstitutionCode"
+                                placeholder="Select Banking Institute Code" required>
+                                <mat-option *ngFor="let dfsp of dfsps" [value]="dfsp.fspId">
+                                    {{ dfsp.name }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="programForm.controls.bankingInstitutionCode.hasError('required')">
+                                Banking Institute Code is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-actions class="buttons-group">
+                <button mat-stroked-button type="button" class="button" [routerLink]="['../']">
+                    {{ 'labels.buttons.Cancel' | translate }}
+                </button>
+                <button mat-flat-button class="submit button" [disabled]="!programForm.valid">
+                    {{ 'labels.buttons.Submit' | translate }}
+                </button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

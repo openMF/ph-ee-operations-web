@@ -11,7 +11,6 @@ export class DatetimeFormatPipe implements PipeTransform {
   }
 
   transform(value: any, datetimeFormat?: string): any {
-    const defaultDateFormat = this.settingsService.dateFormat.replace('dd', 'DD');
     if (typeof value === 'undefined') {
       return '';
     }
@@ -22,7 +21,7 @@ export class DatetimeFormatPipe implements PipeTransform {
       dateVal = moment(value);
     }
     if (datetimeFormat == null) {
-      return dateVal.format(defaultDateFormat + ' HH:mm:ss');
+      return dateVal.format('YY-MM-DD' +"/" +' HH:mm:ss');
     }
     return dateVal.format(datetimeFormat);
   }

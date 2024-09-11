@@ -1,0 +1,15 @@
+.upload-dialog {
+  position: relative;
+  margin: 1rem;
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  .close {
+    position: absolute;
+    top: -1rem;
+    right: 0.5rem;
+    cursor: pointer;
+  }
+}

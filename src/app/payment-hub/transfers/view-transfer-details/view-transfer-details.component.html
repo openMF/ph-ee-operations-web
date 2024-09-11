@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{ 'labels.heading.View Transfer' | translate }}</h1>
+<h1 mat-dialog-title class="primary">{{ 'labels.heading.View Transfer' | translate }}</h1>
 
 <div mat-dialog-content>
 
@@ -11,7 +11,7 @@
 
         <tr>
             <th>{{ 'labels.inputs.Transaction ID' | translate }}</th>
-            <td><mifosx-identifier identifier="{{transfer.transactionId}}" completed="true"></mifosx-identifier>
+            <td><mifosx-identifier identifier="{{transfer.transactionId || transfer.instructionId}}" completed="true"></mifosx-identifier>
             </td>
         </tr>
 
@@ -37,7 +37,7 @@
 
         <tr>
             <th>{{ 'labels.inputs.Payee Dfsp' | translate }}</th>
-            <td>{{ transfer.payeeDfspId }}</td>
+            <td>{{ transfer.payeeDfspId || transfer.payerFsp }}</td>
         </tr>
 
         <tr>
@@ -74,14 +74,10 @@
         </tr>
 
         <tr>
-            <th>{{ 'labels.inputs.Start Time' | translate }}</th>
-            <td>{{ convertTimestampToUTCDate(transfer.startedAt) }}</td>
+            <th>{{ 'labels.inputs.Date/Time' | translate }}</th>
+            <td>{{ convertTimestampToUTCDate(transfer.date) }}</td>
         </tr>
 
-        <tr>
-            <th>{{ 'labels.inputs.Completed Time' | translate }}</th>
-            <td>{{ convertTimestampToUTCDate(transfer.completedAt) }}</td>
-        </tr>
     </table>
 
 </div>
