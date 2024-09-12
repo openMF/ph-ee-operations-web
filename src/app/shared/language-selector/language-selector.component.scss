@@ -1,4 +1,7 @@
 #language-selector,
 .languageselector {
-  max-width: 6rem;
+  max-width: 12rem;
+}
+::ng-deep .mat-form-field-wrapper{
+  padding-bottom: 0 !important ;
 }

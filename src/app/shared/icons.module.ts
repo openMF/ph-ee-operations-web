@@ -112,7 +112,13 @@ import {
   faPause,
   faFilter,
   faPaperPlane,
-  faTicket
+  faTicket,
+  faSquareParking,
+  faCaretDown,
+  faLeftLong,
+  faRightLong,
+  faCaretUp,
+  faChevronUp
 } from '@fortawesome/free-solid-svg-icons';
 
 /**
@@ -237,7 +243,13 @@ export class IconsModule {
       faPiggyBank,
       faBars,
       faPaperPlane,
-      faTicket
+      faTicket,
+      faSquareParking,
+      faCaretDown,
+      faLeftLong,
+      faRightLong,
+      faCaretUp,
+      faChevronUp
     );
   }
 

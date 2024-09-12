@@ -8,10 +8,10 @@
 
     <div class="app-sidenav">
 
-      <div class="m-t-30 m-b-1 nav-item-sep center">
-        <div class="app-brand" [routerLink]="['/home']">
-          <img src="assets/images/app_logo.png" alt="app-logo" class="app-logo">
-          <span *ngIf="!sidenavCollapsed" #logo class="app-logo-text text-muted">{{ 'APP_NAME' | translate }}</span>
+      <div fxLayout="row" fxLayoutAlign="center center" class="nav-item-sep">
+        <div  fxLayout="row" fxLayoutAlign="space-between center"  class="app-brand">
+          <fa-icon  class="app-logo" icon="square-parking" size="xl"></fa-icon>
+          <span *ngIf="!sidenavCollapsed" #logo class="app-logo-text">{{ 'APP_NAME' | translate }}</span>
         </div>
       </div>
 
@@ -22,6 +22,48 @@
           </mat-icon>
           <a *ngIf="!sidenavCollapsed" matLine #dashboard>{{ 'labels.menus.Dashboard' | translate }}</a>
         </mat-list-item>
+
+        <!-- User Management Section -->
+        <mat-list-item (click)="toggleUserManagement($event)" matTooltip="User Management">
+          <a *ngIf="!sidenavCollapsed" fxLayout="row" fxLayoutAlign="space-between center" matLine #userManagement>
+            <p>{{ "labels.menus.User Management" | translate }}</p>
+            <mat-icon *ngIf="!sidenavCollapsed" matListIcon>
+              <fa-icon [icon]="isUserManagementExpanded ? 'caret-up' : 'caret-down'" size="lg" class="mat-list-icon"></fa-icon>
+            </mat-icon>
+          </a>
+          <mat-icon matListIcon>
+            <fa-icon icon="users" size="sm"></fa-icon>
+          </mat-icon>
+        </mat-list-item>
+        
+        <div class="expanded-user p-4" fxLayout="column" fxLayoutAlign="center flex-end"
+          *ngIf="!sidenavCollapsed && isUserManagementExpanded">
+          <button fxLayout="row" fxLayoutAlign="flex-start center" [routerLink]="['/users/create']" class="sub-menu" [ngStyle]="{
+                          'background-color': activeButton === 'create' ? 'white' : '',
+                          color: activeButton === 'create' ? '#1658BD' : ''
+                        }" (click)="setActiveButton('create'); $event.stopPropagation()">
+            <a matLine #createUser>{{
+              "labels.menus.Create User" | translate
+              }}</a>
+          </button>
+          <button fxLayout="row" fxLayoutAlign="flex-start center" [routerLink]="['/users/user-requests']" class="sub-menu" [ngStyle]="{
+                          'background-color':
+                            activeButton === 'userRequests' ? 'white' : '',
+                          color: activeButton === 'userRequests' ? '#1658BD' : ''
+                        }" (click)="setActiveButton('userRequests'); $event.stopPropagation()">
+            <a matLine #userRequests>{{
+              "labels.menus.User Requests" | translate
+              }}</a>
+          </button>
+          <button fxLayout="row" fxLayoutAlign="flex-start center" [routerLink]="['/users']" class="sub-menu" [ngStyle]="{
+                          'background-color': activeButton === 'viewUsers' ? 'white' : '',
+                          color: activeButton === 'viewUsers' ? '#1658BD' : ''
+                        }" (click)="setActiveButton('viewUsers'); $event.stopPropagation()">
+            <a matLine #view>{{ "labels.menus.View Users" | translate }}</a>
+          </button>
+        </div>
+
+
         <mat-list-item [routerLink]="['/settings']" matTooltip="Settings">
           <mat-icon matListIcon >
             <fa-icon icon="cog" size="lg"></fa-icon>
@@ -32,10 +74,10 @@
 
       <div class="sidenav-collapse">
         <button mat-fab *ngIf="!sidenavCollapsed" matTooltip="Close" (click)="sideNavCollapsed(true)">
-          <fa-icon icon="arrow-left" size="lg"></fa-icon>
+          <fa-icon icon="left-long" size="lg"></fa-icon>
         </button>
         <button mat-fab *ngIf="sidenavCollapsed" matTooltip="Open" (click)="sideNavCollapsed(false)">
-          <fa-icon icon="arrow-right" size="lg"></fa-icon>
+          <fa-icon icon="right-long" size="lg"></fa-icon>
         </button>
       </div>
     </div>

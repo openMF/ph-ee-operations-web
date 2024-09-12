@@ -1,9 +1,23 @@
-.container {
-    width: 80%;
+@import 'theme/theme';
 
+.container {
+    width: 90%;
+    margin: 0 auto;
     .breadcrumb {
         padding-left: 18%;
         margin: 0;
-        font-size: x-large;
+        font-size: 1.6rem;
+        font-weight: 600;
     }
+}
+
+::ng-deep .xng-breadcrumb-link{
+    color: $primary !important;
+    font-size:1.3rem;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+::ng-deep .xng-breadcrumb-link:hover{
+    text-decoration: none !important;
 }

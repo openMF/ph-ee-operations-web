@@ -164,7 +164,7 @@ export class AuthenticationService {
    */
   private getUserDetails(loginContext: LoginContext, tokenResponse: OAuth2Token) {
     if (this.isOauthKeyCloak()) {
-      this.oauthKeycloakService.introspect(tokenResponse).subscribe((userDetails: Introspect) => {
+      this.oauthKeycloakService.getUserInfo(tokenResponse).subscribe((userDetails: Introspect) => {
         this.storage.setItem(this.oAuthUserDetailsStorageKey, JSON.stringify(userDetails));
         this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
 
