@@ -91,6 +91,18 @@ export class OauthKeycloakService {
     return this.http.post(url, payload.toString(), httpOptions);
   }
 
+  getUserInfo(token: OAuth2Token): Observable<any> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token.access_token}`,
+        'Content-Type': 'application/json'
+      })
+    };
+    const url: string = `${this.url()}/userinfo`;
+    return this.http.get(url, httpOptions);
+  }
+
   private url(): string {
     return `${environment.oauth.serverUrl}/realms/${environment.oauth.realm}/protocol/openid-connect`;
   }

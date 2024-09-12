@@ -27,8 +27,18 @@ export let environment = {
     realm: window['env']['oauthRealm'] || 'paymenthub',
     clientId: window['env']['oauthClientId'] || 'opsapp',
     clientSecret: window['env']['oauthClientSecret'] || '',
+    clientUUID: window['env']['oauthClientUUID'] || '',
     basicAuth: window['env']['oauthBasicAuth'] || true,
     basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
+  },
+  jbpm:{
+    jbpmApiUrl: window['env']['jbpmApiUrl'] || '',
+    containerId: window['env']['jbpmContainerId'] || '',
+    credentials: {
+      adminMaker: window['env']['jbpmCredentialsAdminMaker'] || '',
+      adminChecker: window['env']['jbpmCredentialsAdminChecker'] || '',
+      both: window['env']['jbpmCredentialsBoth'] || ''
+    }
   },
   auth: {
     enabled: window['env']['authEnabled'] || false,

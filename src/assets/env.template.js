@@ -22,8 +22,16 @@
     window["env"]["oauthRealm"] = '$PH_OAUTH_REALM';
     window["env"]["oauthClientId"] = '$PH_OAUTH_CLIENT_ID';
     window["env"]["oauthClientSecret"] = '$PH_OAUTH_CLIENT_SECRET';
+    window["env"]["oauthClientUUID"] = '$PH_OAUTH_CLIENT_UUUID';
     window["env"]["oauthBasicAuth"] = '$PH_OAUTH_BASIC_AUTH';
     window["env"]["oauthBasicAuthToken"] = '$PH_OAUTH_BASIC_AUTH_TOKEN';
+
+    //JBPM Environment variables
+    window["env"]["jbpmApiUrl"] = '$PH_JBPM_API_URL';
+    window["env"]["jbpmContainerId"] = '$PH_JBPM_CONTAINER_ID';
+    window["env"]["jbpmCredentialsAdminMaker"] = '$PH_JBPM_CREDENTIALS_ADMIN_MAKER';
+    window["env"]["jbpmCredentialsAdminChecker"] = '$PH_JBPM_CREDENTIALS_ADMIN_CHECKER';
+    window["env"]["jbpmCredentialsBoth"] = '$PH_JBPM_CREDENTIALS_BOTH';
   
     // Language Environment variables
     window["env"]["defaultLanguage"] = '$PH_DEFAULT_LANGUAGE';

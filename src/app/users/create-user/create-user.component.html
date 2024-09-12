@@ -1,3 +1,4 @@
+<span>{{ 'labels.texts.Add a new user to the network' | translate }}</span>
 <div class="container">
 
   <mat-card>
@@ -5,123 +6,142 @@
     <form [formGroup]="userForm" (ngSubmit)="submit()">
 
       <mat-card-content>
-
-        <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Username</mat-label>
-            <input matInput required formControlName="username">
-            <mat-error *ngIf="userForm.controls.username.hasError('required')">
-              Username is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Email</mat-label>
-            <input matInput [required]="userForm.controls.sendPasswordToEmail.value" formControlName="email">
-            <mat-error *ngIf="userForm.controls.email.hasError('email')">
-              Email is <strong>invalid</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls.email.hasError('required')">
-              Email is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>First Name</mat-label>
-            <input matInput required formControlName="firstname">
-            <mat-error *ngIf="userForm.controls.firstname.hasError('pattern')">
-              First Name <strong>cannot begin with a special character or number</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls.firstname.hasError('required')">
-              First Name is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Last Name</mat-label>
-            <input matInput required formControlName="lastname">
-            <mat-error *ngIf="userForm.controls.lastname.hasError('pattern')">
-              Last Name <strong>cannot begin with a special character or number</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls.lastname.hasError('required')">
-              Last Name is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <div fxFlex="48%" class="password-never-expires-wrapper">
-            <mat-checkbox labelPosition="before" formControlName="passwordNeverExpires" >
-              Override password expiry policy
-            </mat-checkbox>
+        <h2>{{ 'labels.heading.Define User' | translate }}</h2>
+        <div fxLayoutAlign="space-between center" class="gap" fxLayout="row wrap" >
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Type of User'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <mat-select formControlName="userTypes" required placeholder="PayEE User"
+                (selectionChange)="onUserTypeChange($event.value)">
+                <mat-option *ngFor="let type of userTypes" [value]="type.name">{{
+                  type.name
+                  }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="userForm.controls.userTypes.hasError('required')">
+                UserType is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Role'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <mat-select formControlName="roles" placeholder="Normal User" required multiple>
+                <mat-option *ngFor="let role of rolesData" [value]="role.name">{{
+                  role.name
+                  }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="userForm.controls.roles.hasError('required')">
+                role is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
           </div>
 
-          <div fxFlex="48%" class="send-password-to-email-wrapper">
-            <mat-checkbox labelPosition="before" formControlName="sendPasswordToEmail">
-              Auto generate password
-            </mat-checkbox>
           </div>
+          <h2>{{ 'labels.heading.User Information' | translate }}</h2>
+          <div fxLayoutAlign="space-between center" class="gap" fxLayout="row wrap">
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+              <mat-label>{{'labels.inputs.First Name'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <input matInput formControlName="firstName" required placeholder="Alice" />
+                <mat-error *ngIf="userForm.controls.firstName.hasError('pattern')">
+                  First Name
+                  <strong>cannot contain any special character or numbers</strong>
+                </mat-error>
+                <mat-error *ngIf="userForm.controls.firstName.hasError('required')">
+                  First Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
 
-          <mat-form-field fxFlex="48%" *ngIf="!userForm.controls.sendPasswordToEmail.value">
-            <mat-label>Password</mat-label>
-            <input matInput required type="password" formControlName="password">
-            <mat-error *ngIf="userForm.controls.password.hasError('required')">
-              Password is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+              <mat-label>{{'labels.inputs.Last Name'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <input matInput formControlName="lastName" placeholder="Jones" required />
+                <mat-error *ngIf="userForm.controls.lastName.hasError('pattern')">
+                  Last Name
+                  <strong>cannot contain any special character or numbers</strong>
+                </mat-error>
+                <mat-error *ngIf="userForm.controls.lastName.hasError('required')">
+                  Last Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
 
-          <mat-form-field fxFlex="48%" *ngIf="!userForm.controls.sendPasswordToEmail.value">
-            <mat-label>Repeat Password</mat-label>
-            <input matInput required type="password" formControlName="repeatPassword">
-            <mat-error *ngIf="userForm.controls.repeatPassword.hasError('required')">
-              Password is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+              <mat-label>{{'labels.inputs.User Name'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <input matInput formControlName="username" placeholder="alicejone123" required />
+                <mat-error *ngIf="userForm.controls.username.hasError('pattern')">
+                  User Name
+                  <strong>cannot begin with a special character or number</strong>
+                </mat-error>
+                <mat-error *ngIf="userForm.controls.username.hasError('required')">
+                  User Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
 
-          <p fxFlex="98%" class="reset-password-error" *ngIf="userForm.errors?.passwordsDoNotMatch &&
-          (!userForm.controls.password.hasError('required') && !userForm.controls.repeatPassword.hasError('required'))">
-          Passwords <strong>do not match</strong>
-          </p>      
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+              <mat-label>{{'labels.inputs.Email'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <input matInput formControlName="email" placeholder="alice@mifos.org" required />
+                <mat-error *ngIf="userForm.controls.email.hasError('email')">
+                  Email is <strong>invalid</strong>
+                </mat-error>
+                <mat-error *ngIf="userForm.controls.email.hasError('required')">
+                  Email is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+              <mat-label>{{'labels.inputs.Mobile Number'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <input matInput required formControlName="mobileNo" placeholder="9745678910" />
+                <mat-error *ngIf="userForm.controls.mobileNo.hasError('pattern')">
+                  Mobile Number is <strong>invalid</strong>
+                </mat-error>
+                <mat-error *ngIf="userForm.controls.mobileNo.hasError('required')">
+                  Mobile Number is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column" *ngIf="showFspIdField">
+              <mat-label>{{'labels.inputs.FSP ID'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <mat-select required formControlName="fspID" placeholder="Select FSP ID">
+                  <mat-option *ngFor="let id of fspIds" [value]="id">
+                    {{ id }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="userForm.controls.fspID.hasError('required')">
+                  FSP ID is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          
+            <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column" *ngIf="showGovtIdField">
+              <mat-label>{{'labels.inputs.Govt ID'| translate}} *</mat-label>
+              <mat-form-field class="custom-form-field">
+                <mat-select required formControlName="govtID" placeholder="Select Govt ID">
+                  <mat-option *ngFor="let id of govtIds" [value]="id">
+                    {{ id }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="userForm.controls.govtID.hasError('required')">
+                  Govt ID is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
 
-          <mat-form-field fxFlex="48%">
-            <mat-label>Office</mat-label>
-            <mat-select required formControlName="officeId">
-              <mat-option *ngFor="let office of officesData" [value]="office.id">
-                {{ office.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="userForm.controls.officeId.hasError('required')">
-              Office is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Staff</mat-label>
-            <mat-select formControlName="staffId">
-              <mat-option *ngFor="let staff of staffData" [value]="staff.id">
-                {{ staff.displayName }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="48%">
-            <mat-label>Roles</mat-label>
-            <mat-select required formControlName="roles" multiple>
-              <mat-option *ngFor="let role of rolesData" [value]="role.id">
-                {{ role.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="userForm.controls.roles.hasError('required')">
-              At least one role <strong>must be selected</strong>
-            </mat-error>
-          </mat-form-field>
-
-        </div>
-
+        </div>  
       </mat-card-content>
 
-      <mat-card-actions fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="5px">
-        <button type="button" mat-raised-button [routerLink]="['../']">Cancel</button>
-        <button mat-raised-button color="primary" [disabled]="!userForm.valid">Submit</button>
+      <mat-card-actions fxLayout="row" fxLayout.xs="column" fxLayoutAlign="end center" fxLayoutGap="16px">
+        <button mat-stroked-button type="button" class="button" [routerLink]="['../']">Cancel</button>
+        <button mat-flat-button class="submit button" [disabled]="!userForm.valid">Submit</button>
       </mat-card-actions>
 
     </form>

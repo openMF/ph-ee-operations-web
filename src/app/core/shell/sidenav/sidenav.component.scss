@@ -1,18 +1,18 @@
-@import "theme/theme";
+@import 'theme/theme';
 
 .sidenav {
-  margin-left: 30px;
   background-color: $primary;
   color: $white;
   min-height: 100vh;
   height: 100vh;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
 }
 
 .mat-fab {
   background-color: $white;
   color: $dark-grey;
+  width: 40px;
+  height: 40px;
+  box-shadow: none;
 }
 
 .sidebar-full,
@@ -20,142 +20,65 @@
   .navigation-panel {
     width: 100%;
     height: 100%;
-    margin-top: 20px;
 
     .sidenav-collapse {
       position: absolute;
       bottom: 20px;
       right: 20px;
     }
-  }
-
-  img {
-    max-width: 100%;
-  }
-
-  .app-brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    max-width: 15rem;
-    z-index: 9999;
-    width: 100%;
-    margin: auto;
-    color: $white;
-    margin-bottom: 60px;
-
-    .app-logo {
-      width: auto;
-      height: 42px;
-      margin-right: 8px;
-    }
-
-    .app-logo-text {
-      width: auto;
-      height: auto;
-      font-size: 1.3rem;
-      font-weight: normal;
-    }
-  }
-
-  .app-user {
-    text-align: center;
-    width: 100%;
-    padding: 1rem 0 0.4rem;
-
-    .app-user-photo {
-      width: 72px;
-      margin: 0 auto 8px;
-      height: 72px;
-      border: 1px solid hsla(210, 8%, 51%, 0.13);
-      padding: 4px;
-      border-radius: 50%;
-    }
-
-    img {
+    .nav-item-sep {
       width: 100%;
-      height: 100%;
-      border-radius: 50%;
     }
+    .app-brand {
+      text-align: center;
+      z-index: 9999;
+      width: 100%;
+      margin: 3rem 1rem;
+      color: $white;
 
-    .app-user-name {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 300;
-      color: rgba(0, 0, 0, 0.96);
-      margin-left: -2px;
-    }
-
-    .app-user-controls {
-      .mat-icon-button {
-        .xs-button {
-          height: 20px;
-          width: 20px;
-          line-height: 20px;
-          margin: 5px;
-        }
+      .app-logo {
+        width: auto;
+        height: 100%;
+        font-size: 2rem;
       }
 
-      .text-muted {
-        color: rgba(0, 0, 0, 0.54);
+      .app-logo-text {
+        width: auto;
+        height: auto;
+        font-size: 1.4rem;
+        font-weight: bold;
+        // white-space: nowrap;
       }
-    }
-  }
-
-  .nav-item-sep {
-    span {
-      padding: 16px 0 0 16px;
-      display: block;
-      font-size: 12px;
     }
   }
 
   .app-sidenav {
-    .icon-menu {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-
-      .mat-divider {
-        margin: 0 -24px;
-      }
-
-      .icon-menu-title {
-        padding-left: 0;
-        margin-left: -8px;
-      }
-
-      .icon-menu-item {
-        display: inline-block;
+    .mat-nav-list {
+      .expanded-user {
+        padding: 0 1rem;
+        width: 90%;
+        gap: 0.5rem;
 
         button {
-          min-width: auto;
-          margin: 4px;
+          background-color: $primary;
+          border: none;
+          color: $white;
+          font-size: 1rem;
+          padding: 0.1rem 1rem;
+          width: 10rem;
+          border-radius: 5px;
         }
       }
-    }
-
-    .nav-item-sep {
-      padding: 0;
-      margin: 1rem 0;
-    }
-
-    .mat-nav-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      color: $white;
-
       .mat-list-item {
         color: inherit;
 
         .mat-list-icon {
-          height: 30px;
-          font-size: 22px;
+          height: 1.8rem;
+          width: 1.8rem;
+          font-size: 1.3rem;
         }
       }
-    }
+    }    
   }
 }
 
@@ -170,25 +93,8 @@
     }
   }
 
-  .app-user {
-    display: none;
-  }
-
   .app-sidenav {
     .nav-item-sep {
-      span {
-        display: none;
-      }
-    }
-
-    .icon-menu {
-      padding: 8px 0 0;
-      width: 4rem;
-
-      .nav-item-sep {
-        display: none;
-      }
-
       span {
         display: none;
       }
@@ -196,13 +102,20 @@
   }
 }
 
-.sidebar-full {
+.sidebar-compact {
   .navigation-panel {
-    padding-top: 5%;
-  }
-  .app-sidenav {
-    .icon-menu {
-      flex-direction: row;
+    .sidenav-collapse {
+      position: absolute;
+      bottom: 20px;
+      right: 25px;
     }
   }
+}
+
+::ng-deep .mat-list-item-content {
+  justify-content: center;
+}
+
+::ng-deep .mat-button-wrapper {
+  padding: 0 !important;
 }
