@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { SettingsService } from 'app/settings/settings.service';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -31,17 +31,54 @@ export class BatchesService {
 
   createBatch(correlationID: string, institutionId: string, purpose: string, programId: string, signature: string, payload: any): Observable<any> {
     const httpParams = new HttpParams()
-    .set('type', 'raw');
-    const headers = new HttpHeaders()
-    .append('Purpose', purpose)
-    .append('type', 'raw')
-    .append('X-CorrelationID', correlationID)
-    .append('Platform-TenantId', this.settingsService.tenantIdentifier)
-    .append('X-Signature', signature)
-    .append('X-Callback-URL', environment.backend.voucherCallbackUrl)
-    .append('X-Registering-Institution-Id', institutionId)
-    .append('X-Program-Id', programId);
-    return this.http.post(this.bulkConnectorOps + '/batchtransactions', payload, { params: httpParams, headers: headers });
+    //.set('type', 'json');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',   // Specify JSON content type
+      'Purpose': purpose,
+      'type': 'json',
+      'X-CorrelationID': correlationID,
+      'Platform-TenantId': this.settingsService.tenantIdentifier,
+      'X-Registering-Institution-Id': institutionId,
+      'X-Signature': signature, 
+      'X-Callback-URL': environment.backend.voucherCallbackUrl,
+      'X-Program-Id': programId
+    });
+    // const headers = new HttpHeaders()
+    // .append('Purpose', purpose)
+    // .append('type', 'json')
+    // .append('X-CorrelationID', correlationID)
+    // .append('Platform-TenantId', this.settingsService.tenantIdentifier)
+    // .append('X-Signature', signature)
+    // .append('X-Callback-URL', environment.backend.voucherCallbackUrl)
+    // .append('X-Registering-Institution-Id', institutionId)
+    // .append('X-Program-Id', programId);
+
+    const options = {
+      headers: headers,
+      observe: 'response' as 'body',
+      http2: true  // Optional: Enable HTTP/2 if supported
+    };
+    // const formData = new FormData();
+    // formData.append('data', file);
+
+    console.info('Request URL:', this.bulkConnectorOps + '/batchtransactions');
+    console.log('Request Headers:', headers);
+    console.log('Request Payload:', payload);
+
+    //return this.http.post(this.bulkConnectorOps + '/batchtransactions', formData, { headers: headers });
+    return this.http.post(this.bulkConnectorOps + '/batchtransactions', payload , options )
+      .pipe(
+        tap(response => console.log('Response:', response)),
+        catchError(error => {
+          console.error('TD Error in createBatch:', error);
+          console.error('TD Error details:', error.error);
+          console.error('TD Status:', error.status);
+          console.error('TD StatusText:', error.statusText);
+          throw error;
+        })
+      );
   }
 
 }
+
+

@@ -11,6 +11,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { environment } from 'environments/environment';
 
 import { sha3_256 } from 'js-sha3';
+import { firstValueFrom } from 'rxjs';
 import * as uuid from 'uuid';
 import { SignatureService } from '../services/signature.service';
 
@@ -98,26 +99,61 @@ export class BatchesBulkImportComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
 
-  async sendData() {
-    const institutionId: string = this.createBatchForm.value.institutionId;
-    const purpose: string = this.createBatchForm.value.purpose;
-    const programId: string = this.createBatchForm.value.programId;
-    const correlationID: string = uuid.v4();
+  // async sendData() {
+  //   const institutionId: string = this.createBatchForm.value.institutionId;
+  //   const purpose: string = this.createBatchForm.value.purpose;
+  //   const programId: string = this.createBatchForm.value.programId;
+  //   const correlationID: string = uuid.v4();
 
-    const body: any = this.batchInstructions;
-    const payload = `${correlationID}:${this.settingsService.tenantIdentifier}:${JSON.stringify(body)}`;
-    const hashSHA3_256: any = sha3_256(payload);
-    this.signatureService.createSignature({hash: hashSHA3_256}).subscribe((signResponse: any) => {
-      const signature = signResponse.signature;
-      this.batchesService.createBatch(correlationID, institutionId, purpose, programId, signature, body)
-        .subscribe((batchResponse: any) => {
-          console.log(batchResponse);
-          const msg = '\n Request Id: ';
-          this.alertService.alert({ type: 'Batch File Upload', message: msg });
-          this.clearData();
-      });
-    });
+  //   const body: any = this.batchInstructions;
+  //   const payload = `${correlationID}:${this.settingsService.tenantIdentifier}:${JSON.stringify(body)}`;
+  //   const hashSHA3_256: any = sha3_256(payload);
+  //   this.signatureService.createSignature({hash: hashSHA3_256}).subscribe((signResponse: any) => {
+  //     const signature = signResponse.signature;
+  //     this.batchesService.createBatch(correlationID, institutionId, purpose, programId, signature, body)
+  //       .subscribe((batchResponse: string) => {
+  //         console.log(batchResponse);
+  //         const msg = '\n Request Id: ';
+  //         this.alertService.alert({ type: 'Batch File Upload', message: msg });
+  //         this.clearData();
+  //     });
+  //   });
+  // }
+
+  async sendData() {
+    const institutionId = this.createBatchForm.value.institutionId;
+    const purpose = this.createBatchForm.value.purpose;
+    const programId = this.createBatchForm.value.programId;
+    const correlationID = uuid.v4();
+    const body = this.batchInstructions;
+    const platformTenantId = 'gorilla'; // Replace with your actual platform tenant ID
+    let signature = "";
+    const payload = JSON.stringify(body);
+  
+    try {
+      // Generate signature
+      const signatureResponse = await firstValueFrom(
+        this.signatureService.createSignature(payload, correlationID, platformTenantId)
+      );
+      console.log('Signature after generation is:', signatureResponse);
+      signature = signatureResponse; // Assuming the response is the signature itself
+  
+      // Create batch
+      const batchResponse = await firstValueFrom(
+        this.batchesService.createBatch(correlationID, institutionId, purpose, programId, signature, body)
+      );
+      console.log('Batch creation response:', batchResponse);
+  
+      const msg = `\n Request Id: ${batchResponse.requestId || ''}`; // Adjust based on actual response structure
+      this.alertService.alert({ type: 'Batch File Upload', message: msg });
+      this.clearData();
+    } catch (error) {
+      console.error('Error in sendData:', error);
+      // Handle errors appropriately, e.g., display error message to the user
+      this.alertService.alert({ type: 'Error', message: 'Failed to send data. Please try again.' });
+    }
   }
+
 
   clearData(): void {
     this.batchInstructions = [];
