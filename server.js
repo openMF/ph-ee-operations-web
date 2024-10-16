@@ -28,6 +28,7 @@ app.post('/callback/batches', (req, res) => {
 // Signature 
 app.post('/api/sign', (req, res) => {
     console.log(req.body);
+    console.log(res.body); 
     const rsaPrivateKey = createPrivateKey({
         key: Buffer.from(process.env.PH_OPS_BATCH_KEY, 'base64'),
         format: "der",
