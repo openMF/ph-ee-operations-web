@@ -44,38 +44,16 @@ export class BatchesService {
       'X-Program-Id': programId
       //'FILE_NAME': "fred.cvs" 
     });
-    // const headers = new HttpHeaders()
-    // .append('Purpose', purpose)
-    // .append('type', 'json')
-    // .append('X-CorrelationID', correlationID)
-    // .append('Platform-TenantId', this.settingsService.tenantIdentifier)
-    // .append('X-Signature', signature)
-    // .append('X-Callback-URL', environment.backend.voucherCallbackUrl)
-    // .append('X-Registering-Institution-Id', institutionId)
-    // .append('X-Program-Id', programId);
-
-    // const options = {
-    //   headers: headers,
-    //   observe: 'response' as 'body',
-    //   http2: true  // Optional: Enable HTTP/2 if supported
-    // };
-    // const formData = new FormData();
-    // formData.append('data', file);
-    // const formData = new FormData();
-    // formData.append('payload', payload); // Adding JSON as form data
-    // formData.append('type', 'json'); // Optional: mimic other fields in the form
 
     console.info('TD Request URL:', this.bulkConnectorOps + '/batchtransactions');
     console.log('TD sig to send : ', signature )
     console.log('TD Request Headers:', headers);
-    //console.log('TD Request FormData:', formData);
 
     const options = {
       headers: headers,
       observe: 'response' as 'body'
     };
 
-    //return this.http.post(this.bulkConnectorOps + '/batchtransactions', formData, { headers: headers });
     return this.http.post(this.bulkConnectorOps + '/batchtransactions', payload  , options )
       .pipe(
         tap(response => console.log('Response:', response)),
