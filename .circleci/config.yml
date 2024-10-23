@@ -38,7 +38,8 @@ jobs:
               -t "openmf/ph-ee-operations-web:$IMAGE_TAG" .
 
             # Push the Docker image to Docker Hub
-            docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
+            echo "${DOCKERHUB_GAZELLE_TOKEN}" | docker login -u "${DOCKERHUB_GAZELLE_USERNAME}" --password-stdin
+            #docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
             docker push "openmf/ph-ee-operations-web:$IMAGE_TAG"
 
           # when: always  # The job will be executed even if there's no match for the tag filter
