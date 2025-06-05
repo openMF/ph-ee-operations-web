@@ -14,10 +14,14 @@
     <input matInput [formControl]="externalId" />
   </mat-form-field>
 
-  <!-- <mat-form-field fxFlex="20%">
-    <mat-label>Payer DFSP name</mat-label>
-    <input matInput [formControl]="payerDfspName" [matAutocomplete]="dfspEntriesAutocomplete">
-  </mat-form-field> -->
+  <mat-form-field fxFlex="20%">
+    <mat-label>AMS Business Short Code</mat-label>
+    <mat-select [formControl]="payerDfspId">
+      <mat-option *ngFor="let code of amsCodes" [value]="code.value">
+        {{ code.option }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
@@ -46,10 +50,11 @@
     <input matInput [formControl]="amount" />
   </mat-form-field>
 
-  <!-- <mat-form-field fxFlex="20%">
+  <mat-form-field fxFlex="20%">
     <mat-label>Currency</mat-label>
     <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
-  </mat-form-field> -->
+  </mat-form-field>
+
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
@@ -80,6 +85,13 @@
   </mat-form-field>
 </div>
 
+<!-- Autocomplete data -->
+<mat-autocomplete autoActiveFirstOption #currenciesAutocomplete="matAutocomplete" [displayWith]="displayCurrencyName">
+  <mat-option *ngFor="let currency of filteredCurrencies | async" [value]="{ AlphabeticCode: currency.AlphabeticCode, Currency: currency.Currency }">
+    {{ currency.Currency}} ( {{ currency.AlphabeticCode }} )
+  </mat-option>
+</mat-autocomplete>
+
 <div class="container">
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
@@ -88,7 +100,7 @@
           Start Time (UTC)
         </th>
         <td mat-cell *matCellDef="let requestToPay">
-          {{ formatDate(requestToPay.startedAt) }}
+          {{ formatDate(convertTimestampToUTCDate(requestToPay.startedAt)) }}
         </td>
       </ng-container>
 
@@ -97,7 +109,7 @@
           Completed Time (UTC)
         </th>
         <td mat-cell *matCellDef="let requestToPay">
-          {{ formatDate(requestToPay.completedAt) }}
+          {{ formatDate(convertTimestampToUTCDate(requestToPay.completedAt)) }}
         </td>
       </ng-container>
 
@@ -133,7 +145,7 @@
       </ng-container>
 
       <ng-container matColumnDef="payerDfspId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Payer Dfsp ID</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>AMS Business Short Code</th>
         <td mat-cell *matCellDef="let requestToPay">
           {{ requestToPay.payerDfspId }}
         </td>
@@ -170,7 +182,8 @@
           [ngClass]="{
             red: requestToPay.state === 'FAILED',
             green: requestToPay.state === 'ACCEPTED',
-            orange: requestToPay.state === 'IN_PROGRESS'
+            orange: requestToPay.state === 'IN_PROGRESS',
+            blue: requestToPay.state === 'NOT_AUTOSAVED'
           }"
         >
           {{ requestToPay.state }}
@@ -187,7 +200,7 @@
     </table>
 
     <mat-paginator
-      [length]="lengthElement"
+      [length]="dataSource?.records$ | async"
       #paginator
       [pageSizeOptions]="[10, 20, 30]"
       showFirstLastButtons
@@ -198,7 +211,7 @@
   </div>
   <form
     #postForm="ngForm"
-    (ngSubmit)="exportCSV(postForm.value, postForm.id)"
+    (ngSubmit)="exportCSV(postForm.value)"
     class="csv-form"
   >
     <div
@@ -222,6 +235,7 @@
           <option value="payeeid">PAYEE ID</option>
           <option value="externalid">EXTERNALID</option>
           <option value="workflowinstancekey">WORKFLOWINSTANCEKEY</option>
+          <option value="payerdfspid">AMS Business Short Code</option>
         </select>
       </mat-form-field>
       <mat-form-field class="example-full-width form-group" fxFlex="20%">

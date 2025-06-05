@@ -18,5 +18,47 @@ export let environment = {
   auth: {
     enabled: true,
     tenant: "phdefault"
+  },
+  amsShortCodes: [
+    {
+      option: 'ERPLY_TILL',
+      type: 'TILL',
+      value: '9499081'
+  },
+  {
+      option: 'TUPANDE_TILL',
+      type: 'TILL',
+      value: '6064956'
+  },
+  {
+      option: 'PAYGOPS_USSD_KE_TILL',
+      type: 'TILL',
+      value: '9347335'
+  },
+  {
+      option: 'ROSTER_USSD_KE_TILL',
+      type: 'TILL',
+      value: '9558723'
+  },
+  {
+      option: 'ODOO_KE_TILL',
+      type: 'TILL',
+      value: '9491775'
+  },
+  {
+      option: 'FINERACT_USSD_KE_TILL',
+      type: 'TILL',
+      value: '8167094'
+  },
+  {
+      option: 'PAYGOPS_PAYBILL',
+      type: 'PAYBILL',
+      value: '840706'
+  },
+  {
+      option: 'TEST_PAYBILL',
+      type: 'PAYBILL',
+      value: '840700'
   }
+  ]
 };

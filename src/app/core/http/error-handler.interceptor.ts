@@ -45,7 +45,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         errorMessage = response.error.errors[0].defaultUserMessage || response.error.errors[0].developerMessage;
       }
     }
-
+    
     if (!environment.production) {
       log.error(`Request Error: ${errorMessage}`);
     }
@@ -59,6 +59,9 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     } else if (status === 403) {
       this.alertService.alert({ type: 'Unauthorized Request', message: errorMessage || 'You are not authorized for this request!' });
     } else if (status === 404) {
+      if (response.error instanceof Blob) {
+        errorMessage = 'No records found matching your criteria'
+      }
       this.alertService.alert({ type: 'Resource does not exist', message: errorMessage || 'Resource does not exist!' });
     } else if (status === 500) {
       this.alertService.alert({ type: 'Internal Server Error', message: 'Internal Server Error. Please try again later.' });

@@ -10,9 +10,18 @@
     <input matInput [formControl]="externalId" />
   </mat-form-field>
 
-  <mat-form-field fxFlex="20%">
+  <!-- <mat-form-field fxFlex="20%">
     <mat-label>Payer DFSP name</mat-label>
     <input matInput [formControl]="payerDfspName" [matAutocomplete]="dfspEntriesAutocomplete">
+  </mat-form-field> -->
+
+  <mat-form-field fxFlex="20%">
+    <mat-label>AMS Business Short Code</mat-label>
+    <mat-select [formControl]="payerDfspId">
+      <mat-option *ngFor="let code of amsCodes" [value]="code.value">
+        {{ code.option }}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -111,7 +120,7 @@
   
 
     <ng-container matColumnDef="payerDfspId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer DFSP Id </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> AMS Business Short Code </th>
       <td mat-cell *matCellDef="let transaction"> {{ transaction.payerDfspId }} </td>
     </ng-container>
 

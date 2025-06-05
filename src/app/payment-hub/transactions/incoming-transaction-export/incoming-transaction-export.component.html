@@ -28,18 +28,6 @@
         />
       </mat-form-field>
       <mat-form-field>
-        <mat-label>External ID</mat-label>
-        <input
-          matInput
-          type="textArea"
-          class="form-control col-sm-4"
-          ngModel
-          name="externalid"
-          placeholder="comma-separated-list"
-          id="externalid"
-        />
-      </mat-form-field>
-      <mat-form-field>
         <mat-label>WORKFLOW INSTANCE KEY</mat-label>
         <input
           matInput
@@ -91,23 +79,10 @@
           matNativeControl
         >
           <option value="">STATUS</option>
-          <option value="ACCEPTED">ACCEPTED</option>
-          <option value="NOT_AUTOSAVED">NOT AUTOSAVED</option>
+          <option value="COMPLETED">COMPLETED</option>
           <option value="FAILED">FAILED</option>
-          <option value="IN_PROGRESS">PENDING/INCOMPLETE</option>
+          <option value="IN_PROGRESS">IN PROGRESS</option>
         </select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Error Description</mat-label>
-        <input
-          matInput
-          type="textArea"
-          class="form-control col-sm-4"
-          ngModel
-          name="errordescription"
-          placeholder="comma-separated-list"
-          id="errordescription"
-        />
       </mat-form-field>
       <mat-form-field>
         <mat-label>Payer Id</mat-label>
@@ -133,7 +108,6 @@
           id="payeeid"
         />
       </mat-form-field>
-    
       <mat-form-field>
         <mat-label>AMS Business Short Code</mat-label>
         <mat-select 
@@ -154,3 +128,4 @@
     </button>
   </form>
 </div>
+

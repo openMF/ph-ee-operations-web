@@ -27,6 +27,7 @@ import { ViewRequestToPayResolver } from "./request-to-pay/common-resolvers/view
 import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
 import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bulk-batch-export.component";
 import { GetBatchesExportComponent } from "./request-to-pay/get-batches-export/get-batches-export.component";
+import { IncomingTransactionExportComponent } from "./transactions/incoming-transaction-export/incoming-transaction-export.component";
 /** Payment HUB Routes */
 const routes: Routes = [
   Route.withShell([
@@ -107,7 +108,6 @@ const routes: Routes = [
               path: "",
               component: IncomingRequestToPayComponent,
               resolve: {
-                requestsToPay: RequestToPayResolver,
                 currencies: CurrenciesResolver,
                 dfspEntries: DfspResolver,
               },
@@ -166,6 +166,19 @@ const routes: Routes = [
             {
               path: "",
               component: IncomingRequestExportComponent,
+            },
+          ],
+        },
+        {
+          path: "incomingtransactionexport",
+          data: {
+            title: extract(""),
+            breadcrumb: "Export Incoming Transactions",
+          },
+          children: [
+            {
+              path: "",
+              component: IncomingTransactionExportComponent,
             },
           ],
         },

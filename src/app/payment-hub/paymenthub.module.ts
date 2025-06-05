@@ -20,6 +20,7 @@ import { ViewRequestToPayComponent } from "./request-to-pay/view-request-to-pay/
 import { IncomingRequestExportComponent } from "./request-to-pay/incoming-request-export/incoming-request-export.component";
 import { GetBatchesExportComponent } from "./request-to-pay/get-batches-export/get-batches-export.component";
 import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bulk-batch-export.component";
+import { IncomingTransactionExportComponent } from './transactions/incoming-transaction-export/incoming-transaction-export.component';
 /**
  * Payment HUB Module
  *
@@ -45,6 +46,7 @@ import { BulkBatchExportComponent } from "./request-to-pay/bulk-batch-export/bul
     IncomingRequestExportComponent,
     BulkBatchExportComponent,
     GetBatchesExportComponent,
+    IncomingTransactionExportComponent,
   ],
   entryComponents: [
     PaymentHubComponent,

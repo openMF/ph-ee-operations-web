@@ -251,7 +251,7 @@ export class AuditTrailsComponent implements OnInit, AfterViewInit {
    */
   getAuditTrails() {
     this.dataSource = new AuditTrailsDataSource(this.systemService);
-    this.dataSource.getAuditTrails(this.filterAuditTrailsBy, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+    this.dataSource.getAuditTrails(this.filterAuditTrailsBy);
   }
 
   /**
@@ -375,7 +375,9 @@ export class AuditTrailsComponent implements OnInit, AfterViewInit {
    * @returns {any} Filtered entities.
    */
   private filterEntityAutocompleteData(entityName: string): any {
-    return this.auditTrailSearchTemplateData.entityNames.filter((entity: any) => entity.toLowerCase().includes(entityName.toLowerCase()));
+    return this.auditTrailSearchTemplateData.entityNames.filter((entity: any) => 
+      entity && entity.toLowerCase().includes(entityName.toLowerCase())
+  );
   }
 
   /**
@@ -386,10 +388,10 @@ export class AuditTrailsComponent implements OnInit, AfterViewInit {
     const replacer = (key: any, value: any) => value === undefined ? '' : value;
     const header = ['ID', 'Resource ID', 'Status', 'Office', 'Made On', 'Maker', 'Checked On', 'Checker', 'Entity', 'Action', 'Client'];
     const headerCode = ['id', 'resourceId', 'processingResult', 'officeName', 'madeOnDate', 'maker', 'checkedOnDate', 'checker', 'entityName', 'actionName', 'clientName'];
-    this.systemService.getAuditTrails(this.filterAuditTrailsBy, this.sort.active ? this.sort.active : '', this.sort.direction, 0, -1).subscribe((response: any) => {
+    this.systemService.getAuditTrails(this.filterAuditTrailsBy, this.sort.active ? this.sort.active : '', this.sort.direction, 0, 10).subscribe((response: any) => {
       if (response !== undefined) {
-        let csv = response.pageItems.map((row: any) => headerCode.map(fieldName => (fieldName === 'madeOnDate' || fieldName === 'checkedOnDate') && (JSON.stringify(row[fieldName], replacer) !== '""')
-          ? this.datePipe.transform(JSON.stringify(row[fieldName], replacer), dateFormat)
+        let csv = response.content.map((row: any) => headerCode.map(fieldName => (fieldName === 'madeOnDate' || fieldName === 'checkedOnDate') && (JSON.stringify(row[fieldName], replacer) !== '""')
+          ? this.datePipe.transform(row[fieldName], dateFormat)
           : JSON.stringify(row[fieldName], replacer)));
         csv.unshift(`data:text/csv;charset=utf-8,${header.join()}`);
         csv = csv.join('\r\n');

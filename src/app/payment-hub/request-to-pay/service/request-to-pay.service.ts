@@ -9,15 +9,18 @@ import { RequestPays } from '../model/requestPay.model'
 import {RequestPayDetails} from '../model/requestPay-details.model'
 
 import { Dates } from "../../../core/utils/dates";
+import { PaymenthubService } from 'app/payment-hub/paymenthub.service';
 @Injectable({
   providedIn: 'root'
 })
 export class RequestToPayService {
+  private readonly exportUrl = "/api/v1/transactionRequests";
+  private readonly fileNamePrefix = "TRANSACTION_REQUESTS";
 
   /**
    * @param {HttpClient} http Http Client to send requests.
    */
-  constructor(private http: HttpClient, private dateUtils: Dates) { }
+  constructor(private http: HttpClient, private paymenthubService: PaymenthubService) { }
 
   getRequestsToPay() {
     return this.http.get('/api/v1/transactionRequests');
@@ -45,62 +48,7 @@ export class RequestToPayService {
   //     .get('/assets/mock/payment-hub/transaction-details.mock.json');
   // }
 
-  exportCSV(filterBy: any, filterName: string) {
-    let body = new HttpParams();
-    body = body.set("command", "export");
-    let fileFilters = ''
-    let startFrom = this.dateUtils.formatDate(filterBy.startdate, 'yyyy-MM-dd HH:mm:ss')
-    let startTo = this.dateUtils.formatDate(filterBy.enddate, 'yyyy-MM-dd HH:mm:ss')
-    let state = filterBy.status;
-    if (startFrom) {
-      body = body.set("startFrom", startFrom);
-      fileFilters += `_FROM_${this.dateUtils.getDate(filterBy.startdate)}`
-    }
-    if (startTo) {
-      body = body.set("startTo", startTo);
-      fileFilters += `_TO_${this.dateUtils.getDate(filterBy.enddate)}`
-    }
-    if (state) {
-      body = body.set("state", filterBy.status);
-      fileFilters += `_FOR_STATUS_${filterBy.status}`
-    }
-   
-    console.log(body);
-    const exportURl = "/api/v1/transactionRequests?" + body;
-
-    const postData = {
-      transactionId: filterBy.transactionid ? filterBy.transactionid.split(",") : [],
-      externalid: filterBy.externalid ? filterBy.externalid.split(",") : [],
-      workflowinstancekey: filterBy.workflowinstancekey ? filterBy.workflowinstancekey.split(",") : [],
-      errorDescription: filterBy.errordescription ? filterBy.errordescription.split(",") : [],
-      payeeId: filterBy.payeeid ? filterBy.payeeid.split(",") : [],
-      payerId: filterBy.payerid ? filterBy.payerid.split(",") : [],
-    };
-
-    console.log(Object.values(postData).toString().split(","));
-    this.http
-      .post(
-        exportURl,
-
-        JSON.stringify(postData),
-
-        {
-          responseType: "blob" as "json",
-          headers: new HttpHeaders().append("Content-Type", "application/json"),
-        }
-      )
-      .subscribe((val: Blob) => {
-        console.log("POST call successful value returned in body", val);
-        this.downLoadFile(val, `TRANSACTION_REQUESTS${fileFilters}_AS_AT_${this.dateUtils.formatDate(new Date(), 'yyyy-MM-dd_HH:mm:ss')}.csv`);
-      });
-  }
-  downLoadFile(data: Blob, fileTitle: string) {
-    let url = window.URL.createObjectURL(data);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = fileTitle;
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+  exportCSV(filterBy: any) {
+    this.paymenthubService.exportCSV(filterBy, this.exportUrl, this.fileNamePrefix, new HttpParams().set("command", "export"));
   }
 }

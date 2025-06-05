@@ -1,36 +1,29 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
 import { FormControl } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { requestInterface } from "./incoming-request-to-pay-interface";
 import {
-  HttpClient,
-  HttpParams,
-  HttpHeaders,
-  JsonpClientBackend,
-} from "@angular/common/http";
-/** rxjs Imports */
-import { merge } from "rxjs";
-import {
   tap,
-  startWith,
-  map,
   distinctUntilChanged,
   debounceTime,
+  startWith,
+  map,
 } from "rxjs/operators";
 
 /** Custom Services */
 import { RequestToPayService } from "../service/request-to-pay.service";
 import { RequestToPayDataSource } from "../dataSource /requestToPay.datasource";
 /** Custom Data Source */
-import { formatDate } from "../helper/date-format.helper";
+import { formatUTCDate } from "../helper/date-format.helper";
 import { transactionStatusData as statuses } from "../helper/incoming-reqest.helper";
 
 import { DfspEntry } from "../model/dfsp.model";
+import { amsShortCodes } from "../helper/ams-short-codes";
+
 @Component({
   selector: "mifosx-incoming-request-to-pay",
   templateUrl: "./incoming-request-to-pay.component.html",
@@ -53,6 +46,7 @@ export class IncomingRequestToPayComponent implements OnInit {
   currenciesData: any;
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
+  amsCodes = amsShortCodes('TILL');
   /** Transaction date from form control. */
   transactionDateFrom = new FormControl();
   /** Transaction date to form control. */
@@ -62,12 +56,6 @@ export class IncomingRequestToPayComponent implements OnInit {
   externalId = new FormControl();
   csvExport: [];
   csvName: string;
-  lengthElement: number;
-  /* Requests to pay data. */
-  requestToPayData: any;
-  requestToPayDatas: any;
-  /* Requests to incoming data. */
-  requestToPayIncomingData: requestInterface[] = [];
 
   /** Columns to be displayed in request to pay table. */
   displayedColumns: string[] = [
@@ -133,6 +121,10 @@ export class IncomingRequestToPayComponent implements OnInit {
       type: "externalId",
       value: "",
     },
+    {
+      type: 'payerDfspId',
+      value: ''
+    }
   ];
   dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
 
@@ -144,36 +136,46 @@ export class IncomingRequestToPayComponent implements OnInit {
   constructor(
     private requestToPayService: RequestToPayService,
     private route: ActivatedRoute,
-    public dialog: MatDialog,
-    private http: HttpClient
+    public dialog: MatDialog
   ) {
     this.route.data.subscribe(
       (data: {
-        requestsToPay: any;
         dfspEntries: DfspEntry[];
         currencies: any;
       }) => {
-        this.requestToPayData = data.requestsToPay.content;
-        this.requestToPayDatas = data.requestsToPay;
         this.currenciesData = data.currencies;
         this.dfspEntriesData = data.dfspEntries;
       }
     );
-    for (let request of this.requestToPayData) {
-      if (request.direction === "INCOMING")
-        this.requestToPayIncomingData.push(request);
-    }
-    this.lengthElement = this.requestToPayDatas.totalElements;
-    console.log(this.requestToPayDatas);
-    console.log(this.dataSource);
   }
 
   ngOnInit() {
-    // this.setRequestToPay();
-    //console.log(this.dataSource);
-    // this.dataSource.getRequestsPay(this.filterTransactionsBy , this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
     this.getRequestsPay();
+    this.setFilteredCurrencies();
   }
+
+  /**
+   * Sets filtered gl accounts for autocomplete.
+   */
+  setFilteredCurrencies() {
+    this.filteredCurrencies = this.currencyCode.valueChanges
+      .pipe(
+        startWith(''),
+        map((currency: any) => typeof currency === 'string' ? currency : currency.Currency + ' (' + currency.AlphabeticCode + ')'),
+        map((currency: string) => currency ? this.filterCurrencyAutocompleteData(currency) : this.currenciesData)
+      );
+  }
+
+  /**
+   * Filters gl accounts.
+   * @param {string} glAccount Gl Account name to filter gl account by.
+   * @returns {any} Filtered gl accounts.
+   */
+  private filterCurrencyAutocompleteData(currency: string): any {
+    return this.currenciesData.filter((option: any) => (option.Currency + ' (' + option.AlphabeticCode + ')').toLowerCase().includes(currency.toLowerCase()));
+  }
+
+  
   ngAfterViewInit() {
     this.paginator.page
       .pipe(tap(() => this.loadTransactionsPage()))
@@ -264,6 +266,9 @@ export class IncomingRequestToPayComponent implements OnInit {
         distinctUntilChanged(),
         tap((filterValue) => {
           filterValue = filterValue.AlphabeticCode;
+          if('KES' === filterValue){
+            filterValue = 'KE'
+          }
           this.applyFilter(filterValue, "currency");
         })
       )
@@ -306,9 +311,7 @@ export class IncomingRequestToPayComponent implements OnInit {
 
     // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
-  onSubmit() {
-    this.exportCSV(this.csvExport, this.csvName);
-  }
+
   loadTransactionsPage() {
     // if (!this.sort.direction) {
     //   delete this.sort.active;
@@ -330,11 +333,11 @@ export class IncomingRequestToPayComponent implements OnInit {
   //   this.dataSource.sort = this.sort;
   // }
 
-  convertTimestampToDate(timestamp: any) {
+  convertTimestampToUTCDate(timestamp: any) {
     if (!timestamp) {
       return undefined;
     }
-    return formatDate(new Date(timestamp));
+    return formatUTCDate(new Date(timestamp));
   }
 
   formatDate(date: string) {
@@ -405,9 +408,9 @@ export class IncomingRequestToPayComponent implements OnInit {
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
-  exportCSV(filterBy: any, filterName: string) {
+  exportCSV(filterBy: any) {
     filterBy[filterBy.cars] = filterBy.val;
-    this.requestToPayService.exportCSV(filterBy, filterName);
+    this.requestToPayService.exportCSV(filterBy);
   }
   /**
    * Displays office name in form control input.
@@ -442,7 +445,6 @@ export class IncomingRequestToPayComponent implements OnInit {
   }
   getRequestsPay() {
     this.dataSource = new RequestToPayDataSource(this.requestToPayService);
-    console.log(this.dataSource);
     this.dataSource.getRequestsPay(this.filterTransactionsBy);
   }
 }

@@ -18,6 +18,13 @@
             <h4 matLine>Search Outgoing Transactions</h4>
             <p matLine>Advanced search option for outgoing transactions</p>
           </mat-list-item>
+
+          <mat-list-item [routerLink]="['incomingtransactionexport']">
+            <mat-icon matListIcon>
+              <fa-icon icon="download" size="sm"></fa-icon>
+            </mat-icon>
+            <h4 matLine>Export Incoming Transactions</h4>
+          </mat-list-item>
         </mat-nav-list>
       </div>
 
@@ -38,23 +45,17 @@
             <h4 matLine>Search Outgoing Request to Pay</h4>
             <p matLine>Advanced search option for outgoing request to pays</p>
           </mat-list-item>
-        </mat-nav-list>
-      </div>
-      <div fxFlex="50%">
-        <mat-nav-list>
+
           <mat-list-item [routerLink]="['incomingrequesttopayexport']">
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>
             <h4 matLine>Export Incoming Request to Pay</h4>
           </mat-list-item>
-
-          <mat-list-item [routerLink]="['outgoingrequesttopayexport']">
-            <mat-icon matListIcon>
-              <fa-icon icon="download" size="sm"></fa-icon>
-            </mat-icon>
-            <h4 matLine>Export Outgoing Request to Pay</h4>
-          </mat-list-item>
+        </mat-nav-list>
+      </div>
+      <div fxFlex="50%">
+        <mat-nav-list>
           <mat-list-item [routerLink]="['getbatchexport']">
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>

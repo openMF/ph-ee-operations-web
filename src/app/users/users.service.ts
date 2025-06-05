@@ -29,7 +29,7 @@ export class UsersService {
    * @returns {Observable<any>} Users template data
    */
   getUsersTemplate(): Observable<any> {
-    return this.http.get('/api/v1/roles');
+    return this.http.get('/roles');
   }
 
   /**

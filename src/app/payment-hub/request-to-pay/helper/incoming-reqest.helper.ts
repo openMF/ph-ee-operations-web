@@ -5,6 +5,11 @@ export const transactionStatusData = [
         css: 'green'
     },
     {
+        option: 'NOT AUTOSAVED',
+        value: 'NOT_AUTOSAVED',
+        css: 'blue'
+    },
+    {
         option: 'FAILED',
         value: 'FAILED',
         css: 'red'
