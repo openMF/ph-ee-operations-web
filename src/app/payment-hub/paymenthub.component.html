@@ -1,9 +1,15 @@
-<div class="container">
+<div class="container" matomoForm="payment-hub-navigation">
   <mat-card>
     <div fxLayout="row" fxLayout.lt-md="column" class="payment-hub-ee-wrap">
       <div fxFlex="50%">
         <mat-nav-list>
-          <mat-list-item [routerLink]="['incomingtransactions']">
+          <mat-list-item
+            [routerLink]="['incomingtransactions']"
+            (click)="onNavigateToSection('Incoming Transactions', 'Search')"
+            matomoClick="navigation-incoming-transactions"
+            category="Payment Hub Navigation"
+            name="Search Incoming Transactions"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
@@ -11,7 +17,13 @@
             <p matLine>Advanced search option for incoming transactions</p>
           </mat-list-item>
 
-          <mat-list-item [routerLink]="['outgoingtransactions']">
+          <mat-list-item
+            [routerLink]="['outgoingtransactions']"
+            (click)="onNavigateToSection('Outgoing Transactions', 'Search')"
+            matomoClick="navigation-outgoing-transactions"
+            category="Payment Hub Navigation"
+            name="Search Outgoing Transactions"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
@@ -19,7 +31,13 @@
             <p matLine>Advanced search option for outgoing transactions</p>
           </mat-list-item>
 
-          <mat-list-item [routerLink]="['incomingtransactionexport']">
+          <mat-list-item
+            [routerLink]="['incomingtransactionexport']"
+            (click)="onExportAction('Incoming Transactions')"
+            matomoClick="export-incoming-transactions"
+            category="Export Actions"
+            name="Export Incoming Transactions"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>
@@ -30,7 +48,13 @@
 
       <div fxFlex="50%">
         <mat-nav-list>
-          <mat-list-item [routerLink]="['incomingrequesttopay']">
+          <mat-list-item
+            [routerLink]="['incomingrequesttopay']"
+            (click)="onNavigateToSection('Incoming Request to Pay', 'Search')"
+            matomoClick="navigation-incoming-rtp"
+            category="Payment Hub Navigation"
+            name="Search Incoming Request to Pay"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
@@ -38,7 +62,13 @@
             <p matLine>Advanced search option for incoming request to pays</p>
           </mat-list-item>
 
-          <mat-list-item [routerLink]="['outgoingrequesttopay']">
+          <mat-list-item
+            [routerLink]="['outgoingrequesttopay']"
+            (click)="onNavigateToSection('Outgoing Request to Pay', 'Search')"
+            matomoClick="navigation-outgoing-rtp"
+            category="Payment Hub Navigation"
+            name="Search Outgoing Request to Pay"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
@@ -46,7 +76,13 @@
             <p matLine>Advanced search option for outgoing request to pays</p>
           </mat-list-item>
 
-          <mat-list-item [routerLink]="['incomingrequesttopayexport']">
+          <mat-list-item
+            [routerLink]="['incomingrequesttopayexport']"
+            (click)="onExportAction('Incoming Request to Pay')"
+            matomoClick="export-incoming-rtp"
+            category="Export Actions"
+            name="Export Incoming Request to Pay"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>
@@ -56,7 +92,13 @@
       </div>
       <div fxFlex="50%">
         <mat-nav-list>
-          <mat-list-item [routerLink]="['getbatchexport']">
+          <mat-list-item
+            [routerLink]="['getbatchexport']"
+            (click)="onNavigateToSection('Batches', 'Export')"
+            matomoClick="navigation-batches"
+            category="Payment Hub Navigation"
+            name="Batches Export"
+          >
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>

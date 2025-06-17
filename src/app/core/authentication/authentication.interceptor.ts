@@ -1,14 +1,13 @@
 /** Angular Imports */
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY } from 'rxjs';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { switchMap, take, filter, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 
-import { AuthenticationService } from './authentication.service';
 import { Router } from '@angular/router';
+import { AuthenticationService } from './authentication.service';
 
 import { environment } from '../../../environments/environment';
 
@@ -38,10 +37,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-  /**  if (request.url.indexOf('assets') !== -1) {
-   *   return EMPTY;
-   * }
-   */
+    /**  if (request.url.indexOf('assets') !== -1) {
+     *   return EMPTY;
+     * }
+     */
 
     this.retrieveAuthData();
     if (!environment.auth.enabled) {
@@ -102,7 +101,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     if (tenantId) {
       httpOptions.headers['Platform-TenantId'] = tenantId;
     } else {
-      delete httpOptions.headers['Platform-TenantId'];
+      delete httpOptions.headers["Platform-TenantId"];
+
     }
   }
 

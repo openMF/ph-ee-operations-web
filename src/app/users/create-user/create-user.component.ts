@@ -1,10 +1,16 @@
 /** Angular Imports */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 /** Custom Services */
 import { UsersService } from '../users.service';
+import { MatomoService } from 'app/core/analytics/matomo.service';
 
 /** Custom Validators */
 import { confirmPasswordValidator } from '../../login/reset-password/confirm-password.validator';
@@ -15,10 +21,9 @@ import { confirmPasswordValidator } from '../../login/reset-password/confirm-pas
 @Component({
   selector: 'mifosx-create-user',
   templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss']
+  styleUrls: ['./create-user.component.scss'],
 })
 export class CreateUserComponent implements OnInit {
-
   /** User form. */
   userForm: FormGroup;
   /** Offices data. */
@@ -35,13 +40,14 @@ export class CreateUserComponent implements OnInit {
    * @param {ActivatedRoute} route Activated Route.
    * @param {Router} router Router for navigation.
    */
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private usersService: UsersService,
+    private matomoService: MatomoService,
     private route: ActivatedRoute,
-    private router: Router) {
-    this.route.data.subscribe((data: {
-      usersTemplate: any
-    }) => {
+    private router: Router
+  ) {
+    this.route.data.subscribe((data: { usersTemplate: any }) => {
       this.officesData = [];
       this.rolesData = data.usersTemplate;
     });
@@ -60,16 +66,22 @@ export class CreateUserComponent implements OnInit {
    * Creates the user form.
    */
   createUserForm() {
-    this.userForm = this.formBuilder.group({
-      'email': ['', [Validators.required, Validators.email]],
-      'firstname': ['', [Validators.required, Validators.pattern('(^[A-z]).*')]],
-      'lastname': ['', [Validators.required, Validators.pattern('(^[A-z]).*')]],
-      'sendPasswordToEmail': [true],
-      'passwordNeverExpires': [false],
-      'officeId': [undefined],
-      'staffId': [undefined],
-      'roles': ['', Validators.required]
-    }, { validator: confirmPasswordValidator });
+    this.userForm = this.formBuilder.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        firstname: [
+          '',
+          [Validators.required, Validators.pattern('(^[A-z]).*')],
+        ],
+        lastname: ['', [Validators.required, Validators.pattern('(^[A-z]).*')]],
+        sendPasswordToEmail: [true],
+        passwordNeverExpires: [false],
+        officeId: [undefined],
+        staffId: [undefined],
+        roles: ['', Validators.required],
+      },
+      { validator: confirmPasswordValidator }
+    );
   }
 
   /**
@@ -88,18 +100,28 @@ export class CreateUserComponent implements OnInit {
    * Sets the conditional controls of the user form
    */
   setConditionalControls() {
-    this.userForm.get('sendPasswordToEmail').valueChanges.subscribe((sendPasswordToEmail: boolean) => {
-      if (sendPasswordToEmail) {
-        this.userForm.removeControl('password');
-        this.userForm.removeControl('repeatPassword');
-        this.userForm.get('email').setValidators([Validators.required, Validators.email]);
-      } else {
-        this.userForm.addControl('password', new FormControl('', Validators.required));
-        this.userForm.addControl('repeatPassword', new FormControl('', Validators.required));
-        this.userForm.get('email').setValidators([Validators.email]);
-      }
-      this.userForm.get('email').updateValueAndValidity();
-    });
+    this.userForm
+      .get('sendPasswordToEmail')
+      .valueChanges.subscribe((sendPasswordToEmail: boolean) => {
+        if (sendPasswordToEmail) {
+          this.userForm.removeControl('password');
+          this.userForm.removeControl('repeatPassword');
+          this.userForm
+            .get('email')
+            .setValidators([Validators.required, Validators.email]);
+        } else {
+          this.userForm.addControl(
+            'password',
+            new FormControl('', Validators.required)
+          );
+          this.userForm.addControl(
+            'repeatPassword',
+            new FormControl('', Validators.required)
+          );
+          this.userForm.get('email').setValidators([Validators.email]);
+        }
+        this.userForm.get('email').updateValueAndValidity();
+      });
   }
 
   /**
@@ -107,31 +129,65 @@ export class CreateUserComponent implements OnInit {
    * if successful redirects to users.
    */
   submit() {
-    let user = this.userForm.value;
-    let data = {
-      "email": user.email,
-      "username": user.email,
-      "firstname": user.firstname,
-      "lastname": user.lastname,
-      "password": user.password,
-      "accountNonExpired": true,
-      "accountNonLocked": true,
-      "credentialsNonExpired": true,
-      "enabled": true,
-      "firstTimeLoginRemaining": false,
-      "deleted": false,
-      "payeePartyIdTypesList":["*"],
-      "currenciesList":["*"],
-      "payeePartyIdsList":["*"],
-      "passwordNeverExpires": true,
-      "lastTimePasswordUpdated": Date.now()
-    }
-    this.usersService.createUser(data).subscribe((response: any) => {
-      let rolesData = { "entityIds": user.roles }
-      this.usersService.assignRoles(response.id,rolesData).subscribe((response: any) => {
-        this.router.navigate(['../'], { relativeTo: this.route });
-      });
-    });
-  }
+    const user = this.userForm.value;
 
+    // Track user creation attempt
+    this.matomoService.trackEvent(
+      'User Management',
+      'Create User Attempt',
+      user.email
+    );
+
+    const data = {
+      email: user.email,
+      username: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      password: user.password,
+      accountNonExpired: true,
+      accountNonLocked: true,
+      credentialsNonExpired: true,
+      enabled: true,
+      firstTimeLoginRemaining: false,
+      deleted: false,
+      payeePartyIdTypesList: ['*'],
+      currenciesList: ['*'],
+      payeePartyIdsList: ['*'],
+      passwordNeverExpires: true,
+      lastTimePasswordUpdated: Date.now(),
+    };
+    this.usersService.createUser(data).subscribe(
+      (response: any) => {
+        const rolesData = { entityIds: user.roles };
+        this.usersService.assignRoles(response.id, rolesData).subscribe(
+          (roleResponse: any) => {
+            // Track successful user creation
+            this.matomoService.trackEvent(
+              'User Management',
+              'Create User Success',
+              user.email
+            );
+            this.matomoService.setCustomDimension(1, 'User Created'); // Custom dimension for user actions
+            this.router.navigate(['../'], { relativeTo: this.route });
+          },
+          (roleError: any) => {
+            // Track role assignment failure
+            this.matomoService.trackEvent(
+              'User Management',
+              'Role Assignment Error',
+              user.email
+            );
+          }
+        );
+      },
+      (error: any) => {
+        // Track user creation failure
+        this.matomoService.trackEvent(
+          'User Management',
+          'Create User Error',
+          user.email
+        );
+      }
+    );
+  }
 }

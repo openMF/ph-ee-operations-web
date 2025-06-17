@@ -1,35 +1,88 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-
+<div
+  class="container"
+  fxLayout="row wrap"
+  fxLayoutGap="2%"
+  fxLayout.lt-md="column"
+  matomoForm="outgoing-transactions-search"
+>
   <mat-form-field fxFlex="20%">
     <mat-label>Payer Id</mat-label>
-    <input matInput [formControl]="payerPartyId" >
+    <input
+      matInput
+      [formControl]="payerPartyId"
+      matomoClick="filter-payer-party-id"
+      category="Outgoing Transactions Filter"
+      name="Payer Party ID Filter"
+      (focus)="onFilterUsed('payerPartyId', payerPartyId.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
-    <input matInput [formControl]="payeePartyId" >
+    <input
+      matInput
+      [formControl]="payeePartyId"
+      matomoClick="filter-payee-party-id"
+      category="Outgoing Transactions Filter"
+      name="Payee Party ID Filter"
+      (focus)="onFilterUsed('payeePartyId', payeePartyId.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee DFSP Id</mat-label>
-    <input matInput [formControl]="payeeDfspId" >
+    <input
+      matInput
+      [formControl]="payeeDfspId"
+      matomoClick="filter-payee-dfsp-id"
+      category="Outgoing Transactions Filter"
+      name="Payee DFSP ID Filter"
+      (focus)="onFilterUsed('payeeDfspId', payeeDfspId.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee DFSP name</mat-label>
-    <input matInput [formControl]="payeeDfspName" [matAutocomplete]="dfspEntriesAutocomplete">
+    <input
+      matInput
+      [formControl]="payeeDfspName"
+      [matAutocomplete]="dfspEntriesAutocomplete"
+      matomoClick="filter-payee-dfsp-name"
+      category="Outgoing Transactions Filter"
+      name="Payee DFSP Name Autocomplete"
+      (focus)="onFilterUsed('payeeDfspName', payeeDfspName.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction ID</mat-label>
-    <input matInput [formControl]="transactionId">
+    <input
+      matInput
+      [formControl]="transactionId"
+      matomoClick="filter-transaction-id"
+      category="Outgoing Transactions Filter"
+      name="Transaction ID Filter"
+      (focus)="onFilterUsed('transactionId', transactionId.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Status</mat-label>
-    <mat-select [formControl]="status">
+    <mat-select
+      [formControl]="status"
+      matomoClick="filter-status"
+      category="Outgoing Transactions Filter"
+      name="Status Filter"
+      (selectionChange)="onFilterUsed('status', status.value)"
+    >
       <ng-container *ngFor="let filter of transactionStatusData">
-        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+        <mat-option
+          [value]="filter.value"
+          *ngIf="!filter.hidden"
+          matomoClick="status-option-{{ filter.value }}"
+          category="Status Filter Options"
+          name="Status Option: {{ filter.option }}"
+        >
           {{ filter.option }}
         </mat-option>
       </ng-container>
@@ -38,109 +91,356 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount</mat-label>
-    <input matInput [formControl]="amount">
+    <input
+      matInput
+      [formControl]="amount"
+      matomoClick="filter-amount"
+      category="Outgoing Transactions Filter"
+      name="Amount Filter"
+      (focus)="onFilterUsed('amount', amount.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Currency</mat-label>
-    <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
+    <input
+      matInput
+      [formControl]="currencyCode"
+      [matAutocomplete]="currenciesAutocomplete"
+      matomoClick="filter-currency"
+      category="Outgoing Transactions Filter"
+      name="Currency Autocomplete"
+      (focus)="onFilterUsed('currencyCode', currencyCode.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
-    <input matInput [ngxMatDatetimePicker]="transactionDateFromPicker" placeholder="Choose a date" [formControl]="transactionDateFrom"
-       [min]="minDate" [max]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #transactionDateFromPicker [showSpinners]="true" [showSeconds]="true"
-       [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
+    <input
+      matInput
+      [ngxMatDatetimePicker]="transactionDateFromPicker"
+      placeholder="Choose a date"
+      [formControl]="transactionDateFrom"
+      [min]="minDate"
+      [max]="maxDate"
+      matomoClick="filter-date-from"
+      category="Outgoing Transactions Filter"
+      name="Transaction Date From"
+      (dateChange)="
+        onFilterUsed('transactionDateFrom', transactionDateFrom.value)
+      "
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="transactionDateFromPicker"
+    ></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker
+      #transactionDateFromPicker
+      [showSpinners]="true"
+      [showSeconds]="true"
+      [stepHour]="1"
+      [stepMinute]="1"
+      [stepSecond]="1"
+    >
     </ngx-mat-datetime-picker>
- </mat-form-field>
+  </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date To</mat-label>
-    <input matInput [ngxMatDatetimePicker]="transactionDateToPicker" placeholder="Choose a date" [formControl]="transactionDateTo"
-       [min]="minDate" [max]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #transactionDateToPicker [showSpinners]="true" [showSeconds]="true"
-       [stepHour]="1" [stepMinute]="1" [stepSecond]="1">
+    <input
+      matInput
+      [ngxMatDatetimePicker]="transactionDateToPicker"
+      placeholder="Choose a date"
+      [formControl]="transactionDateTo"
+      [min]="minDate"
+      [max]="maxDate"
+      matomoClick="filter-date-to"
+      category="Outgoing Transactions Filter"
+      name="Transaction Date To"
+      (dateChange)="onFilterUsed('transactionDateTo', transactionDateTo.value)"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="transactionDateToPicker"
+    ></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker
+      #transactionDateToPicker
+      [showSpinners]="true"
+      [showSeconds]="true"
+      [stepHour]="1"
+      [stepMinute]="1"
+      [stepSecond]="1"
+    >
     </ngx-mat-datetime-picker>
- </mat-form-field>
-
+  </mat-form-field>
 </div>
 
-
 <!-- Autocomplete data -->
-<mat-autocomplete autoActiveFirstOption #currenciesAutocomplete="matAutocomplete" [displayWith]="displayCurrencyName">
-  <mat-option *ngFor="let currency of filteredCurrencies | async" [value]="{ AlphabeticCode: currency.AlphabeticCode, Currency: currency.Currency }">
-    {{ currency.Currency}} ( {{ currency.AlphabeticCode }} )
+<mat-autocomplete
+  autoActiveFirstOption
+  #currenciesAutocomplete="matAutocomplete"
+  [displayWith]="displayCurrencyName"
+>
+  <mat-option
+    *ngFor="let currency of filteredCurrencies | async"
+    [value]="{
+      AlphabeticCode: currency.AlphabeticCode,
+      Currency: currency.Currency
+    }"
+    matomoClick="currency-option-{{ currency.AlphabeticCode }}"
+    category="Currency Autocomplete"
+    name="Currency Selection: {{ currency.Currency }}"
+    (click)="onAutocompleteSelection('currency', currency.AlphabeticCode)"
+  >
+    {{ currency.Currency }} ( {{ currency.AlphabeticCode }} )
   </mat-option>
 </mat-autocomplete>
 
-<mat-autocomplete autoActiveFirstOption #dfspEntriesAutocomplete="matAutocomplete" [displayWith]="displayDfspName">
-  <mat-option *ngFor="let entry of filteredDfspEntries | async" [value]="{ id: entry.id, name: entry.name }">
+<mat-autocomplete
+  autoActiveFirstOption
+  #dfspEntriesAutocomplete="matAutocomplete"
+  [displayWith]="displayDfspName"
+>
+  <mat-option
+    *ngFor="let entry of filteredDfspEntries | async"
+    [value]="{ id: entry.id, name: entry.name }"
+    matomoClick="dfsp-option-{{ entry.id }}"
+    category="DFSP Autocomplete"
+    name="DFSP Selection: {{ entry.name }}"
+    (click)="onAutocompleteSelection('dfsp', entry.name)"
+  >
     {{ entry.name }} ( {{ entry.id }} )
   </mat-option>
 </mat-autocomplete>
 
-
 <div class="mat-elevation-z8 container">
-
-  <table mat-table [dataSource]="dataSource" matSort>
-
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    matomoClick="outgoing-transactions-table"
+    category="Table Interaction"
+    name="Outgoing Transactions Data Table"
+  >
     <ng-container matColumnDef="startedAt">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time (UTC) </th>
-      <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-started-at"
+        category="Table Sorting"
+        name="Sort by Start Time"
+        (click)="onColumnSort('startedAt', sort.direction)"
+      >
+        Start Time (UTC)
+      </th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ formatDate(convertTimestampToUTCDate(transaction.startedAt)) }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="completedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Time (UTC) </th>
-        <td mat-cell *matCellDef="let transaction"> {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-completed-at"
+        category="Table Sorting"
+        name="Sort by Completed Time"
+        (click)="onColumnSort('completedAt', sort.direction)"
+      >
+        Completed Time (UTC)
+      </th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ formatDate(convertTimestampToUTCDate(transaction.completedAt)) }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="transactionId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction ID </th>
-      <td mat-cell *matCellDef="let transaction" matTooltip={{transaction.transactionId}}> {{ shortenValue(transaction.transactionId) }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-transaction-id"
+        category="Table Sorting"
+        name="Sort by Transaction ID"
+        (click)="onColumnSort('transactionId', sort.direction)"
+      >
+        Transaction ID
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let transaction"
+        matTooltip="{{ transaction.transactionId }}"
+      >
+        {{ shortenValue(transaction.transactionId) }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="payerPartyId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payer Id </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.payerPartyId }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-payer-party-id"
+        category="Table Sorting"
+        name="Sort by Payer ID"
+        (click)="onColumnSort('payerPartyId', sort.direction)"
+      >
+        Payer Id
+      </th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ transaction.payerPartyId }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="payeePartyId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payee Id </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.payeePartyId }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-payee-party-id"
+        category="Table Sorting"
+        name="Sort by Payee ID"
+        (click)="onColumnSort('payeePartyId', sort.direction)"
+      >
+        Payee Id
+      </th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ transaction.payeePartyId }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="payeeDfspId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payee DFSP Id </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.payeeDfspId }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-payee-dfsp-id"
+        category="Table Sorting"
+        name="Sort by Payee DFSP ID"
+        (click)="onColumnSort('payeeDfspId', sort.direction)"
+      >
+        Payee DFSP Id
+      </th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ transaction.payeeDfspId }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="payeeDfspName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payee DFSP Name </th>
-      <td mat-cell *matCellDef="let transaction"> {{ displayDfspName(getDfpsEntry(transaction.payeeDfspId)) }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-payee-dfsp-name"
+        category="Table Sorting"
+        name="Sort by Payee DFSP Name"
+        (click)="onColumnSort('payeeDfspName', sort.direction)"
+      >
+        Payee DFSP Name
+      </th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ displayDfspName(getDfpsEntry(transaction.payeeDfspId)) }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.amount }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-amount"
+        category="Table Sorting"
+        name="Sort by Amount"
+        (click)="onColumnSort('amount', sort.direction)"
+      >
+        Amount
+      </th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.amount }}</td>
     </ng-container>
 
     <ng-container matColumnDef="currency">
-      <th mat-header-cell *matHeaderCellDef> Currency </th>
-      <td mat-cell *matCellDef="let transaction"> {{ transaction.currency }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        matomoClick="currency-header"
+        category="Table Headers"
+        name="Currency Header"
+      >
+        Currency
+      </th>
+      <td mat-cell *matCellDef="let transaction">{{ transaction.currency }}</td>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-    <td mat-cell *matCellDef="let transaction" [ngClass]="{'red': transaction.status==='FAILED','green': transaction.status==='COMPLETED','orange': transaction.status==='ACTION_NEEDED'}">{{ transaction.status }} </td>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        matomoClick="sort-status"
+        category="Table Sorting"
+        name="Sort by Status"
+        (click)="onColumnSort('status', sort.direction)"
+      >
+        Status
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let transaction"
+        [ngClass]="{
+          red: transaction.status === 'FAILED',
+          green: transaction.status === 'COMPLETED',
+          orange: transaction.status === 'ACTION_NEEDED'
+        }"
+      >
+        {{ transaction.status }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let transaction" (click)="$event.stopPropagation()">
-        <div *ngIf="transaction.status==='ACTION_NEEDED'"><button mat-button color="primary" (click)="openRetryResolveDialog(transaction.workflowInstanceKey,'retry')"><fa-icon icon="redo" size="lg"></fa-icon></button><button mat-button class="green" (click)="openRetryResolveDialog(transaction.workflowInstanceKey,'resolve')" ><fa-icon icon="check" size="lg"></fa-icon></button></div>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        matomoClick="actions-header"
+        category="Table Headers"
+        name="Actions Header"
+      ></th>
+      <td
+        mat-cell
+        *matCellDef="let transaction"
+        (click)="$event.stopPropagation()"
+      >
+        <div *ngIf="transaction.status === 'ACTION_NEEDED'">
+          <button
+            mat-button
+            color="primary"
+            (click)="
+              openRetryResolveDialog(transaction.workflowInstanceKey, 'retry')
+            "
+            matomoClick="retry-transaction-{{
+              transaction.workflowInstanceKey
+            }}"
+            category="Transaction Actions"
+            name="Retry Transaction"
+          >
+            <fa-icon icon="redo" size="lg"></fa-icon>
+          </button>
+          <button
+            mat-button
+            class="green"
+            (click)="
+              openRetryResolveDialog(transaction.workflowInstanceKey, 'resolve')
+            "
+            matomoClick="resolve-transaction-{{
+              transaction.workflowInstanceKey
+            }}"
+            category="Transaction Actions"
+            name="Resolve Transaction"
+          >
+            <fa-icon icon="check" size="lg"></fa-icon>
+          </button>
+        </div>
       </td>
     </ng-container>
 
@@ -153,11 +453,33 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Fee </th>
       <td mat-cell *matCellDef="let transaction"> {{ transaction.payerFee+transaction.payeeFee }} </td>
     </ng-container> -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['view', row.workflowInstanceKey]" class="select-row"></tr>
-
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+      matomoClick="table-header-row"
+      category="Table Interaction"
+      name="Table Header Row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [routerLink]="['view', row.workflowInstanceKey]"
+      class="select-row"
+      matomoClick="transaction-row-{{ row.transactionId }}"
+      category="Table Navigation"
+      name="View Transaction Details"
+      (click)="onTransactionRowClick(row.transactionId)"
+    ></tr>
   </table>
 
-  <mat-paginator [length]="dataSource?.records$ | async" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons='false'></mat-paginator>
-
+  <mat-paginator
+    [length]="dataSource?.records$ | async"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    showFirstLastButtons="false"
+    matomoClick="outgoing-transactions-paginator"
+    category="Pagination Controls"
+    name="Outgoing Transactions Pagination"
+    (page)="onPageChange($event.pageIndex, $event.pageSize)"
+  ></mat-paginator>
 </div>

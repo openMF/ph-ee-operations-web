@@ -5,7 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 /** rxjs Imports */
 import { from } from 'rxjs';
@@ -18,7 +24,7 @@ import { DfspEntry } from './model/dfsp.model';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
 
 /** Dialog Components */
-import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component'
+import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component';
 import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
 import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
 
@@ -27,6 +33,7 @@ import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { AlertService } from 'app/core/alert/alert.service';
 import { AuthenticationService } from 'app/core/authentication/authentication.service';
+import { MatomoService } from 'app/core/analytics/matomo.service';
 
 /**
  * View transaction component.
@@ -37,14 +44,19 @@ import { AuthenticationService } from 'app/core/authentication/authentication.se
   styleUrls: ['./transaction-details.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', display: 'none' })
+      ),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
 export class TransactionDetailsComponent implements OnInit {
-
   // TODO: Update once language and date settings are setup
 
   /** Transaction data.  */
@@ -52,8 +64,19 @@ export class TransactionDetailsComponent implements OnInit {
   /** Transaction ID. */
   transactionId: string;
   /** Columns to be displayed in transaction table. */
-  displayedColumns: string[] = ['timestamp', 'elementId', 'type', 'intent', 'actions'];
-  displayedColumnsDetailsTable: string[] = ['timestamp', 'elementId', 'type', 'intent'];
+  displayedColumns: string[] = [
+    'timestamp',
+    'elementId',
+    'type',
+    'intent',
+    'actions',
+  ];
+  displayedColumnsDetailsTable: string[] = [
+    'timestamp',
+    'elementId',
+    'type',
+    'intent',
+  ];
   displayedBusinessAttributeColumns: string[] = ['name', 'timestamp', 'value'];
   /** Data source for transaction table. */
   taskList: MatTableDataSource<any>;
@@ -61,7 +84,7 @@ export class TransactionDetailsComponent implements OnInit {
   dfspEntriesData: DfspEntry[];
   transactionStatusData = statuses;
   tasks: Array<any> = [];
-  counter: number = 0;
+  counter = 0;
   expandedElement: Array<any> = [];
   /**
    * @param {TransactionsService} transactionsService Transactions Service.
@@ -69,25 +92,25 @@ export class TransactionDetailsComponent implements OnInit {
    * @param {Router} router Router for navigation.
    * @param {MatDialog} dialog Dialog reference.
    */
-  constructor(private transactionsService: TransactionsService,
+  constructor(
+    private transactionsService: TransactionsService,
     private alertService: AlertService,
     private authService: AuthenticationService,
+    private matomoService: MatomoService,
     private route: ActivatedRoute,
     private router: Router,
-    public dialog: MatDialog) {
-    this.route.data.subscribe((data: {
-      dfspEntries: DfspEntry[]
-    }) => {
+    public dialog: MatDialog
+  ) {
+    this.route.data.subscribe((data: { dfspEntries: DfspEntry[] }) => {
       this.dfspEntriesData = data.dfspEntries;
     });
   }
 
   checkExpanded(transaction: any): boolean {
     let flag = false;
-    this.expandedElement.forEach(e => {
+    this.expandedElement.forEach((e) => {
       if (e === transaction) {
         flag = true;
-
       }
     });
     return flag;
@@ -109,16 +132,28 @@ export class TransactionDetailsComponent implements OnInit {
     this.route.data.subscribe((data: { transaction: any }) => {
       this.datasource = data.transaction;
       this.setTransactionBusinessAttributes();
+
+      // Track transaction view
+      this.matomoService.trackEvent(
+        'Transaction Management',
+        'View Transaction Details',
+        this.getTransferId()
+      );
     });
     const source = from(this.datasource.tasks);
     const example = source.pipe(
-      groupBy(transaction => transaction['type']),
-      mergeMap(group => group.pipe(toArray()))
+      groupBy((transaction) => transaction['type']),
+      mergeMap((group) => group.pipe(toArray()))
     );
-    const subscribe = example.subscribe(val => {
+    const subscribe = example.subscribe((val) => {
       this.tasks.push(val[val.length - 1]);
-      this.tasks[this.counter].datasource = new MatTableDataSource(val.slice(0, val.length - 1));
-      this.tasks[this.counter].datasource.sortingDataAccessor = (transaction: any, property: any) => {
+      this.tasks[this.counter].datasource = new MatTableDataSource(
+        val.slice(0, val.length - 1)
+      );
+      this.tasks[this.counter].datasource.sortingDataAccessor = (
+        transaction: any,
+        property: any
+      ) => {
         return transaction[property];
       };
       this.counter++;
@@ -138,7 +173,10 @@ export class TransactionDetailsComponent implements OnInit {
 
   setTransactionBusinessAttributes() {
     this.businessAttributes = new MatTableDataSource(this.datasource.variables);
-    this.businessAttributes.sortingDataAccessor = (transaction: any, property: any) => {
+    this.businessAttributes.sortingDataAccessor = (
+      transaction: any,
+      property: any
+    ) => {
       return transaction[property];
     };
   }
@@ -171,74 +209,121 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   cleanse(unformatted: any) {
-    return unformatted ? unformatted.replace(/\\n|\\r|\\t/gm, '').replace(/\\"/gi, '"') : undefined;
+    return unformatted
+      ? unformatted.replace(/\\n|\\r|\\t/gm, '').replace(/\\"/gi, '"')
+      : undefined;
   }
 
   getDfpsEntry(dfpsId?: any): DfspEntry | undefined {
-    const elements = this.dfspEntriesData.filter((option) => option.id === dfpsId);
+    const elements = this.dfspEntriesData.filter(
+      (option) => option.id === dfpsId
+    );
     return elements.length > 0 ? elements[0] : undefined;
   }
-
 
   displayDfspName(entry?: any): string | undefined {
     return entry ? entry.name : undefined;
   }
   displayStatus(status?: any): string | undefined {
-    const elements = this.transactionStatusData.filter((option) => option.value === status);
+    const elements = this.transactionStatusData.filter(
+      (option) => option.value === status
+    );
     return elements.length > 0 ? elements[0].option : undefined;
   }
 
   displayCSS(status?: any): string | undefined {
-
-    const elements = this.transactionStatusData.filter((option) => option.value === status);
+    const elements = this.transactionStatusData.filter(
+      (option) => option.value === status
+    );
     return elements.length > 0 ? elements[0].css : undefined;
   }
 
   openBPMNDialog() {
+    this.matomoService.trackEvent(
+      'Transaction Management',
+      'View BPMN Diagram',
+      this.getTransferId()
+    );
+
     const bpmnDialogRef = this.dialog.open(BpmnDialogComponent, {
       data: {
-        datasource: this.datasource
+        datasource: this.datasource,
       },
     });
   }
 
   openRetryResolveDialog(workflowInstanceKey: any, action: string) {
-    const retryResolveDialogRef = this.dialog.open(RetryResolveDialogComponent, {
-      data: {
-        action: action,
-        workflowInstanceKey: workflowInstanceKey
-      },
-    });
+    const retryResolveDialogRef = this.dialog.open(
+      RetryResolveDialogComponent,
+      {
+        data: {
+          action: action,
+          workflowInstanceKey: workflowInstanceKey,
+        },
+      }
+    );
   }
 
   hasRefundAccess() {
-    return this.datasource.transfer.direction === 'INCOMING' && this.authService.hasAccess('REFUND');
+    return (
+      this.datasource.transfer.direction === 'INCOMING' &&
+      this.authService.hasAccess('REFUND')
+    );
   }
 
   openReturnDialog() {
     if (!this.hasRefundAccess()) {
       return;
     }
+
+    this.matomoService.trackEvent(
+      'Transaction Management',
+      'Initiate Refund',
+      this.getTransferId()
+    );
+
     const formfields: FormfieldBase[] = [
       new InputBase({
         controlName: 'comment',
         label: 'Comment',
         type: 'text',
-        required: true
+        required: true,
       }),
     ];
     const data = {
       title: 'Comment',
       layout: { addButtonText: 'Confirm' },
-      formfields: formfields
+      formfields: formfields,
     };
     const editFundDialogRef = this.dialog.open(FormDialogComponent, { data });
     editFundDialogRef.afterClosed().subscribe((response: any) => {
       if (response.data) {
-        return this.transactionsService.refund(this.getTransferId(), response.data.value).subscribe(
-          res => this.alertService.alert({ type: 'Refund Success', message: `Refund request was successfully initiated!` }),
-          err => this.alertService.alert({ type: 'Refund Error', message: `Refund request was failed` })
-        );
+        return this.transactionsService
+          .refund(this.getTransferId(), response.data.value)
+          .subscribe(
+            (res) => {
+              this.matomoService.trackEvent(
+                'Transaction Management',
+                'Refund Success',
+                this.getTransferId()
+              );
+              this.alertService.alert({
+                type: 'Refund Success',
+                message: `Refund request was successfully initiated!`,
+              });
+            },
+            (err) => {
+              this.matomoService.trackEvent(
+                'Transaction Management',
+                'Refund Error',
+                this.getTransferId()
+              );
+              this.alertService.alert({
+                type: 'Refund Error',
+                message: `Refund request was failed`,
+              });
+            }
+          );
       }
     });
   }

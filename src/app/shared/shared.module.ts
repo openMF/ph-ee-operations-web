@@ -12,6 +12,14 @@ import { FooterComponent } from './footer/footer.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 
+/** Custom Directives */
+import {
+  MatomoClickDirective,
+  MatomoFormDirective,
+  MatomoDownloadDirective,
+  MatomoOutboundDirective,
+} from '../core/analytics/matomo.directives';
+
 /** Custom Modules */
 import { IconsModule } from './icons.module';
 import { MaterialModule } from './material.module';
@@ -23,12 +31,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
  * Modules and components that are shared throughout the application should be here.
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    IconsModule,
-    MaterialModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, IconsModule, MaterialModule, ReactiveFormsModule],
   declarations: [
     FormfieldComponent,
     FormDialogComponent,
@@ -38,6 +41,10 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     FooterComponent,
     LanguageSelectorComponent,
     ThemePickerComponent,
+    MatomoClickDirective,
+    MatomoFormDirective,
+    MatomoDownloadDirective,
+    MatomoOutboundDirective,
   ],
   exports: [
     FileUploadComponent,
@@ -48,12 +55,16 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     IconsModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatomoClickDirective,
+    MatomoFormDirective,
+    MatomoDownloadDirective,
+    MatomoOutboundDirective,
   ],
   entryComponents: [
     FormDialogComponent,
     ConfirmDialogComponent,
-    DeleteDialogComponent
-  ]
+    DeleteDialogComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

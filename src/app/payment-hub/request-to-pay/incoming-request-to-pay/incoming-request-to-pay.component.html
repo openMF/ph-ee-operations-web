@@ -3,21 +3,43 @@
   fxLayout="row wrap"
   fxLayoutGap="2%"
   fxLayout.lt-md="column"
+  matomoForm="incoming-request-to-pay"
 >
   <mat-form-field fxFlex="20%">
     <mat-label>Payer Id</mat-label>
-    <input matInput [formControl]="payerPartyId" />
+    <input
+      matInput
+      [formControl]="payerPartyId"
+      matomoClick="rtp-filter-payer-id"
+      (focus)="onFilterUsed('Payer ID')"
+      (blur)="onFilterUsed('Payer ID', $event.target.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>External Id</mat-label>
-    <input matInput [formControl]="externalId" />
+    <input
+      matInput
+      [formControl]="externalId"
+      matomoClick="rtp-filter-external-id"
+      (focus)="onFilterUsed('External ID')"
+      (blur)="onFilterUsed('External ID', $event.target.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>AMS Business Short Code</mat-label>
-    <mat-select [formControl]="payerDfspId">
-      <mat-option *ngFor="let code of amsCodes" [value]="code.value">
+    <mat-select
+      [formControl]="payerDfspId"
+      matomoClick="rtp-filter-ams-code"
+      (focus)="onFilterUsed('AMS Business Code')"
+      (selectionChange)="onFilterUsed('AMS Business Code', $event.value)"
+    >
+      <mat-option
+        *ngFor="let code of amsCodes"
+        [value]="code.value"
+        matomoClick="rtp-ams-code-option-{{ code.value }}"
+      >
         {{ code.option }}
       </mat-option>
     </mat-select>
@@ -25,20 +47,43 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Payee Id</mat-label>
-    <input matInput [formControl]="payeePartyId" />
+    <input
+      matInput
+      [formControl]="payeePartyId"
+      matomoClick="rtp-filter-payee-id"
+      (focus)="onFilterUsed('Payee ID')"
+      (blur)="onFilterUsed('Payee ID', $event.target.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction ID</mat-label>
-    <input matInput [formControl]="transactionId" />
+    <input
+      matInput
+      [formControl]="transactionId"
+      matomoClick="rtp-filter-transaction-id"
+      (focus)="onFilterUsed('Transaction ID')"
+      (blur)="onFilterUsed('Transaction ID', $event.target.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Status</mat-label>
-    <mat-select [formControl]="status">
-      <mat-option [value]="">--Select Status--</mat-option>
+    <mat-select
+      [formControl]="status"
+      matomoClick="rtp-filter-status"
+      (focus)="onFilterUsed('Status')"
+      (selectionChange)="onFilterUsed('Status', $event.value)"
+    >
+      <mat-option [value]="" matomoClick="rtp-status-option-all"
+        >--Select Status--</mat-option
+      >
       <ng-container *ngFor="let filter of transactionStatusData">
-        <mat-option [value]="filter.value" *ngIf="!filter.hidden">
+        <mat-option
+          [value]="filter.value"
+          *ngIf="!filter.hidden"
+          matomoClick="rtp-status-option-{{ filter.value }}"
+        >
           {{ filter.option }}
         </mat-option>
       </ng-container>
@@ -47,14 +92,26 @@
 
   <mat-form-field fxFlex="20%">
     <mat-label>Amount</mat-label>
-    <input matInput [formControl]="amount" />
+    <input
+      matInput
+      [formControl]="amount"
+      matomoClick="rtp-filter-amount"
+      (focus)="onFilterUsed('Amount')"
+      (blur)="onFilterUsed('Amount', $event.target.value)"
+    />
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
     <mat-label>Currency</mat-label>
-    <input matInput [formControl]="currencyCode" [matAutocomplete]="currenciesAutocomplete">
+    <input
+      matInput
+      [formControl]="currencyCode"
+      [matAutocomplete]="currenciesAutocomplete"
+      matomoClick="rtp-filter-currency"
+      (focus)="onFilterUsed('Currency')"
+      (blur)="onFilterUsed('Currency', $event.target.value)"
+    />
   </mat-form-field>
-
 
   <mat-form-field fxFlex="20%">
     <mat-label>Transaction Date From</mat-label>
@@ -65,9 +122,18 @@
       [formControl]="transactionDateFrom"
       [min]="minDate"
       [max]="maxDate"
+      matomoClick="rtp-filter-date-from"
+      (focus)="onFilterUsed('Transaction Date From'); onDatePickerUsed('from')"
+      (dateChange)="onFilterUsed('Transaction Date From', $event.value)"
     />
-    <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #picker [showSeconds]="true"> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="picker"
+      matomoClick="rtp-datepicker-from-toggle"
+    >
+    </mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker [showSeconds]="true">
+    </ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field fxFlex="20%">
@@ -79,16 +145,37 @@
       [formControl]="transactionDateTo"
       [min]="minDate"
       [max]="maxDate"
+      matomoClick="rtp-filter-date-to"
+      (focus)="onFilterUsed('Transaction Date To'); onDatePickerUsed('to')"
+      (dateChange)="onFilterUsed('Transaction Date To', $event.value)"
     />
-    <mat-datepicker-toggle matSuffix [for]="pickerTo"> </mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true"> </ngx-mat-datetime-picker>
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="pickerTo"
+      matomoClick="rtp-datepicker-to-toggle"
+    >
+    </mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerTo [showSeconds]="true">
+    </ngx-mat-datetime-picker>
   </mat-form-field>
 </div>
 
 <!-- Autocomplete data -->
-<mat-autocomplete autoActiveFirstOption #currenciesAutocomplete="matAutocomplete" [displayWith]="displayCurrencyName">
-  <mat-option *ngFor="let currency of filteredCurrencies | async" [value]="{ AlphabeticCode: currency.AlphabeticCode, Currency: currency.Currency }">
-    {{ currency.Currency}} ( {{ currency.AlphabeticCode }} )
+<mat-autocomplete
+  autoActiveFirstOption
+  #currenciesAutocomplete="matAutocomplete"
+  [displayWith]="displayCurrencyName"
+>
+  <mat-option
+    *ngFor="let currency of filteredCurrencies | async"
+    [value]="{
+      AlphabeticCode: currency.AlphabeticCode,
+      Currency: currency.Currency
+    }"
+    matomoClick="rtp-currency-option-{{ currency.AlphabeticCode }}"
+    (click)="onAutocompleteSelection('Currency', currency.AlphabeticCode)"
+  >
+    {{ currency.Currency }} ( {{ currency.AlphabeticCode }} )
   </mat-option>
 </mat-autocomplete>
 
@@ -145,7 +232,9 @@
       </ng-container>
 
       <ng-container matColumnDef="payerDfspId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>AMS Business Short Code</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          AMS Business Short Code
+        </th>
         <td mat-cell *matCellDef="let requestToPay">
           {{ requestToPay.payerDfspId }}
         </td>

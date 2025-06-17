@@ -1,8 +1,8 @@
 /** Angular Imports */
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { style, animate, transition, trigger } from '@angular/animations';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 
 /** rxjs Imports */
@@ -10,12 +10,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
-import { AuthenticationService } from '../../authentication/authentication.service';
 import { Credentials } from 'app/core/authentication/credentials.model';
 import { Utils } from 'app/core/utils/utils';
+import { MatomoService } from '../../analytics/matomo.service';
+import { AuthenticationService } from '../../authentication/authentication.service';
 
 /**
- * Toolbar component.
+ * Toolbar component. test
  */
 @Component({
   selector: 'mifosx-toolbar',
@@ -25,24 +26,20 @@ import { Utils } from 'app/core/utils/utils';
     trigger('fadeInOut', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate(500, style({ opacity: 1 }))
+        animate(500, style({ opacity: 1 })),
       ]),
-      transition(':leave', [
-        animate(500, style({ opacity: 0 }))
-      ])
-    ])
-  ]
+      transition(':leave', [animate(500, style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class ToolbarComponent implements OnInit {
-
   authorities: string[] = [];
-  credentials: Credentials
+  credentials: Credentials;
 
   /** Subscription to breakpoint observer for handset. */
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches)
-    );
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(map((result) => result.matches));
 
   /** Sets the initial visibility of search input as hidden. Visible if true. */
   searchVisible = false;
@@ -58,11 +55,15 @@ export class ToolbarComponent implements OnInit {
    * @param {BreakpointObserver} breakpointObserver Breakpoint observer to detect screen size.
    * @param {Router} router Router for navigation.
    * @param {AuthenticationService} authenticationService Authentication service.
+   * @param {MatomoService} matomoService Matomo Analytics Service.
    */
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(
+    private breakpointObserver: BreakpointObserver,
     private router: Router,
     private utils: Utils,
-    private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService,
+    private matomoService: MatomoService
+  ) { }
 
   /**
    * Subscribes to breakpoint for handset.
@@ -70,7 +71,7 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
     this.credentials = this.authenticationService.getCredentials();
     this.authorities = this.getUserAuthorities(this.credentials) ?? [];
-    this.isHandset$.subscribe(isHandset => {
+    this.isHandset$.subscribe((isHandset) => {
       if (isHandset && this.sidenavCollapsed) {
         this.toggleSidenavCollapse(false);
       }
@@ -78,7 +79,9 @@ export class ToolbarComponent implements OnInit {
   }
 
   displayUser() {
-    return this.credentials ? this.credentials.username + ' - ' + this.credentials.tenantId : '';
+    return this.credentials
+      ? this.credentials.username + ' - ' + this.credentials.tenantId
+      : '';
   }
 
   /**
@@ -107,7 +110,11 @@ export class ToolbarComponent implements OnInit {
    * Logs out the authenticated user and redirects to login page.
    */
   logout() {
-    this.authenticationService.logout()
+    // Track logout event
+    this.matomoService.trackLogout();
+
+    this.authenticationService
+      .logout()
       .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
   }
 
@@ -115,8 +122,6 @@ export class ToolbarComponent implements OnInit {
    * Parse a user's token to get the permissions/authorities given to a user.
    */
   getUserAuthorities(credentials: Credentials) {
-    return this.utils.parseJwtToken(credentials.accessToken).authorities
+    return this.utils.parseJwtToken(credentials.accessToken).authorities;
   }
-
- 
 }

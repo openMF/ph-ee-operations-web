@@ -1,78 +1,105 @@
-<div class="container m-b-20" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="end" fxLayoutGap="2%">
-  <button mat-raised-button color="primary" (click)="editAppUser()">
-    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
-    Edit
+<div
+  class="container m-b-20"
+  fxLayout="row"
+  fxLayout.lt-md="column"
+  fxLayoutAlign="end"
+  fxLayoutGap="2%"
+>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="editAppUser()"
+    matomoClick="Edit User Details"
+    category="User Management"
+    name="Edit User Button"
+    [value]="userData.id"
+  >
+    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp; Edit
   </button>
-  <button mat-raised-button color="warn" (click)="delete()">
-    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp;
-    Delete
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="delete()"
+    matomoClick="Delete User"
+    category="User Management"
+    name="Delete User Button"
+    [value]="userData.id"
+  >
+    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp; Delete
   </button>
-  <button mat-raised-button color="primary" (click)="changePassword()">
-    <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp;
-    Change Password
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="changePassword()"
+    matomoClick="Change User Password"
+    category="User Management"
+    name="Change Password Button"
+    [value]="userData.id"
+  >
+    <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp; Change Password
   </button>
 
-  <button mat-raised-button color="primary" (click)="deactivate()" *ngIf="userData.enabled">
-    <fa-icon icon="toggle-off"></fa-icon>&nbsp;&nbsp;
-    Deactivate
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="deactivate()"
+    *ngIf="userData.enabled"
+    matomoClick="Deactivate User"
+    category="User Management"
+    name="Deactivate User Button"
+    [value]="userData.id"
+  >
+    <fa-icon icon="toggle-off"></fa-icon>&nbsp;&nbsp; Deactivate
   </button>
-  <button mat-raised-button color="primary" (click)="activate()" *ngIf="!userData.enabled">
-    <fa-icon icon="toggle-on"></fa-icon>&nbsp;&nbsp;
-    Activate
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="activate()"
+    *ngIf="!userData.enabled"
+    matomoClick="Activate User"
+    category="User Management"
+    name="Activate User Button"
+    [value]="userData.id"
+  >
+    <fa-icon icon="toggle-on"></fa-icon>&nbsp;&nbsp; Activate
   </button>
 </div>
 
 <div class="container">
-
   <mat-card>
-
     <mat-card-content>
-
       <div fxLayout="row wrap" class="content">
-
-        <div fxFlex="50%" class="mat-body-strong">
-          Login Name
-        </div>
+        <div fxFlex="50%" class="mat-body-strong">Login Name</div>
 
         <div fxFlex="50%">
           {{ userData.username }}
         </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          First Name
-        </div>
+        <div fxFlex="50%" class="mat-body-strong">First Name</div>
 
         <div fxFlex="50%">
           {{ userData.firstname }}
         </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Last Name
-        </div>
+        <div fxFlex="50%" class="mat-body-strong">Last Name</div>
 
         <div fxFlex="50%">
           {{ userData.lastname }}
         </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Email
-        </div>
+        <div fxFlex="50%" class="mat-body-strong">Email</div>
 
         <div fxFlex="50%">
           {{ userData.email }}
         </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Office
-        </div>
+        <div fxFlex="50%" class="mat-body-strong">Office</div>
 
         <div fxFlex="50%">
           {{ userData.officeName }}
         </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Roles
-        </div>
+        <div fxFlex="50%" class="mat-body-strong">Roles</div>
 
         <div fxFlex="50%">
           <span *ngFor="let role of userData.selectedRoles">
@@ -90,15 +117,20 @@
           </span>
         </div>
         <div fxFlex="20%">
-          <button mat-raised-button color="primary" (click)="editCurrencies()">
-            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
-            Edit
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="editCurrencies()"
+            matomoClick="Edit User Currencies"
+            category="User Configuration"
+            name="Edit Currencies Button"
+            [value]="userData.id"
+          >
+            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp; Edit
           </button>
         </div>
 
-        <div fxFlex="30%" class="mat-body-strong">
-          Assigned AMS
-        </div>
+        <div fxFlex="30%" class="mat-body-strong">Assigned AMS</div>
 
         <div fxFlex="50%">
           <span *ngFor="let payeePartyIdType of userData.payeePartyIdTypesList">
@@ -106,15 +138,20 @@
           </span>
         </div>
         <div fxFlex="20%">
-          <button mat-raised-button color="primary" (click)="editPayePartyIdTypes()">
-            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
-            Edit
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="editPayePartyIdTypes()"
+            matomoClick="Edit User AMS"
+            category="User Configuration"
+            name="Edit AMS Button"
+            [value]="userData.id"
+          >
+            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp; Edit
           </button>
         </div>
 
-        <div fxFlex="30%" class="mat-body-strong">
-          Assigned Shop/Account ID 
-        </div>
+        <div fxFlex="30%" class="mat-body-strong">Assigned Shop/Account ID</div>
 
         <div fxFlex="50%">
           <span *ngFor="let payeePartyId of userData.payeePartyIdsList">
@@ -123,15 +160,19 @@
         </div>
 
         <div fxFlex="20%">
-          <button mat-raised-button color="primary" (click)="editPayePartyIds()">
-            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
-            Edit
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="editPayePartyIds()"
+            matomoClick="Edit User Shop/Account ID"
+            category="User Configuration"
+            name="Edit Shop/Account ID Button"
+            [value]="userData.id"
+          >
+            <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp; Edit
           </button>
         </div>
       </div>
-
     </mat-card-content>
-
   </mat-card>
-
 </div>

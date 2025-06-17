@@ -2,63 +2,68 @@
 import env from './.env';
 
 export let environment = {
-  name: "prod",
+  name: 'prod',
   production: true,
   version: env.npm_package_version,
-  serverUrl: "",
+  serverUrl: '',
   oauth: {
-    enabled: "false",
-    serverUrl: "",
-    basicAuth: "false",
-    basicAuthToken: ''
+    enabled: 'false',
+    serverUrl: '',
+    basicAuth: 'false',
+    basicAuthToken: '',
   },
-  defaultLanguage: "en-US",
-  supportedLanguages: ["en-US", "fr-FR"],
-  externalConfigurationFile: "",
+  defaultLanguage: 'en-US',
+  supportedLanguages: ['en-US', 'fr-FR'],
+  externalConfigurationFile: '',
   auth: {
     enabled: true,
-    tenant: "phdefault"
+    tenant: 'phdefault',
   },
   amsShortCodes: [
     {
       option: 'ERPLY_TILL',
       type: 'TILL',
-      value: '9499081'
-  },
-  {
+      value: '9499081',
+    },
+    {
       option: 'TUPANDE_TILL',
       type: 'TILL',
-      value: '6064956'
-  },
-  {
+      value: '6064956',
+    },
+    {
       option: 'PAYGOPS_USSD_KE_TILL',
       type: 'TILL',
-      value: '9347335'
-  },
-  {
+      value: '9347335',
+    },
+    {
       option: 'ROSTER_USSD_KE_TILL',
       type: 'TILL',
-      value: '9558723'
-  },
-  {
+      value: '9558723',
+    },
+    {
       option: 'ODOO_KE_TILL',
       type: 'TILL',
-      value: '9491775'
-  },
-  {
+      value: '9491775',
+    },
+    {
       option: 'FINERACT_USSD_KE_TILL',
       type: 'TILL',
-      value: '8167094'
-  },
-  {
+      value: '8167094',
+    },
+    {
       option: 'PAYGOPS_PAYBILL',
       type: 'PAYBILL',
-      value: '840706'
-  },
-  {
+      value: '840706',
+    },
+    {
       option: 'TEST_PAYBILL',
       type: 'PAYBILL',
-      value: '840700'
-  }
-  ]
+      value: '840700',
+    },
+  ],
+  matomo: {
+    url: 'https://analytics.oneacrefund.org',
+    siteId: 18, // Replace with your production site ID
+    disabled: false,
+  },
 };

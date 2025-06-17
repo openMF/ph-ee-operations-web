@@ -1,37 +1,49 @@
 <div
   [ngClass]="{
-  'sidebar-full': !sidenavCollapsed,
-  'sidebar-compact': sidenavCollapsed
-  }">
-
+    'sidebar-full': !sidenavCollapsed,
+    'sidebar-compact': sidenavCollapsed
+  }"
+>
   <div class="navigation-panel" fxLayout="column">
-
     <!-- TODO: Allow customization by organization -->
     <div class="app-brand">
-      <img src="assets/images/MifosX_logo.png" alt="app-logo" class="app-logo">
+      <img
+        src="assets/images/MifosX_logo.png"
+        alt="app-logo"
+        class="app-logo"
+      />
       <span class="app-logo-text text-muted">Mifos</span>
     </div>
 
     <div class="app-user">
       <div class="app-user-photo">
         <!-- TODO: Decision to be taken on providing this feature -->
-        <img src="assets/images/user_placeholder.png" alt="app-user-photo">
+        <img src="assets/images/user_placeholder.png" alt="app-user-photo" />
       </div>
       <span class="app-user-name mb-05">
         {{ username }}
       </span>
       <div class="app-user-controls">
-        <button class="text-muted xs-button" mat-icon-button matTooltip="Settings" [routerLink]="['/settings']">
+        <button
+          class="text-muted xs-button"
+          mat-icon-button
+          matTooltip="Settings"
+          [routerLink]="['/settings']"
+        >
           <fa-icon icon="cog"></fa-icon>
         </button>
-        <button class="text-muted xs-button" mat-icon-button matTooltip="Sign Out" (click)="logout()">
+        <button
+          class="text-muted xs-button"
+          mat-icon-button
+          matTooltip="Sign Out"
+          (click)="logout()"
+        >
           <fa-icon icon="sign-out-alt"></fa-icon>
         </button>
       </div>
     </div>
 
     <div class="app-sidenav">
-
       <!-- TODO: Generate frequently accessed routes dynamically -->
       <div class="mt-1 mb-1 nav-item-sep">
         <mat-divider></mat-divider>
@@ -50,11 +62,7 @@
         <span class="text-muted">Main Items</span>
       </div>
 
-      <mat-nav-list>
-      </mat-nav-list>
-
+      <mat-nav-list> </mat-nav-list>
     </div>
-
   </div>
-
 </div>

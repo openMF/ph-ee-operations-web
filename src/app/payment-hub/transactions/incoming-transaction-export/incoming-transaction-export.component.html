@@ -3,6 +3,7 @@
   fxLayout="row wrap"
   fxLayoutGap="2%"
   fxLayout.lt-md="column"
+  matomoForm="incoming-transaction-export"
 >
   <form
     #postForm="ngForm"
@@ -25,6 +26,9 @@
           name="transactionid"
           placeholder="comma-separated-list"
           id="transactionid"
+          matomoClick="export-filter-transaction-id"
+          (focus)="onFilterUsed('Transaction ID')"
+          (blur)="onFilterUsed('Transaction ID', $event.target.value)"
         />
       </mat-form-field>
       <mat-form-field>
@@ -37,9 +41,14 @@
           name="workflowinstancekey"
           placeholder="comma-separated-list"
           id="workflowinstancekey"
+          matomoClick="export-filter-workflow-key"
+          (focus)="onFilterUsed('Workflow Instance Key')"
+          (blur)="onFilterUsed('Workflow Instance Key', $event.target.value)"
         />
       </mat-form-field>
-      <mat-form-field (click)="startDatePicker.open()">
+      <mat-form-field
+        (click)="startDatePicker.open(); onDatePickerUsed('start')"
+      >
         <mat-label>START DATE</mat-label>
         <input
           matInput
@@ -50,11 +59,18 @@
           placeholder="Start Date"
           id="startdate"
           [matDatepicker]="startDatePicker"
+          matomoClick="export-filter-start-date"
+          (focus)="onFilterUsed('Start Date')"
+          (dateChange)="onFilterUsed('Start Date', $event.value)"
         />
-        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="startDatePicker"
+          matomoClick="export-datepicker-start-toggle"
+        ></mat-datepicker-toggle>
         <mat-datepicker #startDatePicker></mat-datepicker>
       </mat-form-field>
-      <mat-form-field (click)="endDatePicker.open()">
+      <mat-form-field (click)="endDatePicker.open(); onDatePickerUsed('end')">
         <mat-label>END DATE</mat-label>
         <input
           matInput
@@ -65,9 +81,16 @@
           placeholder="End Date"
           id="enddate"
           [matDatepicker]="endDatePicker"
+          matomoClick="export-filter-end-date"
+          (focus)="onFilterUsed('End Date')"
+          (dateChange)="onFilterUsed('End Date', $event.value)"
         />
-        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker></mat-datepicker>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endDatePicker"
+          matomoClick="export-datepicker-end-toggle"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
         <mat-label for="querytype" class="form-control">Filter By</mat-label>
@@ -77,11 +100,28 @@
           class="form-control col-sm-4"
           ngModel
           matNativeControl
+          matomoClick="export-filter-status"
+          (focus)="onFilterUsed('Status')"
+          (change)="onFilterUsed('Status', $event.target.value)"
         >
-          <option value="">STATUS</option>
-          <option value="COMPLETED">COMPLETED</option>
-          <option value="FAILED">FAILED</option>
-          <option value="IN_PROGRESS">IN PROGRESS</option>
+          <option value="" matomoClick="export-status-option-all">
+            STATUS
+          </option>
+          <option
+            value="COMPLETED"
+            matomoClick="export-status-option-completed"
+          >
+            COMPLETED
+          </option>
+          <option value="FAILED" matomoClick="export-status-option-failed">
+            FAILED
+          </option>
+          <option
+            value="IN_PROGRESS"
+            matomoClick="export-status-option-in-progress"
+          >
+            IN PROGRESS
+          </option>
         </select>
       </mat-form-field>
       <mat-form-field>
@@ -94,6 +134,9 @@
           name="payerid"
           placeholder="comma-separated-list"
           id="payerid"
+          matomoClick="export-filter-payer-id"
+          (focus)="onFilterUsed('Payer ID')"
+          (blur)="onFilterUsed('Payer ID', $event.target.value)"
         />
       </mat-form-field>
       <mat-form-field>
@@ -106,26 +149,46 @@
           name="payeeid"
           placeholder="comma-separated-list"
           id="payeeid"
+          matomoClick="export-filter-payee-id"
+          (focus)="onFilterUsed('Payee ID')"
+          (blur)="onFilterUsed('Payee ID', $event.target.value)"
         />
       </mat-form-field>
       <mat-form-field>
         <mat-label>AMS Business Short Code</mat-label>
-        <mat-select 
-        class="form-control col-sm-4"
-        ngModel
-        name="payerdfspid"
-        placeholder="comma-separated-list"
-        id="payerdfspid" multiple>
-          <mat-option *ngFor="let code of amsCodes" [value]="code.value">
+        <mat-select
+          class="form-control col-sm-4"
+          ngModel
+          name="payerdfspid"
+          placeholder="comma-separated-list"
+          id="payerdfspid"
+          multiple
+          matomoClick="export-filter-ams-code"
+          (focus)="onFilterUsed('AMS Business Code')"
+          (selectionChange)="
+            onAmsCodeSelection($event.value);
+            onFilterUsed('AMS Business Code', $event.value)
+          "
+        >
+          <mat-option
+            *ngFor="let code of amsCodes"
+            [value]="code.value"
+            matomoClick="export-ams-code-option-{{ code.value }}"
+          >
             {{ code.option }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <button mat-stroked-button type="submit" [disabled]="!postForm.valid">
+    <button
+      mat-stroked-button
+      type="submit"
+      [disabled]="!postForm.valid"
+      matomoClick="export-csv-submit-button"
+      (click)="onFormValidationChange(postForm.valid)"
+    >
       Export CSV
     </button>
   </form>
 </div>
-
