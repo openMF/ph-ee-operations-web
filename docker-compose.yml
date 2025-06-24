@@ -18,8 +18,8 @@ services:
       - PH_OPS_BACKEND_SERVER_URL=https://ops.mifos.gazelle.test/api/v1
       - PH_VOU_BACKEND_SERVER_URL=https://ops.mifos.gazelle.test/api/v1
       - PH_ACT_BACKEND_SERVER_URL=https://ops.mifos.gazelle.test/api/v1
-      - PH_PLATFORM_TENANT_ID=gorilla
-      - PH_PLATFORM_TENANT_IDS=gorilla
+      - PH_PLATFORM_TENANT_ID=ph_bluebank
+      - PH_PLATFORM_TENANT_IDS=ph_greenbank
       - PH_REGISTERING_INSTITUTION_ID=SocialInstitution
       - PH_AUTH_ENABLED=false
       - PH_OAUTH_ENABLED=false
