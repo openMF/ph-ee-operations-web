@@ -65,11 +65,11 @@ jobs:
             echo "Using Docker Namespace: $DOCKER_ORG_LOWER"
             echo "Using Docker Repository: $DOCKER_REPO_LOWER"
       - docker-buildx/install
-      - run:
-          name: Build Application
-          command: |
-            # ./gradlew checkstyleMain
-            ./gradlew clean bootJar
+      # - run:
+      #     name: Build Application
+      #     command: |
+      #       # ./gradlew checkstyleMain
+      #       ./gradlew clean bootJar
       - run:
           name: Sanitize Branch Name
           command: |
