@@ -1,0 +1,19 @@
+# Global code owners
+
+# This file defines who owns and is responsible for code in this repository.
+
+# For more information about CODEOWNERS, see:
+
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owner for all files in the repository
+
+- @muchendu221
+
+# You can add more specific rules below if needed, for example:
+
+# /src/app/core/ @muchendu221 @other-maintainer
+
+# \*.md @muchendu221 @docs-team
+
+# package.json @muchendu221 @build-team

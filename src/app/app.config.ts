@@ -1,8 +1,6 @@
-import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
-import { keyValuesToMap } from '@angular/flex-layout/extended/typings/style/style-transforms';
 
 @Injectable()
 export class AppConfig {
@@ -33,9 +31,9 @@ export class AppConfig {
                                 const keyValue = variable.split(' ');
                                 const keys = keyValue[0].split('.');
                                 if (keys.length > 1) {
-                                    environment[keys[0]][keys[1]] = keyValue[1];
+                                    (environment as any)[keys[0]][keys[1]] = keyValue[1];
                                 } else {
-                                    environment[keyValue[0]] = keyValue[1];
+                                    (environment as any)[keyValue[0]] = keyValue[1];
                                 }
                             }
                             resolve(true);

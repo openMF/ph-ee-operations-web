@@ -23,7 +23,7 @@ const log = new Logger("MatomoService");
 })
 export class MatomoService {
   constructor(private matomoTracker: MatomoTracker) {
-    log.debug("MatomoService initialized");
+
   }
 
   /**
@@ -33,7 +33,7 @@ export class MatomoService {
    */
   trackPageView(url?: string, title?: string): void {
     if (environment.matomo.disabled) {
-      log.debug("Matomo tracking is disabled");
+
       return;
     }
 
@@ -43,7 +43,7 @@ export class MatomoService {
         this.matomoTracker.setDocumentTitle(title);
       }
       this.matomoTracker.trackPageView();
-      log.debug("Page view tracked:", { url, title });
+
     } catch (error) {
       log.error("Error tracking page view:", error);
     }
@@ -63,13 +63,13 @@ export class MatomoService {
     value?: number
   ): void {
     if (environment.matomo.disabled) {
-      log.debug("Matomo tracking is disabled");
+
       return;
     }
 
     try {
       this.matomoTracker.trackEvent(category, action, name, value);
-      log.debug("Event tracked:", { category, action, name, value });
+
     } catch (error) {
       log.error("Error tracking event:", error);
     }
@@ -87,7 +87,7 @@ export class MatomoService {
     try {
       this.matomoTracker.setUserId(userId);
       this.trackEvent("Authentication", "Login", "User Login");
-      log.debug("Login tracked for user:", userId);
+     
     } catch (error) {
       log.error("Error tracking login:", error);
     }
@@ -104,7 +104,7 @@ export class MatomoService {
     try {
       this.trackEvent("Authentication", "Logout", "User Logout");
       this.matomoTracker.resetUserId();
-      log.debug("Logout tracked");
+     
     } catch (error) {
       log.error("Error tracking logout:", error);
     }
@@ -123,7 +123,7 @@ export class MatomoService {
     try {
       const action = success ? "Submit Success" : "Submit Error";
       this.trackEvent("Forms", action, formName);
-      log.debug("Form submission tracked:", { formName, success });
+     
     } catch (error) {
       log.error("Error tracking form submission:", error);
     }
@@ -141,7 +141,7 @@ export class MatomoService {
 
     try {
       this.matomoTracker.setCustomDimension(dimensionId, value);
-      log.debug("Custom dimension set:", { dimensionId, value });
+     
     } catch (error) {
       log.error("Error setting custom dimension:", error);
     }
@@ -164,7 +164,7 @@ export class MatomoService {
 
     try {
       this.matomoTracker.trackSiteSearch(query, category, resultsCount);
-      log.debug("Site search tracked:", { query, category, resultsCount });
+     
     } catch (error) {
       log.error("Error tracking site search:", error);
     }
@@ -181,7 +181,7 @@ export class MatomoService {
 
     try {
       this.matomoTracker.trackLink(downloadUrl, "download");
-      log.debug("Download tracked:", downloadUrl);
+    
     } catch (error) {
       log.error("Error tracking download:", error);
     }
@@ -198,7 +198,7 @@ export class MatomoService {
 
     try {
       this.matomoTracker.trackLink(linkUrl, "link");
-      log.debug("Outbound link tracked:", linkUrl);
+    
     } catch (error) {
       log.error("Error tracking outbound link:", error);
     }
@@ -226,7 +226,7 @@ export class MatomoService {
         this.setCustomDimension(2, tenant); // Assuming dimension 2 is for tenant
       }
 
-      log.debug("User context set:", { userId, userRole, tenant });
+  
     } catch (error) {
       log.error("Error setting user context:", error);
     }
@@ -256,7 +256,7 @@ export class MatomoService {
       this.trackEvent("Errors", action, name);
       this.setCustomDimension(3, severity); // Assuming dimension 3 is for error severity
 
-      log.debug("Error tracked:", { error: errorMessage, component, severity });
+      
     } catch (trackingError) {
       log.error("Error tracking error:", trackingError);
     }
@@ -279,7 +279,7 @@ export class MatomoService {
 
     try {
       this.trackEvent(category, metric, `${value}ms`, value);
-      log.debug("Performance tracked:", { metric, value, category });
+     
     } catch (error) {
       log.error("Error tracking performance:", error);
     }
@@ -302,7 +302,7 @@ export class MatomoService {
 
     try {
       this.trackEvent("Business Metrics", metric, `${value} ${unit}`, value);
-      log.debug("Business metric tracked:", { metric, value, unit });
+   
     } catch (error) {
       log.error("Error tracking business metric:", error);
     }
@@ -319,7 +319,7 @@ export class MatomoService {
       } else {
         this.matomoTracker.setDoNotTrack(true);
       }
-      log.debug("Tracking enabled status changed:", enabled);
+      
     } catch (error) {
       log.error("Error changing tracking status:", error);
     }

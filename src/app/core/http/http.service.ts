@@ -1,20 +1,20 @@
 /** Angular Imports */
+import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken, Injector, Optional } from '@angular/core';
-import { HttpClient, HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 /** rxjs Imports */
 import { Observable } from 'rxjs';
 
 /** Custom Interceptors */
-import { ErrorHandlerInterceptor } from './error-handler.interceptor';
-import { CacheInterceptor } from './cache.interceptor';
 import { ApiPrefixInterceptor } from './api-prefix.interceptor';
+import { CacheInterceptor } from './cache.interceptor';
+import { ErrorHandlerInterceptor } from './error-handler.interceptor';
 
 /**
  * HttpClient is declared in a re-exported module, so we have to extend the original module to make it work properly.
  * (see https://github.com/Microsoft/TypeScript/issues/13897)
  */
-declare module '@angular/common/http/http' {
+declare module '@angular/common/http' {
 
   /**
    * Augment HttpClient with the added configuration methods from HttpService, to allow in-place replacement of
@@ -75,8 +75,8 @@ export const HTTP_DYNAMIC_INTERCEPTORS = new InjectionToken<HttpInterceptor>('HT
 export class HttpService extends HttpClient {
 
   constructor(private httpHandler: HttpHandler,
-              private injector: Injector,
-              @Optional() @Inject(HTTP_DYNAMIC_INTERCEPTORS) private interceptors: HttpInterceptor[] = []) {
+    private injector: Injector,
+    @Optional() @Inject(HTTP_DYNAMIC_INTERCEPTORS) private interceptors: HttpInterceptor[] = []) {
     super(httpHandler);
 
     if (!this.interceptors) {

@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 
 /** Http request options headers. */
 const httpOptions = {
-  headers: {}
+  headers: {} as { [key: string]: any }
 };
 
 /** Authorization header. */
@@ -60,7 +60,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         this.refreshTokenSubject.next(null);
         return this.authService.refreshOAuthAccessToken().pipe(
           catchError(err => {
-            console.log('Handling error locally and rethrowing it...', err);
+          
             this.authService.logout();
             this.router.navigate(['/login'], { replaceUrl: true });
             return throwError(err);

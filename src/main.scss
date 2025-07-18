@@ -10,8 +10,68 @@
 /* You can add global styles to this file, and also import other style files */
 @import "assets/styles/helper";
 
-
 // // 3rd party libraries
- $fa-font-path: "../fonts";
+$fa-font-path: "../fonts";
 
- @import "../node_modules/font-awesome/scss/font-awesome.scss";
+// Note: Commenting out old font-awesome import to avoid Sass division deprecation warnings
+// The project now uses @fortawesome/angular-fontawesome components
+// @import "../node_modules/font-awesome/scss/font-awesome.scss";
+
+/* Fix for ngxMatDatetimePicker transparency issues */
+/* Focus on background and visibility without interfering with interactions */
+
+/* Ensure proper backdrop styling */
+.cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.32);
+}
+
+/* Main datetime picker container styling */
+.ngx-mat-datetime-picker-container {
+  background: white;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+/* Calendar content background */
+.ngx-mat-calendar {
+  background: white;
+}
+
+.ngx-mat-calendar-content {
+  background: white;
+}
+
+/* Time picker content background */
+.ngx-mat-timepicker {
+  background: white;
+}
+
+/* Ensure date cells are clickable */
+.ngx-mat-calendar-body-cell {
+  background: transparent;
+  cursor: pointer;
+}
+
+.ngx-mat-calendar-body-cell:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Time input fields */
+.ngx-mat-timepicker-input {
+  background: white;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+/* Action buttons */
+.ngx-mat-datetime-picker-actions {
+  background: white;
+}
+
+/* Alternative selectors for different versions */
+.mat-datetime-picker-container,
+.mat-datepicker-popup {
+  background: white;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}

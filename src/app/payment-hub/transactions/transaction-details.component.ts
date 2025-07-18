@@ -1,10 +1,4 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import {
   animate,
   state,
@@ -12,28 +6,32 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { Component, OnInit } from '@angular/core';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /** rxjs Imports */
 import { from } from 'rxjs';
 import { groupBy, mergeMap, toArray } from 'rxjs/operators';
 
 /** Custom Services */
-import { TransactionsService } from './service/transactions.service';
-import { formatDate, formatUTCDate } from './helper/date-format.helper';
-import { DfspEntry } from './model/dfsp.model';
+import { formatUTCDate } from './helper/date-format.helper';
 import { transactionStatusData as statuses } from './helper/transaction.helper';
+import { DfspEntry } from './model/dfsp.model';
+import { TransactionsService } from './service/transactions.service';
 
 /** Dialog Components */
-import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component';
 import { FormDialogComponent } from 'app/shared/form-dialog/form-dialog.component';
+import { BpmnDialogComponent } from './bpmn-dialog/bpmn-dialog.component';
 import { RetryResolveDialogComponent } from './retry-resolve-dialog/retry-resolve-dialog.component';
 
 /** Custom Models */
+import { AlertService } from 'app/core/alert/alert.service';
+import { MatomoService } from 'app/core/analytics/matomo.service';
+import { AuthenticationService } from 'app/core/authentication/authentication.service';
 import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
-import { AlertService } from 'app/core/alert/alert.service';
-import { AuthenticationService } from 'app/core/authentication/authentication.service';
-import { MatomoService } from 'app/core/analytics/matomo.service';
 
 /**
  * View transaction component.
@@ -142,7 +140,7 @@ export class TransactionDetailsComponent implements OnInit {
     });
     const source = from(this.datasource.tasks);
     const example = source.pipe(
-      groupBy((transaction) => transaction['type']),
+      groupBy((transaction) => (transaction as any)['type']),
       mergeMap((group) => group.pipe(toArray()))
     );
     const subscribe = example.subscribe((val) => {

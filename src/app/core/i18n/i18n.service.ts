@@ -2,15 +2,15 @@
 import { Injectable } from '@angular/core';
 
 /** Translation Imports */
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 /** Custom Services */
 import { Logger } from '../logger/logger.service';
 
 /** Other Imports */
 import { includes } from 'lodash';
-import * as enUS from '../../../translations/en-US.json';
-import * as frFR from '../../../translations/fr-FR.json';
+import * as enUS from '../../../assets/translations/en-US.json';
+import * as frFR from '../../../assets/translations/fr-FR.json';
 
 /** Initialize Logger */
 const log = new Logger('I18nService');
@@ -77,7 +77,7 @@ export class I18nService {
       language = this.defaultLanguage;
     }
 
-    log.debug(`Language set to ${language}`);
+
     this.translateService.use(language);
   }
 

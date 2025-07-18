@@ -1,0 +1,115 @@
+{
+    "APP_NAME": "MifosX",
+    "PAYMENT_HUB_EE": "Payment Hub EE",
+    "PAYMENT_HUB_EE_OPERATIONS": "Payment Hub EE - Gestion des Opérations",
+    "COMMON": {
+        "LOGIN": "Connexion",
+        "LOGOUT": "Déconnexion",
+        "USERNAME": "Nom d'utilisateur",
+        "PASSWORD": "Mot de passe",
+        "TENANT": "Locataire",
+        "REMEMBER_ME": "Se souvenir de moi",
+        "FORGOT_PASSWORD": "Mot de passe oublié ?",
+        "SETTINGS": "Paramètres",
+        "SIGN_OUT": "Se déconnecter",
+        "HOME": "Accueil",
+        "DASHBOARD": "Tableau de bord",
+        "ABOUT": "À propos",
+        "VERSION": "Version",
+        "LOGGED_IN_AS": "Connecté en tant que",
+        "SEARCH": "Rechercher",
+        "EXPORT": "Exporter",
+        "DOWNLOAD": "Télécharger",
+        "VIEW": "Voir",
+        "CREATE": "Créer",
+        "EDIT": "Modifier",
+        "DELETE": "Supprimer",
+        "SAVE": "Enregistrer",
+        "CANCEL": "Annuler",
+        "SUBMIT": "Soumettre",
+        "CLOSE": "Fermer",
+        "YES": "Oui",
+        "NO": "Non",
+        "OK": "OK",
+        "LOADING": "Chargement...",
+        "ERROR": "Erreur",
+        "SUCCESS": "Succès",
+        "WARNING": "Avertissement",
+        "INFO": "Information"
+    },
+    "VALIDATION": {
+        "USERNAME_REQUIRED": "Le nom d'utilisateur est requis",
+        "PASSWORD_REQUIRED": "Le mot de passe est requis",
+        "TENANT_REQUIRED": "Le locataire est requis",
+        "USERNAME_PASSWORD_INCORRECT": "Nom d'utilisateur ou mot de passe incorrect"
+    },
+    "NAVIGATION": {
+        "FREQUENTLY_ACCESSED": "Fréquemment Consultés",
+        "TOGGLE_HIDE_OPEN": "Basculer Masquer/Ouvrir",
+        "TOGGLE_COLLAPSE": "Basculer Réduire",
+        "HIDE_OPEN_MENU": "Masquer/Ouvrir Menu",
+        "COLLAPSE_MENU": "Réduire Menu"
+    },
+    "PAYMENT_HUB": {
+        "TITLE": "Payment Hub EE",
+        "NAVIGATION_TITLE": "Navigation Payment Hub",
+        "INCOMING_TRANSACTIONS": {
+            "SEARCH": "Rechercher Transactions Entrantes",
+            "SEARCH_DESCRIPTION": "Option de recherche avancée pour les transactions entrantes",
+            "EXPORT": "Exporter Transactions Entrantes",
+            "EXPORT_DESCRIPTION": "Exporter les données des transactions entrantes"
+        },
+        "OUTGOING_TRANSACTIONS": {
+            "SEARCH": "Rechercher Transactions Sortantes",
+            "SEARCH_DESCRIPTION": "Option de recherche avancée pour les transactions sortantes",
+            "EXPORT": "Exporter Transactions Sortantes",
+            "EXPORT_DESCRIPTION": "Exporter les données des transactions sortantes"
+        },
+        "INCOMING_REQUEST_TO_PAY": {
+            "SEARCH": "Rechercher Demandes de Paiement Entrantes",
+            "SEARCH_DESCRIPTION": "Option de recherche avancée pour les demandes de paiement entrantes",
+            "EXPORT": "Exporter Demandes de Paiement Entrantes",
+            "EXPORT_DESCRIPTION": "Exporter les données des demandes de paiement entrantes"
+        },
+        "OUTGOING_REQUEST_TO_PAY": {
+            "SEARCH": "Rechercher Demandes de Paiement Sortantes",
+            "SEARCH_DESCRIPTION": "Option de recherche avancée pour les demandes de paiement sortantes",
+            "EXPORT": "Exporter Demandes de Paiement Sortantes",
+            "EXPORT_DESCRIPTION": "Exporter les données des demandes de paiement sortantes"
+        },
+        "BATCHES": {
+            "TITLE": "Lots",
+            "EXPORT": "Export de Lots",
+            "EXPORT_DESCRIPTION": "Exporter les données de lots"
+        }
+    },
+    "SYSTEM": {
+        "TITLE": "Système",
+        "ROLES_PERMISSIONS": "Rôles et Permissions",
+        "ADD_ROLE": "Ajouter un Rôle",
+        "AUDIT_TRAILS": "Pistes d'Audit",
+        "VIEW_AUDIT": "Voir l'Audit"
+    },
+    "USERS": {
+        "TITLE": "Utilisateurs",
+        "CREATE_USER": "Créer un Utilisateur",
+        "VIEW_USER": "Voir l'Utilisateur"
+    },
+    "FOOTER": {
+        "RESOURCES": "Ressources",
+        "COMMUNITY": "Communauté",
+        "CONTRIBUTE": "Contribuer",
+        "USER_MANUAL": "Manuel Utilisateur",
+        "FUNCTIONAL_SPECIFICATIONS": "Spécifications Fonctionnelles",
+        "DEVELOPER_ZONE": "Zone Développeur",
+        "USER_GROUP": "Groupe d'Utilisateurs",
+        "DEVELOPER_GROUP": "Groupe de Développeurs",
+        "IRC": "IRC",
+        "KEY_DESIGN_PRINCIPLES": "Principes de Conception Clés",
+        "WORKING_WITH_CODE": "Travailler avec le Code",
+        "DONATE": "Faire un Don"
+    },
+    "ABOUT_TEXT": {
+        "MIFOS_DESCRIPTION": "Mifos X est conçu par l'Initiative Mifos. Une communauté mondiale qui vise à accélérer l'élimination de la pauvreté en permettant aux organisations de fournir plus efficacement et efficacement des services financiers responsables aux pauvres et aux non-bancarisés du monde. Cela semble intéressant ? Participez !"
+    }
+}

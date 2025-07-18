@@ -1,0 +1,16 @@
+# Hadolint configuration file
+# See https://github.com/hadolint/hadolint for more information
+
+# Ignore rules that are too strict for development containers
+ignored:
+  # Allow installing packages without pinning versions in development images
+  - DL3008
+
+# Configure specific rules
+failure-threshold: error
+
+# Trusted registries (optional)
+trustedRegistries:
+  - docker.io
+  - gcr.io
+  - registry.hub.docker.com

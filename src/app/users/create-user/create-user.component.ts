@@ -1,9 +1,9 @@
 /** Angular Imports */
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
   Validators,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,7 +25,7 @@ import { confirmPasswordValidator } from '../../login/reset-password/confirm-pas
 })
 export class CreateUserComponent implements OnInit {
   /** User form. */
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   /** Offices data. */
   officesData: any;
   /** Roles data. */
@@ -41,7 +41,7 @@ export class CreateUserComponent implements OnInit {
    * @param {Router} router Router for navigation.
    */
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private usersService: UsersService,
     private matomoService: MatomoService,
     private route: ActivatedRoute,
@@ -112,11 +112,11 @@ export class CreateUserComponent implements OnInit {
         } else {
           this.userForm.addControl(
             'password',
-            new FormControl('', Validators.required)
+            new UntypedFormControl('', Validators.required)
           );
           this.userForm.addControl(
             'repeatPassword',
-            new FormControl('', Validators.required)
+            new UntypedFormControl('', Validators.required)
           );
           this.userForm.get('email').setValidators([Validators.email]);
         }

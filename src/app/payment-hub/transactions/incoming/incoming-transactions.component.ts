@@ -1,32 +1,32 @@
 /** Angular Imports */
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
-import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
 import {
-  tap,
-  startWith,
-  map,
-  distinctUntilChanged,
   debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  tap,
 } from 'rxjs/operators';
 
 /** Custom Services */
 import { MatomoService } from 'app/core/analytics/matomo.service';
 
 /** Custom Data Source */
+import { amsShortCodes } from 'app/payment-hub/request-to-pay/helper/ams-short-codes';
 import { TransactionsDataSource } from '../dataSource/transactions.datasource';
 import { formatDate, formatUTCDate } from '../helper/date-format.helper';
 import { transactionStatusData as statuses } from '../helper/transaction.helper';
-import { TransactionsService } from '../service/transactions.service';
 import { DfspEntry } from '../model/dfsp.model';
 import { RetryResolveDialogComponent } from '../retry-resolve-dialog/retry-resolve-dialog.component';
-import { amsShortCodes } from 'app/payment-hub/request-to-pay/helper/ams-short-codes';
+import { TransactionsService } from '../service/transactions.service';
 
 /**
  * Transactions component.
@@ -41,13 +41,13 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum transaction date allowed. */
   maxDate = new Date();
-  payeePartyId = new FormControl();
-  payerPartyId = new FormControl();
-  payerDfspId = new FormControl();
-  payerDfspName = new FormControl();
-  status = new FormControl();
-  amount = new FormControl();
-  currencyCode = new FormControl();
+  payeePartyId = new UntypedFormControl();
+  payerPartyId = new UntypedFormControl();
+  payerDfspId = new UntypedFormControl();
+  payerDfspName = new UntypedFormControl();
+  status = new UntypedFormControl();
+  amount = new UntypedFormControl();
+  currencyCode = new UntypedFormControl();
   filteredCurrencies: any;
   filteredDfspEntries: any;
   currenciesData: any;
@@ -55,12 +55,12 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
   transactionStatusData = statuses;
   amsCodes = amsShortCodes('PAYBILL');
   /** Transaction date from form control. */
-  transactionDateFrom = new FormControl();
+  transactionDateFrom = new UntypedFormControl();
   /** Transaction date to form control. */
-  transactionDateTo = new FormControl();
-  externalId = new FormControl();
+  transactionDateTo = new UntypedFormControl();
+  externalId = new UntypedFormControl();
   /** Transaction ID form control. */
-  transactionId = new FormControl();
+  transactionId = new UntypedFormControl();
   /** Columns to be displayed in transactions table. */
   displayedColumns: string[] = [
     'startedAt',
@@ -337,22 +337,27 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue: moment.Moment) => {
-          this.applyFilter(
-            filterValue.format(this.dateTimeFormat),
-            'startFrom'
-          );
-          // Track filter usage
-          this.matomoService.trackEvent(
-            'Transaction Management',
-            'Filter Applied',
-            'Date From',
-            1
-          );
-          this.matomoService.trackEvent(
-            'Transaction Management',
-            'Date Range Filter',
-            'From Date Set'
-          );
+          if (filterValue) {
+            this.applyFilter(
+              filterValue.format(this.dateTimeFormat),
+              'startFrom'
+            );
+            // Track filter usage
+            this.matomoService.trackEvent(
+              'Transaction Management',
+              'Filter Applied',
+              'Date From',
+              1
+            );
+            this.matomoService.trackEvent(
+              'Transaction Management',
+              'Date Range Filter',
+              'From Date Set'
+            );
+          } else {
+            // Clear the filter when date is null/empty
+            this.applyFilter('', 'startFrom');
+          }
         })
       )
       .subscribe();
@@ -362,19 +367,24 @@ export class IncomingTransactionsComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         tap((filterValue: moment.Moment) => {
-          this.applyFilter(filterValue.format(this.dateTimeFormat), 'startTo');
-          // Track filter usage
-          this.matomoService.trackEvent(
-            'Transaction Management',
-            'Filter Applied',
-            'Date To',
-            1
-          );
-          this.matomoService.trackEvent(
-            'Transaction Management',
-            'Date Range Filter',
-            'To Date Set'
-          );
+          if (filterValue) {
+            this.applyFilter(filterValue.format(this.dateTimeFormat), 'startTo');
+            // Track filter usage
+            this.matomoService.trackEvent(
+              'Transaction Management',
+              'Filter Applied',
+              'Date To',
+              1
+            );
+            this.matomoService.trackEvent(
+              'Transaction Management',
+              'Date Range Filter',
+              'To Date Set'
+            );
+          } else {
+            // Clear the filter when date is null/empty
+            this.applyFilter('', 'startTo');
+          }
         })
       )
       .subscribe();

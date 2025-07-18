@@ -1,9 +1,9 @@
 /** Angular Imports */
-import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 /** rxjs Imports */
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
@@ -13,13 +13,13 @@ import { AlertService } from '../alert/alert.service';
 import { environment } from '../../../environments/environment';
 
 /** Custom Models */
-import { LoginContext } from './login-context.model';
-import { Credentials } from './credentials.model';
-import { OAuth2Token } from './o-auth2-token.model';
 import { AppConfig } from 'app/app.config';
+import { Credentials } from './credentials.model';
+import { LoginContext } from './login-context.model';
+import { OAuth2Token } from './o-auth2-token.model';
 
-import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 /**
  * Authentication workflow.
@@ -48,6 +48,7 @@ export class AuthenticationService {
   private refreshAccessToken = false;
   private loggedIn = false;
   private authorizationToken: String;
+  private refreshTimeout: any;
   private tenantId: String = environment.auth.tenant;
   private username: String;
   private accessTokenExpirationTime = 1;
@@ -73,25 +74,74 @@ export class AuthenticationService {
     const savedCredentials = JSON.parse(
       this.getStoreageItem(this.credentialsStorageKey)
     );
-    if (savedCredentials) {
-      if (savedCredentials.rememberMe) {
-        this.rememberMe = true;
-        this.storage = localStorage;
-      }
 
-      const oAuthRefreshToken = JSON.parse(this.getStoreageItem(this.oAuthTokenDetailsStorageKey)).refresh_token;
-      if (oAuthRefreshToken) {
-        this.refreshAccessToken = true;
-        this.authorizationToken = `Bearer ${oAuthRefreshToken}`;
-      } else {
-        this.authorizationToken = `Basic ${savedCredentials.base64EncodedAuthenticationKey}`;
-      }
+    if (!savedCredentials) {
+      return;
+    }
+
+    this.setupStorageType(savedCredentials);
+    this.setupAuthorizationToken(savedCredentials);
+  }
+
+  private setupStorageType(savedCredentials: any): void {
+    if (savedCredentials.rememberMe) {
+      this.rememberMe = true;
+      this.storage = localStorage;
+    }
+  }
+
+  private setupAuthorizationToken(savedCredentials: any): void {
+    const oAuthTokenDetailsString = this.getStoreageItem(this.oAuthTokenDetailsStorageKey);
+
+    if (!oAuthTokenDetailsString) {
+      this.authorizationToken = `Basic ${savedCredentials.base64EncodedAuthenticationKey}`;
+      return;
+    }
+
+    const oAuthTokenDetails = JSON.parse(oAuthTokenDetailsString);
+    const oAuthRefreshToken = oAuthTokenDetails.refresh_token;
+
+    if (!oAuthRefreshToken) {
+      this.authorizationToken = `Basic ${savedCredentials.base64EncodedAuthenticationKey}`;
+      return;
+    }
+
+    this.handleOAuthToken(savedCredentials, oAuthTokenDetails);
+  }
+
+  private handleOAuthToken(savedCredentials: any, oAuthTokenDetails: any): void {
+    this.refreshAccessToken = true;
+    this.authorizationToken = `Bearer ${savedCredentials.accessToken}`;
+
+    if (this.isTokenValid(oAuthTokenDetails)) {
+      const timeUntilExpiry = this.calculateTimeUntilExpiry(oAuthTokenDetails);
+      this.setupTokenRefresh(timeUntilExpiry);
+    } else {
+      console.log('Stored token has expired or will expire soon, will refresh on next API call');
+    }
+  }
+
+  private isTokenValid(oAuthTokenDetails: any): boolean {
+    return oAuthTokenDetails.expires_in && oAuthTokenDetails.timestamp;
+  }
+
+  private calculateTimeUntilExpiry(oAuthTokenDetails: any): number {
+    const tokenExpiry = oAuthTokenDetails.timestamp + (oAuthTokenDetails.expires_in * 1000);
+    const now = Date.now();
+    return Math.max(0, tokenExpiry - now);
+  }
+
+  private setupTokenRefresh(timeUntilExpiry: number): void {
+    if (timeUntilExpiry > 60000) { // If more than 1 minute left
+      // Token is still valid, set up refresh
+      this.refreshTokenOnExpiry(Math.floor(timeUntilExpiry / 1000));
+      this.refreshAccessToken = false; // Token is still valid
     }
   }
 
   hasAccess(permission: String): Boolean {
     const credentials = JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
-    const decoded = jwt_decode(credentials.accessToken);
+    const decoded = jwt_decode(credentials.accessToken) as any;
     const authorities = decoded['authorities'];
     return authorities.includes('ALL_FUNCTIONS') || authorities.includes(permission);
   }
@@ -120,10 +170,16 @@ export class AuthenticationService {
       return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
         .pipe(
           map((tokenResponse: OAuth2Token) => {
-            // TODO: fix UserDetails API
-            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+            // Add timestamp to token response for expiry calculation
+            const tokenWithTimestamp = {
+              ...tokenResponse,
+              timestamp: Date.now()
+            };
+            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenWithTimestamp));
             this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
-            return of(true);
+            // Set up automatic token refresh
+            this.refreshTokenOnExpiry(tokenResponse.expires_in);
+            return true;
           })
         );
     } else {
@@ -131,7 +187,7 @@ export class AuthenticationService {
         .pipe(
           map((credentials: Credentials) => {
             this.onLoginSuccess(credentials);
-            return of(true);
+            return true;
           })
         );
     }
@@ -159,9 +215,39 @@ export class AuthenticationService {
    * Sets the oauth2 token to refresh on expiry.
    * @param {number} expiresInTime OAuth2 token expiry time in seconds.
    */
+  /**
+   * Sets up automatic token refresh before expiry.
+   * @param {number} expiresInTime OAuth2 token expiry time in seconds.
+   */
   private refreshTokenOnExpiry(expiresInTime: number) {
+    // Clear any existing refresh timeout
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+    }
+
     this.accessTokenExpirationTime = Date.now() + expiresInTime * 1000;
-    setTimeout(() => this.refreshAccessToken = true, expiresInTime * 1000);
+
+    // Calculate when to refresh the token (60 seconds before expiry, minimum 30 seconds)
+    const refreshTime = Math.max(30, expiresInTime - 60);
+
+
+    // Set up automatic refresh before token expires
+    this.refreshTimeout = setTimeout(() => {
+
+      this.refreshOAuthAccessToken().subscribe(
+        (success) => {
+          console.log('Token refreshed successfully');
+        },
+        (error) => {
+          console.error('Failed to refresh token automatically:', error);
+          // If refresh fails, redirect to login
+          this.alertService.alert({ type: 'Session Expired', message: 'Your session has expired. Please log in again.' });
+          this.logout().subscribe(() => {
+            this.router.navigate(['/login']);
+          });
+        }
+      );
+    }, refreshTime * 1000);
   }
 
   private getStoreageItem(item: string): any {
@@ -173,30 +259,34 @@ export class AuthenticationService {
    */
   public refreshOAuthAccessToken() {
     const oAuth = this.getStoreageItem(this.oAuthTokenDetailsStorageKey);
-      const oAuthData = JSON.parse(oAuth);
+    const oAuthData = JSON.parse(oAuth);
 
-      const oAuthRefreshToken = oAuthData.refresh_token;
-      this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
-      let httpParams = new HttpParams();
-      httpParams = httpParams.set('grant_type', 'refresh_token');
-      httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
-    
-      if (environment.oauth.basicAuth === 'true') {
-        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-      }
+    const oAuthRefreshToken = oAuthData.refresh_token;
+    this.tenantId = JSON.parse(this.getStoreageItem(this.credentialsStorageKey)).tenantId;
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('grant_type', 'refresh_token');
+    httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
 
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
+    if (environment.oauth.basicAuth === 'true') {
+      this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
+    }
+
+    return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .pipe(map((tokenResponse: OAuth2Token) => {
         this.refreshAccessToken = false;
-        this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenResponse));
+        const tokenWithTimestamp = {
+          ...tokenResponse,
+          timestamp: Date.now()
+        };
+        this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenWithTimestamp));
         this.authorizationToken = `Bearer ${tokenResponse.access_token}`;
         this.refreshTokenOnExpiry(tokenResponse.expires_in);
         const credentials = JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
         credentials.accessToken = tokenResponse.access_token;
         this.storage.setItem(this.credentialsStorageKey, JSON.stringify(credentials));
-        return of(true);
+        return true;
       }));
-    
+
   }
 
   /**
@@ -231,6 +321,12 @@ export class AuthenticationService {
    * @returns {Observable<boolean>} True if the user was logged out successfully.
    */
   logout(): Observable<boolean> {
+    // Clear the refresh timeout
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+      this.refreshTimeout = null;
+    }
+
     this.loggedIn = false;
     this.setCredentials();
     return of(true);
@@ -313,6 +409,15 @@ export class AuthenticationService {
 
   getUsername() {
     return this.username;
+  }
+
+  /**
+   * Checks if a user is currently logged in.
+   * @returns {boolean} True if user is logged in, false otherwise.
+   */
+  public isUserLoggedIn(): boolean {
+    const credentials = this.getCredentials();
+    return !!credentials && credentials.authenticated === true;
   }
 
 }

@@ -13,8 +13,15 @@
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Search Incoming Transactions</h4>
-            <p matLine>Advanced search option for incoming transactions</p>
+            <h4 matLine>
+              {{ "PAYMENT_HUB.INCOMING_TRANSACTIONS.SEARCH" | translate }}
+            </h4>
+            <p matLine>
+              {{
+                "PAYMENT_HUB.INCOMING_TRANSACTIONS.SEARCH_DESCRIPTION"
+                  | translate
+              }}
+            </p>
           </mat-list-item>
 
           <mat-list-item
@@ -27,8 +34,15 @@
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Search Outgoing Transactions</h4>
-            <p matLine>Advanced search option for outgoing transactions</p>
+            <h4 matLine>
+              {{ "PAYMENT_HUB.OUTGOING_TRANSACTIONS.SEARCH" | translate }}
+            </h4>
+            <p matLine>
+              {{
+                "PAYMENT_HUB.OUTGOING_TRANSACTIONS.SEARCH_DESCRIPTION"
+                  | translate
+              }}
+            </p>
           </mat-list-item>
 
           <mat-list-item
@@ -41,7 +55,9 @@
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Export Incoming Transactions</h4>
+            <h4 matLine>
+              {{ "PAYMENT_HUB.INCOMING_TRANSACTIONS.EXPORT" | translate }}
+            </h4>
           </mat-list-item>
         </mat-nav-list>
       </div>
@@ -58,8 +74,15 @@
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Search Incoming Request to Pay</h4>
-            <p matLine>Advanced search option for incoming request to pays</p>
+            <h4 matLine>
+              {{ "PAYMENT_HUB.INCOMING_REQUEST_TO_PAY.SEARCH" | translate }}
+            </h4>
+            <p matLine>
+              {{
+                "PAYMENT_HUB.INCOMING_REQUEST_TO_PAY.SEARCH_DESCRIPTION"
+                  | translate
+              }}
+            </p>
           </mat-list-item>
 
           <mat-list-item
@@ -72,8 +95,15 @@
             <mat-icon matListIcon>
               <fa-icon icon="search" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Search Outgoing Request to Pay</h4>
-            <p matLine>Advanced search option for outgoing request to pays</p>
+            <h4 matLine>
+              {{ "PAYMENT_HUB.OUTGOING_REQUEST_TO_PAY.SEARCH" | translate }}
+            </h4>
+            <p matLine>
+              {{
+                "PAYMENT_HUB.OUTGOING_REQUEST_TO_PAY.SEARCH_DESCRIPTION"
+                  | translate
+              }}
+            </p>
           </mat-list-item>
 
           <mat-list-item
@@ -86,7 +116,9 @@
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Export Incoming Request to Pay</h4>
+            <h4 matLine>
+              {{ "PAYMENT_HUB.INCOMING_REQUEST_TO_PAY.EXPORT" | translate }}
+            </h4>
           </mat-list-item>
         </mat-nav-list>
       </div>
@@ -102,7 +134,7 @@
             <mat-icon matListIcon>
               <fa-icon icon="download" size="sm"></fa-icon>
             </mat-icon>
-            <h4 matLine>Batches</h4>
+            <h4 matLine>{{ "PAYMENT_HUB.BATCHES.TITLE" | translate }}</h4>
           </mat-list-item>
         </mat-nav-list>
       </div>

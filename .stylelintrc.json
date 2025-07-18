@@ -1,0 +1,78 @@
+{
+  "customSyntax": "postcss-scss",
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "extend",
+          "at-root",
+          "debug",
+          "warn",
+          "error",
+          "if",
+          "else",
+          "for",
+          "each",
+          "while",
+          "mixin",
+          "include",
+          "content",
+          "return",
+          "function"
+        ]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": [
+          "ng-deep"
+        ]
+      }
+    ],
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": [
+          "mat-color",
+          "map-get",
+          "map-keys",
+          "map-values",
+          "mat-get-color-from-palette"
+        ]
+      }
+    ],
+    "no-empty-source": null,
+    "color-function-notation": "legacy",
+    "alpha-value-notation": "number",
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "keyframes-name-pattern": null,
+    "import-notation": null,
+    "comment-empty-line-before": null,
+    "length-zero-no-unit": null,
+    "rule-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "font-family-name-quotes": null,
+    "property-no-vendor-prefix": null,
+    "shorthand-property-no-redundant-values": null,
+    "hue-degree-notation": null,
+    "no-duplicate-selectors": null,
+    "declaration-block-no-duplicate-properties": null
+  },
+  "ignoreFiles": [
+    "src/assets/**/*.scss",
+    "src/theme/**/*.scss",
+    "node_modules/**/*",
+    "dist/**/*",
+    "coverage/**/*"
+  ]
+}

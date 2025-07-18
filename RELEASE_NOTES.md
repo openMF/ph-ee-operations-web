@@ -3,6 +3,7 @@
 ## Version 1.1.8
 
         * [CP-3621] - Matomo integration
+        * [CP-3641] - Updgrade to Angular 16
 
 ## Version 1.1.7
 

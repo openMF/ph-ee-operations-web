@@ -9,16 +9,35 @@
     This content will be hidden for smaller screens.
   -->
 
-  <div fxFlex="70%" fxLayout="column" fxLayoutAlign="center center" fxHide.lt-md class="cover">
+  <div
+    fxFlex="70%"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxHide.lt-md
+    class="cover"
+  >
     <div class="cover-content">
       <h1 class="mat-display-1 cover-title">Mifos</h1>
       <p class="mat-headline cover-description">
         Mifos X is designed by the
-        <a href="http://www.openmf.org" target="_blank" class="cover-link">Mifos Initiative</a>. A
-        <a href="http://mifos.org/resources/community/" target="_blank" class="cover-link">global community</a> that
-        aims to speed the elimination of poverty by enabling Organizations to more effectively and efficiently deliver
-        responsible financial services to the world’s poor and unbanked. Sounds interesting?
-        <a href="http://mifos.org/take-action/volunteer/" target="_blank" class="cover-link">Get involved!</a>
+        <a href="http://www.openmf.org" target="_blank" class="cover-link"
+          >Mifos Initiative</a
+        >. A
+        <a
+          href="http://mifos.org/resources/community/"
+          target="_blank"
+          class="cover-link"
+          >global community</a
+        >
+        that aims to speed the elimination of poverty by enabling Organizations
+        to more effectively and efficiently deliver responsible financial
+        services to the world’s poor and unbanked. Sounds interesting?
+        <a
+          href="http://mifos.org/take-action/volunteer/"
+          target="_blank"
+          class="cover-link"
+          >Get involved!</a
+        >
       </p>
     </div>
   </div>
@@ -35,16 +54,22 @@
   <div fxLayout="column" fxFlex.gt-md="1 0 30%" class="login-container">
     <!-- Language Selector to the extreme right -->
     <div fxLayout="row-reverse" fxFlex="1 0 auto">
-      <mifosx-language-selector class="p-r-10 p-t-10"></mifosx-language-selector>
+      <mifosx-language-selector
+        class="p-r-10 p-t-10"
+      ></mifosx-language-selector>
     </div>
 
     <!-- Logo with Organization Name -->
     <div fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
-      <img src="assets/images/mifos-logo-flat.png" alt="Mifos X Logo" class="img-container" />
+      <img
+        src="assets/images/mifos-logo-flat.png"
+        alt="Mifos X Logo"
+        class="img-container"
+      />
     </div>
 
     <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
-      <p>Payment Hub EE - Operations Management</p>
+      <p>{{ "PAYMENT_HUB_EE_OPERATIONS" | translate }}</p>
     </div>
 
     <!--
@@ -54,15 +79,35 @@
         Forgot Password (TODO: Decision to be taken on providing this feature.)
     -->
     <div fxLayout="row" fxFlex="3 0 auto" fxLayoutAlign="center start">
-      <mifosx-login-form *ngIf="!resetPassword && !twoFactorAuthenticationRequired"></mifosx-login-form>
+      <mifosx-login-form
+        *ngIf="!resetPassword && !twoFactorAuthenticationRequired"
+      ></mifosx-login-form>
       <mifosx-reset-password *ngIf="resetPassword"></mifosx-reset-password>
     </div>
 
     <!-- Contact Information/Resources (hidden on smaller screens) -->
-    <mat-list fxHide.lt-lg fxLayout="row" fxFlexAlign="center" fxFlex="3 0 auto" class="information-list">
-      <mat-list-item><button mat-button [matMenuTriggerFor]="resourcesMenu">Resources</button></mat-list-item>
-      <mat-list-item><button mat-button [matMenuTriggerFor]="communityMenu">Community</button></mat-list-item>
-      <mat-list-item><button mat-button [matMenuTriggerFor]="contributeMenu">Contribute</button></mat-list-item>
+    <mat-list
+      fxHide.lt-lg
+      fxLayout="row"
+      fxFlexAlign="center"
+      fxFlex="3 0 auto"
+      class="information-list"
+    >
+      <mat-list-item
+        ><button mat-button [matMenuTriggerFor]="resourcesMenu">
+          {{ "FOOTER.RESOURCES" | translate }}
+        </button></mat-list-item
+      >
+      <mat-list-item
+        ><button mat-button [matMenuTriggerFor]="communityMenu">
+          {{ "FOOTER.COMMUNITY" | translate }}
+        </button></mat-list-item
+      >
+      <mat-list-item
+        ><button mat-button [matMenuTriggerFor]="contributeMenu">
+          {{ "FOOTER.CONTRIBUTE" | translate }}
+        </button></mat-list-item
+      >
     </mat-list>
 
     <!-- Footer -->
@@ -72,24 +117,45 @@
 
 <!-- Contact Information/Resources Menus -->
 <mat-menu #resourcesMenu="matMenu">
-  <a href="https://mifosforge.jira.com/wiki/spaces/docs/pages/52035622/User+Manual" target="_blank" mat-menu-item
-    >User Manual</a
+  <a
+    href="https://mifosforge.jira.com/wiki/spaces/docs/pages/52035622/User+Manual"
+    target="_blank"
+    mat-menu-item
+    >{{ "FOOTER.USER_MANUAL" | translate }}</a
   >
   <a
     href="https://cwiki.apache.org/confluence/display/FINERACT/Apache+Fineract+1.0+Functional+Specifications"
     target="_blank"
     mat-menu-item
-    >Functional Specifications</a
+    >{{ "FOOTER.FUNCTIONAL_SPECIFICATIONS" | translate }}</a
   >
-  <a href="https://cwiki.apache.org/confluence/display/FINERACT/Contributor%27s+Zone" target="_blank" mat-menu-item
-    >Developer Zone</a
+  <a
+    href="https://cwiki.apache.org/confluence/display/FINERACT/Contributor%27s+Zone"
+    target="_blank"
+    mat-menu-item
+    >{{ "FOOTER.DEVELOPER_ZONE" | translate }}</a
   >
 </mat-menu>
 
 <mat-menu #communityMenu="matMenu">
-  <a href="https://groups.google.com/forum/#!forum/mifosusers" target="_blank" mat-menu-item>User Group</a>
-  <a href="https://groups.google.com/forum/#!forum/mifosdeveloper" target="_blank" mat-menu-item>Developer Group</a>
-  <a href="http://mifos.org/resources/community/communications/#mifos-irc" target="_blank" mat-menu-item>IRC</a>
+  <a
+    href="https://groups.google.com/forum/#!forum/mifosusers"
+    target="_blank"
+    mat-menu-item
+    >{{ "FOOTER.USER_GROUP" | translate }}</a
+  >
+  <a
+    href="https://groups.google.com/forum/#!forum/mifosdeveloper"
+    target="_blank"
+    mat-menu-item
+    >{{ "FOOTER.DEVELOPER_GROUP" | translate }}</a
+  >
+  <a
+    href="http://mifos.org/resources/community/communications/#mifos-irc"
+    target="_blank"
+    mat-menu-item
+    >{{ "FOOTER.IRC" | translate }}</a
+  >
 </mat-menu>
 
 <mat-menu #contributeMenu="matMenu">
@@ -97,8 +163,15 @@
     href="https://mifosforge.jira.com/wiki/spaces/MDZ/pages/92012624/Key+Design+Principles"
     target="_blank"
     mat-menu-item
-    >Key Design Principles</a
+    >{{ "FOOTER.KEY_DESIGN_PRINCIPLES" | translate }}</a
   >
-  <a href="https://sourceforge.net/projects/mifos/" target="_blank" mat-menu-item>Working with Code</a>
-  <a href="http://mifos.org/donate/" target="_blank" mat-menu-item>Donate</a>
+  <a
+    href="https://sourceforge.net/projects/mifos/"
+    target="_blank"
+    mat-menu-item
+    >{{ "FOOTER.WORKING_WITH_CODE" | translate }}</a
+  >
+  <a href="http://mifos.org/donate/" target="_blank" mat-menu-item>{{
+    "FOOTER.DONATE" | translate
+  }}</a>
 </mat-menu>

@@ -27,7 +27,7 @@
         <button
           class="text-muted xs-button"
           mat-icon-button
-          matTooltip="Settings"
+          [matTooltip]="'COMMON.SETTINGS' | translate"
           [routerLink]="['/settings']"
         >
           <fa-icon icon="cog"></fa-icon>
@@ -35,7 +35,7 @@
         <button
           class="text-muted xs-button"
           mat-icon-button
-          matTooltip="Sign Out"
+          [matTooltip]="'COMMON.SIGN_OUT' | translate"
           (click)="logout()"
         >
           <fa-icon icon="sign-out-alt"></fa-icon>

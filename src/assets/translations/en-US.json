@@ -1,0 +1,115 @@
+{
+    "APP_NAME": "MifosX",
+    "PAYMENT_HUB_EE": "Payment Hub EE",
+    "PAYMENT_HUB_EE_OPERATIONS": "Payment Hub EE - Operations Management",
+    "COMMON": {
+        "LOGIN": "Login",
+        "LOGOUT": "Logout",
+        "USERNAME": "Username",
+        "PASSWORD": "Password",
+        "TENANT": "Tenant",
+        "REMEMBER_ME": "Remember me",
+        "FORGOT_PASSWORD": "Forgot Password?",
+        "SETTINGS": "Settings",
+        "SIGN_OUT": "Sign Out",
+        "HOME": "Home",
+        "DASHBOARD": "Dashboard",
+        "ABOUT": "About",
+        "VERSION": "Version",
+        "LOGGED_IN_AS": "Logged in as",
+        "SEARCH": "Search",
+        "EXPORT": "Export",
+        "DOWNLOAD": "Download",
+        "VIEW": "View",
+        "CREATE": "Create",
+        "EDIT": "Edit",
+        "DELETE": "Delete",
+        "SAVE": "Save",
+        "CANCEL": "Cancel",
+        "SUBMIT": "Submit",
+        "CLOSE": "Close",
+        "YES": "Yes",
+        "NO": "No",
+        "OK": "OK",
+        "LOADING": "Loading...",
+        "ERROR": "Error",
+        "SUCCESS": "Success",
+        "WARNING": "Warning",
+        "INFO": "Information"
+    },
+    "VALIDATION": {
+        "USERNAME_REQUIRED": "Username is required",
+        "PASSWORD_REQUIRED": "Password is required",
+        "TENANT_REQUIRED": "Tenant is required",
+        "USERNAME_PASSWORD_INCORRECT": "Username or password incorrect"
+    },
+    "NAVIGATION": {
+        "FREQUENTLY_ACCESSED": "Frequently Accessed",
+        "TOGGLE_HIDE_OPEN": "Toggle Hide/Open",
+        "TOGGLE_COLLAPSE": "Toggle Collapse",
+        "HIDE_OPEN_MENU": "Hide/Open Menu",
+        "COLLAPSE_MENU": "Collapse Menu"
+    },
+    "PAYMENT_HUB": {
+        "TITLE": "Payment Hub EE",
+        "NAVIGATION_TITLE": "Payment Hub Navigation",
+        "INCOMING_TRANSACTIONS": {
+            "SEARCH": "Search Incoming Transactions",
+            "SEARCH_DESCRIPTION": "Advanced search option for incoming transactions",
+            "EXPORT": "Export Incoming Transactions",
+            "EXPORT_DESCRIPTION": "Export incoming transactions data"
+        },
+        "OUTGOING_TRANSACTIONS": {
+            "SEARCH": "Search Outgoing Transactions",
+            "SEARCH_DESCRIPTION": "Advanced search option for outgoing transactions",
+            "EXPORT": "Export Outgoing Transactions",
+            "EXPORT_DESCRIPTION": "Export outgoing transactions data"
+        },
+        "INCOMING_REQUEST_TO_PAY": {
+            "SEARCH": "Search Incoming Request to Pay",
+            "SEARCH_DESCRIPTION": "Advanced search option for incoming request to pays",
+            "EXPORT": "Export Incoming Request to Pay",
+            "EXPORT_DESCRIPTION": "Export incoming request to pay data"
+        },
+        "OUTGOING_REQUEST_TO_PAY": {
+            "SEARCH": "Search Outgoing Request to Pay",
+            "SEARCH_DESCRIPTION": "Advanced search option for outgoing request to pays",
+            "EXPORT": "Export Outgoing Request to Pay",
+            "EXPORT_DESCRIPTION": "Export outgoing request to pay data"
+        },
+        "BATCHES": {
+            "TITLE": "Batches",
+            "EXPORT": "Batches Export",
+            "EXPORT_DESCRIPTION": "Export batch data"
+        }
+    },
+    "SYSTEM": {
+        "TITLE": "System",
+        "ROLES_PERMISSIONS": "Roles and Permissions",
+        "ADD_ROLE": "Add Role",
+        "AUDIT_TRAILS": "Audit Trails",
+        "VIEW_AUDIT": "View Audit"
+    },
+    "USERS": {
+        "TITLE": "Users",
+        "CREATE_USER": "Create User",
+        "VIEW_USER": "View User"
+    },
+    "FOOTER": {
+        "RESOURCES": "Resources",
+        "COMMUNITY": "Community",
+        "CONTRIBUTE": "Contribute",
+        "USER_MANUAL": "User Manual",
+        "FUNCTIONAL_SPECIFICATIONS": "Functional Specifications",
+        "DEVELOPER_ZONE": "Developer Zone",
+        "USER_GROUP": "User Group",
+        "DEVELOPER_GROUP": "Developer Group",
+        "IRC": "IRC",
+        "KEY_DESIGN_PRINCIPLES": "Key Design Principles",
+        "WORKING_WITH_CODE": "Working with Code",
+        "DONATE": "Donate"
+    },
+    "ABOUT_TEXT": {
+        "MIFOS_DESCRIPTION": "Mifos X is designed by the Mifos Initiative. A global community that aims to speed the elimination of poverty by enabling Organizations to more effectively and efficiently deliver responsible financial services to the world's poor and unbanked. Sounds interesting? Get involved!"
+    }
+}

@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router } from '@angular/router';
 
 /** Custom Services */
 import { Logger } from '../logger/logger.service';
@@ -16,7 +16,7 @@ const log = new Logger('AuthenticationGuard');
  * Route access authorization.
  */
 @Injectable()
-export class AuthenticationGuard implements CanActivate {
+export class AuthenticationGuard  {
 
   /**
    * @param {Router} router Router for navigation.
@@ -31,11 +31,11 @@ export class AuthenticationGuard implements CanActivate {
    * @returns {boolean} True if user is authenticated.
    */
   canActivate(): boolean {
-    if (this.authenticationService.isAuthenticated() || !environment.auth.enabled) {
+    if (this.authenticationService.isUserLoggedIn()) {
       return true;
     }
 
-    log.debug('User not authenticated, redirecting to login...');
+   
     this.authenticationService.logout();
     this.router.navigate(['/login'], { replaceUrl: true });
     return false;

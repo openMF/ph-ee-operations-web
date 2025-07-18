@@ -1,18 +1,17 @@
+import { HttpClient } from "@angular/common/http";
 import {
+  AfterViewInit,
   Component,
-  OnInit,
   EventEmitter,
   Output,
-  ViewChild,
-  AfterViewInit,
+  ViewChild
 } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 import { Router } from "@angular/router";
-import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
+import { Observable } from "rxjs";
 
-import { FormControl, NgForm } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 @Component({
   selector: "mifosx-get-batches-export",
   templateUrl: "./get-batches-export.component.html",
@@ -20,7 +19,7 @@ import { FormControl, NgForm } from "@angular/forms";
 })
 export class GetBatchesExportComponent implements AfterViewInit {
   @Output() redirect: EventEmitter<any> = new EventEmitter();
-  template = new FormControl("");
+  template = new UntypedFormControl("");
   templates: string[] = ["Mojaloo", "Program"];
   fileToUpload: File | null = null;
   posts: Observable<any>;
@@ -46,7 +45,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
     "Total",
   ];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
   changeComponent(url: string) {
     this.redirect.emit(this.getBatchesContent.batch_id); //emits the data to the parent
     this.router.navigate([]); //redirects url to new component
@@ -71,21 +70,21 @@ export class GetBatchesExportComponent implements AfterViewInit {
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
   }
-  generateUUID() { 
+  generateUUID() {
     var d = new Date().getTime();
-    var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16;
-        if(d > 0){
-            r = (d + r)%16 | 0;
-            d = Math.floor(d/16);
-        } else {
-            r = (d2 + r)%16 | 0;
-            d2 = Math.floor(d2/16);
-        }
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16;
+      if (d > 0) {
+        r = (d + r) % 16 | 0;
+        d = Math.floor(d / 16);
+      } else {
+        r = (d2 + r) % 16 | 0;
+        d2 = Math.floor(d2 / 16);
+      }
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
-}
+  }
   fileName = "";
   reqId = ""
   onFileSelected(event: any) {
@@ -95,9 +94,9 @@ export class GetBatchesExportComponent implements AfterViewInit {
       this.fileName = file.name;
       this.reqId = this.generateUUID();
       const formdata = new FormData();
-      
+
       formdata.append("data", event.target.files[0], this.fileName);
-      formdata.append("requestId",  this.reqId);
+      formdata.append("requestId", this.reqId);
       formdata.append("purpose", "iliydufkgiku");
 
       const upload$ = this.http
@@ -107,7 +106,7 @@ export class GetBatchesExportComponent implements AfterViewInit {
           formdata
         );
 
-      upload$.subscribe((res) => {
+      upload$.subscribe((res: any) => {
         if (res) {
           this.resbatch = res;
           console.log(this.resbatch.batch_id);

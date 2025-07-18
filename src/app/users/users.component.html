@@ -82,13 +82,11 @@
           Status
         </th>
         <td mat-cell *matCellDef="let user">
-          <i
-            class="fa fa-stop"
+          <fa-icon
+            icon="stop"
             [style.color]="user.enabled ? 'green' : 'red'"
-            uib-tooltip="user.enabled ? 'Active' : 'Disabled'"
-            tooltip-placement="top"
-          >
-          </i>
+            [matTooltip]="user.enabled ? 'Active' : 'Disabled'"
+          ></fa-icon>
         </td>
       </ng-container>
 

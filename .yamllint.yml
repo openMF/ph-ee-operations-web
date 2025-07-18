@@ -1,0 +1,35 @@
+# Yamllint configuration file
+# See https://yamllint.readthedocs.io/en/stable/configuration.html for more details
+
+extends: default
+
+rules:
+  # Document start is not required for all YAML files
+  document-start:
+    present: false
+
+  # Allow truthy values like "on" in GitHub Actions
+  truthy:
+    allowed-values: ["true", "false", "on", "off", "yes", "no"]
+
+  # Line length can be a bit longer for readability
+  line-length:
+    max: 120
+    level: warning
+
+  # Allow empty lines for better readability
+  empty-lines:
+    max: 2
+    max-start: 1
+    max-end: 1
+
+  # Allow comments to be longer
+  comments:
+    min-spaces-from-content: 1
+    require-starting-space: true
+
+  # Be more lenient with indentation in some cases
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false

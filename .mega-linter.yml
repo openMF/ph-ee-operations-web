@@ -1,0 +1,89 @@
+---
+# MegaLinter Configuration
+# Documentation: https://megalinter.io/latest/configuration/
+
+# Apply linters to the project
+APPLY_FIXES: none # Set to 'all' to automatically fix issues, or 'none' to only report
+DEFAULT_BRANCH: main
+
+# Enable/Disable linters
+ENABLE_LINTERS:
+  # Temporarily disable TypeScript ESLint until Angular ESLint plugin issue is resolved
+  # - TYPESCRIPT_ES
+  - HTML_HTMLHINT
+  - CSS_STYLELINT
+  - JSON_ESLINT_PLUGIN_JSONC
+  - YAML_YAMLLINT
+  - MARKDOWN_MARKDOWNLINT
+  - DOCKERFILE_HADOLINT
+
+# Disable linters that might conflict or aren't needed
+DOCKERFILE_HADOLINT_CONFIG_FILE: .hadolint.yaml
+
+DISABLE_LINTERS:
+  - TYPESCRIPT_ES
+  - TYPESCRIPT_STANDARD
+  - TYPESCRIPT_PRETTIER
+  - JSON_PRETTIER
+  - YAML_PRETTIER
+
+# ESLint configuration for TypeScript
+TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.js
+TYPESCRIPT_ES_RULES_PATH: .
+TYPESCRIPT_ES_DISABLE_ERRORS_IF_LESS_THAN: 1000
+# Environment variables for ESLint
+TYPESCRIPT_ES_ARGUMENTS: --resolve-plugins-relative-to .
+# Ensure ESLint uses the workspace directory for plugin resolution
+TYPESCRIPT_ES_PRE_COMMANDS:
+  - command: npm ls @angular-eslint/eslint-plugin || echo "Angular ESLint plugin missing"
+    cwd: workspace
+
+# HTMLHint configuration - will use default rules if .htmlhintrc doesn't exist
+HTML_HTMLHINT_CONFIG_FILE: .htmlhintrc
+HTML_HTMLHINT_DISABLE_ERRORS_IF_LESS_THAN: 0
+
+# Stylelint configuration - will use default rules if config doesn't exist
+CSS_STYLELINT_CONFIG_FILE: .stylelintrc.json
+CSS_STYLELINT_DISABLE_ERRORS_IF_LESS_THAN: 0
+
+# Yamllint configuration
+YAML_YAMLLINT_CONFIG_FILE: .yamllint.yml
+YAML_YAMLLINT_DISABLE_ERRORS_IF_LESS_THAN: 0
+
+# File patterns to include/exclude
+FILTER_REGEX_INCLUDE: (src/.*\.(ts|html|scss|css|json))|(.*\.(md|yml|yaml|json))|(Dockerfile)
+FILTER_REGEX_EXCLUDE: (node_modules/|dist/|coverage/|\.git/)
+
+# Reporting
+SHOW_ELAPSED_TIME: true
+FILEIO_REPORTER: false
+JSON_REPORTER: true
+SARIF_REPORTER: true
+TAP_REPORTER: false
+CONSOLE_REPORTER: true
+
+# Fail fast - stop on first error
+DISABLE_ERRORS: false
+FAIL_IF_MISSING_LINTER_IN_FLAVOR: false
+
+# Pre/post commands
+PRE_COMMANDS:
+  - command: npm ci --include=dev
+    cwd: workspace
+  - command: ls -la node_modules/@angular-eslint/ || echo "Angular ESLint packages not found"
+    cwd: workspace
+    continue_if_failed: true
+  - command: npm list @angular-eslint/eslint-plugin @angular-eslint/template-parser @angular-eslint/eslint-plugin-template || npm install @angular-eslint/eslint-plugin@^16.3.0 @angular-eslint/template-parser@^16.3.0 @angular-eslint/eslint-plugin-template@^16.3.0 --save-dev
+    cwd: workspace
+    continue_if_failed: true
+  - command: npm install stylelint@^16.6.1 stylelint-config-standard@^36.0.1 stylelint-scss@^6.5.1 postcss-scss@^4.0.9 --save-dev
+    cwd: workspace
+    continue_if_failed: true
+  - command: npm run build --if-present
+    cwd: workspace
+    continue_if_failed: true
+
+# Linter-specific configurations
+TYPESCRIPT_ES_FILTER_REGEX_INCLUDE: (src/.*\.ts)
+HTML_HTMLHINT_FILTER_REGEX_INCLUDE: (src/.*\.html)
+CSS_STYLELINT_FILTER_REGEX_INCLUDE: (src/.*\.(scss|css))

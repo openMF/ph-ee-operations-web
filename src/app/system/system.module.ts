@@ -14,18 +14,16 @@ import { ViewAuditComponent } from './audit-trails/view-audit/view-audit.compone
 
 
 @NgModule({
-  imports: [
-    SystemRoutingModule,
-    SharedModule
-  ],
-  declarations: [
-    SystemComponent,
-    RolesAndPermissionsComponent,
-    AddRoleComponent,
-    AuditTrailsComponent,
-    ViewAuditComponent
-  ],
-  entryComponents: [
-  ]
+    imports: [
+        SystemRoutingModule,
+        SharedModule
+    ],
+    declarations: [
+        SystemComponent,
+        RolesAndPermissionsComponent,
+        AddRoleComponent,
+        AuditTrailsComponent,
+        ViewAuditComponent
+    ]
 })
 export class SystemModule { }

@@ -1,13 +1,13 @@
 /** Angular Imports */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 /** rxjs Imports */
 import { finalize } from 'rxjs/operators';
 
 /** Custom Services */
-import { AuthenticationService } from '../../core/authentication/authentication.service';
 import { MatomoService } from '../../core/analytics/matomo.service';
+import { AuthenticationService } from '../../core/authentication/authentication.service';
 
 /**
  * Login form component.
@@ -19,7 +19,7 @@ import { MatomoService } from '../../core/analytics/matomo.service';
 })
 export class LoginFormComponent implements OnInit {
   /** Login form group. */
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   /** Password input field type. */
   passwordInputType: string;
   /** True if loading. */
@@ -31,10 +31,10 @@ export class LoginFormComponent implements OnInit {
    * @param {MatomoService} matomoService Matomo Analytics Service.
    */
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private matomoService: MatomoService
-  ) {}
+  ) { }
 
   /**
    * Creates login form.
@@ -72,7 +72,7 @@ export class LoginFormComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (success) => {
+        next: (success: boolean) => {
           if (success) {
             // Track successful login
             const credentials = this.authenticationService.getCredentials();
@@ -86,7 +86,7 @@ export class LoginFormComponent implements OnInit {
             }
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           // Track login failure
           this.matomoService.trackEvent(
             'Authentication',
