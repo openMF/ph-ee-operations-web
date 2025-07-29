@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 
 /** Custom Services */
 import { AlertService } from '../alert/alert.service';
+import { KeycloakAuthService } from './keycloak.service';
 
 /** Environment Configuration */
 import { environment } from '../../../environments/environment';
@@ -60,7 +61,8 @@ export class AuthenticationService {
    * @param {AlertService} alertService Alert Service.
    */
   constructor(private http: HttpClient,
-    private alertService: AlertService, private config: AppConfig, private router: Router) {
+    private alertService: AlertService, private config: AppConfig, private router: Router,
+    private keycloakAuthService: KeycloakAuthService) {
     this.storage = sessionStorage;
 
     config.load().then(value => {
@@ -161,27 +163,10 @@ export class AuthenticationService {
     httpParams = httpParams.set('username', loginContext.username);
     httpParams = httpParams.set('password', loginContext.password);
     //httpParams = httpParams.set('tenantIdentifier', loginContext.tenant);
-    if (environment.oauth.enabled === 'true') {
-
-      httpParams = httpParams.set('grant_type', 'password');
-      if (environment.oauth.basicAuth === "true") {
-        this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-      }
-      return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
-        .pipe(
-          map((tokenResponse: OAuth2Token) => {
-            // Add timestamp to token response for expiry calculation
-            const tokenWithTimestamp = {
-              ...tokenResponse,
-              timestamp: Date.now()
-            };
-            this.storage.setItem(this.oAuthTokenDetailsStorageKey, JSON.stringify(tokenWithTimestamp));
-            this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
-            // Set up automatic token refresh
-            this.refreshTokenOnExpiry(tokenResponse.expires_in);
-            return true;
-          })
-        );
+    if (environment.oauth.enabled) {
+      // Use Keycloak authentication
+      this.keycloakAuthService.login();
+      return of(true);
     } else {
       return this.http.post('/authentication', {}, { params: httpParams })
         .pipe(
@@ -267,9 +252,7 @@ export class AuthenticationService {
     httpParams = httpParams.set('grant_type', 'refresh_token');
     httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
 
-    if (environment.oauth.basicAuth === 'true') {
-      this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
-    }
+    // Keycloak handles authentication, no need for basic auth token
 
     return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
       .pipe(map((tokenResponse: OAuth2Token) => {
@@ -299,7 +282,7 @@ export class AuthenticationService {
    */
   private onLoginSuccess(credentials: Credentials) {
     this.loggedIn = true;
-    if (environment.oauth.enabled === 'true') {
+    if (environment.oauth.enabled) {
       this.authorizationToken = `Bearer ${credentials.accessToken}`;
     } else {
       this.authorizationToken = `Basic ${credentials.base64EncodedAuthenticationKey}`;
@@ -327,6 +310,10 @@ export class AuthenticationService {
       this.refreshTimeout = null;
     }
 
+    if (environment.oauth.enabled) {
+      this.keycloakAuthService.logout();
+    }
+
     this.loggedIn = false;
     this.setCredentials();
     return of(true);
@@ -336,10 +323,14 @@ export class AuthenticationService {
    * Checks if the user is authenticated.
    * @returns {boolean} True if the user is authenticated.
    */
-  isAuthenticated(): boolean {
-    return !!(JSON.parse(
-      sessionStorage.getItem(this.credentialsStorageKey) || this.getStoreageItem(this.credentialsStorageKey)
-    ));
+  async isAuthenticated(): Promise<boolean> {
+    if (environment.oauth.enabled) {
+      return await this.keycloakAuthService.isAuthenticated();
+    } else {
+      return !!(JSON.parse(
+        sessionStorage.getItem(this.credentialsStorageKey) || this.getStoreageItem(this.credentialsStorageKey)
+      ));
+    }
   }
 
   /**
@@ -415,9 +406,13 @@ export class AuthenticationService {
    * Checks if a user is currently logged in.
    * @returns {boolean} True if user is logged in, false otherwise.
    */
-  public isUserLoggedIn(): boolean {
-    const credentials = this.getCredentials();
-    return !!credentials && credentials.authenticated === true;
+  public async isUserLoggedIn(): Promise<boolean> {
+    if (environment.oauth.enabled) {
+      return await this.keycloakAuthService.isAuthenticated();
+    } else {
+      const credentials = this.getCredentials();
+      return !!credentials && credentials.authenticated === true;
+    }
   }
 
 }

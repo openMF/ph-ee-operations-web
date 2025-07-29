@@ -48,6 +48,8 @@
     "@ngx-translate/core": "^15.0.0",
     "@swimlane/ngx-charts": "20.5.0",
     "angular-archwizard": "5.0.0",
+    "keycloak-angular": "^14.0.0",
+    "keycloak-js": "^18.0.1",
     "core-js": "3.37.1",
     "jwt-decode": "^2.2.0",
     "lodash": "4.17.21",

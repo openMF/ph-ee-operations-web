@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Silent Check SSO</title>
+</head>
+<body>
+    <script>
+        // Check if there's an error in the URL (like login_required)
+        const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        const error = urlParams.get('error');
+        
+        if (error === 'login_required') {
+            // Redirect to the main app which will handle the login
+            window.location.href = window.location.origin + '/login';
+        } else {
+            // Normal silent check - post message to parent
+            parent.postMessage(location.href, location.origin);
+        }
+    </script>
+</body>
+</html> 

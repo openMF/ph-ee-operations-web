@@ -20,6 +20,7 @@ import { environment } from 'environments/environment';
 /** Custom Services */
 import { MatomoService } from './analytics/matomo.service';
 import { AuthenticationService } from './authentication/authentication.service';
+import { KeycloakAuthService } from './authentication/keycloak.service';
 import { HttpCacheService } from './http/http-cache.service';
 import { HttpService } from './http/http.service';
 import { I18nService } from './i18n/i18n.service';
@@ -78,6 +79,7 @@ import { ToolbarComponent } from './shell/toolbar/toolbar.component';
   ],
   providers: [
     AuthenticationService,
+    KeycloakAuthService,
     AuthenticationGuard,
     AuthenticationInterceptor,
     {
