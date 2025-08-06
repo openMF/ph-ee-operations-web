@@ -160,7 +160,7 @@ export class ToolbarComponent implements OnInit {
       try {
         const token = this.keycloakAuthService.getToken();
         if (token) {
-          return this.utils.parseJwtToken(token).resource_access.fineract.roles || [];
+          return this.utils.parseJwtToken(token).resource_access.paymenthub.roles || [];
         }
       } catch (error) {
         console.warn('Could not parse Keycloak token:', error);
