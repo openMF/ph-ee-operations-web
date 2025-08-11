@@ -8,6 +8,7 @@ import { catchError, filter, switchMap, take } from 'rxjs/operators';
 
 import { Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
+import { KeycloakAuthService } from './keycloak.service';
 
 import { environment } from '../../../environments/environment';
 
@@ -30,7 +31,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private accessExpired = false;
   private refreshTokenSubject: Subject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private router: Router, private authService: AuthenticationService) { }
+  constructor(private router: Router, private authService: AuthenticationService, private keycloakAuthService: KeycloakAuthService) { }
 
   /**
    * Intercepts a Http request and sets the request headers.
@@ -41,6 +42,14 @@ export class AuthenticationInterceptor implements HttpInterceptor {
      *   return EMPTY;
      * }
      */
+
+    // Skip authentication for asset requests and OAuth token requests
+    if (request.url.indexOf('assets') !== -1 || 
+        request.url.indexOf('/oauth/token') !== -1 ||
+        request.url.indexOf('keycloak') !== -1 ||
+        request.url.indexOf('accounts.integration.oneacrefund.org') !== -1) {
+      return next.handle(request);
+    }
 
     this.retrieveAuthData();
     if (!environment.auth.enabled) {
@@ -89,7 +98,19 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   retrieveAuthData() {
     this.setTenantId(this.authService.getTenantId());
-    this.setAuthorization(this.authService.getAuthorizationToken());
+    
+    if (environment.oauth.enabled) {
+      try {
+        const authHeader = this.keycloakAuthService.getAuthorizationHeader();
+        this.setAuthorization(authHeader);
+      } catch (error) {
+        console.warn('Keycloak not ready yet, skipping authorization header');
+        this.setAuthorization('');
+      }
+    } else {
+      this.setAuthorization(this.authService.getAuthorizationToken());
+    }
+    
     this.setAccessExpired(this.authService.isRefreshAccessToken());
   }
 

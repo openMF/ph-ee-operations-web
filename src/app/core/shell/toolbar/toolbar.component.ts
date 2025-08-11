@@ -6,7 +6,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 
 /** rxjs Imports */
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
@@ -14,6 +14,10 @@ import { Credentials } from 'app/core/authentication/credentials.model';
 import { Utils } from 'app/core/utils/utils';
 import { MatomoService } from '../../analytics/matomo.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
+import { KeycloakAuthService } from '../../authentication/keycloak.service';
+
+/** Environment Configuration */
+import { environment } from '../../../../environments/environment';
 
 /**
  * Toolbar component. test
@@ -35,6 +39,7 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 export class ToolbarComponent implements OnInit {
   authorities: string[] = [];
   credentials: Credentials;
+  username$ = new BehaviorSubject<string>('Keycloak User');
 
   /** Subscription to breakpoint observer for handset. */
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -55,6 +60,7 @@ export class ToolbarComponent implements OnInit {
    * @param {BreakpointObserver} breakpointObserver Breakpoint observer to detect screen size.
    * @param {Router} router Router for navigation.
    * @param {AuthenticationService} authenticationService Authentication service.
+   * @param {KeycloakAuthService} keycloakAuthService Keycloak Auth Service.
    * @param {MatomoService} matomoService Matomo Analytics Service.
    */
   constructor(
@@ -62,15 +68,28 @@ export class ToolbarComponent implements OnInit {
     private router: Router,
     private utils: Utils,
     private authenticationService: AuthenticationService,
+    private keycloakAuthService: KeycloakAuthService,
     private matomoService: MatomoService
   ) { }
 
   /**
    * Subscribes to breakpoint for handset.
    */
-  ngOnInit() {
-    this.credentials = this.authenticationService.getCredentials();
-    this.authorities = this.getUserAuthorities(this.credentials) ?? [];
+  async ngOnInit() {
+    if (environment.oauth.enabled) {
+      // Try to get username immediately
+      this.updateUsername();
+      
+      // Wait a bit for Keycloak to be ready and try again
+      setTimeout(() => {
+        this.updateUsername();
+        this.authorities = this.getUserAuthorities(this.credentials) ?? [];
+      }, 1000);
+    } else {
+      this.credentials = this.authenticationService.getCredentials();
+      this.authorities = this.getUserAuthorities(this.credentials) ?? [];
+    }
+    
     this.isHandset$.subscribe((isHandset) => {
       if (isHandset && this.sidenavCollapsed) {
         this.toggleSidenavCollapse(false);
@@ -78,10 +97,25 @@ export class ToolbarComponent implements OnInit {
     });
   }
 
+  private updateUsername() {
+    try {
+      const username = this.keycloakAuthService.getUsername();
+      if (username && username !== 'Keycloak User') {
+        this.username$.next(username);
+      }
+    } catch (error) {
+      console.warn('Could not get Keycloak username:', error);
+    }
+  }
+
   displayUser() {
-    return this.credentials
-      ? this.credentials.username + ' - ' + this.credentials.tenantId
-      : '';
+    if (environment.oauth.enabled) {
+      return this.username$.value;
+    } else {
+      return this.credentials
+        ? this.credentials.username + ' - ' + this.credentials.tenantId
+        : '';
+    }
   }
 
   /**
@@ -122,6 +156,21 @@ export class ToolbarComponent implements OnInit {
    * Parse a user's token to get the permissions/authorities given to a user.
    */
   getUserAuthorities(credentials: Credentials) {
-    return this.utils.parseJwtToken(credentials.accessToken).authorities;
+    if (environment.oauth.enabled) {
+      try {
+        const token = this.keycloakAuthService.getToken();
+        if (token) {
+          return this.utils.parseJwtToken(token).resource_access.paymenthub.roles || [];
+        }
+      } catch (error) {
+        console.warn('Could not parse Keycloak token:', error);
+      }
+      return [];
+    } else {
+      if (credentials && credentials.accessToken) {
+        return this.utils.parseJwtToken(credentials.accessToken).authorities;
+      }
+    }
+    return [];
   }
 }

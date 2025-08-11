@@ -43,7 +43,7 @@
       </a>
 
       <a
-        *ngIf="authorities.includes('ALL_FUNCTIONS')"
+        *ngIf="authorities.includes('super_user')"
         mat-tab-link
         class="tab-link"
         [matMenuTriggerFor]="adminMenu"

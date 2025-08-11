@@ -5,6 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
+/** Keycloak Imports */
+import { KeycloakAngularModule } from 'keycloak-angular';
+
 /** Tanslation Imports */
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -22,6 +25,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 /** Load config dynamically */
 import { AppConfig } from './app.config';
+
+/** Keycloak Services */
+import { KeycloakAuthService } from './core/authentication/keycloak.service';
 
 /** Custom Modules */
 import { CoreModule } from './core/core.module';
@@ -42,6 +48,16 @@ export function initConfig(config: AppConfig) {
   return () => config.load();
 }
 
+export function initKeycloak(keycloakAuthService: KeycloakAuthService) {
+  return async () => {
+    try {
+      await keycloakAuthService.initKeycloak();
+    } catch (error) {
+      console.warn('Keycloak initialization failed:', error);
+    }
+  };
+}
+
 /**
  * App Module
  *
@@ -55,6 +71,7 @@ export function initConfig(config: AppConfig) {
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
     TranslateModule.forRoot(),
     NgxChartsModule,
+    KeycloakAngularModule,
     CoreModule,
     HomeModule,
     LoginModule,
@@ -71,6 +88,12 @@ export function initConfig(config: AppConfig) {
       provide: APP_INITIALIZER,
       useFactory: initConfig,
       deps: [AppConfig],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initKeycloak,
+      deps: [KeycloakAuthService],
       multi: true
     }],
   bootstrap: [WebAppComponent]

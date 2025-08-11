@@ -10,6 +10,10 @@ import { Alert } from '../core/alert/alert.model';
 
 /** Custom Services */
 import { AlertService } from '../core/alert/alert.service';
+import { KeycloakAuthService } from '../core/authentication/keycloak.service';
+
+/** Environment Configuration */
+import { environment } from '../../environments/environment';
 
 /**
  * Login component.
@@ -31,14 +35,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * @param {AlertService} alertService Alert Service.
    * @param {Router} router Router for navigation.
+   * @param {KeycloakAuthService} keycloakAuthService Keycloak Auth Service.
    */
   constructor(private alertService: AlertService,
-              private router: Router) { }
+              private router: Router,
+              private keycloakAuthService: KeycloakAuthService) { }
 
   /**
    * Subscribes to alert event of alert service.
    */
   ngOnInit() {
+    // If OAuth is enabled, redirect to Keycloak login
+    if (environment.oauth.enabled) {
+      this.keycloakAuthService.login();
+      return;
+    }
+
     this.alert$ = this.alertService.alertEvent.subscribe((alertEvent: Alert) => {
       const alertType = alertEvent.type;
       if (alertType === 'Password Expired') {

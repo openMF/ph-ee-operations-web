@@ -15,7 +15,7 @@ import {
 
 /** Custom Services */
 import { MatomoService } from 'app/core/analytics/matomo.service';
-import { RequestToPayDataSource } from '../dataSource /requestToPay.datasource';
+import { RequestToPayDataSource } from '../dataSource/requestToPay.datasource';
 import { RequestToPayService } from '../service/request-to-pay.service';
 /** Custom Data Source */
 import { formatUTCDate } from '../helper/date-format.helper';
