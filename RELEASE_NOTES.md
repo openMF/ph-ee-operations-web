@@ -4,6 +4,7 @@
 
         * [CP-3621] - Matomo integration
         * [CP-3641] - Updgrade to Angular 16
+        * [CP-3750] - Rename Paygop Paybill to Fineract Paybill
 
 ## Version 1.1.7
 
