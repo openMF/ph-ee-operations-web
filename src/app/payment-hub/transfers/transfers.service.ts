@@ -26,7 +26,10 @@ export class TransfersService {
   }
 
   getSubBatchSumaryDetail(batchId: string, subBatchId: string): Observable<any> {
-    return this.http.get(this.apiPrefix + '/batches/' + batchId + '/subBatches/' + subBatchId);
+    // return this.http.get(this.apiPrefix + '/batches/' + batchId + '/subBatches/' + subBatchId);
+
+    // Mock data for transfer details
+    return this.http.get('../../assets/mock/payment-hub/sub-batches-details.mock.json');
   }
 
 }

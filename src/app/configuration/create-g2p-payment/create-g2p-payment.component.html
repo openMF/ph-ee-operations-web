@@ -1,0 +1,77 @@
+<div class="container">
+  <mat-card>
+    <form [formGroup]="programForm" (ngSubmit)="submit()">
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="content">
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>Goverment Entity *</mat-label>
+            <mat-form-field class="custom-g2p-field">
+              <mat-select formControlName="governmentEntity" placeholder="Select government Entity" required>
+                <mat-option *ngFor="let entity of govtEntities" [value]="entity.govInstId">
+                  {{ entity.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="programForm.controls.governmentEntity.hasError('required')"> Government Entity <strong>required</strong> </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>Program *</mat-label>
+            <mat-form-field class="custom-g2p-field">
+              <mat-select formControlName="program" placeholder="Select Programs" required>
+                <mat-option *ngFor="let program of programs" [value]="program.programId">
+                  {{ program.programName }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="programForm.controls.program.hasError('required')"> Program is <strong>required</strong> </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>Payer DFSP *</mat-label>
+            <mat-form-field class="custom-g2p-field">
+              <mat-select formControlName="payerDfsp" placeholder="Select Payer DFSP" required>
+                <mat-option *ngFor="let dfsp of payerDfsps" [value]="dfsp.fspId">
+                  {{ dfsp.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="programForm.controls.payerDfsp.hasError('required')"> Payer DFSP is <strong>required</strong> </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>Payment Account *</mat-label>
+            <mat-form-field class="custom-g2p-field">
+              <input matInput formControlName="account" placeholder="Enter Account Number" required />
+              <mat-error *ngIf="programForm.controls.account.hasError('required')"> Account is <strong>required</strong> </mat-error>
+              <mat-error *ngIf="programForm.controls.account.hasError('pattern')">
+                Account Number <strong>cannot contain any special character or alphabets</strong>
+              </mat-error>
+              <mat-error *ngIf="programForm.controls.account.hasError('minlength')"> Account Number <strong>should be of 12 digits</strong> </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>Status *</mat-label>
+            <mat-form-field class="custom-g2p-field">
+              <mat-select formControlName="status" placeholder="Select Status" required>
+                <mat-option value="Active">Active</mat-option>
+                <mat-option value="Inactive">Inactive</mat-option>
+              </mat-select>
+              <mat-error *ngIf="programForm.controls.status.hasError('required')"> Status is <strong>required</strong> </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions fxLayout="row" fxLayoutAlign="end center" class="buttons-group">
+        <button mat-stroked-button type="button" class="button" [routerLink]="['../']">
+          {{ 'labels.buttons.Cancel' | translate }}
+        </button>
+        <button mat-flat-button class="submit button" [disabled]="!programForm.valid">
+          {{ 'labels.buttons.Submit' | translate }}
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

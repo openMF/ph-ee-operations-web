@@ -24,6 +24,9 @@ import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { DragDropFileComponent } from './drag-drop-file/drag-drop-file.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
+import { SuccessDialogComponent } from './success-dialog/success-dialog.component';
+import { UpdatePasswordDialogComponent } from './update-password-dialog/update-password-dialog.component';
+import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 
 /**
  * Shared Module
@@ -53,7 +56,10 @@ import { NgxFileDropModule } from 'ngx-file-drop';
         ListItemComponent,
         TenantSelectorComponent,
         IdentifierComponent,
-        DragDropFileComponent
+        DragDropFileComponent,
+        SuccessDialogComponent,
+        UpdatePasswordDialogComponent,
+        UploadDialogComponent
     ],
     exports: [
         FileUploadComponent,
@@ -72,7 +78,10 @@ import { NgxFileDropModule } from 'ngx-file-drop';
         BreadcrumbModule,
         NgxCsvParserModule,
         NgxFileDropModule,
-        DragDropFileComponent
+        DragDropFileComponent,
+        SuccessDialogComponent,
+        UpdatePasswordDialogComponent,
+        UploadDialogComponent
     ],
     providers: [
         BreadcrumbService

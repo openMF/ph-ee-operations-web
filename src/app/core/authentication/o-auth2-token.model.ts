@@ -40,6 +40,7 @@ export interface RealmAccess {
 }
 
 export interface ResourceAccess {
+  opsapp: RealmAccess;
   'realm-management': RealmAccess;
   broker:             RealmAccess;
   account:            RealmAccess;

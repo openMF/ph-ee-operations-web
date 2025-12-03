@@ -1,8 +1,7 @@
 <div class="container" fxLayout="row" fxLayout.lt-md="column">
   <div *ngFor="let section of sections;">
-    <mifosx-list-item *userHasRole="section.roleName" 
-      [section]="section"
-      [classFormat]="">
+    <mifosx-list-item [section]="section" classFormat="full-height padding-left">
     </mifosx-list-item>
   </div>
+
 </div>

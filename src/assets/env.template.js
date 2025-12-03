@@ -9,6 +9,7 @@
     window["env"]["serverApiUrlVou"] = '$PH_VOU_BACKEND_SERVER_URL';
     window["env"]["callbackUrlVou"] = '$PH_VOU_CALLBACK_URL';
     window["env"]["serverApiUrlAct"] = '$PH_ACT_BACKEND_SERVER_URL';
+    window["env"]["g2pPaymentConfigApi"] = '$PH_G2P_PAYMENT_CONFIG_API';
   
     window["env"]["registeringInstitutionId"] = '$PH_REGISTERING_INSTITUTION_ID';
     window["env"]["platformTenantId"] = '$PH_PLATFORM_TENANT_ID';
@@ -22,8 +23,19 @@
     window["env"]["oauthRealm"] = '$PH_OAUTH_REALM';
     window["env"]["oauthClientId"] = '$PH_OAUTH_CLIENT_ID';
     window["env"]["oauthClientSecret"] = '$PH_OAUTH_CLIENT_SECRET';
+    window["env"]["oauthClientUUID"] = '$PH_OAUTH_CLIENT_UUUID';
     window["env"]["oauthBasicAuth"] = '$PH_OAUTH_BASIC_AUTH';
     window["env"]["oauthBasicAuthToken"] = '$PH_OAUTH_BASIC_AUTH_TOKEN';
+
+    //JBPM Environment variables
+    window["env"]["jbpmApiUrl"] = '$PH_JBPM_API_URL';
+    window["env"]["jbpmContainerId"] = '$PH_JBPM_CONTAINER_ID';
+    window["env"]["jbpmCredentialsAdminMaker"] = '$PH_JBPM_CREDENTIALS_ADMIN_MAKER';
+    window["env"]["jbpmCredentialsAdminChecker"] = '$PH_JBPM_CREDENTIALS_ADMIN_CHECKER';
+    window["env"]["jbpmCredentialsBoth"] = '$PH_JBPM_CREDENTIALS_BOTH';
+
+    //Grafana Dashboard Environment variables
+    window["env"]["grafanaUrl"] = '$PH_GRAFANA_DASHBOARD_URL';
   
     // Language Environment variables
     window["env"]["defaultLanguage"] = '$PH_DEFAULT_LANGUAGE';

@@ -1,16 +1,63 @@
+@import 'theme/theme';
+
 #login-form {
-  .login-input {
-    width: 14rem;
-    margin-bottom: 0.6rem;
+  color: $white;
+
+  .custom-form-field {
+    margin-bottom: 1rem;
   }
 
-  .login-button {
-    width: 14rem;
+  .custom-button {
+    width: 100%;
     margin-top: 1rem;
+    background-color: $green;
+    padding: 0.5rem 0;
+    box-shadow: none;
+    color: $white;
+    gap: 2rem;
+  }
+
+  .custom-button:disabled {
+    background-color: $mid-grey;
+    color: $black;
+  }
+
+  .icon {
+    color: $black;
+    padding-bottom: 1rem;
   }
 
   mat-spinner {
+    margin: 0 auto;
     float: right;
     margin: 0.5rem 0;
   }
+}
+
+//custom angular checkbox styles
+::ng-deep .mat-checkbox-frame { 
+  border-color: $white 
+}
+
+::ng-deep .mat-checkbox-ripple .mat-ripple-element .mat-checkbox-frame {
+  background-color: $white !important;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: $green !important;
+}
+
+//custom angular spinner styles
+::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: $white;
+}
+
+//custom angular form field styles
+::ng-deep .custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: $white;
+  background-color: $white;
+  border-radius: 5px;
+}
+::ng-deep .custom-form-field.mat-form-field input {
+  color: $black;
 }

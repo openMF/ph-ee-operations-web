@@ -10,7 +10,7 @@ import { Transfer } from '../model/transfer.model';
 })
 export class ViewTransferDetailsComponent {
 
-  transfer: Transfer;
+  transfer: any;
 
   constructor(private dates: Dates,
     public dialogRef: MatDialogRef<ViewTransferDetailsComponent>,

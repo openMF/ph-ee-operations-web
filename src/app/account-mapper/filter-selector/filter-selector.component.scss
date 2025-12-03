@@ -1,0 +1,16 @@
+@import 'theme/theme';
+
+.payment-hub-ee-wrap {
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.25rem;
+  color: $dark-grey;
+}
+
+.mat-nav-list .mat-list-item:focus,
+.mat-action-list .mat-list-item:focus,
+.mat-list-option:focus {
+  background: #76b900 !important;
+}

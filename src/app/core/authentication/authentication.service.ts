@@ -8,6 +8,8 @@ import { map } from 'rxjs/operators';
 
 /** Custom Services */
 import { AlertService } from '../alert/alert.service';
+import { OauthKeycloakService } from './keycloak/oauth-keycloak.service';
+import { G2PPaymentConfigService } from 'app/configuration/services/g2p-payment-config.service';
 
 /** Environment Configuration */
 import { environment } from '../../../environments/environment';
@@ -17,8 +19,8 @@ import { LoginContext } from './login-context.model';
 import { Credentials } from './credentials.model';
 import { Introspect, OAuth2Token } from './o-auth2-token.model';
 
+/** External Imports */
 import jwt_decode from 'jwt-decode';
-import { OauthKeycloakService } from './keycloak/oauth-keycloak.service';
 
 /**
  * Authentication workflow.
@@ -45,6 +47,10 @@ export class AuthenticationService {
   private oAuthTokenDetailsStorageKey = 'pheeOAuthTokenDetails';
   /** Key to store user roles details in storage. */
   private oAuthUserDetailsStorageKey = 'pheeOAuthUserDetails';
+  /** Key to store dfsps in storage. */
+  private dfspsStorageKey = 'pheeDfsps';
+  /** Key to store govt entities in storage. */
+  private govtEntitiesStorageKey = 'pheeGovtEntities';
 
   private refreshAccessToken = false;
   private loggedIn = false;
@@ -58,10 +64,13 @@ export class AuthenticationService {
    * credentials are presently in storage or not.
    * @param {HttpClient} http Http Client to send requests.
    * @param {AlertService} alertService Alert Service.
+   * @param {OauthKeycloakService} oauthKeycloakService Oauth Keycloak Service.
+   * @param {G2PPaymentConfigService} g2pPaymentService G2P Payment Service.
    */
   constructor(private http: HttpClient,
     private alertService: AlertService,
-    private oauthKeycloakService: OauthKeycloakService) {
+    private oauthKeycloakService: OauthKeycloakService,
+    private g2pPaymentService: G2PPaymentConfigService) {
     this.storage = sessionStorage;
 
     this.init();
@@ -157,6 +166,26 @@ export class AuthenticationService {
   }
 
   /**
+   * Retrieves the payer dfsps.
+   * @returns {void} Sets the payer dfsps in storage.
+   */
+  getDfsps(): void {
+    this.g2pPaymentService.getPayerDfsps().subscribe((dfsps: any) => {
+      sessionStorage.setItem(this.dfspsStorageKey, JSON.stringify(dfsps));
+    });
+  }
+
+  /**
+   * Retrieves the government entities.
+   * @returns {void} Sets the government entities in storage
+   */
+  getGovtEntities(): void {
+    this.g2pPaymentService.getGovtEntities().subscribe((govtEntities: any) => {
+      sessionStorage.setItem(this.govtEntitiesStorageKey, JSON.stringify(govtEntities));
+    });
+  }
+
+  /**
    * Retrieves the user details after oauth2 authentication.
    *
    * Sets the oauth2 token refresh time.
@@ -164,7 +193,7 @@ export class AuthenticationService {
    */
   private getUserDetails(loginContext: LoginContext, tokenResponse: OAuth2Token) {
     if (this.isOauthKeyCloak()) {
-      this.oauthKeycloakService.introspect(tokenResponse).subscribe((userDetails: Introspect) => {
+      this.oauthKeycloakService.getUserInfo(tokenResponse).subscribe((userDetails: Introspect) => {
         this.storage.setItem(this.oAuthUserDetailsStorageKey, JSON.stringify(userDetails));
         this.onLoginSuccess({ username: loginContext.username, accessToken: tokenResponse.access_token, authenticated: true, tenantId: loginContext.tenant } as any);
 
@@ -228,6 +257,8 @@ export class AuthenticationService {
     this.loggedIn = true;
     if (environment.oauth.enabled) {
       this.authorizationToken = `Bearer ${credentials.accessToken}`;
+      this.getGovtEntities();
+      this.getDfsps();
     } else {
       this.authorizationToken = `Basic ${credentials.base64EncodedAuthenticationKey}`;
     }
@@ -240,7 +271,6 @@ export class AuthenticationService {
       this.alertService.alert({ type: 'Authentication Success', message: `${credentials.username} successfully logged in!` });
       delete this.credentials;
     }
-
   }
 
   /**
@@ -278,6 +308,10 @@ export class AuthenticationService {
     return JSON.parse(this.getStoreageItem(this.credentialsStorageKey));
   }
 
+  /**
+   * Gets the user details.
+   * @returns {Introspect} The user details if the user is authenticated otherwise null.
+   */
   get userDetails(): Introspect | null {
     return JSON.parse(this.getStoreageItem(this.oAuthUserDetailsStorageKey));
   }
@@ -299,6 +333,8 @@ export class AuthenticationService {
       this.storage.removeItem(this.credentialsStorageKey);
       this.storage.removeItem(this.oAuthTokenDetailsStorageKey);
       this.storage.removeItem(this.oAuthUserDetailsStorageKey);
+      this.storage.removeItem(this.dfspsStorageKey);
+      this.storage.removeItem(this.govtEntitiesStorageKey);
       this.loggedIn = false;
     }
   }

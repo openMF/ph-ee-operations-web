@@ -6,7 +6,6 @@ import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 
 /** Custom Components */
-import { HomeComponent } from './home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { DirectivesModule } from 'app/directives/directives.module';
@@ -24,7 +23,6 @@ import { DirectivesModule } from 'app/directives/directives.module';
     DirectivesModule
   ],
   declarations: [
-    HomeComponent,
     DashboardComponent
   ]
 })

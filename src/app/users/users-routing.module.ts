@@ -6,9 +6,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { Route } from '../core/route/route.service';
 
 /** Custom Components */
-import { UsersComponent } from './users.component';
+import { UsersComponent } from './users/users.component';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { ViewUserComponent } from './view-user/view-user.component';
+import { UserRequestsComponent } from './user-requests/user-requests.component';
 
 /** Custom Resolvers */
 import { UsersResolver } from './users.resolver';
@@ -20,7 +21,7 @@ const routes: Routes = [
   Route.withShell([
     {
       path: 'users',
-      data: { title: 'Users', breadcrumb: 'Users' },
+      data: { breadcrumb: 'Users', title: 'Users' },
       children: [
         {
           path: '',
@@ -32,14 +33,19 @@ const routes: Routes = [
         {
           path: 'create',
           component: CreateUserComponent,
-          data: { title: 'Create User', breadcrumb: 'Create User' },
+          data: { title: 'Create User', breadcrumb: 'Create' },
           resolve: {
             usersTemplate: UsersTemplateResolver
           }
         },
         {
+          path: "user-requests",
+          component: UserRequestsComponent,
+          data: { title: "User Requests", breadcrumb: "User Requests" },
+        },
+        {
           path: ':id',
-          data: { title: 'View User', routeResolveBreadcrumb: ['user', 'username'] },
+          data: { title: 'View User', breadcrumb:'View User' },
           resolve: {
             user: UserResolver
           },
@@ -66,7 +72,7 @@ const routes: Routes = [
   providers: [
     UsersResolver,
     UsersTemplateResolver,
-    UserResolver
+    UserResolver  
   ]
 })
 export class UsersRoutingModule { }

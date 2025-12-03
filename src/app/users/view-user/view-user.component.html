@@ -1,15 +1,14 @@
+<span>user details of the network</span>
+
 <div class="container m-b-20" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="end" fxLayoutGap="2%">
-  <button mat-raised-button color="primary">
-    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
-    Edit
+  <button mat-raised-button *userHasRole="['Admin Maker']" class="edit-b custom-button" (click)="toggleEdit()">
+    <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp; Edit
   </button>
-  <button mat-raised-button color="warn" (click)="delete()">
-    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp;
-    Delete
+  <button mat-raised-button *userHasRole="['Admin Maker']" class="delete-b custom-button" (click)="delete()">
+    <fa-icon icon="trash"></fa-icon>&nbsp;&nbsp; Delete
   </button>
-  <button mat-raised-button color="primary">
-    <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp;
-    Change Password
+  <button mat-raised-button *userHasRole="['Admin Maker']" class="update-b custom-button" (click)="updatePassword()">
+    <fa-icon icon="cog"></fa-icon>&nbsp;&nbsp; Change Password
   </button>
 </div>
 
@@ -18,63 +17,96 @@
   <mat-card>
 
     <mat-card-content>
+      <h1>{{ userData.username }}</h1>
+      <form [formGroup]="userForm">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="content">
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Type of User'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field" [ngClass]="{ 'not-allowed': isEditing }">
+              <ng-container *ngIf="!isEditing; else editableSelectUserType">
+                <input matInput formControlName="userTypes" required />
+              </ng-container>
+              <ng-template #editableSelectUserType>
+                <mat-select formControlName="userTypes" multiple required>
+                  <mat-option *ngFor="let type of userTemplate.userTypes" [value]="type.name">{{
+                    type.name
+                    }}</mat-option>
+                </mat-select>
+              </ng-template>
+            </mat-form-field>
+          </div>
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Role'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <ng-container *ngIf="!isEditing; else editableSelectRole">
+                <input matInput formControlName="roles" required />
+              </ng-container>
+              <ng-template #editableSelectRole>
+                <mat-select formControlName="roles" required multiple>
+                  <mat-option *ngFor="let role of userTemplate.availableRoles" [value]="role.name">{{
+                    role.name
+                    }}</mat-option>
+                </mat-select>
+              </ng-template>
+            </mat-form-field>
+          </div>
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.First Name'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <input matInput formControlName="firstName" required />
+            </mat-form-field>
+          </div>
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Last Name'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <input matInput formControlName="lastName" required />
+            </mat-form-field>
+          </div>
 
-      <div fxLayout="row wrap" class="content">
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Status'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <ng-container *ngIf="!isEditing; else editableSelectStatus">
+                <input matInput formControlName="status" required />
+              </ng-container>
+              <ng-template #editableSelectStatus>
+                <mat-select formControlName="status" multiple required>
+                  <mat-option *ngFor="let status of userTemplate.userStatus" [value]="status.name">{{
+                    status.name
+                    }}</mat-option>
+                </mat-select>
+              </ng-template>
+            </mat-form-field>
+          </div>
 
-        <div fxFlex="50%" class="mat-body-strong">
-          Login Name
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Email'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <input matInput formControlName="email" required />
+            </mat-form-field>
+          </div>
+          <div fxFlex="45" fxFlex.lt-md="100" fxLayout="column">
+            <mat-label>{{'labels.inputs.Mobile Number'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field">
+              <input matInput formControlName="mobileNo" required />
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="userData.attributes.fspId || userData.attributes.govtId" fxFlex="45" fxFlex.lt-md="100"
+            fxLayout="column">
+            <mat-label *ngIf="userForm.get('idType').value === 'govtId'">{{'labels.inputs.GOVT ID '| translate}} *</mat-label>
+            <mat-label *ngIf="userForm.get('idType').value === 'fspId'">{{'labels.inputs.FSP ID'| translate}} *</mat-label>
+            <mat-form-field class="custom-form-field" [ngClass]="{ 'not-allowed': !isEditing }">
+              <input matInput formControlName="id" required />
+            </mat-form-field>
+          </div>
         </div>
 
-        <div fxFlex="50%">
-          {{ userData.username }}
-        </div>
-
-        <div fxFlex="50%" class="mat-body-strong">
-          First Name
-        </div>
-
-        <div fxFlex="50%">
-          {{ userData.firstname }}
-        </div>
-
-        <div fxFlex="50%" class="mat-body-strong">
-          Last Name
-        </div>
-
-        <div fxFlex="50%">
-          {{ userData.lastname }}
-        </div>
-
-        <div fxFlex="50%" class="mat-body-strong">
-          Email
-        </div>
-
-        <div fxFlex="50%">
-          {{ userData.email }}
-        </div>
-
-        <div fxFlex="50%" class="mat-body-strong">
-          Office
-        </div>
-
-        <div fxFlex="50%">
-          {{ userData.officeName }}
-        </div>
-
-        <div fxFlex="50%" class="mat-body-strong">
-          Roles
-        </div>
-
-        <div fxFlex="50%">
-          <span *ngFor="let role of userData.selectedRoles">
-            {{ role.name }}
-          </span>
-        </div>
-
-      </div>
-
+        <mat-card-actions>
+          <button mat-button (click)="save()" *ngIf="isEditing">Save</button>
+          <button mat-button (click)="toggleEdit()" *ngIf="isEditing">Cancel</button>
+        </mat-card-actions>
+      </form>
     </mat-card-content>
-
   </mat-card>
-
 </div>

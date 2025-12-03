@@ -1,20 +1,19 @@
-<mat-toolbar fxLayout="row" id="mifosx-toolbar">
-
-  <div class="toolbar">
-    <div class="content">
-
-      <mifosx-language-selector class="m-l-10 language" fxHide.lt-md></mifosx-language-selector>
-
-      <span fxFlex="auto"></span>
-      <div class="username" matTooltip="{{displayEmail()}}" >{{displayUser()}}</div>
-
-      <button mat-fab class="user-icon m-r-10" [matMenuTriggerFor]="applicationMenu">
+<div class="content">
+  <mifosx-language-selector fxHide.lt-md></mifosx-language-selector>
+  <div class="right-toolbar">
+  <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="10px" fxLayout.gt-lg="row wrap" >
+    <mat-card  matTooltip="{{displayEmail()}}" >{{displayUser()}}</mat-card>
+    <mat-card>{{displayUserType()}}</mat-card>
+    <ng-container *ngIf="displayInstitueId() !== undefined">
+      <mat-card matTooltip="{{displayInstitueId()}}">{{displayInstituteName()}}</mat-card>
+    </ng-container>
+  </div>
+      <button mat-fab class="user-icon" >
           <fa-icon icon="user" size="lg"></fa-icon>
       </button>
-    </div>
+      <fa-icon [matMenuTriggerFor]="applicationMenu" #menuTrigger="matMenuTrigger" [icon]="menuTrigger.menuOpen ? 'chevron-up' : 'chevron-down'" size="lg"></fa-icon>
   </div>
-
-</mat-toolbar>
+</div>
 
 <!-- Application User Help Menu -->
 <mat-menu #applicationMenu="matMenu" [overlapTrigger]="false">

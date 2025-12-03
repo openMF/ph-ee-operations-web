@@ -6,7 +6,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { Route } from '../core/route/route.service';
 
 /** Custom Components */
-import { HomeComponent } from './home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 /** Home and Dashboard Routes */
@@ -14,13 +13,8 @@ const routes: Routes = [
   Route.withShell([
     {
       path: '',
-      redirectTo: '/home',
+      redirectTo: '/dashboard',
       pathMatch: 'full'
-    },
-    {
-      path: 'home',
-      component: HomeComponent,
-      data: { breadcrumb: {alias: 'Batches'} }
     },
     {
       path: 'dashboard',

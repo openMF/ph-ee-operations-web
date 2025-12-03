@@ -5,9 +5,10 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/c
 /** rxjs Imports */
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+/** Custom Services */
 import { SettingsService } from 'app/settings/settings.service';
 
+/** External Imports */
 import * as uuid from 'uuid';
 
 /** Http request options headers. */
@@ -27,6 +28,19 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private accessExpired = false;
   private refreshTokenSubject: Subject<any> = new BehaviorSubject<any>(null);
 
+  /** Key to store user data in storage. */
+  private oAuthUserDetailsStorageKey = 'pheeOAuthUserDetails';
+  private getStoreageItem(key: string): string {
+    return localStorage.getItem(key) || sessionStorage.getItem(key);
+  }
+
+  getInstitueId(): string {
+    const userData = JSON.parse(this.getStoreageItem(this.oAuthUserDetailsStorageKey));
+    return userData.govtId || userData.fspId || '';
+  }
+  getUserType(): string {
+    return JSON.parse(this.getStoreageItem(this.oAuthUserDetailsStorageKey)).userType;
+}
   constructor(private settingsService: SettingsService) {}
 
   /**
@@ -45,7 +59,12 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         delete httpOptions.headers['X-CallbackURL'];
       }
       if ((url.indexOf('/vouchers') > 0) || (url.indexOf('/benefici') > 0)) {
-        httpOptions.headers['x-registering-institution-id'] = environment.backend.registeringInstituionId;
+        if(this.getUserType()==='Govt. Entity User') {
+        httpOptions.headers['x-registering-institution-id'] = this.getInstitueId();
+        }
+        if(this.getUserType()==='FSP User') {
+          httpOptions.headers['x-banking-institution-Code'] = this.getInstitueId();
+        }
         delete httpOptions.headers['X-Correlation-ID'];
         delete httpOptions.headers['Platform-TenantId'];
       }

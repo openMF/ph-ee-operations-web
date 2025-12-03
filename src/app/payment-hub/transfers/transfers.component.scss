@@ -1,3 +1,5 @@
+@import 'theme/theme';
+
 .filter-options {
   width: 100%;
   margin-bottom: 20px;
@@ -15,19 +17,26 @@ table {
   display: hidden;
 }
 
-table {
-  width: 100%;
+.summary {
+  position: absolute;
+  right: 0;
+  top: -4rem;
+  button {
+    width: 12rem;
+    border-radius: 10px;
+    background-color: $green;
+    box-shadow: none;
+    color: $white;
+    padding: 0.5rem 0;
+  }
 }
 
 .mat-cell {
   word-wrap: break-word !important;
   white-space: unset !important;
-
   overflow-wrap: break-word;
   word-wrap: break-word;
-
   word-break: break-word;
-
   -ms-hyphens: auto;
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
@@ -37,4 +46,48 @@ table {
 .mat-cell.cdk-column-completedAt {
   flex: 0 0 110px !important;
   width: 110px !important;
+}
+
+.equal-width {
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 0 !important;
+}
+
+.mat-expansion-panel-header:hover,
+.mat-expansion-panel-header:focus {
+  background-color: inherit !important;
+  box-shadow: none !important;
+}
+.mat-expansion-panel-header {
+  height: fit-content;
+}
+
+.active-filter-button {
+  background-color: $green;
+  color: $white;
+}
+
+.filter-button {
+  background-color: $light-grey;
+}
+
+.container {
+  width: 100%;
+  gap: 1rem;
+  position: relative;
+}
+
+.filter-header {
+  padding: 0.5rem;
+}
+
+.custom-button {
+  width: 12rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  background-color: $green;
+  padding: 0.5rem 0;
+  box-shadow: none;
+  color: $white;
 }

@@ -1,0 +1,167 @@
+<div class="container" fxLayout="column wrap" fxLayout.lt-md="column">
+  <div class="equal-width">
+    <mat-accordion class="filter-options">
+      <mat-expansion-panel class="filter-header" #panel hideToggle>
+        <mat-expansion-panel-header (click)="togglePanel()">
+          <mat-panel-title fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="space-between center">
+            <div *ngIf="!panel.expanded" fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="flex-start center"
+              class="gap0">
+
+              <button mat-button (click)="removeFilter('governmentEntity')" [ngClass]="{
+                  'active-filter-button': selectedFilters.governmentEntity,
+                  'filter-button': !selectedFilters.governmentEntity
+                }">
+                 {{'labels.inputs.Government Entity'| translate}}
+              </button>
+
+              <button mat-button (click)="removeFilter('program')" [ngClass]="{
+                  'active-filter-button': selectedFilters.program,
+                  'filter-button': !selectedFilters.program
+                }">
+                 {{'labels.inputs.Program'| translate}}
+              </button>
+
+              <button mat-button (click)="removeFilter('payerDfsp')" [ngClass]="{
+                  'active-filter-button': selectedFilters.payerDfsp,
+                  'filter-button': !selectedFilters.payerDfsp
+                }">
+                 {{'labels.inputs.Payer DFSP'| translate}}
+              </button>
+
+              <button mat-button (click)="removeFilter('account')" [ngClass]="{
+                  'active-filter-button': selectedFilters.account,
+                  'filter-button': !selectedFilters.account
+                }">
+                 {{'labels.inputs.Payment Account'| translate}}
+              </button>
+
+              <button mat-button (click)="removeFilter('status')" [ngClass]="{
+                  'active-filter-button': selectedFilters.status,
+                  'filter-button': !selectedFilters.status
+                }">
+                 {{'labels.inputs.Status'| translate}}
+
+              </button>
+            </div>
+
+            <div fxFlex fxLayout="row" fxLayoutGap="1rem" (click)="togglePanel($event)" fxLayoutAlign="end center">
+              <fa-icon icon="filter" size="xl"></fa-icon>
+              <h3>{{ 'labels.inputs.Filters' | translate }}</h3>
+              <fa-icon [icon]="panel.expanded ? 'chevron-up' : 'chevron-down'" size="lg"></fa-icon>
+            </div>
+
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="container" fxLayout="column">
+          <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+            <div fxLayout="column">
+              <mat-label>{{ 'labels.inputs.Government Entity' | translate }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="governmentEntity" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{ 'labels.inputs.Program' | translate }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="program" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{ 'labels.inputs.Payer DFSP' | translate }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="payerDfsp" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{ 'labels.inputs.Payment Account' | translate }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="account" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{ 'labels.inputs.Status' | translate }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="status" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="p-4" fxLayoutAlign="flex-start center">
+            <button mat-raised-button class="search-button" (click)="searchConfigs()">
+              {{ 'labels.buttons.Search' | translate }}
+            </button>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="equal-width">
+    <mat-card class="radius8 no-padding">
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading">
+
+          <ng-container matColumnDef="governmentEntity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'labels.inputs.Government Entity' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              {{ item?.governmentEntity?.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="program">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'labels.inputs.Program' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              {{ item?.program?.programName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="payerDfsp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'labels.inputs.Payer DFSP' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.dfsp?.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="account">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'labels.inputs.Payment Account' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">{{ item.account }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'labels.inputs.Status' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item" [ngClass]="statusStyle(item.status)">
+              {{ item.status }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" [routerLink]="[row.configId]" class="select-row">
+          </tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">No data matching data found</td>
+          </tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card>
+  </div>
+</div>

@@ -20,7 +20,10 @@ export class VouchersService {
     .set('page', page)
     .set('size', size);
 
-    return this.http.get(this.apiPrefix + '/vouchers', { params: httpParams });
+        // return this.http.get(this.apiPrefix + '/vouchers', { params: httpParams });
+
+        //mock data for vouchers
+        return this.http.get('../../assets/mock/voucher.mock.json');
   }
 
   createVoucher(callbackUrl: string, payload: any): Observable<any> {

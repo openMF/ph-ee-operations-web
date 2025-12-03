@@ -90,3 +90,60 @@ input[type="file"] {
   font-size: large;
   margin-right: 10px;
 }
+
+.upload-box{
+  background-color: #eeeeee;
+  width: 260px;
+  height: 140px;
+  border-radius: 10px;
+  padding: 1.4rem;
+  position: relative;
+  margin-top: 2rem;
+  cursor: pointer;
+  .title {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0;
+    
+  }
+  .arrow-right{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .upload{
+    padding: 1rem;
+    background-color: $white;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.send-button {
+  width: 10rem;
+  border-radius: 10px;
+  background-color: $green;
+  padding: 0.3rem 0;
+  box-shadow: none;
+  color: $white;
+}
+
+.cancel-button {
+  width: 10rem;
+  border-radius: 5px;
+  padding: 0.3rem 0;
+  border: 1px solid $black;
+  box-shadow: none;
+}
+
+::ng-deep .voucher-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: black;
+  background-color: $white;
+  border-radius: 5px;
+}

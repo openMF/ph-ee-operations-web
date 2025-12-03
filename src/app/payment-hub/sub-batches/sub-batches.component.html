@@ -1,118 +1,241 @@
-<div class="main-container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+<div class="container" fxLayout="column wrap" fxLayout.lt-md="column">
+  <div class="summary">
+    <button mat-raised-button *ngIf="!isLoading" (click)="viewSummary()">{{ 'labels.heading.Batch Summary' | translate
+      }}</button>
 
-  <mat-accordion class="filter-options">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <h3 class="m-r-10">{{"labels.inputs.Filters" | translate}}</h3>
-          <fa-icon icon="filter" size="xl"></fa-icon>
-        </mat-panel-title>
+  </div>
+  <div class="equal-width">
+    <mat-accordion class="filter-options">
+      <mat-expansion-panel class="filter-header" #panel hideToggle>
+        <mat-expansion-panel-header (click)="togglePanel()">
+          <mat-panel-title fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="space-between center">
+            <div *ngIf="!panel.expanded" fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="flex-start center"
+              class="gap0">
+              <button mat-button (click)="removeFilter('transactionDateFrom')" [ngClass]="{
+                  'active-filter-button': selectedFilters.transactionDateFrom,
+                  'filter-button': !selectedFilters.transactionDateFrom
+                }">
+                {{ "labels.inputs.From Date" | translate }}
+              </button>
 
-      </mat-expansion-panel-header>
-      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+              <button mat-button (click)="removeFilter('transactionDateTo')" [ngClass]="{
+                  'active-filter-button': selectedFilters.transactionDateTo,
+                  'filter-button': !selectedFilters.transactionDateTo
+                }">
+                {{ "labels.inputs.To Date" | translate }}
+              </button>
+              <button mat-button fxLayout="row" fxLayoutAlign="center" (click)="removeFilter('batchReferenceNumber')"
+                [ngClass]="{
+                  'active-filter-button': selectedFilters.batchReferenceNumber,
+                  'filter-button': !selectedFilters.batchReferenceNumber
+                }">
+                {{
+                "labels.inputs.Sub-Batch Reference Number" | translate
+                }}
+              </button>
+              <button mat-button fxLayout="row" fxLayoutAlign="center" (click)="removeFilter('bulkAmount')" [ngClass]="{
+                'active-filter-button': selectedFilters.bulkAmount,
+                'filter-button': !selectedFilters.bulkAmount
+              }">
+                {{
+                "labels.inputs.Bulk Amount" | translate
+                }}
+              </button>
+              <button mat-button fxLayout="row" fxLayoutAlign="center" (click)="removeFilter('totalInstructionCount')"
+                [ngClass]="{
+              'active-filter-button': selectedFilters.totalInstructionCount,
+              'filter-button': !selectedFilters.totalInstructionCount
+            }">
+                {{
+                "labels.inputs.Number of Instructions" | translate
+                }}
+              </button>
+              <button mat-button fxLayout="row" fxLayoutAlign="center" (click)="removeFilter('payeeFsp')" [ngClass]="{
+            'active-filter-button': selectedFilters.payeeFsp,
+            'filter-button': !selectedFilters.payeeFsp
+          }">
+                {{
+                "labels.inputs.Payee FSP" | translate
+                }}
+              </button>
+              <button mat-button fxLayout="row" fxLayoutAlign="center" (click)="removeFilter('subBatchStatus')" [ngClass]="{
+                  'active-filter-button': selectedFilters.subBatchStatus,
+                  'filter-button': !selectedFilters.subBatchStatus
+                }">
+                {{ "labels.inputs.Status" | translate }}
+              </button>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="1rem" (click)="togglePanel($event)" fxLayoutAlign="end center">
+              <fa-icon icon="filter" size="xl"></fa-icon>
+              <h3>{{ "labels.inputs.Filters" | translate }}</h3>
+              <fa-icon [icon]="panel.expanded ? 'chevron-up' : 'chevron-down'" size="lg"></fa-icon>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="container" fxLayout="column">
+          <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+            <div fxLayout="column">
+              <mat-label>{{ "labels.inputs.From Date" | translate }}</mat-label>
+              <mat-form-field fxFlex="30%" (click)="transactionDateFromPicker.open()">
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker"
+                  [formControl]="transactionDateFrom" />
+                <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #transactionDateFromPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column">
+              <mat-label>{{ "labels.inputs.To Date" | translate }}</mat-label>
+              <mat-form-field fxFlex="25%" (click)="transactionDateToPicker.open()">
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker"
+                  [formControl]="transactionDateTo" />
+                <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #transactionDateToPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
 
-        <mat-form-field fxFlex="30%" (click)="transactionDateFromPicker.open()">
-          <mat-label>{{"labels.inputs.From Date" | translate}}</mat-label>
-          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateFromPicker"
-            [formControl]="transactionDateFrom">
-          <mat-datepicker-toggle matSuffix [for]="transactionDateFromPicker"></mat-datepicker-toggle>
-          <mat-datepicker #transactionDateFromPicker></mat-datepicker>
-        </mat-form-field>
 
-        <mat-form-field fxFlex="25%" (click)="transactionDateToPicker.open()">
-          <mat-label>{{"labels.inputs.To Date" | translate}}</mat-label>
-          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="transactionDateToPicker"
-            [formControl]="transactionDateTo">
-          <mat-datepicker-toggle matSuffix [for]="transactionDateToPicker"></mat-datepicker-toggle>
-          <mat-datepicker #transactionDateToPicker></mat-datepicker>
-        </mat-form-field>
 
-        <div fxFlex="20%" class="push-end m-t-15">
-          <button mat-raised-button color="primary" (click)="searchSubBatches()">
-            <fa-icon icon="search" class="m-r-10"></fa-icon> {{"labels.buttons.Search" | translate}}
-          </button>
+            <div fxLayout="column">
+              <mat-label>{{
+                "labels.inputs.Sub-Batch Reference Number" | translate
+                }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="batchReferenceNumber" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{
+                "labels.inputs.Bulk Amount" | translate
+                }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input type="number" matInput [formControl]="bulkAmount" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{
+                "labels.inputs.Number of Instructions" | translate
+                }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input type="number" matInput [formControl]="totalInstructionCount" />
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="column">
+              <mat-label>{{ "labels.inputs.Payee FSP" | translate }}</mat-label>
+              <mat-form-field fxFlex="20%">
+                <input matInput [formControl]="payeeFsp" />
+              </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+              <div fxLayout="column">
+                <mat-label>{{ "labels.inputs.Status" | translate }}</mat-label>
+                <mat-form-field fxFlex="20%">
+                  <mat-select [formControl]="subBatchStatus">
+                    <mat-option *ngFor="let status of subBatchStatuses" [value]="status">
+                      {{ status }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4" fxLayoutAlign="flex-start center">
+            <button mat-raised-button class="custom-button" (click)="searchSubBatches()">
+              {{ "labels.buttons.Search" | translate }}
+            </button>
+          </div>
         </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="equal-width">
+    <mat-card class="radius8 no-padding">
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading">
+          <ng-container matColumnDef="batchReferenceNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Sub-Batch Reference Number" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              <mifosx-identifier identifier="{{ item.subBatchId }}"></mifosx-identifier>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startedAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Start Time" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.startedAt | datetimeFormat }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="completedAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Completed Time" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.completedAt | datetimeFormat }}
+            </td>
+          </ng-container>
+
+
+
+
+          <ng-container matColumnDef="totalInstructionCount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Number of Instructions" | translate }}
+            </th>
+            <td mat-cell class="center" *matCellDef="let item">
+              {{ item.totalInstructionCount }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Bulk Amount" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.totalAmount | number }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="payeeFsp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Payee FSP" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item">{{ item.payeeFsp }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ "labels.inputs.Status" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let item" [ngClass]="{
+                red: item.status === 'Rejected',
+                green: item.status === 'Completed',
+                orange: item.status === 'Partially Authorized'
+              }">
+              {{ item.status }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let item; columns: displayedColumns" (click)="gotoSubBatchesDetails(item.subBatchId)"
+            class="select-row"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No data matching data found
+            </td>
+          </tr>
+        </table>
       </div>
-
-      <div class="container" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
-        <mat-form-field fxFlex="20%">
-          <mat-label>{{"labels.inputs.Source Ministry" | translate}}</mat-label>
-          <input matInput [formControl]="sourceMinistry">
-        </mat-form-field>
-
-        <mat-form-field fxFlex="20%">
-          <mat-label>{{"labels.inputs.Batch Reference Number" | translate}}</mat-label>
-          <input matInput [formControl]="batchReferenceNumber">
-        </mat-form-field>
-
-        <mat-form-field fxFlex="20%">
-          <mat-label>{{"labels.inputs.Bulk Amount" | translate}}</mat-label>
-          <input type="number" matInput [formControl]="bulkAmount">
-        </mat-form-field>
-      
-        <mat-form-field fxFlex="20%">
-          <mat-label>{{"labels.inputs.Payer FSP" | translate}}</mat-label>
-          <input matInput [formControl]="payerFSP">
-        </mat-form-field>
-
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-
-  <mat-card class="container">
-    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-
-    <table mat-table [dataSource]="dataSource" matSort>
-
-      <ng-container matColumnDef="batchReferenceNumber">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Batch Reference Number" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> 
-          <mifosx-identifier identifier="{{item.subBatchId}}"></mifosx-identifier> 
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="startedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Start Time" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ item.startedAt | datetimeFormat }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="completedAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Completed Time" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ item.completedAt | datetimeFormat }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="sourceMinistry">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Source Ministry" | translate}} </th>
-        <td mat-cell *matCellDef="let item" matTooltip={{item.transactionId}}> </td>
-      </ng-container>
-
-      <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Bulk Amount" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ item.totalAmount | number }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="payerFSP">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Payer FSP" | translate}} </th>
-        <td mat-cell *matCellDef="let item"> {{ item.payerFSP }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{"labels.inputs.Status" | translate}} </th>
-        <td mat-cell *matCellDef="let item"
-          [ngClass]="{'red': item.status==='FAILED','green': item.status==='COMPLETED','orange': item.status==='ACTION_NEEDED'}">
-          {{ item.status }} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let item; columns: displayedColumns;" (click)="gotoSubBatchesDetails(item.subBatchId)" class="select-row"></tr>
-
-    </table>
-
-    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[50, 100, 200]" [length]="totalRows" (page)="pageChanged($event)"
-      showFirstLastButtons></mat-paginator>
-
-  </mat-card>
-
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+    </mat-card>
+  </div>
 </div>

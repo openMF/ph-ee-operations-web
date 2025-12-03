@@ -1,13 +1,90 @@
-.password-never-expires-wrapper {
-  padding: 17.5px 0 17.5px 0;
+@import 'theme/theme';
+
+span {
+  display: flex;
+  color: $mid-grey;
+  width: 90%;
+  margin: 0 auto;
 }
 
-.send-password-to-email-wrapper {
-  padding: 17.5px 0 17.5px 0;
+.container {
+  max-width: 90%;
+  height: fit-content;
+  overflow-y: hidden;
+  .mat-card {
+    padding: 2rem 5rem 0 5rem;
+    margin: 2rem 1rem;
+    background-color: $light-grey;
+    box-shadow: none;
+
+    h2 {
+      color: $primary;
+    }
+    .gap {
+      gap: 1.3rem;
+    }
+
+    .button {
+      padding: 0.3rem 4rem;
+      border-radius: $border-size;
+      background-color: $white;
+      color: $primary;
+      cursor: pointer;
+    }
+
+    .submit {
+      background-color: $primary;
+      color: $white;
+    }
+
+    .submit:disabled {
+      background-color: $light-black;
+      color: $white;
+      cursor: not-allowed;
+    }
+  }
 }
 
-.reset-password-error {
-  color: #f44336;
-  font-size: 80%;
-  margin: 0;
+.edit-b {
+  width: 8rem;
+  background-color: $primary;
+}
+
+.delete-b {
+  width: 8rem;
+  background-color: $red;
+}
+
+.update-b {
+  width: 12rem;
+  background-color: $primary;
+}
+
+.custom-button {
+  border-radius: 5px;
+  padding: 0.2rem 0;
+  box-shadow: none;
+  color: $white;
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+::ng-deep .custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: black;
+  background-color: $white;
+  border-radius: 5px;
+}
+::ng-deep .custom-form-field.mat-form-field input:disabled {
+  color: black;
+}
+::ng-deep .custom-form-field.mat-form-field select:disabled {
+  color: black;
+}
+
+::ng-deep .custom-create-user.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: black;
+  background-color: $white;
+  border-radius: 5px;
 }

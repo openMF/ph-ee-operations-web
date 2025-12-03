@@ -1,0 +1,59 @@
+@import 'theme/theme';
+
+.container {
+  height: fit-content;
+  overflow-y: hidden;
+  .mat-card {
+    margin: 2rem 0;
+  }
+}
+
+.column-label {
+  width: 3.8rem;
+}
+
+/* Hide the search icon by default */
+.hidden-search-icon {
+  visibility: hidden;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Show the search icon on hover with grey color */
+th:hover .hidden-search-icon,
+.hidden-search-icon:hover {
+  visibility: visible;
+  color: grey;
+}
+
+span {
+  display: flex;
+  color: $mid-grey;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.button-box {
+  gap: 0.3rem;
+  height: 3rem;
+  width: 100%;
+  .button {
+    height: 40%;
+    width: 80%;
+    font-size: 10px !important;
+    font-weight: 400;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: $white;
+    color: $primary;
+    cursor: pointer;
+  }
+
+  .submit {
+    background-color: $primary;
+    color: $white;
+  }
+}

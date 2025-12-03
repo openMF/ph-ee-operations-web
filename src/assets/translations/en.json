@@ -1,21 +1,33 @@
 {
-  "APP_NAME": "PHEE - Operations Management",
+  "APP_NAME": "Enterprise Edition",
   "languages": {
     "en": "English",
     "es": "Spanish",
-    "fr": "French"
+    "fr": "French",
+    "it": "Italian",
+    "de": "German"
   },
   "labels": {
     "breadcrumbs": {
       "home": "Home",
       "batches": "Batches",
-      "Payment Hub EE": "Payment Hub EE",
+      "Payment Hub EE": "Payment Hub",
       "bulk-import": "Bulk Import",
       "sub-batches": "Sub Batches",
       "transfers": "Transfers",
       "Voucher Management": "Voucher Management",
-      "voucher-management": "Voucher Management",
-      "Account Mapper": "Account Mapper"
+      "Account Mapper": "Account Mapper",
+      "User Requests": "User Requests",
+      "Create": "Create",
+      "View Users": "View Users",
+      "User Details": "User Details",
+      "dashboard": "Dashboard",
+      "Visualizations": "Visualizations",
+      "Settings": "Settings",
+      "User Management": "User Management",
+      "G2P Payment Config": "G2P Payment Config",
+      "Users":"Users",
+      "View User":"View User"
     },
     "buttons": {
       "Login": "Login",
@@ -26,13 +38,23 @@
       "Clear Data": "Clear Data",
       "Browse Files": "Browse Files",
       "Search": "Search",
-      "Close": "Close"
+      "Close": "Close",
+      "Confirm": "Confirm",
+      "Submit": "Submit",
+      "Approve": "Approve",
+      "Reject": "Reject"
     },
     "errors": {
       "Username or password incorrect.": "Username or password incorrect"
     },
     "heading": {
-      "View Transfer": "View Transfer"
+      "View Transfer": "View Transfer",
+      "Change Password": "Change Password",
+      "Backoffice Login": "Backoffice Login",
+      "Define User": "Define User",
+      "User Information": "User Information",
+      "Batch Summary":"Batch Summary",
+      "Sub Batch Summary":"Sub Batch Summary"
     },
     "inputs": {
       "ID": "ID",
@@ -41,6 +63,7 @@
       "Tenant": "Tenant",
       "Username": "Username",
       "Password": "Password",
+      "Repeat Password": "Repeat Password",
       "Language": "Language",
       "Group Code": "Group Code",
       "Expiry": "Expiry",
@@ -73,23 +96,46 @@
       "Start Time": "Start Time",
       "Completed Time": "Completed Time",
       "Payer FSP": "Payer FSP",
+      "Payee FSP": "Payee FSP",
       "Transaction Type": "Transaction Type",
       "Source Financial Institution": "Source Financial Institution",
       "Source Account Number": "Source Account Number",
       "Destination Account Number": "Destination Account Number",
       "Destination Financial Institution": "Destination Financial Institution",
-      "Transaction Reference Number": "Transaction Reference Number",
+      "Transaction Reference Number": "Transaction ID",
       "Batch ID": "Batch ID",
       "Client Correlation ID": "Client Correlation ID",
       "Direction": "Direction",
-      "Payee Dfsp": "Payee Dfsp",
+      "Payee Dfsp": "Payee DFSP",
       "Payee Fee": "Payee Fee",
       "Payee Party": "Payee Party",
-      "Payer Dfsp": "Payer Dfsp",
+      "Payer Dfsp": "Payer DFSP",
       "Financial Address": "Financial Address",
       "Financial Institution": "Financial Institution",
       "Payment Modality": "Payment Modality",
-      "Purpose": "Purpose"
+      "Purpose": "Purpose",
+      "Bulk Voucher Upload": "Bulk Voucher Upload",
+      "Registering Institution ID": "Registering Institution ID",
+      "Type of User": "Type of User",
+      "Name": "Name",
+      "Role": "Role",
+      "First Name": "First Name",
+      "Last Name": "Last Name",
+      "Email": "Email",
+      "User Name": "User Name",
+      "Mobile Number": "Mobile Number",
+      "Govt ID": "Govt ID",
+      "FSP ID": "FSP ID",
+      "User Type": "User Type",
+      "Action Type": "Action Type",
+      "Number of Instructions": "Number of Instructions",
+      "Sub-Batch Reference Number": "Sub-Batch Reference Number",
+      "Date/Time": "Date/Time",
+      "Total Amount":"Total Amount",
+      "Program":"Program",
+      "Payer DFSP":"Payer DFSP",
+      "Payment Account":"Payment Account",
+      "Date":"Date"
     },
     "menus": {
       "Login": "Login",
@@ -104,7 +150,19 @@
       "Main Batches": "Main Batches",
       "Create Batch": "Create Batch",
       "Sub Batches": "Sub Batches",
-      "Transfers": "Transfers"
+      "Transfers": "Transfers",
+      "User Management": "User Management",
+      "Create User": "Create User",
+      "User Requests": "User Requests",
+      "View Users": "View Users",
+      "Account Mapper": "Account Mapper",
+      "Visualizations": "Visualizations",
+      "G2P Payment Config": "G2P Payment Config",
+      "G2P Payment": "G2P Payment",
+      "Create":"Create",
+      "Update":"Update",
+      "Beneficiaries": "Beneficiaries",
+      "Create Beneficiaries": "Create Beneficiaries"
     },
     "texts": {
       "Logged in as": "Logged in as",
@@ -112,7 +170,33 @@
       "Home": "Home",
       "Remember me": "Remember me",
       "Version": "Version",
-      "Drag and Drop the CSV input file, or": "Drag and Drop the CSV input file, or"
+      "Select voucher file from your system and make sure it matches the requirement": "Select voucher file from your system and make sure it matches the requirement",
+      "File must be in CSV or Excel Format": "(File must be in CSV or Excel Format)",
+      "Username is": "Username",
+      "Password is": "Password",
+      "required": "required",
+      "VoucherCreated": "{{count}} Vouchers have been created successfully",
+      "UserCreated": "User {{username}} Request has been created successfully",
+      "BatchesCreated": "{{count}} Batches has been created successfully",
+      "Enter your login details below": "Enter your login details below",
+      "Add a new user to the network": "Add a new user to the network",
+      "No data found.": "No data found.",
+      "All Users of the Network": "All Users of the Network",
+      "Accept and Reject user requests": "Accept and Reject user requests",
+      "No data matching data found": "No data matching data found"
+    },
+    "commons": {
+      "is required": "is required",
+      "8 characters long": "8 characters long",
+      "50 characters long": "50 characters long",
+      "Password should be at least": "Password should be at least",
+      "Password should not be more than": "Password should not be more than",
+      "Password should include a": "Password should include a",
+      "numeral": "numeral",
+      "and at": "and at",
+      "least one uppercase": "least one uppercase",
+      "lowercase and special character": "lowercase and special character",
+      "does not match": "does not match"
     }
   }
 }

@@ -27,6 +27,7 @@ import { RouteReusableStrategy } from './route/route-reusable-strategy';
 
 /** Custom Modules */
 import { SharedModule } from '../shared/shared.module';
+import { DirectivesModule } from 'app/directives/directives.module';
 
 /** Custom Components */
 import { ShellComponent } from './shell/shell.component';
@@ -44,7 +45,8 @@ import { ContentComponent } from './shell/content/content.component';
     SharedModule,
     HttpClientModule,
     TranslateModule,
-    RouterModule
+    RouterModule,
+    DirectivesModule
   ],
   declarations: [
     ShellComponent,

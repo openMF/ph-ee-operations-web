@@ -1,0 +1,49 @@
+@import "theme/theme";
+
+table {
+  width: 100%;
+
+  .select-row:hover {
+    cursor: pointer;
+  }
+}
+
+span {
+  display: flex;
+  color: $mid-grey;
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: 1rem;
+}
+
+/* Hide the search icon by default */
+.hidden-search-icon {
+  visibility: hidden;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Show the search icon on hover with grey color */
+th:hover .hidden-search-icon,
+.hidden-search-icon:hover {
+  visibility: visible;
+  color: grey;
+}
+
+.column-label{
+  width: 10rem;
+}
+
+
+::ng-deep .custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: black;
+  background-color: $white;
+  border-radius: 5px;
+}
+::ng-deep .column-label.mat-form-field  input:disabled{
+  color: black;
+  border: none;
+  width: fit-content;
+}

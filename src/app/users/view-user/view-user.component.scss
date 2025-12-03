@@ -1,14 +1,69 @@
+@import "theme/theme";
+
+span {
+  display: flex;
+  color: $mid-grey;
+  width: 90%;
+  margin: 0 auto;
+}
+
 .container {
-  max-width: 37rem;
+  max-width: 90%;
+ .mat-card{
+  padding: 2rem 5rem 0 5rem;
+  background-color: $light-grey;
+  box-shadow: none;
+
+  h1 {
+    color: $primary;
+  }
+ 
+}
 
   .content {
     div {
       margin: 1rem 0;
-      word-wrap: break-word;
-
-      span {
-        display: block;
-      }
+      word-wrap: break-word;      
     }
   }
+}
+
+.edit-b{
+  width: 8rem;
+  background-color: $primary;
+}
+
+.delete-b{
+  width: 8rem;
+  background-color: $red;
+}
+
+.update-b{
+  width: 12rem;
+  background-color: $primary;
+
+}
+
+.custom-button {
+  border-radius: 5px;
+  padding: 0.2rem 0;
+  box-shadow: none;
+  color: $white;
+}
+
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+::ng-deep .custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: black;
+  background-color: $white;
+  border-radius: 5px;
+}
+::ng-deep .custom-form-field.mat-form-field  input:disabled{
+  color: black;
+}
+::ng-deep .custom-form-field.mat-form-field  select:disabled{
+  color: black;
 }

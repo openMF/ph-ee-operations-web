@@ -1,0 +1,100 @@
+<span>{{ 'labels.texts.All Users of the Network' | translate }}</span>
+<div class="container">
+
+  <mat-card class="radius8 no-padding view-user">
+
+    <div class="table-container">
+
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="userType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div class="column-label" *ngIf="!showFilter['userType']; else userTypeFilter">
+              {{ 'labels.inputs.Type of User' | translate }}
+            </div>
+            <ng-template #userTypeFilter>
+              <mat-form-field (click)="$event.stopPropagation()" class="column-label">
+                <mat-label>{{ 'labels.inputs.Type of User' | translate }}</mat-label>
+                <input matInput (click)="$event.stopPropagation()" (keyup)="applyFilter($event.target.value, 'userType')" />
+              </mat-form-field>
+            </ng-template>
+            <mat-icon class="hidden-search-icon" (click)="toggleFilter('userType'); $event.stopPropagation()">
+              <fa-icon icon="search" size="2xs"></fa-icon>
+            </mat-icon>
+          </th>
+          <td mat-cell *matCellDef="let user">{{ user.attributes.userType }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div class="column-label" *ngIf="!showFilter['name']; else nameFilter">
+              {{ 'labels.inputs.Name' | translate }}
+            </div>
+            <ng-template #nameFilter>
+              <mat-form-field (click)="$event.stopPropagation()" class="column-label">
+                <mat-label>{{ 'labels.inputs.Name' | translate }}</mat-label>
+                <input matInput (click)="$event.stopPropagation()" (keyup)="applyFilter($event.target.value, 'name')" />
+              </mat-form-field>
+            </ng-template>
+            <mat-icon class="hidden-search-icon" (click)="toggleFilter('name'); $event.stopPropagation()">
+              <fa-icon icon="search" size="2xs"></fa-icon>
+            </mat-icon>
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.firstName + ' ' + user.lastName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div class="column-label" *ngIf="!showFilter['email']; else emailFilter">
+              {{ 'labels.inputs.Email' | translate }}
+            </div>
+            <ng-template #emailFilter>
+              <mat-form-field (click)="$event.stopPropagation()" class="column-label">
+                <mat-label>{{ 'labels.inputs.Email' | translate }}</mat-label>
+                <input matInput (click)="$event.stopPropagation()" (keyup)="applyFilter($event.target.value, 'email')" />
+              </mat-form-field>
+            </ng-template>
+            <mat-icon class="hidden-search-icon" (click)="toggleFilter('email'); $event.stopPropagation()">
+              <fa-icon icon="search" size="2xs"></fa-icon>
+            </mat-icon>
+          </th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div class="column-label" *ngIf="!showFilter['id']; else IdFilter">
+              {{ 'labels.inputs.ID' | translate }}
+            </div>
+            <ng-template #IdFilter>
+              <mat-form-field (click)="$event.stopPropagation()" class="column-label">
+                <mat-label>{{ 'labels.inputs.ID' | translate }}</mat-label>
+                <input matInput (click)="$event.stopPropagation()" (keyup)="applyFilter($event.target.value, 'id')" />
+              </mat-form-field>
+            </ng-template>
+            <mat-icon class="hidden-search-icon" (click)="toggleFilter('id'); $event.stopPropagation()">
+              <fa-icon icon="search" size="2xs"></fa-icon>
+            </mat-icon>
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.attributes.govtId || user.attributes.fspId || 'N/A' }}
+          </td>
+        </ng-container>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            {{ 'labels.texts.No data found.' | translate }}
+          </td>
+        </tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" [routerLink]="[row.id]" class="select-row"></tr>
+      </table>
+    </div>
+  
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+    
+  </mat-card>
+
+</div>

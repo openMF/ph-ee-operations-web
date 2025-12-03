@@ -19,8 +19,10 @@ import { SubBatchesComponent } from './sub-batches/sub-batches.component';
 import { DirectivesModule } from 'app/directives/directives.module';
 import { TransfersComponent } from './transfers/transfers.component';
 import { BatchesBulkImportComponent } from './batches-bulk-import/batches-bulk-import.component';
-import { TranslateModule } from '@ngx-translate/core';
 import { ViewTransferDetailsComponent } from './transfers/view-transfer-details/view-transfer-details.component';
+import { BatchSummaryComponent } from './sub-batches/batch-summary/batch-summary.component';
+import { SubBatchSummaryComponent } from './transfers/sub-batch-summary/sub-batch-summary.component';
+
 /**
  * Payment HUB Module
  *
@@ -46,6 +48,8 @@ import { ViewTransferDetailsComponent } from './transfers/view-transfer-details/
         TransfersComponent,
         BatchesBulkImportComponent,
         ViewTransferDetailsComponent,
+        BatchSummaryComponent,
+        SubBatchSummaryComponent
     ]
 })
 export class PaymentHubModule {}
