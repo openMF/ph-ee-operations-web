@@ -11,19 +11,19 @@ export let environment = {
   production: true,
   version: env.phee.version,
   backend: {
-    operations: window['env']['serverApiUrlOps'] || 'http://ops.local/opsapp/api/v1',
-    signatureApiUrl: window['env']['signatureApiUrl'] || 'http://ops.local/opsapp/api/v1',
-    bulkConnectorOps: window['env']['bulkConnectorOps'] || 'https://bulk-connector-demo.sandbox.fynarfin.io',
-    vouchers: window['env']['serverApiUrlVou'] || 'http://ops.local/opsapp/api/v1',
+    operations: window['env']['serverApiUrlOps'] || 'http://ops.mifos.gazelle.test/api/v1',
+    signatureApiUrl: window['env']['signatureApiUrl'] || 'https://ops.mifos.gazelle.test/api/v1/util/x-signature',
+    bulkConnectorOps: window['env']['bulkConnectorOps'] || 'https://ops.mifos.gazelle.test',
+    vouchers: window['env']['serverApiUrlVou'] || 'http://ops.mifos.gazelle.test/api/v1',
     voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',
-    account: window['env']['serverApiUrlAct'] || 'http://ops.local/opsapp/api/v1',
+    account: window['env']['serverApiUrlAct'] || 'http://ops.mifos.gazelle.test/api/v1',
     registeringInstituionId: window['env']['registeringInstitutionId'] || 'default',
   },
   oauth: {
     // For connecting to Mifos X using OAuth2 Authentication change the value to true
     enabled: window['env']['oauthEnabled'] || false,
     type: window['env']['oauthType'] || 'keycloak',
-    serverUrl: window['env']['oauthServerUrl'] || 'http://keycloak.sandbox.fynarfin.io/auth',
+    serverUrl: window['env']['oauthServerUrl'] || 'http://keycloak.mifos.gazelle.test/auth',
     realm: window['env']['oauthRealm'] || 'paymenthub',
     clientId: window['env']['oauthClientId'] || 'opsapp',
     clientSecret: window['env']['oauthClientSecret'] || '',
@@ -33,8 +33,8 @@ export let environment = {
   auth: {
     enabled: window['env']['authEnabled'] || false,
   },
-  tenant: window['env']['platformTenantId'] || 'phdefault',
-  tenants: window['env']['platformTenantIds'] || 'phdefault',
+  tenant: window['env']['platformTenantId'] || 'gorilla',
+  tenants: window['env']['platformTenantIds'] || 'gorilla',
   defaultLanguage: window['env']['defaultLanguage'] || 'en',
   supportedLanguages: window['env']['supportedLanguages'] || ['en', 'fr']
 
