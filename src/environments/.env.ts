@@ -1,10 +1,3 @@
-// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECKIN!
-/* tslint:disable */
 export default {
-  'phee': {
-    'version': '0.0.0',
-    'hash': '9b40d307'
-  },
-  'allow_switching_backend_instance': true
+  'npm_package_version': '0.0.0'
 };
-/* tslint:enable */
