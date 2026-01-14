@@ -90,22 +90,14 @@ const routes: Routes = [
             },
 
             {
+              path: 'transfers',
+              data: { breadcrumb: { skip: true } },
+              component: TransfersComponent,
+            },
+            {
               path: 'transactions',
-              children: [
-                {
-                  path: '',
-                  component: TransfersComponent,
-                },
-                {
-                  path: 'view/:id',
-                  component: TransactionDetailsComponent,
-                  data: { breadcrumb: { alias: 'View Transaction' } },
-                  resolve: {
-                    transaction: TransactionResolver,
-                    dfspEntries: DfspResolver,
-                  },
-                },
-              ],
+              data: { breadcrumb: { skip: true } },
+              component: TransfersComponent,
             },
           ],
         },

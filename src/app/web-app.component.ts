@@ -135,6 +135,7 @@ export class WebAppComponent implements OnInit {
     // this.settingsService.setServers(environment.serverUrls.split(','));
     // Set the Tenant Identifier(s) list from the env var
     this.settingsService.setTenantIdentifier(environment.tenant || 'phdefault');
+    this.settingsService.setTenantIdentifiers(environment.tenants.split(','));
   }
 
 }

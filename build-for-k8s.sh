@@ -46,7 +46,7 @@ echo "🔨 Building Angular application..."
 echo "   This will create production-ready files in dist/"
 echo ""
 
-npm run build
+npm run env -s && npx ng build --configuration kubernetes 
 
 echo ""
 echo "✅ Build completed successfully!"

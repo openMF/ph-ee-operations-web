@@ -50,7 +50,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     delete httpOptions.headers['X-Correlation-ID'];
     if (this.settingsService.tenantIdentifier) {
       const url: string = request.url;
-      if ((url.indexOf('/batches') > 0) || (url.indexOf('/transactions') > 0)) {
+      if ((url.indexOf('/batches') > 0) || (url.indexOf('/transactions') > 0) || (url.indexOf('/transfers') > 0)) {
         httpOptions.headers['Platform-TenantId'] = this.settingsService.tenantIdentifier;
         if (!url.endsWith('/batches')) {
           httpOptions.headers['X-Correlation-ID'] = uuid.v4();

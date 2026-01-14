@@ -82,8 +82,14 @@ export class TransfersComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.batchId = params.batchId;
       this.subBatchId = params.subBatchId;
+      // Set appropriate columns based on whether viewing all transfers or sub-batch transfers
+      if (!this.subBatchId) {
+        this.displayedColumns = ['batchReferenceNumber', 'startedAt', 'completedAt', 'sourceMinistry', 'bulkAmount', 'payerFspId', 'status'];
+      } else {
+        this.displayedColumns = ['transactionReferenceNumber', 'date', 'bulkAmount', 'functionalId', 'status'];
+      }
+      this.getTransfers();
     });
-    this.getTransfers();
   }
 
   /** Load transfers or sub-batch details based on subBatchId */

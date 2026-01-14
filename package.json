@@ -13,7 +13,7 @@
   "scripts": {
     "ng": "ng",
     "build": "npm run env -s && ng build --configuration production --output-hashing=none",
-    "build:prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --output-hashing=none --base-href=\"/ph-ee-operations-web/\"",
+    "build:prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --output-hashing=none --base-href=\"/\"",
     "start": "npm run env -s && ng serve --aot",
     "serve:sw": "npm run build -s && npx http-server ./dist -p 4200",
     "lint": "ng lint && stylelint \"src/**/*.scss\" --syntax scss && htmlhint \"src\" --config .htmlhintrc",

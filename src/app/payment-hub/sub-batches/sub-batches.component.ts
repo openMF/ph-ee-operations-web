@@ -134,7 +134,7 @@ export class SubBatchesComponent implements OnInit {
 
   /** Navigate to sub-batch details */
   gotoSubBatchesDetails(subBatchId: string): void {
-    this.router.navigate([`dashboard/paymenthub/sub-batches/${this.batchId}/transfers/${subBatchId}`]);
+    this.router.navigate([`/dashboard/paymenthub/sub-batches/${this.batchId}/transfers/${subBatchId}`]);
   }
 
   /** Filter sub-batches */

@@ -1,7 +1,7 @@
 <div class="container" fxLayout="cloumn wrap" fxLayout.lt-md="column">
 
   <div class="summary">
-    <button mat-raised-button *ngIf="!isLoading" (click)="viewSummary()">{{ 'labels.heading.Sub Batch Summary' |
+    <button mat-raised-button *ngIf="!isLoading && subBatchId" (click)="viewSummary()">{{ 'labels.heading.Sub Batch Summary' |
       translate }}</button>
   </div>
 
@@ -116,7 +116,7 @@
     <mat-card class="radius8 no-padding">
       <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
       <div class="table-container">
-        <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading && subBatchId === null">
+        <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading && !subBatchId">
           <ng-container matColumnDef="batchReferenceNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
               {{ 'labels.inputs.Transaction Reference Number' | translate }}
@@ -189,7 +189,7 @@
           </tr>
         </table>
 
-        <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading && subBatchId !== null">
+        <table mat-table [dataSource]="dataSource" matSort *ngIf="!isLoading && subBatchId">
           <ng-container matColumnDef="transactionReferenceNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
               {{ 'labels.inputs.Transaction Reference Number' | translate }}

@@ -17,9 +17,9 @@ export class FilterSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.sections = [
-      { label: 'Main Batches', routeTo: ['dashboard', 'paymenthub', 'batches'], active: false, disabled: false },
-      { label: 'Sub Batches', routeTo: ['dashboard', 'paymenthub', 'sub-batches'], active: false, disabled: true },
-      { label: 'Transfers', routeTo: ['dashboard', 'paymenthub', 'transfers'], active: false, disabled: true }
+      { label: 'Main Batches', routeTo: ['/dashboard', 'paymenthub', 'batches'], active: false, disabled: false },
+      { label: 'Sub Batches', routeTo: ['/dashboard', 'paymenthub', 'sub-batches'], active: false, disabled: true },
+      { label: 'Transfers', routeTo: ['/dashboard', 'paymenthub', 'transactions'], active: false, disabled: false }
     ];
 
     this.router.events.pipe(
