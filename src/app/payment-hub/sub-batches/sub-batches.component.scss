@@ -8,13 +8,25 @@
   position: absolute;
   right: 0;
   top: -4rem;
-  button {
-    width: 10rem;
+  z-index: 10;
+
+  .refresh-button {
+    min-width: 11rem;
     border-radius: 10px;
     background-color: $green;
     box-shadow: none;
     color: $white;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .inline-spinner {
+    display: inline-block;
+    margin-right: 0.5rem;
   }
 }
 

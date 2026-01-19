@@ -76,6 +76,7 @@ export class SubBatchesComponent implements OnInit {
   currentPage = 0;
   pageSize = 50;
   isLoading = false;
+  isRefreshing = false;
   batchId: string | null = null;
 
   constructor(private route: ActivatedRoute, private router: Router, private dates: Dates, private subBatchesService: SubBatchesService, private dialog: MatDialog) {
@@ -200,5 +201,46 @@ export class SubBatchesComponent implements OnInit {
   /** View batch summary */
   viewSummary(): void {
     this.dialog.open(BatchSummaryComponent, { data: { batch: this.batchData } });
+  }
+
+  /** Manually refresh batch status by calling the aggregate API */
+  refreshBatchStatus(): void {
+    if (this.batchId) {
+      this.isRefreshing = true;
+
+      // Step 1: Call aggregate endpoint to force backend recalculation
+      this.subBatchesService.aggregateBatchStatus(this.batchId).subscribe(
+        aggregateResponse => {
+          console.log('Aggregate API response:', aggregateResponse);
+
+          // Step 2: Fetch the updated batch details
+          this.subBatchesService.getBatchDetail(this.batchId).subscribe(
+            batchDetails => {
+              // Force update by clearing data first
+              this.batchData = null;
+              this.subBatchesData = [];
+              this.dataSource.data = [];
+
+              // Then update with new data
+              this.handleBatchDetailResponse(batchDetails);
+
+              // Force Angular change detection
+              this.dataSource._updateChangeSubscription();
+
+              this.isRefreshing = false;
+              console.log('Batch status refreshed successfully', batchDetails);
+            },
+            error => {
+              this.isRefreshing = false;
+              console.error('Error fetching batch details:', error);
+            }
+          );
+        },
+        error => {
+          this.isRefreshing = false;
+          console.error('Error calling aggregate API:', error);
+        }
+      );
+    }
   }
 }

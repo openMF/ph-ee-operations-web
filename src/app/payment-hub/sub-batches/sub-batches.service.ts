@@ -27,4 +27,12 @@ export class SubBatchesService {
     return this.http.get(this.apiPrefix + '/batches/' + batchId);
     // return this.http.get('../../assets/mock/payment-hub/sub-batches.mock.json');
   }
+
+  /**
+   * Trigger batch aggregate recalculation (forces backend to recalculate status from transfers)
+   * This calls the aggregate endpoint that bulk-processor uses
+   */
+  aggregateBatchStatus(batchId: string): Observable<any> {
+    return this.http.get(this.apiPrefix + '/batch/' + batchId);
+  }
 }

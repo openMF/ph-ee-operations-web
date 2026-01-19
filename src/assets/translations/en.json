@@ -42,7 +42,9 @@
       "Confirm": "Confirm",
       "Submit": "Submit",
       "Approve": "Approve",
-      "Reject": "Reject"
+      "Reject": "Reject",
+      "Refresh Status": "Refresh Status",
+      "Refreshing": "Refreshing..."
     },
     "errors": {
       "Username or password incorrect.": "Username or password incorrect"

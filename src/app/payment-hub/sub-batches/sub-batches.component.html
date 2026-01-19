@@ -1,7 +1,10 @@
 <div class="container" fxLayout="column wrap" fxLayout.lt-md="column">
-  <div class="summary">
-    <button mat-raised-button *ngIf="!isLoading" (click)="viewSummary()">{{ 'labels.heading.Batch Summary' | translate
-      }}</button>
+  <div class="summary" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center">
+    <button mat-raised-button *ngIf="!isLoading" (click)="refreshBatchStatus()"
+            [disabled]="isRefreshing" class="refresh-button">
+      <mat-spinner *ngIf="isRefreshing" diameter="18" class="inline-spinner"></mat-spinner>
+      {{ isRefreshing ? ('labels.buttons.Refreshing' | translate) : ('labels.buttons.Refresh Status' | translate) }}
+    </button>
 
   </div>
   <div class="equal-width">
