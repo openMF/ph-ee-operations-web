@@ -53,7 +53,11 @@ jobs:
       - run:
           name: Build and Push Multi-Arch Image
           command: |
-            docker buildx create --use --name multiarch-builder || docker buildx use multiarch-builder
+            # Create and configure buildx builder
+            docker buildx create --name multiarch-builder --driver docker-container --use || docker buildx use multiarch-builder
+            docker buildx inspect --bootstrap
+
+            # Build and push multi-arch image with branch tag
             docker buildx build \
               --platform linux/amd64,linux/arm64 \
               --build-arg BUILDER_IMAGE=node:20-alpine \
@@ -63,6 +67,10 @@ jobs:
               -t "openmf/ph-ee-operations-web:${SANITIZED_BRANCH}" \
               --push \
               .
+
+            # Verify the manifest was created with both architectures
+            echo "Verifying branch tag:"
+            docker buildx imagetools inspect "openmf/ph-ee-operations-web:${SANITIZED_BRANCH}"
 
   # The 'build_and_push_latest_image' job can be kept or removed based on your needs.
   # If you want to push 'latest' only on master, and branch tags for other branches,
@@ -96,7 +104,11 @@ jobs:
       - run:
           name: Build and Push Multi-Arch Image
           command: |
-            docker buildx create --use --name multiarch-builder || docker buildx use multiarch-builder
+            # Create and configure buildx builder
+            docker buildx create --name multiarch-builder --driver docker-container --use || docker buildx use multiarch-builder
+            docker buildx inspect --bootstrap
+
+            # Build and push multi-arch image with latest tag
             docker buildx build \
               --platform linux/amd64,linux/arm64 \
               --build-arg BUILDER_IMAGE=node:20-alpine \
@@ -106,6 +118,10 @@ jobs:
               -t "openmf/ph-ee-operations-web:latest" \
               --push \
               .
+
+            # Verify the manifest was created with both architectures
+            echo "Verifying latest tag:"
+            docker buildx imagetools inspect "openmf/ph-ee-operations-web:latest"
 
 
 workflows:
