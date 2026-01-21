@@ -35,18 +35,18 @@ jobs:
             sudo apt-cache madison docker-ce-cli | grep 20.10
             sudo apt-get install -y docker-ce-cli=5:20.10.24~3-0~ubuntu-focal
       - docker-buildx/install
-      - run:
-          name: Check if Docker image tag exists
-          command: |
-            IMAGE_TAG=$SANITIZED_BRANCH
-            IMAGE_NAME="openmf/ph-ee-operations-web"
-            echo "Checking for Docker image: $IMAGE_NAME:$IMAGE_TAG"
-            if curl -s -f -u "$DOCKERHUB_USERNAME":"$DOCKERHUB_PASSWORD" "https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/$IMAGE_TAG" > /dev/null; then
-              echo "Skipping the build and push as the tag $IMAGE_TAG already exists in Docker Hub for image $IMAGE_NAME."
-              circleci-agent step halt
-            else
-              echo "Tag $IMAGE_TAG does not exist for image $IMAGE_NAME. Proceeding with build."
-            fi
+      # - run:
+      #     name: Check if Docker image tag exists
+      #     command: |
+      #       IMAGE_TAG=$SANITIZED_BRANCH
+      #       IMAGE_NAME="openmf/ph-ee-operations-web"
+      #       echo "Checking for Docker image: $IMAGE_NAME:$IMAGE_TAG"
+      #       if curl -s -f -u "$DOCKERHUB_USERNAME":"$DOCKERHUB_PASSWORD" "https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/$IMAGE_TAG" > /dev/null; then
+      #         echo "Skipping the build and push as the tag $IMAGE_TAG already exists in Docker Hub for image $IMAGE_NAME."
+      #         circleci-agent step halt
+      #       else
+      #         echo "Tag $IMAGE_TAG does not exist for image $IMAGE_NAME. Proceeding with build."
+      #       fi
       - run:
           name: Login to DockerHub
           command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
