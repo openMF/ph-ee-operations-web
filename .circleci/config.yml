@@ -1,151 +1,149 @@
 version: 2.1
-orbs:
-  docker-buildx: devarsh/docker-buildx-orb@0.1.1
+
+# Master CircleCI config template for PHEE Java components.
+# Distributed to all repos by java_version_config_updater.py.
+# Template variables substituted by the script:
+#   cimg/openjdk:17.0.17  - e.g. cimg/openjdk:17.0
+#   {{CHECKSTYLE}}         - ./gradlew checkstyleMain (present or commented out)
+
 executors:
-  docker-executor:
+  java-executor:
+    # cimg/openjdk is built on cimg/base which includes Docker CLI.
+    # No separate Docker CLI install step needed.
+    # The executor JDK is only used to compile the JAR — the final Docker
+    # image base is set independently in each repo's Dockerfile.
     docker:
-      - image: cimg/base:stable
-
-jobs:
-  build_and_push_image_with_branch_tag: # Renamed job for clarity
-    executor: docker-executor
-    environment:
-      JVM_OPTS: -Xmx512m
-      TERM: dumb  
-      GITHUB_TOKEN: ${GITHUB_TOKEN}  # Add the GitHub token as an environment variable
-
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.24
-      - run:
-          name: Sanitize Branch Name
-          command: |
-            echo "export SANITIZED_BRANCH=$(echo $CIRCLE_BRANCH | sed 's/[^a-zA-Z0-9.-]/-/g' | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
-      - run:
-          name: Install Docker CLI
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y curl ca-certificates gnupg lsb-release
-            sudo install -m 0755 -d /etc/apt/keyrings
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            sudo chmod a+r /etc/apt/keyrings/docker.gpg
-            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu focal stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            sudo apt-get update
-            sudo apt-cache madison docker-ce-cli | grep 20.10
-            sudo apt-get install -y docker-ce-cli=5:20.10.24~3-0~ubuntu-focal
-      - docker-buildx/install
-      # - run:
-      #     name: Check if Docker image tag exists
-      #     command: |
-      #       IMAGE_TAG=$SANITIZED_BRANCH
-      #       IMAGE_NAME="openmf/ph-ee-operations-web"
-      #       echo "Checking for Docker image: $IMAGE_NAME:$IMAGE_TAG"
-      #       if curl -s -f -u "$DOCKERHUB_USERNAME":"$DOCKERHUB_PASSWORD" "https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/$IMAGE_TAG" > /dev/null; then
-      #         echo "Skipping the build and push as the tag $IMAGE_TAG already exists in Docker Hub for image $IMAGE_NAME."
-      #         circleci-agent step halt
-      #       else
-      #         echo "Tag $IMAGE_TAG does not exist for image $IMAGE_NAME. Proceeding with build."
-      #       fi
-      - run:
-          name: Login to DockerHub
-          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
-      - run:
-          name: Build and Push Multi-Arch Image
-          command: |
-            # Create and configure buildx builder
-            docker buildx create --name multiarch-builder --driver docker-container --use || docker buildx use multiarch-builder
-            docker buildx inspect --bootstrap
-
-            # Build and push multi-arch image with branch tag
-            docker buildx build \
-              --platform linux/amd64,linux/arm64 \
-              --build-arg BUILDER_IMAGE=node:20-alpine \
-              --build-arg NGINX_IMAGE=nginx:1.19.3 \
-              --build-arg NPM_REGISTRY_URL=https://registry.npmjs.org/ \
-              --build-arg PUPPETEER_SKIP_DOWNLOAD_ARG=true \
-              -t "openmf/ph-ee-operations-web:${SANITIZED_BRANCH}" \
-              --push \
-              .
-
-            # Verify the manifest was created with both architectures
-            echo "Verifying branch tag:"
-            docker buildx imagetools inspect "openmf/ph-ee-operations-web:${SANITIZED_BRANCH}"
-
-  # The 'build_and_push_latest_image' job can be kept or removed based on your needs.
-  # If you want to push 'latest' only on master, and branch tags for other branches,
-  # then you would keep both jobs and adjust the workflows.
-  build_and_push_latest_image:
-    executor: docker-executor
+      - image: cimg/openjdk:17.0.17
     environment:
       JVM_OPTS: -Xmx512m
       TERM: dumb
 
+commands:
+  common-setup:
     steps:
       - checkout
       - setup_remote_docker:
           version: 20.10.24
       - run:
-          name: Install Docker CLI
+          name: Set lowercase image name vars
+          # tr used for POSIX compatibility; Bash 4+ alternative: ${VAR,,}
           command: |
-            sudo apt-get update
-            sudo apt-get install -y curl ca-certificates gnupg lsb-release
-            sudo install -m 0755 -d /etc/apt/keyrings
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            sudo chmod a+r /etc/apt/keyrings/docker.gpg
-            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu focal stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            sudo apt-get update
-            sudo apt-cache madison docker-ce-cli | grep 20.10
-            sudo apt-get install -y docker-ce-cli=5:20.10.24~3-0~ubuntu-focal
-      - docker-buildx/install
+            echo "export DOCKER_ORG_LOWER=$(echo $CIRCLE_PROJECT_USERNAME | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
+            echo "export DOCKER_REPO_LOWER=$(echo $CIRCLE_PROJECT_REPONAME | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
       - run:
-          name: Login to DockerHub
-          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
-      - run:
-          name: Build and Push Multi-Arch Image
+          name: Install Docker Buildx
           command: |
-            # Create and configure buildx builder
-            docker buildx create --name multiarch-builder --driver docker-container --use || docker buildx use multiarch-builder
+            BUILDX_VERSION="v0.14.1"
+            if docker buildx version 2>/dev/null | grep -q "$BUILDX_VERSION"; then
+              echo "Docker Buildx $BUILDX_VERSION already present"
+            else
+              mkdir -vp ~/.docker/cli-plugins/
+              curl --silent -L \
+                "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" \
+                -o ~/.docker/cli-plugins/docker-buildx
+              chmod a+x ~/.docker/cli-plugins/docker-buildx
+              docker buildx version
+            fi
+            docker context create buildcontext 2>/dev/null || true
+            docker buildx create --name multiarch --driver docker-container --use buildcontext 2>/dev/null \
+              || docker buildx use multiarch
             docker buildx inspect --bootstrap
 
-            # Build and push multi-arch image with latest tag
+jobs:
+  build_and_push_tag_image:
+    executor: java-executor
+    steps:
+      - common-setup
+      - run:
+          name: Build application
+          command: ./gradlew bootJar
+      - run:
+          name: Build and push multi-arch image (linux/amd64 + linux/arm64)
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker buildx build \
-              --platform linux/amd64,linux/arm64 \
-              --build-arg BUILDER_IMAGE=node:20-alpine \
-              --build-arg NGINX_IMAGE=nginx:1.19.3 \
-              --build-arg NPM_REGISTRY_URL=https://registry.npmjs.org/ \
-              --build-arg PUPPETEER_SKIP_DOWNLOAD_ARG=true \
-              -t "openmf/ph-ee-operations-web:latest" \
               --push \
+              --platform linux/amd64,linux/arm64 \
+              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:$CIRCLE_TAG" \
               .
 
-            # Verify the manifest was created with both architectures
-            echo "Verifying latest tag:"
-            docker buildx imagetools inspect "openmf/ph-ee-operations-web:latest"
+  build_and_push_branch_image:
+    executor: java-executor
+    steps:
+      - common-setup
+      - run:
+          name: Build application
+          command: |
+            ./gradlew clean bootJar
+      - run:
+          name: Sanitize branch name and set commit tag
+          command: |
+            echo "export SANITIZED_BRANCH=$(echo $CIRCLE_BRANCH | sed 's/[^a-zA-Z0-9.-]/-/g' | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
+            echo "export SHORT_SHA=$(echo $CIRCLE_SHA1 | cut -c1-7)" >> $BASH_ENV
+      - run:
+          name: Build and push multi-arch image (linux/amd64 + linux/arm64)
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            # Two tags per build:
+            #   branch-latest  — mutable, always the most recent build on this branch
+            #   branch-SHA     — immutable, traceable to a specific commit
+            docker buildx build \
+              --push \
+              --platform linux/amd64,linux/arm64 \
+              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:${SANITIZED_BRANCH}-latest" \
+              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:${SANITIZED_BRANCH}-${SHORT_SHA}" \
+              .
 
+  build_and_push_latest_image:
+    executor: java-executor
+    steps:
+      - common-setup
+      - run:
+          name: Build application
+          command: |
+            ./gradlew clean bootJar
+      - run:
+          name: Build and push multi-arch image (linux/amd64 + linux/arm64)
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker buildx build \
+              --push \
+              --platform linux/amd64,linux/arm64 \
+              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:latest" \
+              .
 
 workflows:
   version: 2
-  build-and-push:
+  build-and-push-pipeline:
     jobs:
-      # This job will now build and push an image tagged with the branch name for every branch
-      - build_and_push_image_with_branch_tag:
-          # Remove filters for tags here if you want it to run on all branch pushes,
-          # not just those matching a tag pattern.
-          # If you want this to run *only* for branches (not tags), you'd use a branch filter.
-          # Example for running on all branches except master:
+      # Build tags matching vX.Y.Z format
+      - build_and_push_tag_image:
           filters:
-            branches:
-              ignore: master # Do not run this job on the master branch
             tags:
-              ignore: /.*/ # Ignore all tags for this job
+              only: /^v\d+\.\d+\.\d+$/
+            branches:
+              ignore: /.*/
           context:
             - DOCKER
-      
-      # Keep this job if you still want to push a 'latest' tag specifically from the master branch.
-      - build_and_push_latest_image:
+      # Build any branch commit (except config-propagator update branches)
+      - build_and_push_branch_image:
           filters:
+            tags:
+              ignore: /.*/
             branches:
-              only: master # Only run this job on the master branch
+              ignore: /^ci\/mt-.*/
+          context:
+            - DOCKER
+      # Build 'latest' only on main/master, after branch image succeeds
+      - build_and_push_latest_image:
+          requires:
+            - build_and_push_branch_image
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only:
+                - main
+                - master
           context:
             - DOCKER
