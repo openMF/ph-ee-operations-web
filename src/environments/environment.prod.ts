@@ -14,7 +14,7 @@ export let environment = {
     vouchers: window['env']['serverApiUrlVou'] || 'http://ops.local/opsapp/api/v1',
     voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',
     account: window['env']['serverApiUrlAct'] || 'http://ops.local/opsapp/api/v1',
-    registeringInstituionId: window['env']['registeringInstitutionId'] || 'default',
+    registeringInstitutionId: window['env']['registeringInstitutionId'] || 'default',
     g2pPaymentConfigApi: window['env']['g2pProgramConfigApi'] || 'http://localhost:8084',
   },
   oauth: {
