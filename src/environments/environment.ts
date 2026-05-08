@@ -9,46 +9,45 @@ import env from './.env';
 export let environment = {
   name: 'dev',
   production: false,
-  version: env.phee.version + '-dev',
+  version: env.npm_package_version + '-dev',
   backend: {
-    operations: window['env']['serverApiUrlOps'] || 'http://ops.mifos.gazelle.test/api/v1',
-    signatureApiUrl: window['env']['signatureApiUrl'] || 'http://ops.mifos.gazelle.test/api/v1',
-    bulkConnectorOps: window['env']['bulkConnectorOps'] || 'https://ops.mifos.gazelle.test',
-    vouchers: window['env']['serverApiUrlVou'] || 'http://ops.mifos.gazelle.test/api/v1',
-    voucherCallbackUrl: window['env']['callbackUrlVou'] || 'https://webhook.site/',
-    account: window['env']['serverApiUrlAct'] || 'http://ops.mifos.gazelle.test/api/v1',
-    registeringInstituionId: window['env']['registeringInstitutionId'] || 'default',
-    g2pPaymentConfigApi: window['env']['g2pProgramConfigApi'] || 'http://localhost:8084',
+    operations: (window['env'] && window['env']['serverApiUrlOps'] && !window['env']['serverApiUrlOps'].startsWith('$')) ? window['env']['serverApiUrlOps'] : 'http://ops.mifos.gazelle.test/api/v1',
+    signatureApiUrl: (window['env'] && window['env']['signatureApiUrl'] && !window['env']['signatureApiUrl'].startsWith('$')) ? window['env']['signatureApiUrl'] : 'http://ops.mifos.gazelle.test/api/v1',
+    bulkConnectorOps: (window['env'] && window['env']['bulkConnectorOps'] && !window['env']['bulkConnectorOps'].startsWith('$')) ? window['env']['bulkConnectorOps'] : 'https://ops.mifos.gazelle.test',
+    vouchers: (window['env'] && window['env']['serverApiUrlVou'] && !window['env']['serverApiUrlVou'].startsWith('$')) ? window['env']['serverApiUrlVou'] : 'http://ops.mifos.gazelle.test/api/v1',
+    voucherCallbackUrl: (window['env'] && window['env']['callbackUrlVou'] && !window['env']['callbackUrlVou'].startsWith('$')) ? window['env']['callbackUrlVou'] : 'https://webhook.site/',
+    account: (window['env'] && window['env']['serverApiUrlAct'] && !window['env']['serverApiUrlAct'].startsWith('$')) ? window['env']['serverApiUrlAct'] : 'http://ops.mifos.gazelle.test/api/v1',
+    registeringInstituionId: (window['env'] && window['env']['registeringInstitutionId'] && !window['env']['registeringInstitutionId'].startsWith('$')) ? window['env']['registeringInstitutionId'] : 'default',
+    g2pPaymentConfigApi: (window['env'] && window['env']['g2pProgramConfigApi'] && !window['env']['g2pProgramConfigApi'].startsWith('$')) ? window['env']['g2pProgramConfigApi'] : 'http://localhost:8084',
   },
   oauth: {
-    // For connecting to Mifos X using OAuth2 Authentication change the value to true
-    enabled: window['env']['oauthEnabled'] || false,
-    type: window['env']['oauthType'] || 'keycloak',
-    serverUrl: window['env']['oauthServerUrl'] || 'http://keycloak.mifos.gazelle.test/auth',
-    realm: window['env']['oauthRealm'] || 'paymenthub',
-    clientId: window['env']['oauthClientId'] || 'opsapp',
-    clientSecret: window['env']['oauthClientSecret'] || '',
-    clientUUID: window['env']['oauthClientUUID'] || '',
-    basicAuth: window['env']['oauthBasicAuth'] || true,
-    basicAuthToken: window['env']['oauthBasicAuthToken'] || 'Y2xpZW50Og=='
+    enabled: (window['env'] && window['env']['oauthEnabled'] && !window['env']['oauthEnabled'].startsWith('$')) ? (window['env']['oauthEnabled'] === 'true') : false,
+    type: (window['env'] && window['env']['oauthType'] && !window['env']['oauthType'].startsWith('$')) ? window['env']['oauthType'] : 'keycloak',
+    serverUrl: (window['env'] && window['env']['oauthServerUrl'] && !window['env']['oauthServerUrl'].startsWith('$')) ? window['env']['oauthServerUrl'] : 'http://keycloak.mifos.gazelle.test/auth',
+    realm: (window['env'] && window['env']['oauthRealm'] && !window['env']['oauthRealm'].startsWith('$')) ? window['env']['oauthRealm'] : 'paymenthub',
+    clientId: (window['env'] && window['env']['oauthClientId'] && !window['env']['oauthClientId'].startsWith('$')) ? window['env']['oauthClientId'] : 'opsapp',
+    clientSecret: (window['env'] && window['env']['oauthClientSecret'] && !window['env']['oauthClientSecret'].startsWith('$')) ? window['env']['oauthClientSecret'] : '',
+    clientUUID: (window['env'] && window['env']['oauthClientUUID'] && !window['env']['oauthClientUUID'].startsWith('$')) ? window['env']['oauthClientUUID'] : '',
+    basicAuth: (window['env'] && window['env']['oauthBasicAuth'] && !window['env']['oauthBasicAuth'].startsWith('$')) ? (window['env']['oauthBasicAuth'] === 'true') : true,
+    basicAuthToken: (window['env'] && window['env']['oauthBasicAuthToken'] && !window['env']['oauthBasicAuthToken'].startsWith('$')) ? window['env']['oauthBasicAuthToken'] : 'Y2xpZW50Og=='
   },
   jbpm:{
-    jbpmApiUrl: window['env']['jbpmApiUrl'] || '',
-    containerId: window['env']['jbpmContainerId'] || '',
+    jbpmApiUrl: (window['env'] && window['env']['jbpmApiUrl'] && !window['env']['jbpmApiUrl'].startsWith('$')) ? window['env']['jbpmApiUrl'] : '',
+    containerId: (window['env'] && window['env']['jbpmContainerId'] && !window['env']['jbpmContainerId'].startsWith('$')) ? window['env']['jbpmContainerId'] : '',
     credentials: {
-      adminMaker: window['env']['jbpmCredentialsAdminMaker'] || '',
-      adminChecker: window['env']['jbpmCredentialsAdminChecker'] || '',
-      both: window['env']['jbpmCredentialsBoth'] || ''
+      adminMaker: (window['env'] && window['env']['jbpmCredentialsAdminMaker'] && !window['env']['jbpmCredentialsAdminMaker'].startsWith('$')) ? window['env']['jbpmCredentialsAdminMaker'] : '',
+      adminChecker: (window['env'] && window['env']['jbpmCredentialsAdminChecker'] && !window['env']['jbpmCredentialsAdminChecker'].startsWith('$')) ? window['env']['jbpmCredentialsAdminChecker'] : '',
+      both: (window['env'] && window['env']['jbpmCredentialsBoth'] && !window['env']['jbpmCredentialsBoth'].startsWith('$')) ? window['env']['jbpmCredentialsBoth'] : ''
     }
   },
   grafana: {
-    url: window['env']['grafanaUrl'] || '',
+    url: (window['env'] && window['env']['grafanaUrl'] && !window['env']['grafanaUrl'].startsWith('$')) ? window['env']['grafanaUrl'] : '',
   },
   auth: {
-    enabled: window['env']['authEnabled'] || false,
+    enabled: (window['env'] && window['env']['authEnabled'] && !window['env']['authEnabled'].startsWith('$')) ? (window['env']['authEnabled'] === 'true') : false,
   },
-  tenant: window['env']['platformTenantId'] || 'gorilla',
-  tenants: window['env']['platformTenantIds'] || 'gorilla',
-  defaultLanguage: window['env']['defaultLanguage'] || 'en',
-  supportedLanguages: window['env']['supportedLanguages'] || ['en', 'fr']
+  tenant: (window['env'] && window['env']['platformTenantId'] && !window['env']['platformTenantId'].startsWith('$')) ? window['env']['platformTenantId'] : 'gorilla',
+  tenants: (window['env'] && window['env']['platformTenantIds'] && !window['env']['platformTenantIds'].startsWith('$')) ? window['env']['platformTenantIds'] : 'gorilla',
+  defaultLanguage: (window['env'] && window['env']['defaultLanguage'] && !window['env']['defaultLanguage'].startsWith('$')) ? window['env']['defaultLanguage'] : 'en',
+  supportedLanguages: (window['env'] && window['env']['supportedLanguages'] && !window['env']['supportedLanguages'].startsWith('$')) ? window['env']['supportedLanguages'] : 'en,fr'
 };
