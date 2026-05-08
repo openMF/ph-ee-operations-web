@@ -14,14 +14,7 @@ import { TransactionDetailsComponent } from './transactions/transaction-details.
 import { BpmnDialogComponent } from './transactions/bpmn-dialog/bpmn-dialog.component';
 import { RetryResolveDialogComponent } from './transactions/retry-resolve-dialog/retry-resolve-dialog.component';
 import { FilterSelectorComponent } from './filter-selector/filter-selector.component';
-import { BatchesComponent } from './batches/batches.component';
-import { SubBatchesComponent } from './sub-batches/sub-batches.component';
 import { DirectivesModule } from 'app/directives/directives.module';
-import { TransfersComponent } from './transfers/transfers.component';
-import { BatchesBulkImportComponent } from './batches-bulk-import/batches-bulk-import.component';
-import { ViewTransferDetailsComponent } from './transfers/view-transfer-details/view-transfer-details.component';
-import { BatchSummaryComponent } from './sub-batches/batch-summary/batch-summary.component';
-import { SubBatchSummaryComponent } from './transfers/sub-batch-summary/sub-batch-summary.component';
 
 /**
  * Payment HUB Module
@@ -42,14 +35,7 @@ import { SubBatchSummaryComponent } from './transfers/sub-batch-summary/sub-batc
         PaymentHubComponent,
         BpmnDialogComponent,
         RetryResolveDialogComponent,
-        FilterSelectorComponent,
-        BatchesComponent,
-        SubBatchesComponent,
-        TransfersComponent,
-        BatchesBulkImportComponent,
-        ViewTransferDetailsComponent,
-        BatchSummaryComponent,
-        SubBatchSummaryComponent
+        FilterSelectorComponent
     ]
 })
 export class PaymentHubModule {}
