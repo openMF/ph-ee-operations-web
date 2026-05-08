@@ -31,7 +31,7 @@ export class AuthenticationGuard  {
    * @returns {boolean} True if user is authenticated.
    */
   canActivate(): boolean {
-    if (environment.auth.enabled === 'false') {
+    if (environment.auth.enabled === false) {
       return true;
     }
     if (this.authenticationService.isAuthenticated()) {

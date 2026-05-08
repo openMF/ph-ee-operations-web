@@ -81,8 +81,11 @@ export class WebAppComponent implements OnInit {
     this.i18nService = new I18nService(this.translateService);
 
     // Setup translations
-    this.translateService.addLangs(environment.supportedLanguages.split(','));
-    log.debug(environment.defaultLanguage);
+this.translateService.addLangs(
+  Array.isArray(environment.supportedLanguages)
+    ? environment.supportedLanguages
+    : environment.supportedLanguages.split(',')
+);    log.debug(environment.defaultLanguage);
     this.translateService.use(environment.defaultLanguage);
 
     // Change page title on navigation or language change, based on route data
@@ -125,10 +128,10 @@ export class WebAppComponent implements OnInit {
     });
 
     // initialize language and date format if they are null.
-    if (!localStorage.getItem('phLanguage')) {
+    if (!localStorage.getItem('pheeLanguage')) {
       this.settingsService.setDefaultLanguage();
     }
-    if (!localStorage.getItem('phDateFormat')) {
+    if (!localStorage.getItem('pheeDateFormat')) {
       this.settingsService.setDateFormat('dd MMMM yyyy');
     }
     // Set the server list from the env var FINERACT_API_URLS
