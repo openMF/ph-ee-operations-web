@@ -24,7 +24,7 @@ export class HasRoleDirective {
               private viewContainer: ViewContainerRef,
               private authenticationService: AuthenticationService) {
     const userDetails = this.authenticationService.userDetails;
-    if (environment.auth.enabled === 'false') {
+    if (!environment.auth.enabled) {
       this.userRoles = [HasRoleDirective.NORMAL_USER];
     } else {
       this.userRoles = userDetails.resource_access.opsapp.roles;

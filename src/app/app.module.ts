@@ -50,10 +50,8 @@ import { AppRoutingModule } from './app-routing.module';
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (http: HttpClient, locationStrategy: LocationStrategy) => {
-          return new TranslateHttpLoader(http, `${ window.location.protocol }//${ window.location.host }${locationStrategy.getBaseHref()}assets/translations/`, '.json');
-        },
-        deps: [HttpClient, LocationStrategy]
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
       }
     }),
     KeycloakAngularModule,

@@ -11,7 +11,7 @@ mifosx-login-form {
 .login-container {
   margin: auto;
   background-color: $primary;
-  color: $white;
+  color: $white !important;
   padding: 2rem;
   width: 60%;
   height: fit-content;

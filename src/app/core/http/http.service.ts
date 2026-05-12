@@ -96,11 +96,9 @@ export class HttpService extends HttpClient {
     return this.removeInterceptor(ErrorHandlerInterceptor);
   }
 
-  /*
   disableApiPrefix(): HttpClient {
-    return this.removeInterceptor(ApiPrefixInterceptor);
+    return this;
   }
-  */
 
   /**
    *  Override the original method to wire interceptors when triggering the request.

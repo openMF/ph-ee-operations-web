@@ -142,7 +142,7 @@ export class AuthenticationService {
       } else {
 
         httpParams = httpParams.set('grant_type', 'password');
-        if (environment.oauth.basicAuth === 'true') {
+        if (environment.oauth.basicAuth) {
           this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
         }
         return this.http.disableApiPrefix().post(`${environment.oauth.serverUrl}/oauth/token`, {}, { params: httpParams })
@@ -227,7 +227,7 @@ export class AuthenticationService {
     httpParams = httpParams.set('grant_type', 'refresh_token');
     httpParams = httpParams.set('refresh_token', oAuthRefreshToken);
 
-    if (environment.oauth.basicAuth === 'true') {
+    if (environment.oauth.basicAuth) {
       this.authorizationToken = `Basic ${environment.oauth.basicAuthToken}`;
     }
 
