@@ -14,7 +14,7 @@
     "ng": "ng",
     "build": "npm run env -s && ng build --configuration production --output-hashing=none",
     "build:prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --output-hashing=none --base-href=\"/\"",
-    "start": "npm run env -s && ng serve --aot",
+    "start": "npm run env -s && ng serve",
     "serve:sw": "npm run build -s && npx http-server ./dist -p 4200",
     "lint": "ng lint && stylelint \"src/**/*.scss\" --syntax scss && htmlhint \"src\" --config .htmlhintrc",
     "test": "npm run env -s && ng test",
@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.1",
-    "@angular/cli": "^16.2.1",
+    "@angular/cli": "^16.2.3",
     "@angular/compiler-cli": "16.2.3",
     "@angular/language-service": "16.2.3",
     "@biesbjerg/ngx-translate-extract": "2.3.4",

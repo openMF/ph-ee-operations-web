@@ -4,6 +4,11 @@
  * For app-specific initialization, use `app/web-app.component.ts`.
  */
 
+(window as any).env = {
+  defaultLanguage: 'en',
+  authEnabled: false,
+  serverApiUrlOps: 'http://localhost:3000'
+};
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 

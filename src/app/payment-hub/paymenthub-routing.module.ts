@@ -1,5 +1,3 @@
-/** TODO: Separate routing into feature modules for cleaner accounting module. */
-
 /** Angular Imports */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -8,12 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { Route } from '../core/route/route.service';
 
 /** Custom Components */
-import { TransactionDetailsComponent } from './transactions/transaction-details.component';
 import { PaymentHubComponent } from './paymenthub.component';
-import { BatchesComponent } from './batches/batches.component';
-import { SubBatchesComponent } from './sub-batches/sub-batches.component';
-import { TransfersComponent } from './transfers/transfers.component';
-import { BatchesBulkImportComponent } from './batches-bulk-import/batches-bulk-import.component';
 
 /** Custom Resolvers */
 import { CurrenciesResolver } from './transactions/resolver/currencies.resolver';
@@ -38,67 +31,16 @@ const routes: Routes = [
             },
             {
               path: 'batches',
-              data: { breadcrumb: { skip: true } },
-              component: BatchesComponent,
-            },
-            {
-              path: 'bulk-import',
-              data: { breadcrumb: { alias: 'Batch Bulk Import' } },
-              component: BatchesBulkImportComponent,
+              loadChildren: () => import('./batches/batches.module').then(m => m.BatchesModule)
             },
             {
               path: 'sub-batches',
-              data: { breadcrumb: { skip: true } },
-              children: [
-                {
-                  path: '',
-                  component: SubBatchesComponent,
-                },
-                {
-                  path: ':batchId',
-                  data: { breadcrumb: { alias: 'SubBatches' } },
-                  component: SubBatchesComponent,
-                },
-              ],
+              loadChildren: () => import('./sub-batches/sub-batches.module').then(m => m.SubBatchesModule)
             },
-            {
-              path: 'sub-batches',
-              data: { breadcrumb: { skip: true } },
-              children: [
-                {
-                  path: ':batchId',
-                  data: { breadcrumb: { alias: 'SubBatches' } },
-                  children: [
-                    {
-                      path: 'transfers',
-                      data: { breadcrumb: { skip: true } },
-                      children: [
-                        {
-                          path: '',
-                          component: TransfersComponent,
-                        },
-                        {
-                          path: ':subBatchId',
-                          data: { breadcrumb: { alias: 'Transactions' } },
-                          component: TransfersComponent,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-
             {
               path: 'transfers',
-              data: { breadcrumb: { skip: true } },
-              component: TransfersComponent,
-            },
-            {
-              path: 'transactions',
-              data: { breadcrumb: { skip: true } },
-              component: TransfersComponent,
-            },
+              loadChildren: () => import('./transfers/transfers.module').then(m => m.TransfersModule)
+            }
           ],
         },
       ],

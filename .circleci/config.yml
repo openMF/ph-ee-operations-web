@@ -1,21 +1,13 @@
 version: 2.1
 
-# Master CircleCI config template for PHEE Java components.
-# Distributed to all repos by java_version_config_updater.py.
-# Template variables substituted by the script:
-#   cimg/openjdk:17.0.17  - e.g. cimg/openjdk:17.0
-#   {{CHECKSTYLE}}         - ./gradlew checkstyleMain (present or commented out)
+# Updated CircleCI config for PHEE Web (Angular) components.
+# This fixes the previous error where it was incorrectly trying to run Gradle.
 
 executors:
-  java-executor:
-    # cimg/openjdk is built on cimg/base which includes Docker CLI.
-    # No separate Docker CLI install step needed.
-    # The executor JDK is only used to compile the JAR — the final Docker
-    # image base is set independently in each repo's Dockerfile.
+  node-executor:
     docker:
-      - image: cimg/openjdk:17.0.17
+      - image: cimg/node:20.10
     environment:
-      JVM_OPTS: -Xmx512m
       TERM: dumb
 
 commands:
@@ -26,7 +18,6 @@ commands:
           version: 20.10.24
       - run:
           name: Set lowercase image name vars
-          # tr used for POSIX compatibility; Bash 4+ alternative: ${VAR,,}
           command: |
             echo "export DOCKER_ORG_LOWER=$(echo $CIRCLE_PROJECT_USERNAME | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
             echo "export DOCKER_REPO_LOWER=$(echo $CIRCLE_PROJECT_REPONAME | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
@@ -50,15 +41,30 @@ commands:
             docker buildx inspect --bootstrap
 
 jobs:
-  build_and_push_tag_image:
-    executor: java-executor
+  build_and_push_branch_image:
+    executor: node-executor
     steps:
       - common-setup
       - run:
-          name: Build application
-          command: ./gradlew bootJar
-      - run:
           name: Build and push multi-arch image (linux/amd64 + linux/arm64)
+          command: |
+            echo "export SANITIZED_BRANCH=$(echo $CIRCLE_BRANCH | sed 's/[^a-zA-Z0-9.-]/-/g' | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
+            echo "export SHORT_SHA=$(echo $CIRCLE_SHA1 | cut -c1-7)" >> $BASH_ENV
+            source $BASH_ENV
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker buildx build \
+              --push \
+              --platform linux/amd64,linux/arm64 \
+              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:${SANITIZED_BRANCH}-latest" \
+              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:${SANITIZED_BRANCH}-${SHORT_SHA}" \
+              .
+
+  build_and_push_tag_image:
+    executor: node-executor
+    steps:
+      - common-setup
+      - run:
+          name: Build and push multi-arch image for tag
           command: |
             echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker buildx build \
@@ -67,83 +73,21 @@ jobs:
               -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:$CIRCLE_TAG" \
               .
 
-  build_and_push_branch_image:
-    executor: java-executor
-    steps:
-      - common-setup
-      - run:
-          name: Build application
-          command: |
-            ./gradlew clean bootJar
-      - run:
-          name: Sanitize branch name and set commit tag
-          command: |
-            echo "export SANITIZED_BRANCH=$(echo $CIRCLE_BRANCH | sed 's/[^a-zA-Z0-9.-]/-/g' | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
-            echo "export SHORT_SHA=$(echo $CIRCLE_SHA1 | cut -c1-7)" >> $BASH_ENV
-      - run:
-          name: Build and push multi-arch image (linux/amd64 + linux/arm64)
-          command: |
-            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            # Two tags per build:
-            #   branch-latest  — mutable, always the most recent build on this branch
-            #   branch-SHA     — immutable, traceable to a specific commit
-            docker buildx build \
-              --push \
-              --platform linux/amd64,linux/arm64 \
-              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:${SANITIZED_BRANCH}-latest" \
-              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:${SANITIZED_BRANCH}-${SHORT_SHA}" \
-              .
-
-  build_and_push_latest_image:
-    executor: java-executor
-    steps:
-      - common-setup
-      - run:
-          name: Build application
-          command: |
-            ./gradlew clean bootJar
-      - run:
-          name: Build and push multi-arch image (linux/amd64 + linux/arm64)
-          command: |
-            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker buildx build \
-              --push \
-              --platform linux/amd64,linux/arm64 \
-              -t "$DOCKER_ORG_LOWER/$DOCKER_REPO_LOWER:latest" \
-              .
-
 workflows:
   version: 2
   build-and-push-pipeline:
     jobs:
-      # Build tags matching vX.Y.Z format
+      - build_and_push_branch_image:
+          filters:
+            branches:
+              ignore: /^ci\/mt-.*/
+          context:
+            - DOCKER
       - build_and_push_tag_image:
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+$/
             branches:
               ignore: /.*/
-          context:
-            - DOCKER
-      # Build any branch commit (except config-propagator update branches)
-      - build_and_push_branch_image:
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              ignore: /^ci\/mt-.*/
-          context:
-            - DOCKER
-      # Build 'latest' only on main/master, after branch image succeeds
-      - build_and_push_latest_image:
-          requires:
-            - build_and_push_branch_image
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only:
-                - main
-                - master
           context:
             - DOCKER
