@@ -92,10 +92,16 @@ export class SettingsService {
    * Returns language setting
    */
   get language() {
-    if (!localStorage.getItem('pheeLanguage')) {
+    const storedLanguage = localStorage.getItem('pheeLanguage');
+    if (!storedLanguage || storedLanguage.includes('$')) {
       this.setDefaultLanguage();
     }
-    return JSON.parse(localStorage.getItem('pheeLanguage'));
+    try {
+      return JSON.parse(localStorage.getItem('pheeLanguage'));
+    } catch (e) {
+      this.setDefaultLanguage();
+      return JSON.parse(localStorage.getItem('pheeLanguage'));
+    }
   }
 
   /**
