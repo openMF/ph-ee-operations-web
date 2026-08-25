@@ -44,7 +44,7 @@ export class BatchesBulkImportComponent implements OnInit {
 
   ngOnInit(): void {
     this.createBatchForm = this.formBuilder.group({
-      'institutionId': [environment.backend.registeringInstituionId, Validators.required],
+      'institutionId': [environment.backend.registeringInstitutionId, Validators.required],
       'purpose': ['', Validators.required],
       'programId': ['', Validators.required]
     });
