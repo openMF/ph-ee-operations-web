@@ -9,7 +9,7 @@ import env from './.env';
 export let environment = {
   name: 'dev',
   production: false,
-  version: env.phee.version + '-dev',
+  version: env.npm_package_version + '-dev' ,
   backend: {
     operations: window['env']['serverApiUrlOps'] || 'http://ops.mifos.gazelle.test/api/v1',
     signatureApiUrl: window['env']['signatureApiUrl'] || 'http://ops.mifos.gazelle.test/api/v1',
